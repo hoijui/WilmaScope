@@ -18,35 +18,31 @@
  * -- Tim Dwyer, 2001
  */
 package org.wilmascope.file;
-
 /**
  * Handles reading and writing of graph data structures to files
+ * 
  * @author Tim Dwyer
  * @version 1.0
  */
-
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
 import javax.swing.filechooser.FileFilter;
 import javax.vecmath.Point3f;
-
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.forcelayout.ForceLayout;
 import org.wilmascope.gmlparser.GMLLoader;
 import org.wilmascope.graph.LayoutEngine;
+import org.wilmascope.multiscalelayout.MultiScaleLayout;
 import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.ViewManager;
-
 class GraphFileFilter extends FileFilter {
 	public boolean accept(java.io.File file) {
-		return file.isDirectory()
-			|| file.getName().endsWith(".xwg")
-			|| file.getName().endsWith(".gml");
+		return file.isDirectory() || file.getName().endsWith(".xwg")
+				|| file.getName().endsWith(".gml");
 	}
 	public String getDescription() {
 		return "XML Wilma Graph data files (.xwg) or common graph (.gml)";
@@ -87,21 +83,18 @@ public class FileHandler {
 	public FileFilter getFileFilter() {
 		return new GraphFileFilter();
 	}
-	private void loadEdgeProperties(
-		XMLGraph.Edge xe,
-		GraphControl.EdgeFacade ge) {
+	private void loadEdgeProperties(XMLGraph.Edge xe, GraphControl.EdgeFacade ge) {
 		XMLGraph.ViewType viewType = xe.getViewType();
 		if (viewType != null) {
 			try {
-				EdgeView v =
-					ViewManager.getInstance().createEdgeView(viewType.getName());
+				EdgeView v = ViewManager.getInstance().createEdgeView(
+						viewType.getName());
 				ge.setView(v);
 				v.setProperties(viewType.getProperties());
 			} catch (ViewManager.UnknownViewTypeException e) {
 				e.printStackTrace();
 			}
 		}
-
 		Properties p = xe.getProperties();
 		if (p != null) {
 			String weight = p.getProperty("Weight");
@@ -110,17 +103,15 @@ public class FileHandler {
 			}
 		}
 	}
-	private void loadNodeProperties(
-		XMLGraph.Node xn,
-		GraphControl.NodeFacade gn) {
+	private void loadNodeProperties(XMLGraph.Node xn, GraphControl.NodeFacade gn) {
 		XMLGraph.ViewType viewType = xn.getViewType();
 		if (viewType != null) {
 			try {
 				NodeView v;
 				if (gn instanceof GraphControl.ClusterFacade) {
 					v = ViewManager.getInstance().createClusterView(viewType.getName());
-					gn.setView(
-						ViewManager.getInstance().createClusterView(viewType.getName()));
+					gn.setView(ViewManager.getInstance().createClusterView(
+							viewType.getName()));
 				} else {
 					v = ViewManager.getInstance().createNodeView(viewType.getName());
 				}
@@ -130,17 +121,13 @@ public class FileHandler {
 				e.printStackTrace();
 			}
 		}
-
 		Properties p = xn.getProperties();
 		if (p != null) {
 			String position = p.getProperty("Position");
 			if (position != null) {
 				StringTokenizer st = new StringTokenizer(position);
-				gn.setPosition(
-					new Point3f(
-						Float.parseFloat(st.nextToken()),
-						Float.parseFloat(st.nextToken()),
-						Float.parseFloat(st.nextToken())));
+				gn.setPosition(new Point3f(Float.parseFloat(st.nextToken()), Float
+						.parseFloat(st.nextToken()), Float.parseFloat(st.nextToken())));
 			}
 			String levelConstraint = p.getProperty("LevelConstraint");
 			if (levelConstraint != null) {
@@ -148,9 +135,7 @@ public class FileHandler {
 			}
 		}
 	}
-	private void saveEdgeProperties(
-		GraphControl.EdgeFacade ge,
-		XMLGraph.Edge xe) {
+	private void saveEdgeProperties(GraphControl.EdgeFacade ge, XMLGraph.Edge xe) {
 		EdgeView v = (EdgeView) ge.getView();
 		if (ge.getView() != null) {
 			XMLGraph.ViewType xv = xe.setViewType(v.getTypeName());
@@ -158,9 +143,7 @@ public class FileHandler {
 		}
 		Properties p = new Properties();
 	}
-	private void saveNodeProperties(
-		GraphControl.NodeFacade gn,
-		XMLGraph.Node xn) {
+	private void saveNodeProperties(GraphControl.NodeFacade gn, XMLGraph.Node xn) {
 		NodeView v = (NodeView) gn.getView();
 		if (gn.getView() != null) {
 			XMLGraph.ViewType xv = xn.setViewType(v.getTypeName());
@@ -169,10 +152,9 @@ public class FileHandler {
 		Properties p = new Properties();
 		String data;
 		/*
-		if((data = graphNode.getData())!=null && data.length()!=0) {
-		  xmlNode.setData(data);
-		}
-		*/
+		 * if((data = graphNode.getData())!=null && data.length()!=0) {
+		 * xmlNode.setData(data); }
+		 */
 		Point3f pos = gn.getPosition();
 		p.setProperty("Position", pos.x + " " + pos.y + " " + pos.z);
 		if (gn.getLevelConstraint() != Integer.MIN_VALUE) {
@@ -180,13 +162,9 @@ public class FileHandler {
 		}
 		xn.setProperties(p);
 	}
-	private void loadCluster(
-		XMLGraph.Cluster xmlRoot,
-		GraphControl.ClusterFacade graphRoot) {
-		Vector nodes = new Vector(),
-			edges = new Vector(),
-			forces = new Vector(),
-			clusters = new Vector();
+	private void loadCluster(XMLGraph.Cluster xmlRoot,
+			GraphControl.ClusterFacade graphRoot) {
+		Vector nodes = new Vector(), edges = new Vector(), forces = new Vector(), clusters = new Vector();
 		xmlRoot.load(nodes, edges, clusters);
 		XMLGraph.LayoutEngineType layoutEngine = xmlRoot.getLayoutEngineType();
 		loadLayoutEngine(layoutEngine, graphRoot);
@@ -204,16 +182,14 @@ public class FileHandler {
 		}
 		for (int i = 0; i < edges.size(); i++) {
 			XMLGraph.Edge xmlEdge = (XMLGraph.Edge) edges.get(i);
-			GraphControl.EdgeFacade e =
-				graphRoot.addEdge(
+			GraphControl.EdgeFacade e = graphRoot.addEdge(
 					(GraphControl.NodeFacade) nodeLookup.get(xmlEdge.getStartID()),
 					(GraphControl.NodeFacade) nodeLookup.get(xmlEdge.getEndID()));
 			loadEdgeProperties(xmlEdge, e);
 		}
 	}
-	private void loadLayoutEngine(
-		XMLGraph.LayoutEngineType l,
-		GraphControl.ClusterFacade c) {
+	private void loadLayoutEngine(XMLGraph.LayoutEngineType l,
+			GraphControl.ClusterFacade c) {
 		String type = l.getName();
 		LayoutEngine e = null;
 		if (type.equals("ForceLayout")) {
@@ -222,8 +198,10 @@ public class FileHandler {
 			e = new org.wilmascope.dotlayout.DotLayout();
 			needsLayout = true;
 		} else if (type.equals("ColumnLayout")) {
-			e = new org.wilmascope.columnlayout.ColumnLayout();
-		}
+      e = new org.wilmascope.columnlayout.ColumnLayout();
+    } else if (type.equals("MultiScaleLayout")) {
+      e = new MultiScaleLayout();
+    }
 		c.setLayoutEngine(e);
 		e.setProperties(l.getProperties());
 	}
@@ -238,9 +216,8 @@ public class FileHandler {
 		saveCluster(graphControl.getRootCluster(), xmlGraph.getRootCluster());
 		xmlGraph.save();
 	}
-	private void saveCluster(
-		GraphControl.ClusterFacade graphCluster,
-		XMLGraph.Cluster xmlCluster) {
+	private void saveCluster(GraphControl.ClusterFacade graphCluster,
+			XMLGraph.Cluster xmlCluster) {
 		saveLayoutEngine(graphCluster, xmlCluster);
 		GraphControl.NodeFacade[] nodes = graphCluster.getNodes();
 		Hashtable clusters = new Hashtable();
@@ -257,24 +234,20 @@ public class FileHandler {
 			saveNodeProperties(graphNode, xmlNode);
 		}
 		for (Enumeration e = clusters.keys(); e.hasMoreElements();) {
-			GraphControl.ClusterFacade graphChildCluster =
-				(GraphControl.ClusterFacade) e.nextElement();
-			saveCluster(
-				graphChildCluster,
-				(XMLGraph.Cluster) clusters.get(graphChildCluster));
+			GraphControl.ClusterFacade graphChildCluster = (GraphControl.ClusterFacade) e
+					.nextElement();
+			saveCluster(graphChildCluster, (XMLGraph.Cluster) clusters
+					.get(graphChildCluster));
 		}
 		GraphControl.EdgeFacade[] edges = graphCluster.getEdges();
 		for (int i = 0; i < edges.length; i++) {
-			XMLGraph.Edge xmlEdge =
-				xmlCluster.addEdge(
-					(String) idLookup.get(edges[i].getStartNode()),
-					(String) idLookup.get(edges[i].getEndNode()));
+			XMLGraph.Edge xmlEdge = xmlCluster.addEdge((String) idLookup.get(edges[i]
+					.getStartNode()), (String) idLookup.get(edges[i].getEndNode()));
 			saveEdgeProperties(edges[i], xmlEdge);
 		}
 	}
-	private void saveLayoutEngine(
-		GraphControl.ClusterFacade graphRoot,
-		XMLGraph.Cluster xmlCluster) {
+	private void saveLayoutEngine(GraphControl.ClusterFacade graphRoot,
+			XMLGraph.Cluster xmlCluster) {
 		XMLGraph.LayoutEngineType l = null;
 		Properties p = new Properties();
 		org.wilmascope.graph.LayoutEngine gl = graphRoot.getLayoutEngine();
@@ -284,6 +257,8 @@ public class FileHandler {
 			l = xmlCluster.setLayoutEngineType("DotLayout");
 		} else if (gl instanceof org.wilmascope.columnlayout.ColumnLayout) {
 			l = xmlCluster.setLayoutEngineType("ColumnLayout");
+		} else if (gl instanceof MultiScaleLayout) {
+			l = xmlCluster.setLayoutEngineType("MultiScaleLayout");
 		}
 		l.setProperties(gl.getProperties());
 	}

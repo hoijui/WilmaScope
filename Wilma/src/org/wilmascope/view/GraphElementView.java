@@ -17,34 +17,48 @@
  *
  * -- Tim Dwyer, 2001
  */
-
 package org.wilmascope.view;
-
-import javax.media.j3d.*;
-import javax.vecmath.*;
 import java.awt.Font;
-import java.util.*;
-import com.sun.j3d.utils.picking.PickTool;
+import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.Vector;
+import javax.media.j3d.Appearance;
+import javax.media.j3d.Billboard;
+import javax.media.j3d.BoundingSphere;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Material;
+import javax.media.j3d.PolygonAttributes;
+import javax.media.j3d.RenderingAttributes;
+import javax.media.j3d.Shape3D;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.media.j3d.TransparencyAttributes;
 import javax.swing.ImageIcon;
+import javax.vecmath.AxisAngle4f;
+import javax.vecmath.Color3f;
+import javax.vecmath.Point3d;
+import javax.vecmath.Point3f;
+import javax.vecmath.Quat4f;
+import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
 import com.sun.j3d.utils.geometry.Text2D;
-
+import com.sun.j3d.utils.picking.PickTool;
 /*
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular WilmaScope software
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaScope.org
- * @author Tim Dwyer
+ * Title: WilmaToo Description: Sequel to the ever popular WilmaScope software
+ * Copyright: Copyright (c) 2001 Company: WilmaScope.org @author Tim Dwyer
+ * 
  * @version 1.0
  */
-
 /**
  * GraphElementView defines the methods and interfaces required for Edge and
  * Node views that implement this to be registered as prototypes in the
  * {@link ViewManager}
  */
 public abstract class GraphElementView
-	extends org.wilmascope.patterns.Prototype
-	implements org.wilmascope.graph.Viewable {
+		extends
+			org.wilmascope.patterns.Prototype
+		implements
+			org.wilmascope.graph.Viewable {
 	public void initGraphElement() {
 		pickingClients = new Vector();
 		t3d = new Transform3D();
@@ -67,23 +81,22 @@ public abstract class GraphElementView
 		bg.addChild(tg);
 		//    bg.compile();
 	}
-  public void setTransparencyAttributes(TransparencyAttributes ta) {
-    getAppearance().setTransparencyAttributes(ta);
-  }
+	public void setTransparencyAttributes(TransparencyAttributes ta) {
+		getAppearance().setTransparencyAttributes(ta);
+	}
 	/**
-	 * Sets the default material for graph elements
-	 * You must over-ride this abstract method stub with:
-	 *   setupDefaultAppearance(myDefaultMaterial);
+	 * Sets the default material for graph elements You must over-ride this
+	 * abstract method stub with: setupDefaultAppearance(myDefaultMaterial);
 	 */
 	protected abstract void setupDefaultMaterial();
 	/**
 	 * You must over-ride this method with:
-	 *   setupHighlightAppearance(myHighLightedMaterial)
+	 * setupHighlightAppearance(myHighLightedMaterial)
 	 */
 	protected abstract void setupHighlightMaterial();
 	/**
-	 * you must over-ride the following method to create the 3D Shapes which
-	 * will represent your graph elements
+	 * you must over-ride the following method to create the 3D Shapes which will
+	 * represent your graph elements
 	 */
 	protected abstract void init();
 	/**
@@ -98,56 +111,51 @@ public abstract class GraphElementView
 	public void addTransformGroupChild(javax.media.j3d.Node node) {
 		tg.addChild(node);
 	}
-
 	/**
 	 * set the transform for this graph element's transform group
 	 */
 	protected void setTransformGroupTransform(Transform3D transform) {
 		tg.setTransform(transform);
 	}
-
 	/**
 	 * @return the transform group for this graph element
 	 */
 	public TransformGroup getTransformGroup() {
 		return tg;
 	}
-
-	/** set up for a translation transform
+	/**
+	 * set up for a translation transform
 	 */
 	protected void setTranslation(Vector3f v) {
 		t3d.setTranslation(new Vector3f(v));
 		setTransformGroupTransform(t3d);
 	}
-	/** set up for a transform with scale and translation components
+	/**
+	 * set up for a transform with scale and translation components
 	 */
-	protected void setResizeTranslateTransform(
-		Vector3d scale,
-		Vector3f translation) {
+	protected void setResizeTranslateTransform(Vector3d scale,
+			Vector3f translation) {
 		t3d.setScale(scale);
 		t3d.setTranslation(translation);
 		setTransformGroupTransform(t3d);
 	}
-
-	/** set up for a full transform with scale,
-	 * translation and rotation components
+	/**
+	 * set up for a full transform with scale, translation and rotation
+	 * components
 	 */
-	protected void setFullTransform(
-		Vector3d scale,
-		Vector3f translation,
-		AxisAngle4f rotation) {
+	protected void setFullTransform(Vector3d scale, Vector3f translation,
+			AxisAngle4f rotation) {
 		t3d.setScale(scale);
 		t3d.setTranslation(translation);
 		t3d.setRotation(rotation);
 		setTransformGroupTransform(t3d);
 	}
-	/** set up for a full transform with scale,
-	 * translation and rotation components
+	/**
+	 * set up for a full transform with scale, translation and rotation
+	 * components
 	 */
-	protected void setFullTransform(
-		Vector3d scale,
-		Vector3f translation,
-		Quat4f orientation) {
+	protected void setFullTransform(Vector3d scale, Vector3f translation,
+			Quat4f orientation) {
 		t3d.setScale(scale);
 		t3d.setTranslation(translation);
 		t3d.setRotation(orientation);
@@ -166,62 +174,66 @@ public abstract class GraphElementView
 		}
 		return true;
 	}
-
 	protected void setupDefaultAppearance(Material defaultMaterial) {
 		appearance = new Appearance();
 		appearance.setCapability(Appearance.ALLOW_MATERIAL_WRITE);
 		appearance.setCapability(Appearance.ALLOW_MATERIAL_READ);
 		appearance.setCapability(Appearance.ALLOW_TRANSPARENCY_ATTRIBUTES_WRITE);
-    appearance.setPolygonAttributes(new PolygonAttributes(PolygonAttributes.POLYGON_FILL,
-    PolygonAttributes.CULL_BACK, 0.01f, true));
-    RenderingAttributes ra = new RenderingAttributes();
-    ra.setDepthBufferEnable(true);
-    ra.setDepthBufferWriteEnable(true);
-    appearance.setRenderingAttributes(ra);
+		appearance.setPolygonAttributes(new PolygonAttributes(
+				PolygonAttributes.POLYGON_FILL, PolygonAttributes.CULL_BACK, 0.01f,
+				true));
+		RenderingAttributes ra = new RenderingAttributes();
+		ra.setDepthBufferEnable(true);
+		ra.setDepthBufferWriteEnable(true);
+		appearance.setRenderingAttributes(ra);
 		this.defaultMaterial = defaultMaterial;
 		appearance.setMaterial(defaultMaterial);
 		/*
-		LineAttributes la=new LineAttributes();
-		la.setLineAntialiasingEnable(true);
-		PointAttributes pa=new PointAttributes();
-		pa.setPointAntialiasingEnable(true);
-		appearance.setLineAttributes(la);
-		appearance.setPointAttributes(pa);
-		*/
+		 * LineAttributes la=new LineAttributes();
+		 * la.setLineAntialiasingEnable(true); PointAttributes pa=new
+		 * PointAttributes(); pa.setPointAntialiasingEnable(true);
+		 * appearance.setLineAttributes(la); appearance.setPointAttributes(pa);
+		 */
 	}
 	protected void setupHighlightAppearance(Material highlightMaterial) {
 		this.highlightMaterial = highlightMaterial;
 	}
-
 	public Appearance getAppearance() {
 		return appearance;
 	}
-
 	public void setColour(float red, float green, float blue) {
 		setColour(new Color3f(red, green, blue));
 	}
+	Color3f diffuseColour;
 	public void setColour(Color3f diffuse) {
+		this.diffuseColour = diffuse;
 		defaultColourSet = false;
-		Color3f ambient = new Color3f(diffuse);
-		ambient.scale(0.5f);
-		Material material = new Material();
-		material.setCapability(Material.ALLOW_COMPONENT_READ);
-		material.setDiffuseColor(diffuse);
-		material.setAmbientColor(ambient);
-		appearance.setMaterial(material);
+		// Invisible elements such as LineNode can have null appearance
+		if (appearance != null) {
+			Color3f ambient = new Color3f(diffuse);
+			ambient.scale(0.5f);
+			Material material = new Material();
+			material.setCapability(Material.ALLOW_COMPONENT_READ);
+			material.setDiffuseColor(diffuse);
+			material.setAmbientColor(ambient);
+			appearance.setMaterial(material);
+		}
 	}
 	public void setColour(java.awt.Color colour) {
 		setColour(new Color3f(colour));
 	}
-
 	public Color3f getColor3f() {
 		Color3f colour = new Color3f();
-		appearance.getMaterial().getDiffuseColor(colour);
+		if (diffuseColour == null) { // no user colour set, get it from the
+																 // appearance
+			appearance.getMaterial().getDiffuseColor(colour);
+		} else {
+			colour = diffuseColour;
+		}
 		return colour;
 	}
 	public java.awt.Color getColour() {
-		Color3f colour = new Color3f();
-		appearance.getMaterial().getDiffuseColor(colour);
+		Color3f colour = getColor3f();
 		try {
 			return colour.get();
 		} catch (IllegalArgumentException e) {
@@ -248,7 +260,8 @@ public abstract class GraphElementView
 		this.labelText = text;
 		showLabel(text);
 	}
-	/** sets a multiline label... this may be implemented in different ways by
+	/**
+	 * sets a multiline label... this may be implemented in different ways by
 	 * different subclass views... The default is just to show the first line
 	 */
 	public void setLabel(String[] labelLines) {
@@ -258,34 +271,37 @@ public abstract class GraphElementView
 	public String getLabel() {
 		return labelText;
 	}
-	/** add a label to the element
-	 * @param String the text of the label
-	 * @param scale factor to resize the text
-	 * @param Point3f origin position of the centre of the label relative to the axis of the edge
-	 * @param Vector3f Translation vector to position the label origin relative to centre of the edge
-	 * @param Appearance for the label
+	/**
+	 * add a label to the element
+	 * 
+	 * @param String
+	 *          the text of the label
+	 * @param scale
+	 *          factor to resize the text
+	 * @param Point3f
+	 *          origin position of the centre of the label relative to the axis
+	 *          of the edge
+	 * @param Vector3f
+	 *          Translation vector to position the label origin relative to
+	 *          centre of the edge
+	 * @param Appearance
+	 *          for the label
 	 */
-	//static Font3D f3d = new Font3D(new Font("Dummy", Font.PLAIN, 4),new FontExtrusion());
-	protected void addLabel(
-		String text,
-		double scale,
-		Point3f originPosition,
-		Vector3f vTranslation,
-		Appearance apText) {
+	//static Font3D f3d = new Font3D(new Font("Dummy", Font.PLAIN, 4),new
+	// FontExtrusion());
+	protected void addLabel(String text, double scale, Point3f originPosition,
+			Vector3f vTranslation, Appearance apText) {
 		if (text != null && !text.equals("null") && text.length() > 0) {
 			/*
-			// using Text3D
-			Point3f centredOriginPosition = new Point3f(originPosition);
-			centredOriginPosition.x += -text.length()/2;
-			Text3D txt = new Text3D(f3d, text, centredOriginPosition);
-			OrientedShape3D textShape = new OrientedShape3D();
-			textShape.setAlignmentMode(OrientedShape3D.ROTATE_ABOUT_POINT);
-			textShape.setRotationPoint(new Point3f(0,0,0));
-			textShape.setGeometry(txt);
-			textShape.setAppearance(apText);
-			*/
+			 * // using Text3D Point3f centredOriginPosition = new
+			 * Point3f(originPosition); centredOriginPosition.x += -text.length()/2;
+			 * Text3D txt = new Text3D(f3d, text, centredOriginPosition);
+			 * OrientedShape3D textShape = new OrientedShape3D();
+			 * textShape.setAlignmentMode(OrientedShape3D.ROTATE_ABOUT_POINT);
+			 * textShape.setRotationPoint(new Point3f(0,0,0));
+			 * textShape.setGeometry(txt); textShape.setAppearance(apText);
+			 */
 			// Using text2D and a billboard
-
 			Color3f c = null;
 			if (constants.getProperty("LabelUseViewColour").equals("true")) {
 				c = new Color3f();
@@ -299,20 +315,17 @@ public abstract class GraphElementView
 			textTG.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
 			makePickable(text2D);
 			textTG.addChild(text2D);
-
-			BoundingSphere bounds =
-				new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
-			Billboard billboard =
-				new Billboard(textTG, Billboard.ROTATE_ABOUT_POINT, originPosition);
+			BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0),
+					100.0);
+			Billboard billboard = new Billboard(textTG, Billboard.ROTATE_ABOUT_POINT,
+					originPosition);
 			billboard.setSchedulingBounds(bounds);
-
 			TransformGroup l = new TransformGroup();
 			Transform3D scaleTransform = new Transform3D();
 			scaleTransform.setScale(scale);
 			l.setTransform(scaleTransform);
 			l.addChild(billboard);
 			l.addChild(textTG);
-
 			if (labelSubBranch != null) {
 				labelSubBranch.detach();
 			}
@@ -333,10 +346,10 @@ public abstract class GraphElementView
 		labelBranch.addChild(labelSubBranch);
 	}
 	/**
-	 * Add a visible Shape3D to this Graph Element.
-	 * The shape will be made pickable, returning this GraphElement to the
-	 * pick listener.  Alternately add complex objects such as LODs yourself
-	 * using addTransformGroupChild and then call makePickable on them.
+	 * Add a visible Shape3D to this Graph Element. The shape will be made
+	 * pickable, returning this GraphElement to the pick listener. Alternately
+	 * add complex objects such as LODs yourself using addTransformGroupChild and
+	 * then call makePickable on them.
 	 */
 	protected void addShape(Shape3D shape) {
 		this.shape = shape;
@@ -353,26 +366,26 @@ public abstract class GraphElementView
 		try {
 			PickTool.setCapabilities(shape, PickTool.INTERSECT_FULL);
 		} catch (javax.media.j3d.RestrictedAccessException e) {
-			//System.out.println("Not setting bits on already setup shared geometry");
+			//System.out.println("Not setting bits on already setup shared
+			// geometry");
 		}
 	}
-  GraphCanvas graphCanvas;
+	GraphCanvas graphCanvas;
 	public void hide() {
 		visible = false;
 		bg.detach();
 	}
-  public GraphCanvas getGraphCanvas() {
-    return graphCanvas;
-  }
+	public GraphCanvas getGraphCanvas() {
+		return graphCanvas;
+	}
 	public void show(GraphCanvas graphCanvas) {
-    this.graphCanvas = graphCanvas;
+		this.graphCanvas = graphCanvas;
 		graphCanvas.addGraphElementView(this);
 		visible = true;
 	}
-
 	/**
-	 * Register a PickingClient whose {@link PickingClient#callback} method
-	 * will be called when the element is clicked
+	 * Register a PickingClient whose {@link PickingClient#callback}method will
+	 * be called when the element is clicked
 	 */
 	public void addPickingClient(PickingClient client) {
 		pickingClients.add(client);
@@ -398,7 +411,7 @@ public abstract class GraphElementView
 	}
 	public Properties getProperties() {
 		Properties p = new Properties();
-    String labelText=getLabel();
+		String labelText = getLabel();
 		if (labelText != null) {
 			p.setProperty("Label", labelText);
 		}
@@ -423,10 +436,8 @@ public abstract class GraphElementView
 		String colour = p.getProperty("Colour");
 		if (colour != null) {
 			StringTokenizer st = new StringTokenizer(colour);
-			setColour(
-				Float.parseFloat(st.nextToken()),
-				Float.parseFloat(st.nextToken()),
-				Float.parseFloat(st.nextToken()));
+			setColour(Float.parseFloat(st.nextToken()), Float.parseFloat(st
+					.nextToken()), Float.parseFloat(st.nextToken()));
 		}
 	}
 	protected abstract void showLabel(String text);
@@ -437,15 +448,15 @@ public abstract class GraphElementView
 	private String labelText;
 	private BranchGroup labelBranch;
 	// labelSubBranch is the branch group containing any actual label, it is
-	// replaced if the label changes.  It is a child of labelBranch.
+	// replaced if the label changes. It is a child of labelBranch.
 	private BranchGroup labelSubBranch;
 	private Appearance appearance;
-	// transform to position the element.  set by draw method.
+	// transform to position the element. set by draw method.
 	protected Transform3D t3d;
 	// Called to render the element at a new position
 	private TransformGroup tg;
-	private static org.wilmascope.global.Constants constants =
-		org.wilmascope.global.Constants.getInstance();
+	private static org.wilmascope.global.Constants constants = org.wilmascope.global.Constants
+			.getInstance();
 	// The shape representing this element
 	private Shape3D shape;
 	private Vector pickingClients;

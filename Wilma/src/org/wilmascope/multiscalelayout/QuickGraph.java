@@ -24,6 +24,7 @@ import java.awt.Dimension;
 import java.util.Stack;
 import java.util.Vector;
 
+import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
 /**

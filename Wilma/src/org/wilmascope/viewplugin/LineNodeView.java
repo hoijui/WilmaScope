@@ -28,6 +28,7 @@ public class LineNodeView extends NodeView {
   protected void init() {
   }
   public void setColour(Color3f c) {
+    super.setColour(c);
     Node n = getNode();
     this.colour = c;
     EdgeList edges = n.getEdges();
