@@ -19,6 +19,8 @@
  */
 package org.wilmascope.forcelayout;
 
+import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.LayoutEngine;
 import org.wilmascope.graph.NodeLayout;
 import org.wilmascope.graph.EdgeLayout;
 
@@ -60,12 +62,6 @@ public class ForceManager {
   }
   public void addPrototypeForce(Force prototype) {
     forces.put(prototype.getTypeName(), prototype);
-  }
-  public NodeLayout createNodeLayout() {
-    return new NodeForceLayout();
-  }
-  public EdgeLayout createEdgeLayout() {
-    return new EdgeForceLayout();
   }
   public Collection getAvailableForces() {
     return forces.values();

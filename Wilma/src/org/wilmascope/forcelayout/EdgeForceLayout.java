@@ -33,22 +33,16 @@ import javax.vecmath.Vector3f;
  * @version 1.0
  */
 
-public class EdgeForceLayout implements EdgeLayout {
-  public void delete() {
-    edge = null;
-  }
-  public void setEdge(Edge edge) {
-    this.edge = edge;
-  }
-  public Edge getEdge() {
-    return edge;
-  }
+public class EdgeForceLayout extends EdgeLayout {
   public float getRelaxedLength() {
     return relaxedLength;
   }
   public void setRelaxedLength(float relaxedLength) {
     this.relaxedLength = relaxedLength;
   }
-  private Edge edge;
+  public void setStiffness(float stiffness) {
+    this.stiffness = stiffness;
+  }
   private float relaxedLength = Constants.defaultEdgeLength;
+  private float stiffness = 1f;
 }

@@ -40,19 +40,7 @@ import javax.vecmath.Point3f;
  * forces acting upon it.
  */
 
-public class NodeForceLayout implements NodeLayout {
-  public void delete() {
-    node = null;
-  }
-  /** Set the node for the NodeForceLayout */
-  public void setNode(Node node) {
-    this.node = node;
-  }
-
-  /** Return the node for the NodeForceLayout */
-  public Node getNode() {
-    return node;
-  }
+public class NodeForceLayout extends NodeLayout {
 
   /** Add a force vector which will act on this NodeForceLayout */
   public void addForce(Vector3f force) {
@@ -83,6 +71,7 @@ public class NodeForceLayout implements NodeLayout {
    * @param attenuation scale factor for the velocity
    */
   public void applyForce(float attenuation) {
+    Node node = getNode();
     if(node.isFixedPosition()) {
       return;
     }
@@ -128,7 +117,9 @@ public class NodeForceLayout implements NodeLayout {
   public void setConstraint(Constraint c) {
     constraint = c;
   }
-  Node node;
+  public Constraint getConstraint() {
+    return constraint;
+  }
   //The sum of all force vectors on the node
   Vector3f netForce = new Vector3f();
   // The velocity with which the node was travelling after the last time the
