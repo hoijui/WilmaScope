@@ -19,11 +19,13 @@
  */
 package org.wilmascope.forcelayout;
 
-import org.wilmascope.graph.EdgeList;
-import org.wilmascope.graph.Edge;
-import org.wilmascope.graph.Cluster;
-
 import javax.vecmath.Vector3f;
+
+import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.Edge;
+import org.wilmascope.graph.EdgeList;
+import org.wilmascope.graph.Node;
+import org.wilmascope.graph.NodeLayout;
 
 /*
  * Title:        WilmaToo
@@ -69,8 +71,20 @@ public class Spring extends Force {
       } else {
         v.set(Constants.minVector);
       }
-      ((NodeForceLayout)edge.getEnd().getLayout()).subForce(v);
-      ((NodeForceLayout)edge.getStart().getLayout()).addForce(v);
+      // Apply the force to the nodes at either end...
+      getForceNodeLayout(edge.getEnd()).subForce(v);
+      getForceNodeLayout(edge.getStart()).addForce(v);
+    }
+  }
+
+  // If node is not in a forcelayout cluster then recurse to
+  // the parent cluster until we find one that is a ForceNodeLayout
+  private NodeForceLayout getForceNodeLayout(Node node) {
+    NodeLayout l = node.getLayout();
+    if(l instanceof NodeForceLayout) {
+      return (NodeForceLayout)l; 
+    } else {
+      return (NodeForceLayout)getForceNodeLayout(node.getOwner()); 
     }
   }
 
