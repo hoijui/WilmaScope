@@ -82,25 +82,39 @@
     </copy>
     <jar manifest="META-INF/MANIFEST.MF" jarfile="${lib}/wilma.jar" basedir="${dest}"/>
     <!--
+    -->
+  </target>
+  <target name="distpackage" depends="dist">
     <mkdir dir="${dist}/bin"/>
     <copy file="README" todir="${dist}"/>
     <copy file="COPYING" todir="${dist}"/>
     <copy todir="${dist}/${lib}">
       <fileset dir="${lib}"/>
     </copy>
+    <copy todir="${dist}/userdoc">
+      <fileset dir="userdoc"/>
+    </copy>
+    <copy todir="${dist}/data">
+      <fileset dir="data"/>
+    </copy>
     <copy todir="${dist}/bin" >
       <fileset dir="bin"/>
     </copy>
-    <mkdir dir="tmp"/>
-    <copy todir="tmp"><fileset dir="dist"/></copy>
+    <mkdir dir="Wilma"/>
+    <copy todir="Wilma"><fileset dir="dist"/></copy>
     <zip zipfile="Wilma_${DSTAMP}.zip">
-      <zipfileset dir="tmp" prefix="Wilma"/>
+      <zipfileset dir="Wilma" prefix="Wilma"/>
     </zip>
-    <delete dir="tmp"/>
-    -->
+    <tar tarfile="Wilma_${DSTAMP}.tar">
+      <tarfileset dir="." includes="Wilma/bin/**" mode="755"/>
+      <tarfileset dir="." includes="Wilma/**" excludes="Wilma/bin/**"/>
+    </tar>
+    <gzip src="Wilma_${DSTAMP}.tar" zipfile="Wilma_${DSTAMP}.tar.gz" />
+    <delete file="Wilma_${DSTAMP}.tar"/>
+    <delete dir="Wilma"/>
   </target>
 
-  <target name="all" depends="clean, compile, chat, dist, doc">
+  <target name="all" depends="clean, compile, chat, dist, doc, distpackage">
   </target>
 
   <target name="build" depends="compile">

@@ -31,7 +31,10 @@ NOTE: Debian packages for both of the above are also available from
 STEP 3
 ------
 
-unzip the WILMA_{DATE}.zip file somewhere convenient
+On Windows:
+  unzip the Wilma_{DATE}.zip file somewhere convenient
+On *n*x:
+  tar xzvf Wilma_{DATE}.tar.gz
 
 STEP 4
 ------
