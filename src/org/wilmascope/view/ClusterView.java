@@ -33,10 +33,7 @@ public abstract class ClusterView extends NodeView {
   }
   public void setExpandedView() {
     Appearance a = getAppearance();
-    if(!a.isLive()) {
-      getAppearance().setCapability(Appearance.ALLOW_TRANSPARENCY_ATTRIBUTES_WRITE);
-    }
-    getAppearance().setTransparencyAttributes(transparencyAttributes);
+    setTransparencyAttributes(transparencyAttributes);
   }
   /**
    * the collapsed cluster view will be opaque and will have radius proportional

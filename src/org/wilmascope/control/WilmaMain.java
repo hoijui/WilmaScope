@@ -26,7 +26,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPopupMenu;
 
-import org.wilmascope.file.FileHandler;
+import org.wilmascope.file.*;
 import org.wilmascope.gmlparser.ColumnsImporter;
 import org.wilmascope.gui.Actions;
 import org.wilmascope.gui.ClusterOptionsMenu;

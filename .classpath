@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-    <classpathentry kind="src" path="src"/>
-    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="lib" path="C:/j2sdk1.4.2_01/jre/lib/ext/j3dcore.jar"/>
-    <classpathentry kind="lib" path="C:/j2sdk1.4.2_01/jre/lib/ext/j3dutils.jar"/>
-    <classpathentry kind="lib" path="C:/j2sdk1.4.2_01/jre/lib/ext/vecmath.jar"/>
-    <classpathentry kind="output" path="classes"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
