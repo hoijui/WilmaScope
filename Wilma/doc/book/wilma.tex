@@ -1,0 +1,372 @@
+
+\documentclass[runningheads]{cl2emult}
+
+\usepackage{makeidx}  % allows index generation
+\usepackage{graphicx} % standard LaTeX graphics tool
+                      % for including eps-figure files
+\usepackage{subeqnar} % subnumbers individual equations
+                      % within an array
+\usepackage{multicol} % used for the two-column index
+\usepackage{cropmark} % cropmarks for pages without
+                      % pagenumbers
+\usepackage{math}     % placeholder for figures
+\usepackage{subfigure} % subfigures in one figure
+
+%\usepackage{algorithm2e}
+\usepackage[ruled,algonl]{algorithm2e}
+%\setlength{\algomargin}{2.1em}
+\dontprintsemicolon
+\SetInd{0.5em}{1em}
+\SetKwFor{Forall}{forall}{do}{od}
+\SetKwFor{WhileDo}{while}{do}{od}
+\SetKw{Let}{let}
+
+\makeindex            % used for the subject index
+                      % please use the style sprmidx.sty with
+                      % your makeindex program
+
+%upright Greek letters (example below: upright "mu")
+\newcommand{\euler}[1]{{\usefont{U}{eur}{m}{n}#1}}
+\newcommand{\eulerbold}[1]{{\usefont{U}{eur}{b}{n}#1}}
+\newcommand{\umu}{\mbox{\euler{\char22}}}
+\newcommand{\umub}{\mbox{\eulerbold{\char22}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%OPTIONAL%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\usepackage{amstex}   % useful for coding complex math
+%\mathindent\parindent % needed in case "Amstex" is used
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%AUTHOR_STYLES_AND_DEFINITIONS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%Please reduce your own definitions and macros to an absolute
+%minimum since otherwise the editor will find it rather
+%strenuous to compile all individual contributions to a
+%single book file
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%
+\title*{The WilmaScope 3D Graph Visualisation System}
+%
+%
+\toctitle{WilmaScope}
+% allows explicit linebreak for the table of content
+%
+%
+\titlerunning{WilmaScope}
+% allows abbreviation of title, if the full title is too long
+% to fit in the running head
+%
+\author{Tim Dwyer\inst{1}
+\and Peter Eckersley\inst{2}
+}
+%
+\authorrunning{Tim Dwyer and Peter Eckersley}
+% if there are more than two authors,
+% please abbreviate author list for running head
+%
+%
+\institute{School of Information Technologies,
+     Madsen Building F09,
+     University of Sydney,
+     NSW 2006,
+     Australia
+\and Department of Computer Science,
+     University of Melbourne,
+     Victoria 3010,
+     Australia}
+
+\maketitle              % typesets the title of the contribution
+
+%\begin{abstract}
+%The abstract\index{abstract} should summarize the contents of the paper
+%in at least 70 and at most 150 words; neither too long
+%nor too short but to the point!
+%\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+%
+Graph drawing software relies on a variety of mathematical results,
+mainly in \emph{graph theory}\index{graph theory},
+\emph{topology}\index{topology}, and \emph{geometry}\index{geometry},
+as well as computer science techniques, mainly in the areas
+\emph{algorithms and data structures}\index{algorithms and data
+  structures}, \emph{software engineering}\index{software
+  engineering}, and \emph{user interfaces}\index{user interfaces}.
+Many of the core techniques used in automatic graph drawing come from
+the intersection of mathematics and computer science in combinatorial
+and continuous optimization.
+
+Even though automatic graph drawing is a relatively young scientific
+field, a few generic approaches have emerged in the graph drawing
+community. They allow a classification of layout methods so that most
+software packages implement variations of such approaches.
+
+The purpose of this chapter is to lay the foundations for all
+subsequent chapters so that they can be read independently from each
+other while referring back to the common material presented here. This
+chapter has been written based on the requirements and the
+contributions of all authors in this book. This chapter is \emph{not}
+an introduction to automatic graph drawing, because it is neither
+complete nor balanced. In order to avoid repetitions, we only explain
+subjects that are basic or used in at least two subsequent chapters.
+The following chapters contain a lot of additional material. For
+introductions into the field of automatic graph drawing we recommend
+the books ``Graph Drawing'' by Di Battista, Eades, Tamassia, and
+Tollis~\cite{DETT99} and ``Drawing Graphs'' edited by Kaufmann and
+Wagner~\cite{KW01}. Nevertheless, this book is self-contained in the
+sense that after this chapter has been read, every subsequent chapter
+can be read without referring to external sources.
+
+Section~\ref{sec:basics} contains basic notions and notations from
+graph theory concerning graphs and their representations including
+undirected and directed graphs, layered graphs, and hierarchical and
+clustered graphs.  It closes with some remarks on the storage of
+graphs in computer memory. Section~\ref{sec:embeddings} discusses
+concepts of graph planarity and graph embeddings including planar
+graphs, upward planarity, and cluster planar graphs.
+Section~\ref{sec:methods}
+%discusses the classical graph drawing
+%methods starting with the requirements for graph layout from various
+%viewpoints such as ease of visual perception and {\ae}sthetic
+%considerations as well as mathematical optimization criteria resulting
+%from such requirements. The subsequent subsections~\ref{sec:tree}
+%to~\ref{sec:forcedirected} 
+introduces generic layout styles: tree-, layered-, planarization-,
+orthogonal-, and force-directed-layout.
+Section~\ref{sec:softwareengineering} introduces software engineering
+paradigms used in automatic graph drawing software design, and
+finally, Section~\ref{sec:classification} gives a rough classification
+of the software tools presented in the subsequent chapters.
+
+\section{Graphs and their Representation}\label{sec:basics}
+%
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\U}{\mathcal{U}}
+\def\PP{\mathop{\cal P}}
+\def\NP{\mathop{\cal NP}}
+\def\order{\mathop{\cal O}}
+\def\topnumber{\mathop{\rm topnumber}}
+\def\starr{\mathop{\rm star}}
+\def\instar{\mathop{\rm instar}}
+\def\outstar{\mathop{\rm outstar}}
+\def\loopp{\mathop{\rm loop}}
+\def\adj{\mathop{\rm adj}}
+\def\inadj{\mathop{\rm inadj}}
+\def\outadj{\mathop{\rm outadj}}
+\def\degg{\mathop{\rm deg}}
+\def\maxdeg{\mathop{\rm maxdeg}}
+\def\mindeg{\mathop{\rm mindeg}}
+\def\indeg{\mathop{\rm indeg}}
+\def\outdeg{\mathop{\rm outdeg}}
+\def\depth{\mathop{\rm depth}}
+\def\roott{\mathop{\rm root}}
+\def\parent{\mathop{\rm parent}}
+\def\barycenter{\mathop{\rm barycenter}}
+\def\median{\mathop{\rm median}}
+\def\repulsionforce{\mathop{\rm repulsionforce}}
+\def\springforce{\mathop{\rm springforce}}
+\def\rotationforce{\mathop{\rm rotationforce}}
+\def\gravitationforce{\mathop{\rm gravitationforce}}
+\def\R{\mathop{\rm I\kern-1.5pt R}}
+\def\N{\mathop{\rm I\kern-1.5pt N}}
+\def\argmax{\mathop{\rm argmax}}
+%
+\subsection{Undirected Graphs}
+%
+A \emph{graph}\index{graph}\index{graph!undirected}
+$G=(V,E,\lambda)$\index{00G@$G$} consists of a finite set
+$V=V(G)$\index{00V@$V$} of \emph{vertices}\index{vertex} or
+\emph{nodes}\index{node}, a finite set $E=E(G)$\index{00E@$E$} of
+edges\index{edge}\index{edge!undirected}, and a function $\lambda$
+that maps each edge to a subset $V'\subseteq V$ with $|V'|\in\{1,2\}$.
+An edge for which $|\lambda(e)|=1$ is called a
+\emph{loop}\index{graph!loop} and if for two edges $e,f\in E$ we have
+$\lambda(e)=\lambda(f)$ we say that $e$ and $f$ are multi-edges.
+Figure~\ref{fig:graph} shows a graph with a loop and two multi-edges.
+
+%\begin{figure}[!ht]
+%\centering
+%\includegraphics[width=.4\textwidth]{techfoundfig.1.ps}
+%\caption[]{A graph with a loop and two multi-edges.}
+%\label{fig:graph}
+%\end{figure}
+
+A graph with no loops and no multi-edges is characterized by a finite
+set~$V$ of vertices and a finite set $E\subseteq\{\{u,v\}\mid u,v\in
+V, u\ne v\}$ of edges and called a \emph{simple graph}\index{simple
+  graph}. In the sequel, we deal mostly (unless stated otherwise) with
+simple graphs, but non-simple graphs are important in automatic graph
+drawing and for ease of notation, we use the simplified $G=(V,E)$
+notation with the understanding that multi-edges and loops are
+distinguishable elements of the multi-set $E$. E.g., for the
+non-simple graph in Figure~\ref{fig:graph}, the notation
+$G(V,E,\lambda)=(\{v_1,v_2,v_3\}, \{e_1,e_2,e_3,e_4,e_5\},
+\lambda(e_1)=\{v_1,v_2\},\linebreak[0]
+\lambda(e_2)=\{v_1,v_2\},\linebreak[0]
+\lambda(e_3)=\{v_1,v_3\},\linebreak[0]
+\lambda(e_4)=\{v_2,v_3\},\linebreak[0] \lambda(e_5)=\{v_3,v_3\})$
+becomes simplified to $G(V,E)=(\{v_1,v_2,v_3\},
+\{e_1,e_2,e_3,e_4,e_5\})= (\{v_1,v_2,v_3\}, \{
+\{v_1,v_2\},\linebreak[0]\{v_1,v_2\},\linebreak[0]\{v_1,v_3\},
+\linebreak[0]\{v_2,\linebreak[0]v_3\},\linebreak[0]\{v_3,v_3\}\})$.
+
+For an edge $e=\{u,v\}$, the vertices $u$ and $v$ are the
+\emph{end-vertices}\index{edge!end-vertex} of $e$, and $e$ is
+\emph{incident} to $u$ and $v$.  An edge $\{u,v\}\in E$
+\emph{connects}\index{edge!connecting} the vertices $u$ and $v$.  Two
+vertices $u,v\in V$ are \emph{adjacent}\index{vertex!adjacent} if
+$\{u,v\}\in E$. By $\starr(v)=\{e\in E\mid v\in
+e\}$\index{00star@$\star(v)$} we denote the set of edges incident to a
+vertex $v\in V$ and $\adj(v)=\{u\in V\mid \{u,v\}\in
+E\}$\index{00adj@$\adj(v)$} is the set of vertices adjacent to a
+vertex $v\in V$. By
+$\degg(v)=|\starr(v)|+|\loopp(v)|$\index{00deg@$\degg(v)$}, where
+$\loopp(v)$ \index{00loop@$\loopp(v)$} is the set of edges of the form
+$\{v,v\}$, we denote the \emph{degree}\index{vertex!degree} of a
+vertex $v\in V$, $\mindeg(G)=\min\{\deg(v)\mid v\in
+V\}$\index{00delta@$\mindeg(G)$} is the \emph{minimum
+  degree}\index{degree!minimum} and $\maxdeg(G)=\max\{\deg(v)\mid v\in
+V\}$\index{00Delta@$\maxdeg(G)$} is the \emph{maximum
+  degree}\index{degree!maximum} of $G$.  E.g., in
+Figure~\ref{fig:graph}, $\starr(v_1)=\{e_1,e_2,e_3\}$,
+$\starr(v_3)=\{e_3,e_4,e_5\}$, whereas $\adj(v_1)=\{v_2,v_3\}$ and
+$\adj(v_3)=\{v_1,v_2,v_3\}$. The degree of the two vertices is
+$\deg(v_1)=3$ and $\deg(v_3)=4$, the minimal degree of the graph is
+$\mindeg(G)=3$ and the maximum degree is $\maxdeg(G)=4$. A vertex $v$
+with $\degg(v)=0$ is called an \emph{isolated vertex}\index{isolated
+  vertex}.
+
+\section{Graph Planarity and Embeddings}\label{sec:embeddings}
+%
+A famous result of Euler~\cite{Eul1750} for polytopes relates the
+number of vertices, edges, and faces in any planar embedding of a
+planar graph:
+
+\begin{theorem}[Euler's Formula~\cite{Eul1750}]
+  Let $\Pi$ be a planar embedding of a planar graph $G=(V,E)$ and let
+  $F$ be the set of faces in $\Pi$. Then $|V|-|E|+|F|=2$.
+\end{theorem}
+
+From Euler's formula, an upper bound on the number of edges of a
+planar graph with a given number of vertices is easily derived:
+
+\begin{theorem}
+  For any planar graph $G=(V,E)$ we have $|E|\le3|V|-6$.
+\end{theorem}
+
+The bound is attained for
+\emph{triangulated}\index{graph!triangulated} planar graphs, i.e.,
+planar graphs in which every face is a triangle.
+
+\section{Graph Drawing Methods}\label{sec:methods}
+%
+
+\subsection{Tree Layout}\label{sec:tree}
+%
+
+\subsection{Layered Layout}\label{sec:layered}
+%
+
+\subsection{Planarization}\label{sec:planarization}
+%
+There are many interesting drawing methods for planar graphs that
+yield plane drawings as we will discuss in
+Section~\ref{sec:orthogonal}.  Such a method can be applied to a
+non-planar graph $G$ after transforming $G$ to a planar graph $G'$.
+The basic idea of the planarization method was introduced by
+Tamassia~\emph{et al.}~\cite{TDB88}.
+
+There are different ways of
+\emph{planarizing}\index{planarization}\index{graph!planarization} a
+given non-planar graph. The most widely used method in graph drawing
+is to construct an embedding of $G$ with a small number of crossings,
+and then to substitute each crossing and its involved pair of edges
+$(\{u_1,v_1\},\{u_2,v_2\})$ by an artificial vertex $w$ and four
+incident edges $\{w,u_1\},\{w,u_2\},\{w,v_1\}$, and $\{w,v_2\}$. We
+call the resulting planar graph $G_P=(V_P,E_P)$ the
+\emph{planarized}\index{graph!planarized} graph from $G$.
+
+\begin{algorithm}[htbp]
+\SetKwInOut{Input}{Input}
+\SetKwInOut{Output}{Output}
+\SetLine
+\Input{Graph $G=(V,E)$\;}
+\Output{Maximal Planar Subgraph $P=(V,F)$ of $G$\;}
+\BlankLine
+\caption{Incremental Maximal Planar Subgraph}\label{alg:incremental}
+ Set $F=\emptyset$\;
+ \For {all edges $e\in E$} {
+   \If {$P=(V,F\cup\{e\})$ is planar} {
+     Set $P=(V,F\cup\{e\})$\;
+  }
+ }
+\end{algorithm}
+
+Another method based on the planarity testing algorithm by Hopcroft
+and Tarjan has been suggested by Cai~\emph{et al.}~\cite{CHT93} and
+runs in time $\order(|E|\log|V|)$.
+
+\subsection{Orthogonal Layout}\label{sec:orthogonal}
+%
+
+\subsection{Force Directed Layout}\label{sec:forcedirected}
+%
+
+\section{Software Engineering}\label{sec:softwareengineering}
+%
+(to be written)
+
+\section{Classification}\label{sec:classification}
+%
+(to be written)
+
+\begin{thebibliography}{7}
+%
+\addcontentsline{toc}{section}{References}
+
+\bibitem{CHT93} Cai, J., Han, X., Tarjan, R.~E.\ (1993)
+An $\order(m\log n)$-time algorithm for the maximal planar subgraph
+problem.
+SIAM J.\ Comput.\ {\bf22}, 1142--1164
+
+\bibitem{DETT99} Di Battista, G., Eades, P., Tamassia, R., Tollis,
+  I.~G.\ (1999)
+Graph Drawing: Algorithms for the visualization of graphs.
+Prentice Hall, New Jersey
+
+\bibitem{Dji95} Djidjev, H.~N.\ (1995)
+A linear algorithm for the maximal planar subgraph problem.
+Proc.\ 4th Workshop Algorithms Data Struct., 
+Lecture Notes in Computer Science, Springer Verlag
+
+\bibitem{Eul1750} Euler, L.\ (1750)
+Demonstratio nonnullarum insignium proprietatum quibus solida hedris
+planis inclusa sunt praedita.
+Novi Comm.\ Acad.\ Sci.\ Imp.\ Petropol.\ {\bf4} (1752-3, published
+1758), 140--160, also: Opera Omnia (1) {\bf26}, 94--108
+
+\bibitem{KW01} Kaufmann, M., Wagner, D. (eds.) (2001)
+Drawing Graphs: Methods and Models.
+Lecture Notes in Computer Science 2025, Springer Verlag
+
+\bibitem{TDB88} Tamassia, R., Di Battista, G., Batini, C.\ (1988)
+Automatic graph drawing and readability of diagrams.
+IEEE Transactions on Systems, Man, and Cybernetics {\bf18}, 61--79
+
+\end{thebibliography}
+
+%INDEX%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\addcontentsline{toc}{section}{Index}
+\flushbottom
+\printindex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
