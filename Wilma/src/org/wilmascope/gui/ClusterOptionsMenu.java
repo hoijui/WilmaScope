@@ -27,6 +27,7 @@ import org.wilmascope.control.*;
 import org.wilmascope.view.ViewManager;
 import java.util.Vector;
 import javax.swing.event.*;
+import org.wilmascope.graph.*;
 
 /**
  * A popup menu for clusters
@@ -127,11 +128,19 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
         setLabelMenuItem_actionPerformed(e);
       }
     });
-    this.add(deleteMenuItem);
+    hideNonNeighboursMenuItem.setToolTipText("");
+        hideNonNeighboursMenuItem.setText("Show Only Neighbours");
+        hideNonNeighboursMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                hideNonNeighboursMenuItem_actionPerformed(e);
+            }
+        });
+        this.add(deleteMenuItem);
     this.add(hideMenuItem);
     this.add(contentsPickingMenuItem);
     this.add(addToMenuItem);
     this.add(removeFromMenuItem);
+        this.add(hideNonNeighboursMenuItem);
     this.add(setLabelMenuItem);
     this.add(clusterTypeMenu);
     this.addSeparator();
@@ -224,4 +233,14 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
     cluster.setLabel(label);
   }
   private GraphControl.ClusterFacade rootCluster;
+    JMenuItem hideNonNeighboursMenuItem = new JMenuItem();
+
+    void hideNonNeighboursMenuItem_actionPerformed(ActionEvent e) {
+        Cluster c = cluster.getCluster();
+        EdgeList edges = c.getEdges();
+        NodeList neighbours = new NodeList();
+        for(edges.resetIterator(); edges.hasNext();) {
+            neighbours.add(edges.nextEdge().getNeighbour(c));
+        }
+    }
 }

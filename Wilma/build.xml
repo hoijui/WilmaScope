@@ -147,7 +147,7 @@
 
   <target name="doc" description="generate javadoc documentation">
     <mkdir dir="${doc}"/>
-    <javadoc sourcepath="${src}" packagenames="org.wilmascope.graph,org.wilmascope.control,org.wilmascope.view,org.wilmascope.viewplugin,org.wilmascope.patterns,org.wilmascope.gui,org.wilmascope.global,org.wilmascope.forcelayout,org.wilmascope.file,org.wilmascope" destdir="${doc}"/>
+    <javadoc sourcepath="${src}" packagenames="org.wilmascope.graph,org.wilmascope.control,org.wilmascope.view,org.wilmascope.viewplugin,org.wilmascope.patterns,org.wilmascope.gui,org.wilmascope.global,org.wilmascope.forcelayout,org.wilmascope.file,org.wilmascope.dotlayout,org.wilmascope" destdir="${doc}"/>
   </target>
 
   <target name="clean">

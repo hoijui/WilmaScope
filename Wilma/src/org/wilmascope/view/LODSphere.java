@@ -45,7 +45,7 @@ public class LODSphere {
   }
 
   public LODSphere(float radius, Appearance appearance) {
-    this(radius,appearance,new float[] {5f,10f,30f});
+    this(radius,appearance,new float[] {20f,40f,80f});
   }
   public LODSphere(float radius, Appearance appearance, float[] distances) {
     sw = new Switch(0);

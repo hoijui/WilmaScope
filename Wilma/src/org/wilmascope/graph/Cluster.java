@@ -18,14 +18,6 @@
  * -- Tim Dwyer, 2001
  */
 package org.wilmascope.graph;
-/*
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular WilmaScope software
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaScope.org
- * @author Tim Dwyer
- * @version 1.0
- */
 
 import javax.vecmath.Vector3f;
 import javax.vecmath.Point3f;
@@ -37,14 +29,9 @@ import java.util.Hashtable;
  * ({@link Edge}) sharing the same ({@link LayoutEngine}).
  * This class is the main interface to the graph package for
  * adding {@link GraphElement}s to a graph hierarchy.
- * $Id$
- * Revision history:
- * $Log$
- * Revision 1.6  2002/03/27 07:28:14  tgdwyer
- * Documentation changes
  *
- * @Author: Tim Dwyer
- * @Version: $Revision$
+ * @author Tim Dwyer
+ * @version $Id$
  */
 public class Cluster extends Node {
   // the list of nodes in the cluster
@@ -55,6 +42,9 @@ public class Cluster extends Node {
   // next draw
   private Quat4f orientation = new Quat4f();
 
+  /**
+   * @return a list of the children in this cluster
+   */
   public NodeList getNodes() {
     return nodes;
   }
@@ -78,19 +68,31 @@ public class Cluster extends Node {
       // add the edge at the appropriate level in the cluster hierarchy
       addEdge(edge);
     }
-    calcMass();
+    addMass(node.getMass());
   }
+  /**
+   * Get the edges internal to this cluster, ie, only those edges connecting a
+   * pair of nodes that are <b>both</b> inside this cluster
+   * @see Node#getEdges
+   * @return a list of edges
+   */
   public EdgeList getInternalEdges() {
     return internalEdges;
   }
 
-  public boolean isAncestor(Node n) {
-    if(nodes.contains(n)) {
+  /**
+   * Check if the specified node is a child of this cluster or one of this
+   * cluster's child clusters etc recursively
+   * @param node node ancestory of
+   * @return true if this cluster is an ancestor of node
+   */
+  public boolean isAncestor(Node node) {
+    if(nodes.contains(node)) {
       return true;
     }
     ClusterList clusters = nodes.getClusters();
     for(clusters.resetIterator();clusters.hasNext();) {
-      if(clusters.nextCluster().isAncestor(n)) {
+      if(clusters.nextCluster().isAncestor(node)) {
         return true;
       }
     }
@@ -126,7 +128,7 @@ public class Cluster extends Node {
         // needs to occur as the edge will be deleted from the owner
     }
     // recalculate the mass which should now be minus one node!
-    calcMass();
+    addMass(-1*n.getMass());
   }
 
   /**
@@ -201,6 +203,9 @@ public class Cluster extends Node {
     }
   }
 
+  /**
+   * remove a graph element (ie node or edge) from this cluster
+   */
   public void remove(GraphElement e) {
     if(e instanceof Node) {
       removeNode((Node)e);
@@ -209,7 +214,8 @@ public class Cluster extends Node {
     }
   }
   /**
-   * Remove an {@link Edge} from the Cluster
+   * Remove an {@link Edge} from the Cluster.  Will work with either an
+   * internal or external edge.
    */
   public void removeEdge(Edge e) {
     internalEdges.remove(e);
@@ -217,6 +223,11 @@ public class Cluster extends Node {
     removeExternalEdge(e);
   }
 
+  /**
+   * remove an edge that is external to this cluster.  If the edge is
+   * actually internal nothing will happen.  If in doubt call {@link #removeEdge}
+   * @see #removeEdge
+   */
   public void removeExternalEdge(Edge e) {
     super.removeEdge(e);
   }
@@ -236,9 +247,6 @@ public class Cluster extends Node {
     normal = new Vector3f(0f,1f,0f);
     orientation.set(new AxisAngle4f(normal,0f));
   }
-  private static int idcounter=0;
-  private final int id;
-  private boolean expanded = true;
   public boolean isExpanded() {
     return expanded;
   }
@@ -455,17 +463,50 @@ public class Cluster extends Node {
     delta.sub(getPosition());
     super.reposition(delta);
   }
-  public float calcMass() {
-    float mass = nodes.calcMass();
-    setMass(mass);
-    return mass;
+  /**
+   * On adding or removing a node from the cluster the mass
+   * of the cluster will change, and a positive or negative
+   * contribution to the mass will have to be added, not only
+   * to this cluster, but to parent clusters as well.  The
+   * latter is handled by {@link #setMass}
+   */
+  public float addMass(float newMass) {
+    setMass(getMass()+newMass);
+    return getMass();
+  }
+  /**
+   * When the mass of this cluster changes, due to an addition
+   * or removal of a node from the cluster or by a user call
+   * to this method, the mass of the parent cluster must also
+   * be recalculated
+   */
+  public void setMass(float newMass) {
+    float delta = newMass - getMass();
+    super.setMass(newMass);
+    // owner of the root cluster will be null!
+    if(owner != null) {
+      owner.addMass(delta);
+    }
   }
   // a table mapping this cluster's external edges to their
   // connection points (portal nodes) in the cluster
   private Hashtable portalNodes = new Hashtable();
+  // some layout engines have a notion of an orientation for a cluster...
+  // actually this probably doesn't belong here anymore, but should be stored
+  // in the layout engine itself.
   private Vector3f normal = new Vector3f();
   private AxisAngle4f rotationAngle = new AxisAngle4f();
+  // indicates whether this cluster should be included in recursive operations
+  // such as layout calculation and drawing
+  private boolean expanded = true;
+  // used to keep track of whether the cluster was collapsed by a user (in
+  // which case it should not be expanded until specifically requested) or not
+  // in which case it will be automatically expanded when a parent is expanded.
   private boolean userCollapsed = false;
+  // added this because I got sick of trying to keep track of references
+  // in the debugger and traces
+  private static int idcounter=0;
+  private final int id;
 }
 
 

@@ -51,7 +51,7 @@ public class ArrowEdgeView extends EdgeView {
     setupHighlightAppearance(Colours.yellowMaterial);
   }
   public void init() {
-    LODCylinder cylinder = new LODCylinder(radius,0.9f,getAppearance());
+    LODCylinder cylinder = new LODCylinder(1.0f,0.9f,getAppearance());
     //addShape(new Shape3D(edgeCylinder.getShape(Cylinder.BODY).getGeometry()));
 
     cylinder.makePickable(this);
@@ -63,7 +63,7 @@ public class ArrowEdgeView extends EdgeView {
     showDirectionIndicator();
   }
   public void showDirectionIndicator() {
-    Cone cone=new Cone(0.025f, 0.1f, Cone.GENERATE_NORMALS, getAppearance());
+    Cone cone=new Cone(2f, 0.1f, Cone.GENERATE_NORMALS, getAppearance());
     makePickable(cone.getShape(Cone.BODY));
     makePickable(cone.getShape(Cone.CAP));
     Transform3D transform = new Transform3D();

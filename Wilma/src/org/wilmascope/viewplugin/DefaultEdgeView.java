@@ -56,10 +56,10 @@ public class DefaultEdgeView extends EdgeView {
     makePickable(edgeCylinder.getShape(Cylinder.BODY));
     makePickable(edgeCylinder.getShape(Cylinder.TOP));
     makePickable(edgeCylinder.getShape(Cylinder.BOTTOM));
-	addTransformGroupChild(edgeCylinder);
+  addTransformGroupChild(edgeCylinder);
         */
 
-    LODCylinder cylinder = new LODCylinder(radius, length, getAppearance());
+    LODCylinder cylinder = new LODCylinder(length, length, getAppearance());
     cylinder.makePickable(this);
     cylinder.addToTransformGroup(getTransformGroup());
   }

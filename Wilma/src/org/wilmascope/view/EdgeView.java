@@ -26,6 +26,7 @@ import javax.vecmath.*;
 import javax.media.j3d.*;
 import com.sun.j3d.utils.geometry.Cone;
 import javax.swing.*;
+import java.util.Properties;
 
 /*
  * Title:        WilmaToo
@@ -52,7 +53,7 @@ implements org.wilmascope.graph.EdgeView {
     // length of the edge should not include the radii of the nodes
     l-=edge.getStart().getRadius()+edge.getEnd().getRadius();
     setFullTransform(
-      new Vector3d(1d,l,1d),
+      new Vector3d(radius,l,radius),
       getPositionVector(),
       getPositionAngle());
   }
@@ -117,6 +118,21 @@ implements org.wilmascope.graph.EdgeView {
   public void setRadius(float radius) {
     this.radius = radius;
   }
+  public float getRadius() {
+    return radius;
+  }
+  public void setProperties(Properties p) {
+    super.setProperties(p);
+    String radius = p.getProperty("Radius");
+    if(radius!=null) {
+      setRadius(Float.parseFloat(radius));
+    }
+  }
+  public Properties getProperties() {
+    Properties p = super.getProperties();
+    p.setProperty("Radius",""+this.radius);
+    return p;
+  }
 
   private Edge edge;
   // A vector giving the default orientation of the edgeCylinder
@@ -124,5 +140,5 @@ implements org.wilmascope.graph.EdgeView {
   // offset to allow viewing of multiple edges between the same nodes
   private float multiEdgeOffset=0f;
   // default edge radius
-  protected float radius = 0.02f;
+  private float radius = 0.02f;
 }

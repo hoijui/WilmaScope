@@ -78,7 +78,9 @@ public class Edge extends GraphElement {
       if(e.getStart()!=start) {
         direction = -1;
       }
-      e.getView().setMultiEdgeOffset(i,commonEdges.size(),direction);
+      if(e.getView()!=null) {
+        e.getView().setMultiEdgeOffset(i,commonEdges.size(),direction);
+      }
     }
   }
   /**

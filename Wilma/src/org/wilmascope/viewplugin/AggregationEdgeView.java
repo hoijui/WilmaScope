@@ -51,7 +51,7 @@ public class AggregationEdgeView extends EdgeView {
     setupHighlightAppearance(Colours.yellowMaterial);
   }
   public void init() {
-    LODCylinder cylinder = new LODCylinder(radius,0.8f,getAppearance());
+    LODCylinder cylinder = new LODCylinder(1f,0.8f,getAppearance());
     //addShape(new Shape3D(edgeCylinder.getShape(Cylinder.BODY).getGeometry()));
 
     cylinder.makePickable(this);

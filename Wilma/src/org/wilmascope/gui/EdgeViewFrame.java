@@ -39,7 +39,7 @@ class ColourPanel extends JPanel {
 }
 
 public class EdgeViewFrame extends JFrame {
-  
+
   /** Creates new form EdgeViewFrame */
   public EdgeViewFrame(GraphControl gc, GraphControl.ClusterFacade root) {
     this.rootCluster = root;
@@ -48,7 +48,7 @@ public class EdgeViewFrame extends JFrame {
     minLabelPanel.setBackground(getColourFromSlider(minHueSlider));
     maxLabelPanel.setBackground(getColourFromSlider(maxHueSlider));
   }
-  
+
   /** This method is called from within the constructor to
    * initialize the form.
    */
@@ -161,17 +161,19 @@ public class EdgeViewFrame extends JFrame {
 
     pack();
   }
-  
+
   private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {
     dispose();
   }
-  
+
   private void hueApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {
     GraphControl.EdgeFacade edges[] = rootCluster.getEdges();
     for(int i=0;i<edges.length;i++) {
       EdgeView v = (EdgeView)edges[i].getView();
-      v.setHueByWeight(getHueFromSlider(minHueSlider),
-      getHueFromSlider(maxHueSlider));
+      if(v!=null) {
+        v.setHueByWeight(getHueFromSlider(minHueSlider),
+          getHueFromSlider(maxHueSlider));
+      }
     }
   }
   private void hideApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -187,26 +189,26 @@ public class EdgeViewFrame extends JFrame {
       }
     }
   }
-  
+
   private void maxHueSliderStateChanged(ChangeEvent evt) {
     maxLabelPanel.setBackground(getColourFromSlider(maxHueSlider));
   }
-  
+
   private void minHueSliderStateChanged(ChangeEvent evt) {
     minLabelPanel.setBackground(getColourFromSlider(minHueSlider));
   }
-  
+
   private Color getColourFromSlider(JSlider s) {
     return Color.getHSBColor(getHueFromSlider(s),1f,1f);
   }
   private float getHueFromSlider(JSlider s) {
     return (float)(100-s.getValue())/100f;
   }
-  
+
   private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
     dispose();
   }
-  
+
   private JSlider hideThresholdSlider;
   private ColourPanel hueSliderPanel;
   private JLabel maxLabel;
@@ -221,7 +223,7 @@ public class EdgeViewFrame extends JFrame {
   private JLabel hueLabel;
   private JPanel minLabelPanel;
   private JPanel maxLabelPanel;
-  
+
   private GraphControl.ClusterFacade rootCluster;
   private GraphControl graphControl;
 }

@@ -28,6 +28,7 @@ import javax.media.j3d.*;
 import com.sun.j3d.utils.geometry.Cone;
 import com.sun.j3d.utils.picking.behaviors.PickTranslateBehavior;
 import com.sun.j3d.utils.behaviors.mouse.*;
+import java.util.Properties;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular WilmaScope software
@@ -65,7 +66,11 @@ implements org.wilmascope.graph.NodeView {
   }
   protected void showLabel(String text) {
     double r = (double)node.getRadius();
-    System.out.println("scale is "+Math.log(r * 10 * Math.E));
+    // the log term on the scale is a feable attempt to stop labels getting too
+    // big with large clusters... however it doesn't really work because clusters
+    // typically grow or shrink after a label is set... when the label will be
+    // scaled linearly along with the cluster.  A more correct solution would be
+    // to have the label branch scaled separately in the draw method.
     addLabel(text, 10d / Math.log(r * 10 * Math.E), new Point3f(0.0f,0.05f,-0.07f), new Vector3f(-0.1f * (float)text.length(),1.3f,0.0f), getAppearance());
   }
   BranchGroup anchorBranch;
@@ -143,6 +148,18 @@ implements org.wilmascope.graph.NodeView {
     localToVworld.invert();
     localToVworld.transform(pos);
     node.setPosition(pos);
+  }
+  public void setProperties(Properties p) {
+    super.setProperties(p);
+    String radius = p.getProperty("Radius");
+    if(radius!=null) {
+      getNode().setRadius(Float.parseFloat(radius));
+    }
+  }
+  public Properties getProperties() {
+    Properties p = super.getProperties();
+    p.setProperty("Radius",""+getNode().getRadius());
+    return p;
   }
   private Node node;
 }

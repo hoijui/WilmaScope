@@ -25,7 +25,7 @@ import java.awt.event.*;
 
 import java.awt.Component;
 import org.wilmascope.control.*;
-import org.wilmascope.view.ViewManager;
+import org.wilmascope.view.*;
 import java.util.Vector;
 import javax.swing.event.*;
 
@@ -46,15 +46,20 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
   }
   public void callback(java.awt.event.MouseEvent e, GraphControl.GraphElementFacade edge) {
     this.edge = (GraphControl.EdgeFacade)edge;
-    /*
-    JMenuItem detailsMenuItem;
-    if((detailsMenuItem = edge.getUserOptionsMenuItem(parent)) != null) {
-      remove(this.detailsMenuItem);
-      add(detailsMenuItem);
-      this.detailsMenuItem = detailsMenuItem;
-      //pack();
+    Object userData;
+    detailsMenuItem.setEnabled(false);
+    detailsMenuItem.setText("Show Details...");
+    if((userData = edge.getUserData()) != null && userData instanceof ElementData) {
+      if(customListener != null ) {
+        detailsMenuItem.removeActionListener(customListener);
+      }
+      customListener = ((ElementData)userData).getActionListener();
+      if(customListener != null) {
+        detailsMenuItem.addActionListener(customListener);
+        detailsMenuItem.setEnabled(true);
+        detailsMenuItem.setText(((ElementData)userData).getActionDescription());
+      }
     }
-    */
     show(parent, e.getX(), e.getY());
     updateUI();
   }
@@ -79,6 +84,12 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
         hideMenuItem_actionPerformed(e);
       }
     });
+    setColourMenuItem.setText("Set Colour...");
+    setColourMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        setColourMenuItem_actionPerformed(e);
+      }
+    });
     weightMenuItem.setText("Weight...");
     weightMenuItem.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -101,11 +112,20 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
         reverseMenuItem_actionPerformed(e);
       }
     });
+    radiusMenuItem.setText("Radius...");
+    radiusMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        radiusMenuItem_actionPerformed(e);
+      }
+    });
     this.add(deleteMenuItem);
     this.add(hideMenuItem);
+    this.add(radiusMenuItem);
     this.add(weightMenuItem);
+    this.add(setColourMenuItem);
     this.add(reverseMenuItem);
     this.add(edgeTypeMenu);
+    this.add(detailsMenuItem);
   }
 
   void deleteMenuItem_actionPerformed(ActionEvent e) {
@@ -130,12 +150,6 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
     }
   }
 
-  private Component parent;
-  private GraphControl.EdgeFacade edge;
-  private GraphControl.ClusterFacade rootCluster;
-  JMenuItem hideMenuItem = new JMenuItem();
-  JMenu edgeTypeMenu = new JMenu();
-  JMenuItem reverseMenuItem = new JMenuItem();
 
   void hideMenuItem_actionPerformed(ActionEvent e) {
     edge.hide();
@@ -170,6 +184,45 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
   void reverseMenuItem_actionPerformed(ActionEvent e) {
     edge.reverseDirection();
   }
+  void setColourMenuItem_actionPerformed(ActionEvent e) {
+    java.awt.Color colour = JColorChooser.showDialog(
+      this,"Please select nice colours...", edge.getColour());
+    if(colour!=null) {
+      edge.setColour(colour);
+    }
+  }
+  public static GraphControl.EdgeFacade getSelectedEdge() {
+    return edge;
+  }
   JMenuItem deleteMenuItem = new JMenuItem();
   JMenuItem weightMenuItem = new JMenuItem();
+  JMenuItem detailsMenuItem = new JMenuItem();
+  ActionListener customListener = null;
+  private Component parent;
+  static private GraphControl.EdgeFacade edge;
+  private GraphControl.ClusterFacade rootCluster;
+  JMenuItem hideMenuItem = new JMenuItem();
+  JMenu edgeTypeMenu = new JMenu();
+  JMenuItem reverseMenuItem = new JMenuItem();
+  JMenuItem setColourMenuItem = new JMenuItem();
+  JMenuItem radiusMenuItem = new JMenuItem();
+
+  void radiusMenuItem_actionPerformed(ActionEvent e) {
+    String s = (String)JOptionPane.showInputDialog(parent,
+      "Enter radius for this edge...",
+      (String)"Edge Radius", JOptionPane.QUESTION_MESSAGE,null,null,""+((EdgeView)edge.getEdge().getView()).getRadius());
+    if(s==null) {
+      return;
+    }
+    try {
+      float radius = Float.parseFloat(s);
+      if(radius < 0 || radius > 5) {
+        throw new NumberFormatException();
+      }
+      ((EdgeView)edge.getEdge().getView()).setRadius(radius);
+    } catch(NumberFormatException ex) {
+      JOptionPane.showMessageDialog(parent, "Invalid edge weight entered... enter a floating point number between 0 and 1", "Invalid edge weight", JOptionPane.ERROR_MESSAGE);
+    }
+    rootCluster.unfreeze();
+  }
 }

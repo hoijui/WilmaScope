@@ -23,14 +23,13 @@ import java.io.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 import javax.xml.parsers.*;
-import java.util.Vector;
+import java.util.*;
 
 // For write operation
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-/** Class for loading and accessing xml enrolment data for the
- * Enroller.
+/**
  *
  * @author Tim Dwyer
  * @version 1.0
@@ -127,43 +126,47 @@ public class XMLGraph
     protected void appendChild(XMLGraphElement child) {
       element.appendChild(child.getElement());
     }
-    protected Colour getColour() {
-      NodeList children = getElement().getChildNodes();
+    protected Element[] getChildElements(String tag) {
       // I'd rather use something like getElementsByTagName but that seems to
       // do a pre-order traversal of the entire element tree rather than just
       // searching the immediate children.  Obviously with nested clusters
       // this would cause trouble
-      for(int i=0;i<children.getLength();i++) {
-        Element e = (Element)children.item(i);
-        if(e.getNodeName().equals("Colour")) {
-          return new Colour(e);
-        }
+      NodeList children = getElement().getChildNodes();
+      Element[] elements = new Element[children.getLength()];
+      for(int i = 0; i<children.getLength(); i++) {
+        elements[i] = (Element)children.item(i);
+      }
+      return elements;
+    }
+    protected Properties getProperties() {
+      Properties ps = new Properties();
+      Element[] children = getChildElements("Property");
+      for(int i=0;i<children.length;i++) {
+        Element e = children[i];
+        Property p = new Property(e);
+        ps.setProperty(p.getKey(),p.getValue());
+      }
+      return ps;
+    }
+    protected ViewType getViewType() {
+      Element es[] = getChildElements("ViewType");
+      if(es.length > 0) {
+        return new ViewType(es[0]);
       }
       return null;
     }
-    protected String getData() {
-      return getAttribute("Data");
+    protected ViewType setViewType(String type) {
+      ViewType v = new ViewType(type);
+      appendChild(v);
+      return v;
     }
-    protected void setData(String data) {
-      setAttribute("Data",data);
-    }
-    protected String getViewType() {
-      return getAttribute("ViewType");
-    }
-    protected void setViewType(String type) {
-      setAttribute("ViewType",type);
-    }
-    protected void setColour(float red, float green, float blue) {
-      appendChild(new Colour(red,green,blue));
-    }
-    protected void setColour(java.awt.Color colour) {
-      float rgb[] = colour.getRGBColorComponents(null);
-      appendChild(new Colour(rgb[0],rgb[1],rgb[2]));
+    protected void setProperties(Properties ps) {
+      for(Enumeration keys = ps.keys(); keys.hasMoreElements();) {
+        String key = (String)keys.nextElement();
+        appendChild(new Property(key,ps.getProperty(key)));
+      }
     }
   }
-  /** wrapper class to access enrolment details for a whole day from
-   * the xml data in memory.
-   */
   public class Cluster extends Node {
     protected Cluster() {
       super("Cluster");
@@ -171,16 +174,9 @@ public class XMLGraph
     protected Cluster(Element clusterElement) {
       super(clusterElement);
     }
-    public float getRadius() {
-      return getFloatAttribute("Radius");
-    }
-    public void setRadius(float radius) {
-      setAttribute("Radius",radius);
-    }
-    public void getChildren(
+    public void load(
       Vector nodes,
       Vector edges,
-      Vector forces,
       Vector clusters
     ) {
       NodeList children = getChildNodes();
@@ -190,21 +186,24 @@ public class XMLGraph
         }
         Element child = (Element)children.item(i);
         String tagName = child.getTagName();
-        if(tagName.equals("Node")) {
+        if(tagName.equals("LayoutEngineType")) {
+          layoutEngineType = new LayoutEngineType(child);
+        } else if(tagName.equals("ViewType")) {
+          viewType = new ViewType(child);
+        } else if(tagName.equals("Node")) {
           nodes.add(new Node(child));
         } else if(tagName.equals("Edge")) {
           edges.add(new Edge(child));
-        } else if(tagName.equals("Force")) {
-          forces.add(new Force(child));
         } else if(tagName.equals("Cluster")) {
           clusters.add(new Cluster(child));
         }
       }
     }
-    /** add a name to this timeslot
-     * @param enrolledName the name of the person to add to the
-     * list
-     */
+    public LayoutEngineType setLayoutEngineType(String type) {
+      LayoutEngineType t = new LayoutEngineType(type);
+      appendChild(t);
+      return t;
+    }
     public Node addNode() {
       Node node = new Node();
       appendChild(node);
@@ -220,11 +219,22 @@ public class XMLGraph
       appendChild(edge);
       return edge;
     }
-    public Force addForce(String type, float strength) {
-      Force force = new Force(type,strength);
-      appendChild(force);
-      return force;
+    /**
+     * @return the ViewType for this cluster previously loaded in a call to
+     * {@link #load}
+     */
+    public ViewType getViewType() {
+      return viewType;
     }
+    /**
+     * @return the LayoutEngineType for this cluster previously loaded in a call to
+     * {@link #load}
+     */
+    public LayoutEngineType getLayoutEngineType() {
+      return layoutEngineType;
+    }
+    ViewType viewType;
+    LayoutEngineType layoutEngineType;
   }
   /** wrapper class for Node details
    */
@@ -238,9 +248,6 @@ public class XMLGraph
     protected Node(String type) {
       super(type);
     }
-    public void setLabel(String label) {
-      setAttribute("Label",label);
-    }
     public final String getID() {
       return getAttribute("ID");
     }
@@ -249,35 +256,6 @@ public class XMLGraph
     }
     protected Node(Element nodeElement) {
       super(nodeElement);
-    }
-    /** returns the start time for the timeslot
-     * @return the start time as a String format HH24:MI
-     */
-    public String getLabel() {
-      return getAttribute("Label");
-    }
-    /** get the duration of the class or meeting
-     * @return an integer number of hours duration
-     */
-    public float getRadius() {
-      return Float.parseFloat(getAttribute("Radius"));
-    }
-    protected Position getPosition() {
-      NodeList children = getElement().getChildNodes();
-      // I'd rather use something like getElementsByTagName but that seems to
-      // do a pre-order traversal of the entire element tree rather than just
-      // searching the immediate children.  Obviously with nested clusters
-      // this would cause trouble
-      for(int i=0;i<children.getLength();i++) {
-        Element e = (Element)children.item(i);
-        if(e.getNodeName().equals("Position")) {
-          return new Position(e);
-        }
-      }
-      return null;
-    }
-    protected void setPosition(float x, float y, float z) {
-      appendChild(new Position(x,y,z));
     }
   }
   public class Edge extends XMLGraphElement {
@@ -296,63 +274,44 @@ public class XMLGraph
       return getAttribute("EndID");
     }
   }
-  public class Force extends XMLGraphElement {
-    protected Force(Element forceElement) {
-      super(forceElement);
+  public class Property extends XMLGraphElement {
+    protected Property(Element e) {
+      super(e);
     }
-    protected Force(String type, float strength) {
-      super("Force");
-      setAttribute("Type",type);
-      setAttribute("Strength",strength);
+    protected Property(String key,String value) {
+      super("Property");
+      setAttribute("Key",key);
+      setAttribute("Value",value);
     }
-    public String getType() {
-      return getAttribute("Type");
+    protected String getKey() {
+      return getAttribute("Key");
     }
-    public float getStrength() {
-      return getFloatAttribute("Strength");
-    }
-  }
-  public class Colour extends XMLGraphElement {
-    protected Colour(Element colourElement) {
-      super(colourElement);
-    }
-    protected Colour(float red, float green, float blue) {
-      super("Colour");
-      setAttribute("Red",red);
-      setAttribute("Green",green);
-      setAttribute("Blue",blue);
-    }
-    public java.awt.Color getAWTColour() {
-      return new java.awt.Color(getRed(),getGreen(),getBlue());
-    }
-    public float getRed() {
-      return getFloatAttribute("Red");
-    }
-    public float getGreen() {
-      return getFloatAttribute("Green");
-    }
-    public float getBlue() {
-      return getFloatAttribute("Blue");
+    protected String getValue() {
+      return getAttribute("Value");
     }
   }
-  public class Position extends XMLGraphElement {
-    protected Position(Element positionElement) {
-      super(positionElement);
+  public class LayoutEngineType extends XMLGraphElement {
+    protected LayoutEngineType(Element e) {
+      super(e);
     }
-    protected Position(float x, float y, float z) {
-      super("Position");
-      setAttribute("X",x);
-      setAttribute("Y",y);
-      setAttribute("Z",z);
+    protected LayoutEngineType(String name) {
+      super("LayoutEngineType");
+      setAttribute("Name",name);
     }
-    public float getX() {
-      return getFloatAttribute("X");
+    public String getName() {
+      return getAttribute("Name");
     }
-    public float getY() {
-      return getFloatAttribute("Y");
+  }
+  public class ViewType extends XMLGraphElement {
+    protected ViewType(Element e) {
+      super(e);
     }
-    public float getZ() {
-      return getFloatAttribute("Z");
+    protected ViewType(String name) {
+      super("ViewType");
+      setAttribute("Name",name);
+    }
+    public String getName() {
+      return getAttribute("Name");
     }
   }
   public Cluster getRootCluster() {

@@ -75,7 +75,7 @@ module wilmascope {
       // set the object whose callback method will be called when the
       // graph element is selected by a mouse click
       void setPickingClient(in PickingClient client);
-			void delete();
+      void delete();
     };
 
     // A node represents a vertex in a connected graph
@@ -100,11 +100,10 @@ module wilmascope {
       Cluster addNewCluster();
       void removeNode(in Node n);
       void setBalancedEventClient(in BalancedEventClient callback);
-			void freeze();
-			void unfreeze();
+      void freeze();
+      void unfreeze();
       Force addForce(in string name);
       void setBalancedThreshold(in float threshold);
-      void setIterations(in long iterations);
     };
 
     interface GraphControl {

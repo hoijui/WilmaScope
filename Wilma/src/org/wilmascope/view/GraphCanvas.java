@@ -40,6 +40,7 @@ import com.sun.j3d.utils.picking.PickCanvas;
 public class GraphCanvas extends Canvas3D {
   protected GraphPickBehavior pb;
   protected TransformGroup transformGroup;
+  protected TransformGroup stretchTransformGroup;
   protected TransformGroup rotationTransformGroup;
   private BranchGroup bg;
   private Background background;
@@ -75,9 +76,10 @@ public class GraphCanvas extends Canvas3D {
     rotationTransformGroup.setCapability(TransformGroup.ENABLE_PICK_REPORTING);
     rotationTransformGroup.setCapability(TransformGroup.ALLOW_LOCAL_TO_VWORLD_READ);
 
-    //Transform3D stretch = new Transform3D();
-    //stretch.setScale(new Vector3d(1,1,2));
-    //transformGroup.setTransform(stretch);
+    //stretchTransformGroup = new TransformGroup();
+    Transform3D stretch = new Transform3D();
+    stretch.setScale(new Vector3d(1,1,1));
+    transformGroup.setTransform(stretch);
     // Set up the background
     background = new Background(constants.getColor3f("BackgroundColour"));
     background.setApplicationBounds(bounds);
@@ -133,6 +135,11 @@ public class GraphCanvas extends Canvas3D {
   }
   public void setScale(double scale) {
     getView().setScreenScale(scale);
+  }
+  public void setScale(Vector3d scale) {
+    Transform3D stretch = new Transform3D();
+    stretch.setScale(scale);
+    transformGroup.setTransform(stretch);
   }
   public Behavior addPerFrameBehavior(BehaviorClient client) {
     GraphBehavior gb = new GraphBehavior(client);
