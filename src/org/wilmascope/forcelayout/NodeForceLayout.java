@@ -105,28 +105,14 @@ public class NodeForceLayout implements NodeLayout {
     // Move the node
     node.reposition(velocity);
   }
-  /** Move the nodes to satisfy constraints
+  /**
+   * applies the constraint set for this node
    */
   public void applyConstraint() {
-      org.wilmascope.graph.Cluster owner = node.getOwner();
-      ForceLayout ownerForceEngine = (ForceLayout)owner.getLayoutEngine();
-      Point3f bc = ownerForceEngine.getProjectedBarycenter();
-      Point3f position = node.getPosition();
-      Vector3f t = new Vector3f();
-      ownerForceEngine.constrainPointToPlane(position, t);
-
-      // calculate a torque on the plane due to the force around the
-      // projected barycenter
-      //   torque = r X F
-      Vector3f r = new Vector3f();
-      r.sub(position,bc);
-      Vector3f torque = new Vector3f();
-      torque.cross(r,t);
-      ((ForceLayout)owner.getLayoutEngine()).addNetTorque(torque);
-      t.scale(10f);
-      ((NodeForceLayout)owner.getLayout()).addForce(t);
+    if(constraint != null) {
+      constraint.apply(this);
+    }
   }
-
   /* If a {@link vec} is longer than {@link maxLength} then normalise it.
    * @param vec input vector
    * @param maxLength length beyond which {@link vec} is clipped
@@ -139,12 +125,16 @@ public class NodeForceLayout implements NodeLayout {
     }
     return false;
   }
-  private Node node;
+  public void setConstraint(Constraint c) {
+    constraint = c;
+  }
+  Node node;
   //The sum of all force vectors on the node
-  private Vector3f netForce = new Vector3f();
+  Vector3f netForce = new Vector3f();
   // The velocity with which the node was travelling after the last time the
   // forces were applied.
-  private Vector3f velocity = new Vector3f();
+  Vector3f velocity = new Vector3f();
   // Acceleration of the node due to the forces on the node
-  private Vector3f acceleration = new Vector3f();
+  Vector3f acceleration = new Vector3f();
+  Constraint constraint;
 }
