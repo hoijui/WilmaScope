@@ -69,7 +69,7 @@ class JPEGFileFilter extends FileFilter {
 public class FileHandler {
   GraphControl graphControl;
 
-  Hashtable nodeLookup;
+  Hashtable<String,GraphControl.NodeFacade> nodeLookup;
 
   Hashtable idLookup;
 
@@ -208,27 +208,27 @@ public class FileHandler {
 
   private void loadCluster(XMLGraph.Cluster xmlRoot,
       GraphControl.ClusterFacade graphRoot) {
-    Vector nodes = new Vector(), edges = new Vector(), forces = new Vector(), clusters = new Vector();
+    Vector<XMLGraph.Node> nodes = new Vector<XMLGraph.Node>();
+    Vector<XMLGraph.Edge> edges = new Vector<XMLGraph.Edge>();
+    Vector forces = new Vector();
+    Vector<XMLGraph.Cluster> clusters = new Vector<XMLGraph.Cluster>();
     xmlRoot.load(nodes, edges, clusters);
     XMLGraph.LayoutEngineType layoutEngine = xmlRoot.getLayoutEngineType();
     loadLayoutEngine(layoutEngine, graphRoot);
     loadNodeProperties(xmlRoot, graphRoot);
-    for (int i = 0; i < nodes.size(); i++) {
-      XMLGraph.Node xmlNode = (XMLGraph.Node) nodes.get(i);
+    for (XMLGraph.Node xmlNode:nodes) {
       GraphControl.NodeFacade n = graphRoot.addNode();
       loadNodeProperties(xmlNode, n);
       nodeLookup.put(xmlNode.getID(), n);
     }
-    for (int i = 0; i < clusters.size(); i++) {
-      XMLGraph.Cluster xc = (XMLGraph.Cluster) clusters.get(i);
+    for (XMLGraph.Cluster xc:clusters) {
       GraphControl.ClusterFacade gc = graphRoot.addCluster();
       loadCluster(xc, gc);
     }
-    for (int i = 0; i < edges.size(); i++) {
-      XMLGraph.Edge xmlEdge = (XMLGraph.Edge) edges.get(i);
+    for (XMLGraph.Edge xmlEdge:edges) {
       GraphControl.EdgeFacade e = graphRoot.addEdge(
-          (GraphControl.NodeFacade) nodeLookup.get(xmlEdge.getStartID()),
-          (GraphControl.NodeFacade) nodeLookup.get(xmlEdge.getEndID()));
+          nodeLookup.get(xmlEdge.getStartID()),
+          nodeLookup.get(xmlEdge.getEndID()));
       loadEdgeProperties(xmlEdge, e);
     }
   }

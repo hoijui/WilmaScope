@@ -39,6 +39,7 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.ToolTipManager;
+import javax.vecmath.Vector3f;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.file.FileHandler;
@@ -57,6 +58,7 @@ public class Actions {
   Action adjustForcesAction;
   Action rotateAction;
   Action lightingAction;
+  Action centreAction;
   Action graphOperationsAction;
   Action fileOpenAction;
   Action fileSaveAction;
@@ -133,6 +135,14 @@ public class Actions {
       new AbstractAction("Auto-Rotate", new ImageIcon(org.wilmascope.images.Images.class.getResource("rotate.png"))) {
       public void actionPerformed(ActionEvent e) {
         graphControl.getGraphCanvas().toggleRotator();
+      }
+    };
+
+    centreAction =
+      new AbstractAction("Center Graph", new ImageIcon(org.wilmascope.images.Images.class.getResource("centre.png"))) {
+      public void actionPerformed(ActionEvent e) {
+        Vector3f centre = new Vector3f(graphControl.getRootCluster().getCluster().getAllNodes().getBarycenter());
+        graphControl.getGraphCanvas().reorient(centre);
       }
     };
     lightingAction =
@@ -282,6 +292,7 @@ public class Actions {
     toolbar.add(adjustForcesAction).setToolTipText(
       "Adjust root Cluster Forces");
     toolbar.add(lightingAction).setToolTipText("Adjust lighting");
+    toolbar.add(centreAction).setToolTipText("Centre the graph");
     JToggleButton tb = new JToggleButton(rotateAction);
     toolbar.add(tb);
     tb.setText("");
@@ -317,6 +328,8 @@ public class Actions {
   public JMenu getViewMenu() {
     JMenu viewMenu = new JMenu();
     viewMenu.add(lightingAction);
+    viewMenu.add(centreAction);
+    viewMenu.add(rotateAction);
     return viewMenu;
   }
   private static Actions instance = new Actions();

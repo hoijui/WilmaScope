@@ -61,8 +61,8 @@ visualise graphs. </li>
  href="#The_Graph_Generator_Framework">GraphGenerator framework</a> to
 automatically
 generate graphs based on simple algorithms. </li>
-  <li>by implementing new layout algorithms based on the WilmaScope
-    <a href="#Creating_New_Layout_Engines">LayoutEngine framework</a>. </li>
+  <li>by implementing new layout algorithms based on the WilmaScope <a
+ href="#Creating_New_Layout_Engines">LayoutEngine framework</a>. </li>
   <li>by adding new <a href="#Creating_New_Graph_Element_Glyphs">graphical
 representations for graph elements</a>
 (glyphs). </li>
@@ -133,7 +133,7 @@ architecture (see <a href="#WilmaScope_MVC_Architecture_Figure_1:_MV">Figure
 <div style="text-align: center;"><a
  name="WilmaScope_MVC_Architecture_Figure_1:_MV"></a><img
  alt="WilmaScope MVC Architecture"
- src="Extending%20WilmaScope_files/image002.jpg"
+ src="ExtendingWilmaScope_files/image002.jpg"
  style="width: 383px; height: 322px;"><br>
 Figure 1: MVC Architecture<br>
 </div>
@@ -153,7 +153,7 @@ conveyed by <a href="#WilmaScope_MVC_Architecture_Figure_2:_Wi">Figure
 <div style="text-align: center;"><a
  name="WilmaScope_MVC_Architecture_Figure_2:_Wi"></a><img
  alt="WilmaScope MVC Architecture"
- src="Extending%20WilmaScope_files/image003.jpg"
+ src="ExtendingWilmaScope_files/WilmaMVC.jpg"
  style="width: 658px; height: 454px;"><br>
 Figure 2: WilmaScope MVC Architecture<br>
 </div>
@@ -161,11 +161,14 @@ Figure 2: WilmaScope MVC Architecture<br>
 These three conceptual components are realised in the WilmaScope
 architecture as follows:<br>
 <ul>
-  <li>model&#8212;classes in the graph package. </li>
+  <li>model&#8212;classes in the <a
+ href="org/wilmascope/graph/package-summary.html">graph</a> package. </li>
   <li>view&#8212;classes extending one of the abstract classes found in the
-view
-package. </li>
-  <li>controller&#8212;the GraphController class provides a centralised
+    <a href="org/wilmascope/view/package-summary.html">view
+package</a>. </li>
+  <li>controller&#8212;the <a
+ href="org/wilmascope/control/GraphController.html">GraphController</a>
+class provides a centralised
 bridge for
 updating the graph model </li>
 </ul>
@@ -174,21 +177,24 @@ the ways a user might interact with WilmaScope, or that a programmer
 might write extensions to construct or maintain a graph.&nbsp; These
 are:<br>
 <ul>
-  <li>A user can load a WilmaScope .xwg file or import a supported
+  <li>A user can load a WilmaScope <a
+ href="#XML_Wilma_Graph_XWG_File_Format">.xwg file</a> or import a
+supported
 external
 format file to create a graph (see File Formats). </li>
   <li>A user can interact with the WilmaScope GUI to add or edit graph
 components (see the user help documentation). </li>
   <li>A programmer might call methods provided by the WilmaScope API to
-construct a graph (see Creating Applications Based on GraphCanvas and
-also the WilmaScope Javadoc). </li>
+construct a graph (see <a href="#Creating_Applications_Based_on">Creating
+Applications Based on GraphCanvas</a> and
+also the <a href="index.html">WilmaScope Javadoc</a>). </li>
   <li>A user can use the Graph Generator menus to automatically create
 a
 generic graph, or a programmer can implement a new procedure for
 constructing a graph by implementing the GraphGenerator framework (see
-Creating Test Graphs). </li>
+    <a href="#Creating_Test_Graphs">Creating Test Graphs</a>). </li>
   <li>A programmer can implement new layout algorithms by extending the
-LayoutEngine framework. </li>
+    <a href="#Creating_New_Layout_Engines">LayoutEngine framework</a>. </li>
 </ul>
 Conceptually, the graph model includes definitions of what we call
 Layout Engines.&nbsp; A layout engine is an implementation of a layout
@@ -201,7 +207,7 @@ view of WilmaScope&#8217;s internal architecture is shown in <a
 <br>
 <a name="Wilma_UML_Class_Diagram_Figure_3:_graph_"></a>
 <div style="text-align: center;"><img alt="Wilma UML Class Diagram"
- src="Extending%20WilmaScope_files/image006.jpg"
+ src="ExtendingWilmaScope_files/image006.jpg"
  style="width: 576px; height: 463px;"><br>
 Figure 3: graph and view packages and example packages in which the
 various interfaces are implemented.<br>
@@ -231,10 +237,14 @@ top-level graph is a cluster.<br>
 Knowledge of the details of the classes in the graph package is not
 generally required for programmers to implement applications using or
 extending WilmaScope.&nbsp; Instead, the API methods for creating or
-updating a graph are provided by the GraphControl class.&nbsp;
+updating a graph are provided by the <a
+ href="org/wilmascope/control/GraphControl.html">GraphControl </a>class.&nbsp;
 GraphControl defines facades (or simplified classes) as inner classes:
-ie, GraphControl.NodeFacade, GraphControl.EdgeFacade and
-GraphControl.ClusterFacade.&nbsp; When a GraphControl object is
+ie, <a href="org/wilmascope/control/GraphControl.NodeFacade.html">GraphControl.NodeFacade</a>,
+<a href="org/wilmascope/control/GraphControl.EdgeFacade.html">GraphControl.EdgeFacade</a>
+and
+<a href="org/wilmascope/control/GraphControl.ClusterFacade.html">GraphControl.ClusterFacade</a>.&nbsp;
+When a GraphControl object is
 instantiated a root cluster is created upon which a graph may be
 built.&nbsp; As a basic example consider the following code fragment:<br>
 <br>
@@ -266,7 +276,7 @@ Generator Window&#8221; which is accessed by the user from the
 <br>
 <div style="text-align: center;"><img
  alt="Opening Graph Generator Window"
- src="Extending%20WilmaScope_files/image007.png"
+ src="ExtendingWilmaScope_files/image007.png"
  style="width: 511px; height: 354px;"><br>
 Figure 4: Accessing the graph generator window.<br>
 </div>
@@ -287,7 +297,7 @@ the menu. </li>
 </ul>
 &nbsp;<br>
 <div style="text-align: center;"><img alt="The graph generator window"
- src="Extending%20WilmaScope_files/image009.png"
+ src="ExtendingWilmaScope_files/image009.png"
  style="width: 524px; height: 238px;"><br>
 Figure 5: The Graph Generator window<br>
 </div>
@@ -375,7 +385,7 @@ file should be present in any directory from which you wish to load XWG
 files into Wilma.<br>
 <br>
 <div style="text-align: center;"><img alt="WilmaGraph.dtd"
- src="Extending%20WilmaScope_files/image013.png"
+ src="ExtendingWilmaScope_files/image013.png"
  style="width: 389px; height: 520px;"><br>
 Figure 7: The WilmaGraph.dtd XWG definition<br>
 </div>
@@ -387,14 +397,14 @@ edges or other clusters.&nbsp; Figure 8 shows an example of a very
 simple XWG file and Figure 9 shows how it looks loaded into Wilma.<br>
 <br>
 <div style="text-align: center;"><img alt="A simple XWG file"
- src="Extending%20WilmaScope_files/simpleXWG.png"
+ src="ExtendingWilmaScope_files/simpleXWG.png"
  style="width: 363px; height: 142px;"><br>
 Figure 8: A very simple XWG file.<br>
 </div>
 <br>
 <div style="text-align: center;"><img
  alt="What the simple XWG graph looks like in Wilma"
- src="Extending%20WilmaScope_files/simpleXWGvis.png"
+ src="ExtendingWilmaScope_files/simpleXWGvis.png"
  style="width: 378px; height: 442px;"><br>
 Figure 9: The XWG file from Figure 8 loaded into Wilma.<br>
 <div style="text-align: left;"><br>
@@ -406,7 +416,7 @@ for nodes and edges):<br>
 </div>
 <br>
 <div style="text-align: center;"><img alt="More detailed XWG file"
- src="Extending%20WilmaScope_files/moredetailedXWG.png"
+ src="ExtendingWilmaScope_files/moredetailedXWG.png"
  style="width: 459px; height: 514px;"><br>
 Figure 10: The same graph but with more details specified.<br>
 </div>
