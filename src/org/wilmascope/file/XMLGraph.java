@@ -319,7 +319,7 @@ public class XMLGraph {
    */
   private static int idCounter = 0;
 
-  public class Node extends XMLGraphElement {
+  public class Node extends XMLGraphElement implements Comparable<Node> {
     protected Node() {
       super("Node");
       setAttribute("ID", createNewID());
@@ -330,17 +330,27 @@ public class XMLGraph {
       super(type);
     }
 
+    // clusters don't need IDs so this method is final
     public final String getID() {
-      return getAttribute("ID");
+      if(id==null) {
+        id=getAttribute("ID");
+      }
+      return id;
     }
 
     private String createNewID() {
-      return "N" + idCounter++;
+      id = "N" + idCounter++;
+      return id;
     }
 
     protected Node(Element nodeElement) {
       super(nodeElement);
     }
+
+    public int compareTo(Node other) {
+      return getID().compareTo(other.getID());
+    }
+    private String id;
   }
 
   public class Edge extends XMLGraphElement {

@@ -5,6 +5,9 @@ Changes Since 3.0
 - reworked test graph generation frame work...
   = added package "graphgen" with registry and abstract blueprint class GraphGenerator
   = cleaned up GUI
+  = now supports plugins similar to views
+- centre graph action to centre the graph around its barycentre added (button on toolbar and filemenu)
+- Use of J2SE 1.5 generics added in various places
   
 Changes Since 1.1
 -----------------

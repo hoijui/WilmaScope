@@ -67,7 +67,7 @@ public class CenterNode extends Interpolator {
 			wakeupOn(criterion);
 
 	}
-	/** Sets the orginal postion of the selected node
+	/** Sets the origin position to the specified position
 	 */
 	public void setOriginPosition(Vector3f position) {
 		target.getTransform(targetMatrix);
