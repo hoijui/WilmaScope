@@ -338,7 +338,6 @@ public class MenuBar extends JMenuBar {
 			ColumnsImporter.load(
 				graphControl,
 				chooser.getSelectedFile().getAbsolutePath());
-			removeAxisPlaneControlFrame();
 		}
 	}
 	void queryMenuItem_actionPerformed(ActionEvent e) {
@@ -387,12 +386,6 @@ public class MenuBar extends JMenuBar {
 	}
 	public void fullScreen() {
 		this.setVisible(false);
-	}
-	public void removeAxisPlaneControlFrame() {
-		if (axisPlaneControlFrame != null) {
-			axisPlaneControlFrame.kill();
-			axisPlaneControlFrame = null;
-		}
 	}
 	SliceViewControlFrame axisPlaneControlFrame;
 }

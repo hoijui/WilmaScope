@@ -30,12 +30,16 @@ import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import javax.swing.JPanel;
 import javax.vecmath.Point3f;
 
+import org.wilmascope.columnlayout.ColumnLayout;
+import org.wilmascope.control.GraphControl;
 import org.wilmascope.dotparser.DotParser;
 import org.wilmascope.dotparser.EdgeClient;
 import org.wilmascope.dotparser.GraphClient;
@@ -97,14 +101,22 @@ public class DotLayout implements LayoutEngine {
       in.write(layersString.getBytes());
       for (nodes.resetIterator(); nodes.hasNext();) {
         Node n = nodes.nextNode();
-        float rad = ((ColumnClusterView)n.getView()).getMaxRadius();
+        float rad;
+				try {
+					rad = ((ColumnClusterView) n.getView()).getMaxRadius();
+					
+				} catch (ClassCastException e) {
+					System.err.println("Not a ColumnClusterView, it's a: "+n.getView().getClass().getName());
+          e.printStackTrace();
+          rad=1.0f;
+				}
         String id = "" + n.hashCode();
         nodeLookup.put(id, n);
         String shape = "circle";
         float height = rad, width = rad;
         if(((SizeAdjustableNodeView)n.getView()).getShape() == SizeAdjustableNodeView.BOX) {
           shape = "box";
-          height = ((SizeAdjustableNodeView)n.getView()).getDepth();
+          height = ((SizeAdjustableNodeView)n.getView()).getDepth()*6f;
         }
         String text =
           id
@@ -294,13 +306,14 @@ public class DotLayout implements LayoutEngine {
 
   public int bbXMin, bbXMax, bbYMin, bbYMax;
   public float width, height;
-  public float xScale = 2.0f;
-  public float yScale = 2.0f;
+  private float xScale = 2.0f;
+  private float yScale = 2.0f;
 
   public boolean applyLayout() {
     return true;
   }
 
+  
   public void reset() {
   }
 
@@ -311,5 +324,67 @@ public class DotLayout implements LayoutEngine {
   public EdgeLayout createEdgeLayout(org.wilmascope.graph.Edge e) {
     return new DotEdgeLayout();
   }
+  public JPanel getControls() {
+    return new ControlPanel((GraphControl.ClusterFacade)root.getUserFacade());
+  }
   Cluster root;
+	/**
+	 * @return the horizontal scale for the layout
+	 */
+	public float getXScale() {
+		return xScale;
+	}
+
+	/**
+	 * @return the vertical scale for the layout
+	 */
+	public float getYScale() {
+		return yScale;
+	}
+
+	/**
+	 * @param f horizontal scale
+	 */
+	public void setXScale(float f) {
+		xScale = f;
+	}
+
+	/**
+	 * @param f vertical scale
+	 */
+	public void setYScale(float f) {
+		yScale = f;
+	}
+  public void setStrataSeparation(float sep) {
+    NodeList l = root.getNodes();
+    for(l.resetIterator();l.hasNext();) {
+      ((ColumnLayout)((Cluster)l.nextNode()).getLayoutEngine()).setStrataSeparation(sep);
+    }
+  }
+  public float getStrataSeparation() {
+    NodeList l = root.getNodes();
+    float s=0;
+    l.resetIterator();
+    if(l.hasNext()) {
+      s=((ColumnLayout)((Cluster)l.nextNode()).getLayoutEngine()).getStrataSeparation();
+    }
+    return s;
+  }
+	/* (non-Javadoc)
+	 * @see org.wilmascope.graph.LayoutEngine#getProperties()
+	 */
+	public Properties getProperties() {
+    Properties p = new Properties();
+    p.setProperty("XScale",""+getXScale());
+    p.setProperty("YScale",""+getYScale());
+		return p;
+	}
+	/* (non-Javadoc)
+	 * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
+	 */
+	public void setProperties(Properties p) {
+    setXScale(Float.parseFloat(p.getProperty("XScale","1")));
+    setYScale(Float.parseFloat(p.getProperty("YScale","1")));
+	}
+
 }

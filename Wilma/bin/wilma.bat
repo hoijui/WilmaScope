@@ -3,7 +3,7 @@ if "%JAVA_HOME%a"=="a" goto JAVA_HOME_NOTSET_ERROR
 if "%WILMA_HOME%a"=="a" goto WILMA_HOME_NOTSET_ERROR
 set ARG=%1
 cd "%WILMA_HOME%\lib"
-"%JAVA_HOME%\bin\java" -cp ..\classes;jaxp.jar;crimson.jar;xalan.jar org.wilmascope.control.WilmaMain %ARG%
+"%JAVA_HOME%\bin\java" -cp ..\classes org.wilmascope.control.WilmaMain %ARG%
 goto DONE
 :JAVA_HOME_NOTSET_ERROR
 echo You must set the JAVA_HOME environment variable

@@ -135,8 +135,8 @@ public class Renderer2D {
     w.scale(r);
     Point3f a = new Point3f();
     Point3f b = new Point3f();
-    a.add(start,w);
-    b.sub(start,w);
+    a.sub(start,w);
+    b.add(start,w);
     Point2f p1 = getScreenPoint(start);
     Point2f p2 = getScreenPoint(a);
     Point2f p3 = getScreenPoint(end);

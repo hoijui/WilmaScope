@@ -75,7 +75,7 @@ public class BoxColumnClusterView extends ColumnClusterView {
   public void setLabelColour(Color3f c) {
     this.labelColour = c;
   }
-  Color3f labelColour = new Color3f(1f, 1f, 1f);
+  Color3f labelColour = new Color3f(0f, 0f, 0f);
   String[] labels;
   TransformGroup textTG;
   public void setLabel(String[] labels) {
@@ -91,7 +91,7 @@ public class BoxColumnClusterView extends ColumnClusterView {
       makePickable(text);
       TransformGroup textTG2 = new TransformGroup();
       trans = new Transform3D();
-      trans.setTranslation(new Vector3f(0f, -0.3f * (float)i, 0f));
+      trans.setTranslation(new Vector3f(-0.5f, -0.3f * (float)i, 0.01f));
       textTG2.setTransform(trans);
       textTG2.addChild(text);
       textTG.addChild(textTG2);
@@ -130,4 +130,5 @@ public class BoxColumnClusterView extends ColumnClusterView {
 	public int getShape() {
     return BOX;
 	}
+  
 }

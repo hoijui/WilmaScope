@@ -5,7 +5,7 @@ import java.io.*;
 public class GMLParser implements GMLParserConstants {
 
 // end lexical definitions, parser start
-  static final public void graph(GraphClient g) throws ParseException {
+  final public void graph(GraphClient g) throws ParseException {
     jj_consume_token(GRAPH);
     jj_consume_token(27);
     stmtList(g);
@@ -13,7 +13,7 @@ public class GMLParser implements GMLParserConstants {
     jj_consume_token(0);
   }
 
-  static final public void stmtList(GraphClient g) throws ParseException {
+  final public void stmtList(GraphClient g) throws ParseException {
                                 String s;
     System.out.println("Parsing the GML graph...");
     label_1:
@@ -33,7 +33,7 @@ public class GMLParser implements GMLParserConstants {
     }
   }
 
-  static final public void stmt(GraphClient g) throws ParseException {
+  final public void stmt(GraphClient g) throws ParseException {
                              NodeClient n; Token t1, t2, t3, t4, w, h;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case VERSION:
@@ -192,13 +192,12 @@ public class GMLParser implements GMLParserConstants {
     }
   }
 
-  static private boolean jj_initialized_once = false;
-  static public GMLParserTokenManager token_source;
-  static SimpleCharStream jj_input_stream;
-  static public Token token, jj_nt;
-  static private int jj_ntk;
-  static private int jj_gen;
-  static final private int[] jj_la1 = new int[9];
+  public GMLParserTokenManager token_source;
+  SimpleCharStream jj_input_stream;
+  public Token token, jj_nt;
+  private int jj_ntk;
+  private int jj_gen;
+  final private int[] jj_la1 = new int[9];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -213,13 +212,6 @@ public class GMLParser implements GMLParserConstants {
    }
 
   public GMLParser(java.io.InputStream stream) {
-    if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static parser.  You must");
-      System.out.println("       either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during parser generation.");
-      throw new Error();
-    }
-    jj_initialized_once = true;
     jj_input_stream = new SimpleCharStream(stream, 1, 1);
     token_source = new GMLParserTokenManager(jj_input_stream);
     token = new Token();
@@ -228,7 +220,7 @@ public class GMLParser implements GMLParserConstants {
     for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
-  static public void ReInit(java.io.InputStream stream) {
+  public void ReInit(java.io.InputStream stream) {
     jj_input_stream.ReInit(stream, 1, 1);
     token_source.ReInit(jj_input_stream);
     token = new Token();
@@ -238,13 +230,6 @@ public class GMLParser implements GMLParserConstants {
   }
 
   public GMLParser(java.io.Reader stream) {
-    if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static parser.  You must");
-      System.out.println("       either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during parser generation.");
-      throw new Error();
-    }
-    jj_initialized_once = true;
     jj_input_stream = new SimpleCharStream(stream, 1, 1);
     token_source = new GMLParserTokenManager(jj_input_stream);
     token = new Token();
@@ -253,7 +238,7 @@ public class GMLParser implements GMLParserConstants {
     for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
-  static public void ReInit(java.io.Reader stream) {
+  public void ReInit(java.io.Reader stream) {
     jj_input_stream.ReInit(stream, 1, 1);
     token_source.ReInit(jj_input_stream);
     token = new Token();
@@ -263,13 +248,6 @@ public class GMLParser implements GMLParserConstants {
   }
 
   public GMLParser(GMLParserTokenManager tm) {
-    if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static parser.  You must");
-      System.out.println("       either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during parser generation.");
-      throw new Error();
-    }
-    jj_initialized_once = true;
     token_source = tm;
     token = new Token();
     jj_ntk = -1;
@@ -285,7 +263,7 @@ public class GMLParser implements GMLParserConstants {
     for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
-  static final private Token jj_consume_token(int kind) throws ParseException {
+  final private Token jj_consume_token(int kind) throws ParseException {
     Token oldToken;
     if ((oldToken = token).next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
@@ -299,7 +277,7 @@ public class GMLParser implements GMLParserConstants {
     throw generateParseException();
   }
 
-  static final public Token getNextToken() {
+  final public Token getNextToken() {
     if (token.next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
     jj_ntk = -1;
@@ -307,7 +285,7 @@ public class GMLParser implements GMLParserConstants {
     return token;
   }
 
-  static final public Token getToken(int index) {
+  final public Token getToken(int index) {
     Token t = token;
     for (int i = 0; i < index; i++) {
       if (t.next != null) t = t.next;
@@ -316,18 +294,18 @@ public class GMLParser implements GMLParserConstants {
     return t;
   }
 
-  static final private int jj_ntk() {
+  final private int jj_ntk() {
     if ((jj_nt=token.next) == null)
       return (jj_ntk = (token.next=token_source.getNextToken()).kind);
     else
       return (jj_ntk = jj_nt.kind);
   }
 
-  static private java.util.Vector jj_expentries = new java.util.Vector();
-  static private int[] jj_expentry;
-  static private int jj_kind = -1;
+  private java.util.Vector jj_expentries = new java.util.Vector();
+  private int[] jj_expentry;
+  private int jj_kind = -1;
 
-  static public ParseException generateParseException() {
+  public ParseException generateParseException() {
     jj_expentries.removeAllElements();
     boolean[] la1tokens = new boolean[37];
     for (int i = 0; i < 37; i++) {
@@ -363,10 +341,10 @@ public class GMLParser implements GMLParserConstants {
     return new ParseException(token, exptokseq, tokenImage);
   }
 
-  static final public void enable_tracing() {
+  final public void enable_tracing() {
   }
 
-  static final public void disable_tracing() {
+  final public void disable_tracing() {
   }
 
 }

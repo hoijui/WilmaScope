@@ -46,6 +46,8 @@ import org.wilmascope.view.ClusterView;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.PickingClient;
+
+import java.util.Iterator;
 import java.util.Vector;
 import javax.media.j3d.TransparencyAttributes;
 
@@ -891,12 +893,19 @@ public class GraphControl {
     });
     graphCanvas.createUniverse();
   }
+  Vector clientList = new Vector();
+  public void addGraphClient(GraphClient gc) {
+    clientList.add(gc);
+  }
   protected synchronized void iterate() {
     for(int i=0;i<iterationsPerFrame;i++) {
       rootCluster.getCluster().calculateLayout();
       boolean balanced = rootCluster.getCluster().applyLayout();
       layoutIterationsCounter++;
       if(balanced) {
+        for(Iterator it=clientList.iterator();it.hasNext();) {
+          ((GraphClient)it.next()).balanced();
+        }
         graphBehavior.setEnable(false);
         System.out.println("Balanced after: "+(float)(System.currentTimeMillis()-startTime)/1000f);
         System.out.println("iterations: "+layoutIterationsCounter);

@@ -47,7 +47,7 @@ class ColumnGraphClient implements GraphClient {
 	Hashtable nodes = new Hashtable();
 	int level, maxLevel;
 	GraphControl.ClusterFacade r;
-  Constants constants = Constants.getInstance();
+	Constants constants = Constants.getInstance();
 	public ColumnGraphClient(
 		GraphControl.ClusterFacade root,
 		Hashtable columns,
@@ -82,7 +82,14 @@ class ColumnGraphClient implements GraphClient {
 				}
 				labelLines.add(line);
 				c = new TransientColumn();
-				c.c = new ColumnCluster(r, 100f, radius, level, constants.getProperty("ImportedColumnClusterStyle"),constants.getProperty("ImportedColumnNodeStyle"));
+				c.c =
+					new ColumnCluster(
+						r,
+						100f,
+						4*radius,
+						level,
+						constants.getProperty("ImportedColumnClusterStyle"),
+						constants.getProperty("ImportedColumnNodeStyle"));
 				c.c.setLabel(toStringArray(labelLines));
 				c.level = level - 1;
 				columns.put(id, c);
@@ -91,9 +98,11 @@ class ColumnGraphClient implements GraphClient {
 			while (c.level < level) {
 				c.level++;
 				if (c.level == level) {
-					GraphControl.NodeFacade n = c.c.addStraightNode(radius);
-					n.setColour(0.9f, 0.9f, 1f * (float) level / (float) maxLevel);
-          ((NodeColumnLayout)n.getNode().getLayout()).setHeight(constants.getFloatValue("ImportedColumnNodeHeight"));
+					GraphControl.NodeFacade n = c.c.addStraightNode(4*radius);
+					n.setColour(
+						0.9f,
+						0.9f,
+						1f * (float) level / (float) maxLevel);
 					nodes.put(id, n);
 				} else {
 					c.c.skipLevel();
@@ -101,7 +110,8 @@ class ColumnGraphClient implements GraphClient {
 			}
 
 		} catch (Exception e) {
-			System.err.println("Error adding node: id=" + id + " label=" + label);
+			System.err.println(
+				"Error adding node: id=" + id + " label=" + label);
 			e.printStackTrace();
 		}
 	}
@@ -115,7 +125,14 @@ class ColumnGraphClient implements GraphClient {
 
 		if (c == null) {
 			c = new TransientColumn();
-			c.c = new ColumnCluster(r, 100f, 5f, level, "Column Cluster", "SquareTube");
+			c.c =
+				new ColumnCluster(
+					r,
+					10f,
+					10f,
+					level,
+					"Column Cluster",
+					"Box Node");
 			c.c.setLabel(new String[] { label });
 			edgeColumns.put(startID + "," + endID, c);
 			c.level = level - 1;
@@ -124,7 +141,7 @@ class ColumnGraphClient implements GraphClient {
 		while (c.level < level) {
 			c.level++;
 			if (c.level == level) {
-				c.n = c.c.addVariableNode(5f);
+				c.n = c.c.addStraightNode(200f);
 				c.n.setColour(
 					0.8f * (float) level / (float) maxLevel,
 					0.8f * (float) level / (float) maxLevel,
@@ -135,7 +152,8 @@ class ColumnGraphClient implements GraphClient {
 		}
 		GraphControl.NodeFacade start =
 			(GraphControl.NodeFacade) nodes.get(startID);
-		GraphControl.NodeFacade end = (GraphControl.NodeFacade) nodes.get(endID);
+		GraphControl.NodeFacade end =
+			(GraphControl.NodeFacade) nodes.get(endID);
 		GraphControl.EdgeFacade e1 = null;
 		GraphControl.EdgeFacade e2 = null;
 		float radius = 0.04f;
@@ -166,18 +184,19 @@ class ColumnGraphClient implements GraphClient {
 	public void addEdge(String startID, String endID, String arrowPosition) {
 		GraphControl.NodeFacade start =
 			(GraphControl.NodeFacade) nodes.get(startID);
-		GraphControl.NodeFacade end = (GraphControl.NodeFacade) nodes.get(endID);
+		GraphControl.NodeFacade end =
+			(GraphControl.NodeFacade) nodes.get(endID);
 		GraphControl.EdgeFacade e;
 		if (arrowPosition.equals("both")) {
-			e = r.addEdge(start, end, "SplineTube");
+			e = r.addEdge(start, end, "SplineTube",(float)Math.random()/10f);
 			//r.addEdge(end, start,"Arrow");
 		} else if (arrowPosition.equals("last")) {
-			e = r.addEdge(start, end, "SplineTube");
+			e = r.addEdge(start, end, "SplineTube",(float)Math.random()/10f);
 		} else {
-			e = r.addEdge(start, end, "SplineTube");
+			e = r.addEdge(start, end, "SplineTube",(float)Math.random()/10f);
 		}
-		//e.setColour(0.9f, 0.9f, 1f * (float) level / (float) maxLevel);
-    e.setColour(0.3f, 0.3f, 0.3f);
+		e.setColour(0.9f, 0.9f, 1f * (float) level / (float) maxLevel);
+		//e.setColour(0.3f, 0.3f, 0.3f);
 	}
 
 }
@@ -204,17 +223,18 @@ public class ColumnsImporter {
 			int level = 0;
 			GraphControl.ClusterFacade r = g.getRootCluster();
 			r.deleteAll();
-      String[] strataNames = new String[files.length];
-      for(int i=0; i<files.length; i++) {
-        strataNames[i]=files[i].getName();
-      }
-      r.setUserData(strataNames);
-			r = r.addCluster();
-			r.hide();
+      r.freeze();
+			String[] strataNames = new String[files.length];
+			for (int i = 0; i < files.length; i++) {
+				strataNames[i] = files[i].getName();
+			}
+			r.setUserData(strataNames);
+			//r = r.addCluster();
+			//r.hide();
 			org.wilmascope.dotlayout.DotLayout d =
 				new org.wilmascope.dotlayout.DotLayout(r.getCluster());
-			d.xScale = 16f;
-			d.yScale = 8f;
+			d.setXScale(16f);
+			d.setYScale(6f);
 			r.setLayoutEngine(d);
 			Hashtable columns = new Hashtable();
 			Hashtable edgeColumns = new Hashtable();
@@ -225,10 +245,10 @@ public class ColumnsImporter {
 				if (parser == null) {
 					parser = new GMLParser(f);
 				} else {
-					GMLParser.ReInit(f);
+					parser.ReInit(f);
 				}
 
-				GMLParser.graph(
+				parser.graph(
 					new ColumnGraphClient(
 						r,
 						columns,
@@ -244,58 +264,61 @@ public class ColumnsImporter {
 				reorientation.setTranslation(new Vector3d(0, -0.35, 0));
 				g.getGraphCanvas().reorient(reorientation);
 			}
-      colourEdgeGroups(r, files.length);
+			colourEdgeGroups(r, files.length);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}
-  static void colourEdgeGroups(GraphControl.ClusterFacade r, int noStrata) {
-    EdgeList edges = r.getCluster().getInternalEdges();
-    Hashtable masterEdges = new Hashtable();
-    for (edges.resetIterator(); edges.hasNext();) {
-      Edge e = edges.nextEdge();
-      Integer s =
-        new Integer(
-          ((NodeColumnLayout) e.getStart().getLayout()).getStratum());
-      String key =
-        e.getStart().getOwner().hashCode()
-          + " "
-          + e.getEnd().getOwner().hashCode();
-      Hashtable edgesByStratum = (Hashtable) masterEdges.get(key);
-      if (edgesByStratum == null) {
-        edgesByStratum = new Hashtable();
-        masterEdges.put(key, edgesByStratum);
-      }
-      if (!edgesByStratum.containsKey(s)) {
-        edgesByStratum.put(s, e);
-      }
-    }
-    for (Enumeration keys = masterEdges.keys(); keys.hasMoreElements();) {
-      String key = (String) keys.nextElement();
-      System.out.println(key);
-      Hashtable edgesByStratum = (Hashtable) masterEdges.get(key);
-      String s = new String();
-      TreeSet sortedStrata = new TreeSet(edgesByStratum.keySet());
-      int lastStratum = Integer.MIN_VALUE;
-      for (Iterator strata = sortedStrata.iterator(); strata.hasNext();) {
-        int stratum = ((Integer) strata.next()).intValue();
-        s = s + " " + stratum;
-        Edge e = (Edge) edgesByStratum.get(new Integer(stratum));
-        if (stratum != 0 && lastStratum != stratum - 1) {
-          ((GraphElementView) e.getView()).setColour(0, 1f, 0);
-          if (lastStratum >= 0) {
-            Edge f = (Edge) edgesByStratum.get(new Integer(lastStratum));
-            ((GraphElementView) f.getView()).setColour(1f, 0, 0);
-          }
-        }
-        if (stratum < (noStrata - 1) && !strata.hasNext()) {
-          ((GraphElementView) e.getView()).setColour(1f, 0, 0);
-        }
-        lastStratum = stratum;
-      }
-      System.out.println(s);
-    }
-  }
+	static void colourEdgeGroups(GraphControl.ClusterFacade r, int noStrata) {
+		EdgeList edges = r.getCluster().getInternalEdges();
+		Hashtable masterEdges = new Hashtable();
+		for (edges.resetIterator(); edges.hasNext();) {
+			Edge e = edges.nextEdge();
+			Integer s =
+				new Integer(
+					((NodeColumnLayout) e.getStart().getLayout()).getStratum());
+			String key =
+				e.getStart().getOwner().hashCode()
+					+ " "
+					+ e.getEnd().getOwner().hashCode();
+			Hashtable edgesByStratum = (Hashtable) masterEdges.get(key);
+			if (edgesByStratum == null) {
+				edgesByStratum = new Hashtable();
+				masterEdges.put(key, edgesByStratum);
+			}
+			if (!edgesByStratum.containsKey(s)) {
+				edgesByStratum.put(s, e);
+			}
+		}
+		for (Enumeration keys = masterEdges.keys(); keys.hasMoreElements();) {
+			String key = (String) keys.nextElement();
+			System.out.println(key);
+			Hashtable edgesByStratum = (Hashtable) masterEdges.get(key);
+			String s = new String();
+			TreeSet sortedStrata = new TreeSet(edgesByStratum.keySet());
+			int lastStratum = Integer.MIN_VALUE;
+			for (Iterator strata = sortedStrata.iterator();
+				strata.hasNext();
+				) {
+				int stratum = ((Integer) strata.next()).intValue();
+				s = s + " " + stratum;
+				Edge e = (Edge) edgesByStratum.get(new Integer(stratum));
+				if (stratum != 0 && lastStratum != stratum - 1) {
+					((GraphElementView) e.getView()).setColour(0, 1f, 0);
+					if (lastStratum >= 0) {
+						Edge f =
+							(Edge) edgesByStratum.get(new Integer(lastStratum));
+						((GraphElementView) f.getView()).setColour(1f, 0, 0);
+					}
+				}
+				if (stratum < (noStrata - 1) && !strata.hasNext()) {
+					((GraphElementView) e.getView()).setColour(1f, 0, 0);
+				}
+				lastStratum = stratum;
+			}
+			System.out.println(s);
+		}
+	}
 }

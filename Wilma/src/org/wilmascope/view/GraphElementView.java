@@ -384,6 +384,7 @@ public abstract class GraphElementView
 	}
 	public Properties getProperties() {
 		Properties p = new Properties();
+    String labelText=getLabel();
 		if (labelText != null) {
 			p.setProperty("Label", labelText);
 		}
@@ -399,7 +400,7 @@ public abstract class GraphElementView
 	public void setProperties(Properties p) {
 		String label = p.getProperty("Label");
 		if (label != null) {
-			showLabel(label);
+			setLabel(label);
 		}
 		String visible = p.getProperty("Visible");
 		if (visible != null && visible.equals("false")) {

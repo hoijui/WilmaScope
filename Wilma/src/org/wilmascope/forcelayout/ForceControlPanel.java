@@ -18,7 +18,7 @@
  * -- Tim Dwyer, 2001
  */
 
-package org.wilmascope.gui;
+package org.wilmascope.forcelayout;
 
 /*
  * ForceControlPanel.java
@@ -26,13 +26,14 @@ package org.wilmascope.gui;
  * Created on 18 September 2000, 21:57
  */
 
-import org.wilmascope.forcelayout.Force;
-import org.wilmascope.forcelayout.ForceLayout;
+import java.awt.event.ActionEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
+import javax.swing.JSlider;
+import javax.swing.border.TitledBorder;
+
 import org.wilmascope.control.GraphControl;
-import javax.swing.*;
-import javax.swing.border.*;
-import java.awt.event.*;
-import org.wilmascope.forcelayout.ForceManager;
 /**
  *
  * @author  administrator
