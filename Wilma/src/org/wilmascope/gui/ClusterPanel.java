@@ -19,18 +19,11 @@
  */
 package org.wilmascope.gui;
 
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
-
-import org.wilmascope.control.*;
-
-/**
- * A control panel allowing the user to complete or cancel the create cluster
- * action
- * @author Tim Dwyer
- */
+import java.awt.event.ActionEvent;
 import java.util.Vector;
+
+import org.wilmascope.control.GraphControl;
+import org.wilmascope.control.PickListener;
 public class ClusterPanel extends MultiPickPanel {
 
   public ClusterPanel(ControlPanel controlPanel, GraphControl.ClusterFacade cluster) {

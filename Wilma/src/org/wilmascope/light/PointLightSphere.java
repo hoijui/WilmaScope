@@ -1,12 +1,16 @@
 package org.wilmascope.light;
 
 
-import com.sun.j3d.utils.geometry.*;
-import javax.media.j3d.*;
-import java.awt.*;
-import java.util.*;
-import javax.vecmath.*;
-import com.sun.j3d.utils.picking.PickTool;
+import javax.media.j3d.Appearance;
+import javax.media.j3d.Material;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.media.j3d.TransparencyAttributes;
+import javax.vecmath.Color3f;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
+
+import com.sun.j3d.utils.geometry.Sphere;
 /**
  * @author star
  *

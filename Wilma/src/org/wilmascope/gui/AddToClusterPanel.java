@@ -19,11 +19,10 @@
  */
 package org.wilmascope.gui;
 
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
 
-import org.wilmascope.control.*;
+import org.wilmascope.control.GraphControl;
+import org.wilmascope.control.PickListener;
 /**
  * Defines a control panel for handling the selection of nodes to add
  * to a new or existing cluster

@@ -69,10 +69,6 @@ import org.wilmascope.viewplugin.ColumnClusterView;
  */
 
 public class DotLayout implements LayoutEngine {
-  public DotLayout(Cluster root) {
-    this.root = root;
-  }
-
   TreeMap nodeLookup = new TreeMap();
   TreeMap edgeLookup = new TreeMap();
   TreeMap curveLookup = new TreeMap();
@@ -84,9 +80,7 @@ public class DotLayout implements LayoutEngine {
     try {
       String dotPath = Constants.getInstance().getProperty("DotPath");
       FileOutputStream in = new FileOutputStream(new File("in.dot"));
-      in.write(
-        "digraph d { graph [concentrate=false]; node [ "
-          .getBytes());
+      in.write("digraph d { graph [concentrate=false]; node [ ".getBytes());
       in.write("fixedsize=true ".getBytes());
       in.write("layer=all ".getBytes());
       in.write("];\n".getBytes());
@@ -102,27 +96,32 @@ public class DotLayout implements LayoutEngine {
       for (nodes.resetIterator(); nodes.hasNext();) {
         Node n = nodes.nextNode();
         float rad;
-				try {
-					rad = ((ColumnClusterView) n.getView()).getMaxRadius();
-					
-				} catch (ClassCastException e) {
-					System.err.println("Not a ColumnClusterView, it's a: "+n.getView().getClass().getName());
+        try {
+          rad = ((ColumnClusterView) n.getView()).getMaxRadius();
+
+        } catch (ClassCastException e) {
+          System.err.println(
+            "Not a ColumnClusterView, it's a: "
+              + n.getView().getClass().getName());
           e.printStackTrace();
-          rad=1.0f;
-				}
+          rad = 1.0f;
+        }
         String id = "" + n.hashCode();
         nodeLookup.put(id, n);
         String shape = "circle";
         float height = rad, width = rad;
-        if(((SizeAdjustableNodeView)n.getView()).getShape() == SizeAdjustableNodeView.BOX) {
+        if (((SizeAdjustableNodeView) n.getView()).getShape()
+          == SizeAdjustableNodeView.BOX) {
           shape = "box";
-          height = ((SizeAdjustableNodeView)n.getView()).getDepth()*6f;
+          height = ((SizeAdjustableNodeView) n.getView()).getDepth() * 6f;
         }
         String text =
           id
             + " [label=\""
-            + ((org.wilmascope.view.GraphElementView)n.getView()).getLabel()
-            + "\" shape="+shape+" width=\""
+            + ((org.wilmascope.view.GraphElementView) n.getView()).getLabel()
+            + "\" shape="
+            + shape
+            + " width=\""
             + width / 6f
             + "\" height=\""
             + height / 6f
@@ -143,8 +142,10 @@ public class DotLayout implements LayoutEngine {
 
       for (edges.resetIterator(); edges.hasNext();) {
         Edge e = edges.nextEdge();
-        ((DotEdgeLayout)e.getLayout()).setZLevel(
-          ((org.wilmascope.columnlayout.NodeColumnLayout) e.getStart().getLayout())
+        ((DotEdgeLayout) e.getLayout()).setZLevel(
+          ((org.wilmascope.columnlayout.NodeColumnLayout) e
+            .getStart()
+            .getLayout())
             .getStratum());
         Edge m = matchingEdge(masterEdgeList.keys(), e);
         if (m != null) {
@@ -166,11 +167,12 @@ public class DotLayout implements LayoutEngine {
           end = end.getOwner();
         }
         String text = new String(start.hashCode() + "->" + end.hashCode());
-        Vector matchingEdges = (Vector)masterEdgeList.get(e);
+        Vector matchingEdges = (Vector) masterEdgeList.get(e);
         String layerText = new String("l" + eLayout.getZLevel());
-        for(Iterator i = matchingEdges.iterator(); i.hasNext();) {
-          Edge m = (Edge)i.next();
-          layerText = layerText + ":l"+((DotEdgeLayout)m.getLayout()).getZLevel();
+        for (Iterator i = matchingEdges.iterator(); i.hasNext();) {
+          Edge m = (Edge) i.next();
+          layerText =
+            layerText + ":l" + ((DotEdgeLayout) m.getLayout()).getZLevel();
         }
         edgeLookup.put(text, e);
         in.write(text.concat("[ layer=\"" + layerText + "\" ").getBytes());
@@ -181,8 +183,11 @@ public class DotLayout implements LayoutEngine {
       in.write("}\n".getBytes());
       in.flush();
       in.close();
-      Process p = Runtime.getRuntime().exec(dotPath + " in.dot -o out.dot",
-        new String[]{"DOT_CROSSING_STYLE=2","DOT_ILP_MINCROSS=1"},null);
+      Process p =
+        Runtime.getRuntime().exec(
+          dotPath + " in.dot -o out.dot",
+          new String[] { "DOT_CROSSING_STYLE=2", "DOT_ILP_MINCROSS=1" },
+          null);
       InputStream err = p.getErrorStream();
       try {
         BufferedReader r = new BufferedReader(new InputStreamReader(err));
@@ -313,7 +318,6 @@ public class DotLayout implements LayoutEngine {
     return true;
   }
 
-  
   public void reset() {
   }
 
@@ -325,66 +329,86 @@ public class DotLayout implements LayoutEngine {
     return new DotEdgeLayout();
   }
   public JPanel getControls() {
-    return new ControlPanel((GraphControl.ClusterFacade)root.getUserFacade());
+    return new ControlPanel((GraphControl.ClusterFacade) root.getUserFacade());
   }
   Cluster root;
-	/**
-	 * @return the horizontal scale for the layout
-	 */
-	public float getXScale() {
-		return xScale;
-	}
+  /**
+   * @return the horizontal scale for the layout
+   */
+  public float getXScale() {
+    return xScale;
+  }
 
-	/**
-	 * @return the vertical scale for the layout
-	 */
-	public float getYScale() {
-		return yScale;
-	}
+  /**
+   * @return the vertical scale for the layout
+   */
+  public float getYScale() {
+    return yScale;
+  }
 
-	/**
-	 * @param f horizontal scale
-	 */
-	public void setXScale(float f) {
-		xScale = f;
-	}
+  /**
+   * @param f horizontal scale
+   */
+  public void setXScale(float f) {
+    xScale = f;
+  }
 
-	/**
-	 * @param f vertical scale
-	 */
-	public void setYScale(float f) {
-		yScale = f;
-	}
+  /**
+   * @param f vertical scale
+   */
+  public void setYScale(float f) {
+    yScale = f;
+  }
   public void setStrataSeparation(float sep) {
     NodeList l = root.getNodes();
-    for(l.resetIterator();l.hasNext();) {
-      ((ColumnLayout)((Cluster)l.nextNode()).getLayoutEngine()).setStrataSeparation(sep);
+    for (l.resetIterator(); l.hasNext();) {
+      (
+        (ColumnLayout) ((Cluster) l.nextNode())
+          .getLayoutEngine())
+          .setStrataSeparation(
+        sep);
     }
   }
   public float getStrataSeparation() {
     NodeList l = root.getNodes();
-    float s=0;
+    float s = 0;
     l.resetIterator();
-    if(l.hasNext()) {
-      s=((ColumnLayout)((Cluster)l.nextNode()).getLayoutEngine()).getStrataSeparation();
+    if (l.hasNext()) {
+      s =
+        ((ColumnLayout) ((Cluster) l.nextNode()).getLayoutEngine())
+          .getStrataSeparation();
     }
     return s;
   }
-	/* (non-Javadoc)
-	 * @see org.wilmascope.graph.LayoutEngine#getProperties()
-	 */
-	public Properties getProperties() {
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.LayoutEngine#getProperties()
+   */
+  public Properties getProperties() {
     Properties p = new Properties();
-    p.setProperty("XScale",""+getXScale());
-    p.setProperty("YScale",""+getYScale());
-		return p;
-	}
-	/* (non-Javadoc)
-	 * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
-	 */
-	public void setProperties(Properties p) {
-    setXScale(Float.parseFloat(p.getProperty("XScale","1")));
-    setYScale(Float.parseFloat(p.getProperty("YScale","1")));
-	}
-
+    p.setProperty("XScale", "" + getXScale());
+    p.setProperty("YScale", "" + getYScale());
+    return p;
+  }
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
+   */
+  public void setProperties(Properties p) {
+    setXScale(Float.parseFloat(p.getProperty("XScale", "1")));
+    setYScale(Float.parseFloat(p.getProperty("YScale", "1")));
+  }
+  public String getName() {
+    return "Dot Stratified";
+  }
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.LayoutEngine#init(org.wilmascope.graph.Cluster)
+   */
+  public void init(Cluster root) {
+    this.root = root;
+  }
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.LayoutEngine#create()
+   */
+  public LayoutEngine create() {
+    return new DotLayout();
+  }
 }

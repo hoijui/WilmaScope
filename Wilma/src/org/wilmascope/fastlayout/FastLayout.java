@@ -29,7 +29,7 @@ import org.wilmascope.graph.NodeList;
  * @version      1.1
  */
 
-public class FastLayout implements LayoutEngine{
+public class FastLayout implements LayoutEngine {
 
   // the cluster containing the nodes to be laid out
   Cluster root;
@@ -43,8 +43,8 @@ public class FastLayout implements LayoutEngine{
   // to be updated after some new nodes have been added to the graph
   int oldSize = 0;
 
-  // whether the model is run in 3D
-  boolean threeD = false;
+  // whether the model is to run in 3D
+  boolean threeD = true;
 
   // how much to multiply the repulsion term by when calculating potential
   int repulsion = Defaults.REPULSION;
@@ -132,48 +132,28 @@ public class FastLayout implements LayoutEngine{
   // a colour range from green to red for colour-coding
   Vector colours = new Vector();
 
-  public FastLayout(Cluster root) {
-    this(root, false);
-  }
-
-  public FastLayout(Cluster root, boolean threeD) {
-    this.root = root;
-    root.setLayoutEngine(this);
-    nodes = root.getNodes();
-    updateJumpDec();
-    updateBarrierDec();
-    this.threeD = threeD;
-
-    universe = new DensityMatrix(2*fieldRadius, threeD);
-
-    calcColours();
-
-  }
-
-
   // must be run first to set initial densities
   public void calculateLayout() {
 
     // if new nodes have been added, reinitialize the density matrix
-    if(nodes.size() != oldSize) {
+    if (nodes.size() != oldSize) {
       oldSize = nodes.size();
       universe.setZero();
       universe.set(nodes);
     }
   }
 
-
   private void updatePhase() {
-    switch(phase) {
-      case BOILING:
-        if (iterations > boilLength*totalIterations) {
+    switch (phase) {
+      case BOILING :
+        if (iterations > boilLength * totalIterations) {
           System.out.println("Now quenching...");
           phase = QUENCHING;
           updatePhase(); // in case quenching length is zero
         }
         break;
-      case QUENCHING:
-        if (iterations > (quenchLength+boilLength)*totalIterations) {
+      case QUENCHING :
+        if (iterations > (quenchLength + boilLength) * totalIterations) {
           System.out.println("Now simmering...");
           phase = SIMMERING;
           barrierRate = 0;
@@ -182,116 +162,126 @@ public class FastLayout implements LayoutEngine{
     }
   }
 
-
   public boolean applyLayout() {
 
     iterations++;
 
     updatePhase();
 
-    if(phase == QUENCHING) {
+    if (phase == QUENCHING) {
       maxJump -= jumpDec;
       barrierRate -= barrierDec;
     }
 
-    for(nodes.resetIterator(); nodes.hasNext();) {
+    for (nodes.resetIterator(); nodes.hasNext();) {
       Node current = nodes.nextNode();
 
       Point3f oldPosition = new Point3f(current.getPosition());
       double newPotential = 0d;
 
-      if((boilBarrier || phase != BOILING) && (rand.nextDouble() < barrierRate)) { // true the fraction of times specified by barrierRate
-      // the first half of the test is to ensure that the user hasn't disabled barrier jumping in the boiling phase
+      if ((boilBarrier || phase != BOILING)
+        && (rand.nextDouble() < barrierRate)) {
+        // true the fraction of times specified by barrierRate
+        // the first half of the test is to ensure that the user hasn't disabled barrier jumping in the boiling phase
 
         current.setPosition(computeCentroid(current));
         universe.update(oldPosition, current.getPosition(), current);
 
         // only calculating this because of colour coding
-        if (colourFlag) newPotential = getPotential(current);
-      }
-      else {
+        if (colourFlag)
+          newPotential = getPotential(current);
+      } else {
         double oldPotential = getPotential(current);
         current.reposition(getRandomOffset());
-        if(!naive) universe.update(oldPosition, current.getPosition(), current);
+        if (!naive)
+          universe.update(oldPosition, current.getPosition(), current);
 
         newPotential = getPotential(current);
 
         // make a guess as to what the potential would be
-        if(naive) newPotential += current.getMass()*repulsion*universe.getStandard();
+        if (naive)
+          newPotential += current.getMass()
+            * repulsion
+            * universe.getStandard();
 
-        if(newPotential > oldPotential) {
-          if(!naive) universe.update(current.getPosition(), oldPosition, current);
+        if (newPotential > oldPotential) {
+          if (!naive)
+            universe.update(current.getPosition(), oldPosition, current);
           current.setPosition(oldPosition);
-          if (colourFlag) newPotential = oldPotential;
-        }
-        else {
-          if(naive) universe.update(oldPosition, current.getPosition(), current);
+          if (colourFlag)
+            newPotential = oldPotential;
+        } else {
+          if (naive)
+            universe.update(oldPosition, current.getPosition(), current);
         }
       }
 
       // scale the current colour by newPotential
       if (colourFlag) {
-        if(newPotential < RED_LIMIT) ((NodeFacade)(current.getUserFacade())).setColour((Color)colours.get((int)((newPotential/RED_LIMIT)*100d)));
-        else ((NodeFacade)(current.getUserFacade())).setColour(Color.red);
+        if (newPotential < RED_LIMIT)
+          ((NodeFacade) (current.getUserFacade())).setColour(
+            (Color) colours.get((int) ((newPotential / RED_LIMIT) * 100d)));
+        else
+           ((NodeFacade) (current.getUserFacade())).setColour(Color.red);
       }
 
       // very wasteful in terms of efficiency - used only for visual appeal
       if (eyeCandyFlag) {
         EdgeList edges = current.getEdges();
-        for(edges.resetIterator(); edges.hasNext();) {
+        for (edges.resetIterator(); edges.hasNext();) {
           Edge temp = edges.nextEdge();
-          Color colour1 = ((NodeFacade)temp.getStart().getUserFacade()).getColour();
-          Color colour2 = ((NodeFacade)temp.getEnd().getUserFacade()).getColour();
+          Color colour1 =
+            ((NodeFacade) temp.getStart().getUserFacade()).getColour();
+          Color colour2 =
+            ((NodeFacade) temp.getEnd().getUserFacade()).getColour();
           Color3f edgeColour = new Color3f();
-          edgeColour.interpolate(new Color3f(colour1), new Color3f(colour2), 0.5f);
-          ((EdgeFacade)temp.getUserFacade()).setColour(edgeColour.get());
+          edgeColour.interpolate(
+            new Color3f(colour1),
+            new Color3f(colour2),
+            0.5f);
+          ((EdgeFacade) temp.getUserFacade()).setColour(edgeColour.get());
         }
-        current.setRadius((float)(newPotential/POTENTIAL_SCALE));
+        current.setRadius((float) (newPotential / POTENTIAL_SCALE));
       }
 
     }
 
-    if(centreFlag) recentreGraph();
+    if (centreFlag)
+      recentreGraph();
 
     return (iterations > totalIterations);
   }
-
-
-
 
   public int getIterations() {
     return iterations;
   }
 
-
   public String getPhase() {
-    switch(phase) {
-      case BOILING:
+    switch (phase) {
+      case BOILING :
         return "boiling";
-      case QUENCHING:
+      case QUENCHING :
         return "quenching";
-      default:
+      default :
         return "simmering";
     }
   }
-
 
   // will returrn the total energy of the system
   // this could easily be calculated incrementally in applyLayout() but that would
   // slow down the layout engine unnecessarily when the energy does not need to be known
   public double systemEnergy() {
     double total = 0;
-    for(nodes.resetIterator(); nodes.hasNext();) {
+    for (nodes.resetIterator(); nodes.hasNext();) {
       total += getPotential(nodes.nextNode());
     }
     return total;
   }
 
-
   private void recentreGraph() {
     Point3f centre = nodes.getBarycenter();
     // subtract current centre vector from all nodes to bring their centre back to the origin
-    for(nodes.resetIterator(); nodes.hasNext();) {
+    for (nodes.resetIterator(); nodes.hasNext();) {
       nodes.nextNode().getPosition().sub(centre);
     }
 
@@ -300,47 +290,49 @@ public class FastLayout implements LayoutEngine{
     universe.set(nodes);
   }
 
-
   // will have to take into account a lot of factors, including the phase:
   // boiling, quenching, simmering etc
   // return a position offset within the maxJump factor
   private Vector3f getRandomOffset() {
-    float x = (rand.nextFloat()-0.5f)*2f*maxJump;
-    float y = (rand.nextFloat()-0.5f)*2f*maxJump;
-    float z = threeD ? (rand.nextFloat()-0.5f)*2f*maxJump : 0f;
+    float x = (rand.nextFloat() - 0.5f) * 2f * maxJump;
+    float y = (rand.nextFloat() - 0.5f) * 2f * maxJump;
+    float z = threeD ? (rand.nextFloat() - 0.5f) * 2f * maxJump : 0f;
 
-    return new Vector3f(x,y,z);
+    return new Vector3f(x, y, z);
   }
-
 
   private double getPotential(Node node) {
 
     double potential = 0;
     EdgeList edges = node.getEdges();
 
-    for(edges.resetIterator(); edges.hasNext();) {
+    for (edges.resetIterator(); edges.hasNext();) {
       Edge edge = edges.nextEdge();
       edge.recalculate();
-      potential += attraction*edge.getWeight()*Math.pow(edge.getLength(),2)*edge.getStart().getMass()*edge.getEnd().getMass();
+      potential += attraction
+        * edge.getWeight()
+        * Math.pow(edge.getLength(), 2)
+        * edge.getStart().getMass()
+        * edge.getEnd().getMass();
       // this is modified from that given in the research paper - it creates greater attraction for heavier nodes
     }
-    potential += repulsion*universe.get(node.getPosition());
+    potential += repulsion * universe.get(node.getPosition());
 
     return potential;
   }
-
 
   // for barrier jumping
   // computes a weighted centroid over the adjacent nodes and returns the position
   //
   // Weighted centroid = Sum(edgeWeight*position)/Sum(weight)
   private Point3f computeCentroid(Node node) {
-    if(node.getDegree() == 0) return node.getPosition();
+    if (node.getDegree() == 0)
+      return node.getPosition();
     Point3f centroid = new Point3f();
     float totalWeight = 0f;
 
     EdgeList edges = node.getEdges();
-    for(edges.resetIterator(); edges.hasNext();) {
+    for (edges.resetIterator(); edges.hasNext();) {
       Edge current = edges.nextEdge();
       float weight = current.getWeight();
       Point3f scaledPos = new Point3f(current.getNeighbour(node).getPosition());
@@ -348,18 +340,16 @@ public class FastLayout implements LayoutEngine{
       centroid.add(scaledPos);
       totalWeight += weight;
     }
-    centroid.scale(1f/totalWeight);// average over weights
+    centroid.scale(1f / totalWeight); // average over weights
     return centroid;
   }
 
   // flattens the graph in the z-plane
   public void flattenGraph() {
-    for(nodes.resetIterator(); nodes.hasNext();) {
+    for (nodes.resetIterator(); nodes.hasNext();) {
       nodes.nextNode().getPosition().z = 0f;
     }
   }
-
-
 
   // establishes colours for green, amber & red, then interpolates all the in-between
   // colours to determine the colour spectrum (of length 101) for the nodes
@@ -370,18 +360,18 @@ public class FastLayout implements LayoutEngine{
 
     colours.add(green.get());
     // interpolate the next 50 colours between green and orange:
-    for(int i = 0; i < 50; i++) {
+    for (int i = 0; i < 50; i++) {
       Color3f temp = new Color3f();
-      float alpha = (float)i/(float)49;
+      float alpha = (float) i / (float) 49;
       temp.interpolate(green, orange, alpha);
       colours.add(temp.get());
     }
 
     colours.add(orange.get());
     // interpolate the next 48 colours between orange and red:
-    for(int i = 0; i < 48; i++) {
+    for (int i = 0; i < 48; i++) {
       Color3f temp = new Color3f();
-      float alpha = (float)i/(float)47;
+      float alpha = (float) i / (float) 47;
       temp.interpolate(orange, red, alpha);
       colours.add(temp.get());
     }
@@ -389,16 +379,14 @@ public class FastLayout implements LayoutEngine{
     colours.add(red.get());
   }
 
-
-
-
-
   private void updateJumpDec() {
-    jumpDec = (boilJump - boilJump*simmerRate) / (quenchLength*totalIterations);
+    jumpDec =
+      (boilJump - boilJump * simmerRate) / (quenchLength * totalIterations);
   }
 
   private void updateBarrierDec() {
-    barrierDec = (maxBarrierRate - minBarrierRate) / (quenchLength*totalIterations);
+    barrierDec =
+      (maxBarrierRate - minBarrierRate) / (quenchLength * totalIterations);
   }
 
   public void setIterations(int val) {
@@ -424,7 +412,7 @@ public class FastLayout implements LayoutEngine{
     //  newMaxJump - newBoilJump     newBoilJump
     //
 
-    maxJump = val*(maxJump-boilJump)/boilJump + val;
+    maxJump = val * (maxJump - boilJump) / boilJump + val;
     boilJump = val;
 
     updateJumpDec();
@@ -438,8 +426,10 @@ public class FastLayout implements LayoutEngine{
 
   public void setSimmerRate(double val) {
     simmerRate = val;
-    if(phase == SIMMERING) maxJump = (float)(boilJump*simmerRate);
-    else updateJumpDec();
+    if (phase == SIMMERING)
+      maxJump = (float) (boilJump * simmerRate);
+    else
+      updateJumpDec();
   }
 
   public void setBoilLen(double val) {
@@ -463,7 +453,7 @@ public class FastLayout implements LayoutEngine{
 
   public void setMaxBarrier(double val) {
     // scale barrier rate (see setBoilJump):
-    barrierRate = val*(barrierRate-maxBarrierRate)/maxBarrierRate + val;
+    barrierRate = val * (barrierRate - maxBarrierRate) / maxBarrierRate + val;
 
     maxBarrierRate = val;
     updateBarrierDec();
@@ -513,22 +503,47 @@ public class FastLayout implements LayoutEngine{
     return null;
   }
   public JPanel getControls() {
-    return new ParamsPanel((GraphControl.ClusterFacade)root.getUserFacade());
+    return new ParamsPanel((GraphControl.ClusterFacade) root.getUserFacade());
   }
 
-	/* (non-Javadoc)
-	 * @see org.wilmascope.graph.LayoutEngine#getProperties()
-	 */
-	public Properties getProperties() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.LayoutEngine#getProperties()
+   */
+  public Properties getProperties() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-	/* (non-Javadoc)
-	 * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
-	 */
-	public void setProperties(Properties p) {
-		// TODO Auto-generated method stub
-		
-	}
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
+   */
+  public void setProperties(Properties p) {
+    // TODO Auto-generated method stub
+
+  }
+  public String getName() {
+    return "Simulated Annealing";
+  }
+
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.LayoutEngine#init(org.wilmascope.graph.Cluster)
+   */
+  public void init(Cluster root) {
+    this.root = root;
+    nodes = root.getNodes();
+    updateJumpDec();
+    updateBarrierDec();
+    universe = new DensityMatrix(2 * fieldRadius, threeD);
+    calcColours();
+  }
+
+  public void setThreeD(boolean threeD) {
+    this.threeD = threeD;
+  }
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.LayoutEngine#create()
+   */
+  public LayoutEngine create() {
+    return new FastLayout();
+  }
 }

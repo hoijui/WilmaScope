@@ -20,13 +20,15 @@
 
 package org.wilmascope.view;
 
-import org.wilmascope.graph.Edge;
-
-import javax.vecmath.*;
-import javax.media.j3d.*;
-import com.sun.j3d.utils.geometry.Cone;
-import javax.swing.*;
 import java.util.Properties;
+
+import javax.swing.ImageIcon;
+import javax.vecmath.AxisAngle4f;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
+
+import org.wilmascope.graph.Edge;
 
 /*
  * Title:        WilmaToo

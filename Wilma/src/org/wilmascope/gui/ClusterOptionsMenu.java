@@ -19,15 +19,22 @@
  */
 package org.wilmascope.gui;
 
-import javax.swing.*;
-import java.awt.event.*;
-
 import java.awt.Component;
-import org.wilmascope.control.*;
+import java.awt.event.ActionEvent;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.event.MenuEvent;
+
+import org.wilmascope.control.GraphControl;
+import org.wilmascope.control.OptionsClient;
+import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.EdgeList;
+import org.wilmascope.graph.Node;
+import org.wilmascope.graph.NodeList;
 import org.wilmascope.view.ViewManager;
-import java.util.Vector;
-import javax.swing.event.*;
-import org.wilmascope.graph.*;
 
 /**
  * A popup menu for clusters

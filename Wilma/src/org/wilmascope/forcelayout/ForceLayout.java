@@ -41,14 +41,20 @@ import org.wilmascope.graph.NodeList;
 
 public class ForceLayout implements LayoutEngine {
 
-  public ForceLayout(Cluster root) {
+  /* (non-Javadoc)
+   * @see org.wilmascope.layoutregistry.LayoutPrototype#create()
+   */
+  public LayoutEngine create() {
+    return new ForceLayout();
+  }
+  public void init(Cluster root) {
     this.root = root;
-    root.setLayoutEngine(this);
+    createElementLayouts();
   }
   public void calculateLayout() {
     // Calculate the force on each node for each of our forces
-    for(int j = 0; j < forces.size(); j++) {
-      Force f = (Force)forces.get(j);
+    for (int j = 0; j < forces.size(); j++) {
+      Force f = (Force) forces.get(j);
       f.calculate();
     }
   }
@@ -59,28 +65,29 @@ public class ForceLayout implements LayoutEngine {
   public boolean applyLayout() {
     NodeForceLayout nodeLayout;
     // reposition nodes, calculating maxNetForce as you go
-    float maxNetForce=0;
-    float currentNetForce=0;
+    float maxNetForce = 0;
+    float currentNetForce = 0;
     NodeList nodes = root.getNodes();
     EdgeList edges = root.getInternalEdges();
-    for(nodes.resetIterator(); nodes.hasNext();) {
-      nodeLayout = (NodeForceLayout)(nodes.nextNode().getLayout());
+    for (nodes.resetIterator(); nodes.hasNext();) {
+      nodeLayout = (NodeForceLayout) (nodes.nextNode().getLayout());
       nodeLayout.getNetForce().scale(cool);
       //cool*=0.99;
       currentNetForce = nodeLayout.getNetForce().length();
-      if(currentNetForce > maxNetForce) {
+      if (currentNetForce > maxNetForce) {
         maxNetForce = currentNetForce;
       }
       nodeLayout.applyForce(velocityAttenuation);
-      if(constrained) {
+      if (constrained) {
         nodeLayout.applyConstraint();
       }
     }
-    for(int i=0; i < edges.size(); i++) {
+    for (int i = 0; i < edges.size(); i++) {
       edges.get(i).recalculate();
     }
-    if(maxNetForce<balancedThreshold) {
-      if(balancedEventClient!=null) balancedEventClient.callback();
+    if (maxNetForce < balancedThreshold) {
+      if (balancedEventClient != null)
+        balancedEventClient.callback();
       reset();
       return true;
     }
@@ -109,9 +116,9 @@ public class ForceLayout implements LayoutEngine {
    * Get a reference to one of our forces by name
    */
   public Force getForce(String name) {
-    for(int i = 0; i<forces.size(); i++) {
-      Force force = (Force)forces.get(i);
-      if(name.equals(force.getTypeName()))
+    for (int i = 0; i < forces.size(); i++) {
+      Force force = (Force) forces.get(i);
+      if (name.equals(force.getTypeName()))
         return force;
     }
     return null;
@@ -130,27 +137,29 @@ public class ForceLayout implements LayoutEngine {
   }
   public void setVelocityAttenuation(float va) {
     velocityAttenuation = va;
-    System.out.println("VA="+va);
+    System.out.println("VA=" + va);
   }
   public void setConstrained() {
     constrained = true;
   }
   public void createElementLayouts() {
     NodeList nodes = root.getNodes();
-    for(nodes.resetIterator();nodes.hasNext();) {
+    for (nodes.resetIterator(); nodes.hasNext();) {
       Node n = nodes.nextNode();
       n.setLayout(createNodeLayout(n));
     }
     EdgeList edges = root.getInternalEdges();
-    for(edges.resetIterator();edges.hasNext();) {
+    for (edges.resetIterator(); edges.hasNext();) {
       Edge e = edges.nextEdge();
       e.setLayout(createEdgeLayout(e));
     }
   }
-  public org.wilmascope.graph.NodeLayout createNodeLayout(org.wilmascope.graph.Node n) {
+  public org.wilmascope.graph.NodeLayout createNodeLayout(
+    org.wilmascope.graph.Node n) {
     return new NodeForceLayout();
   }
-  public org.wilmascope.graph.EdgeLayout createEdgeLayout(org.wilmascope.graph.Edge e) {
+  public org.wilmascope.graph.EdgeLayout createEdgeLayout(
+    org.wilmascope.graph.Edge e) {
     return new EdgeForceLayout();
   }
   public void setFrictionCoefficient(float friction) {
@@ -160,32 +169,36 @@ public class ForceLayout implements LayoutEngine {
   Vector forces = new Vector();
   float velocityAttenuation = Constants.velocityAttenuation;
   Cluster root;
-  Vector3f vY = new Vector3f(0,1f,0);
+  Vector3f vY = new Vector3f(0, 1f, 0);
   boolean constrained = false;
   private float balancedThreshold = 0.01f;
   private BalancedEventClient balancedEventClient = null;
-	/* (non-Javadoc)
-	 * @see org.wilmascope.graph.LayoutEngine#getControls()
-	 */
-	public JPanel getControls() {
-		return new ForceControlsPanel((GraphControl.ClusterFacade)root.getUserFacade());
-	}
-	/* (non-Javadoc)
-	 * @see org.wilmascope.graph.LayoutEngine#getProperties()
-	 */
-	public Properties getProperties() {
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.LayoutEngine#getControls()
+   */
+  public JPanel getControls() {
+    return new ForceControlsPanel(
+      (GraphControl.ClusterFacade) root.getUserFacade());
+  }
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.LayoutEngine#getProperties()
+   */
+  public Properties getProperties() {
     Properties p = new Properties();
-    for(Iterator i = forces.iterator(); i.hasNext();) {
-      Force f=(Force)i.next();
+    for (Iterator i = forces.iterator(); i.hasNext();) {
+      Force f = (Force) i.next();
       p.setProperty(f.getTypeName(), "" + f.getStrengthConstant());
     }
     p.setProperty("VelocityAttenuation", "" + getVelocityAttenuation());
-		return p;
-	}
-	/* (non-Javadoc)
-	 * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
-	 */
-	public void setProperties(Properties p) {
+    return p;
+  }
+  public String getName() {
+    return "Force Directed";
+  }
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
+   */
+  public void setProperties(Properties p) {
     ForceManager m = ForceManager.getInstance();
     for (Enumeration k = p.keys(); k.hasMoreElements();) {
       String forceName = (String) k.nextElement();
@@ -202,5 +215,5 @@ public class ForceLayout implements LayoutEngine {
         }
       }
     }
-	}
+  }
 }

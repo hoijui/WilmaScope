@@ -32,7 +32,6 @@ import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.Node;
 import org.wilmascope.view.Colours;
 
-import com.sun.j3d.utils.geometry.Box;
 import com.sun.j3d.utils.geometry.Text2D;
 
 public class BoxColumnClusterView extends ColumnClusterView {
@@ -115,6 +114,7 @@ public class BoxColumnClusterView extends ColumnClusterView {
   }
   public void init() {
     setExpandedView();
+    /*
     Box box = new Box(1f,1f,1f,getAppearance());
     getTransformGroup().addChild(box);
     makePickable(box.getShape(Box.FRONT));
@@ -123,6 +123,7 @@ public class BoxColumnClusterView extends ColumnClusterView {
     makePickable(box.getShape(Box.RIGHT));
     makePickable(box.getShape(Box.TOP));
     makePickable(box.getShape(Box.BOTTOM));
+    */
   }
 	/** always BOX
 	 * @see org.wilmascope.view.SizeAdjustableNodeView#getShape()

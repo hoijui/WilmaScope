@@ -24,14 +24,6 @@ import java.util.*;
 import java.io.*;
 import javax.swing.ImageIcon;
 
-/*
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular WilmaScope software
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaScope.org
- * @author Tim Dwyer
- * @version 1.0
- */
 /**
  * This class manages a 'registry' of view object prototypes for
  * nodes and edges.  It implements the 'Singleton' pattern to ensure that
@@ -45,7 +37,7 @@ public class ViewManager {
   public static ViewManager getInstance() {
     return instance;
   }
-  // private constructor so that the class cannot be extanciated externally
+  // private constructor so that the class cannot be instanciated externally
   private ViewManager() {
     nodeReg = new Registry();
     edgeReg = new Registry();

@@ -20,12 +20,9 @@
 
 package org.wilmascope.viewplugin;
 
-import org.wilmascope.view.*;
-import org.wilmascope.graph.Node;
-
-import javax.media.j3d.*;
-import javax.vecmath.*;
-import com.sun.j3d.utils.geometry.Sphere;
+import org.wilmascope.view.ClusterView;
+import org.wilmascope.view.Colours;
+import org.wilmascope.view.LODSphere;
 /*
  * The following source code is part of the WilmaScope 3D Graph Drawing Engine
  * which is distributed under the terms of the GNU Lesser General Public License

@@ -44,6 +44,11 @@ public interface LayoutEngine {
    */
   public boolean applyLayout();
   /**
+   * Return a string descriptor for the layout engine type.  Useful in GUI elements
+   * such as comboboxes
+   */
+  public String getName();
+  /**
    * Factory method to create a new NodeLayout implementation compatible with
    * the layout engine implementing this interface.
    */
@@ -56,4 +61,13 @@ public interface LayoutEngine {
   public Properties getProperties();
   public void setProperties(Properties p);
   public JPanel getControls();
+  /**
+   * The LayoutEngine should have no constructor.  It should be initialised with this method.
+   */
+  public void init(Cluster root);
+  /**
+   * A clone method
+   * @return a new uninitialised LayoutEngine
+   */
+  public LayoutEngine create();
 }

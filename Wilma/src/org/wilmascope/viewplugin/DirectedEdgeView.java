@@ -1,14 +1,18 @@
 package org.wilmascope.viewplugin;
 
-import org.wilmascope.view.*;
+import javax.media.j3d.Appearance;
+import javax.media.j3d.Material;
+import javax.media.j3d.Shape3D;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.swing.ImageIcon;
+import javax.vecmath.Vector3f;
 
-import javax.media.j3d.*;
-import javax.vecmath.*;
-import javax.swing.*;
-import com.sun.j3d.utils.geometry.Cylinder;
+import org.wilmascope.view.Colours;
+import org.wilmascope.view.EdgeView;
+
 import com.sun.j3d.utils.geometry.Cone;
-
-import com.sun.j3d.utils.picking.PickTool;
+import com.sun.j3d.utils.geometry.Cylinder;
 
 /**
  * Graphical representation of the edge

@@ -20,14 +20,11 @@
 
 package org.wilmascope.multiscalelayout;
 
-import java.util.*;
-import java.awt.*;
-import java.applet.Applet;
-import java.awt.event.*;
+import java.awt.Dimension;
+import java.util.Stack;
+import java.util.Vector;
+
 import javax.vecmath.Vector3f;
-import javax.vecmath.Point3f;
-import javax.vecmath.AxisAngle4f;
-import javax.media.j3d.Transform3D;
 
 /**
  * Constructs a Multi-Scale heirarchy of graphs {@link MultiScaleGraph}

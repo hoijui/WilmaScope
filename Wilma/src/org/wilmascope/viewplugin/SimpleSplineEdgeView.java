@@ -1,15 +1,28 @@
 package org.wilmascope.viewplugin;
 
-import org.wilmascope.view.*;
-import org.wilmascope.dotlayout.*;
-import org.wilmascope.dotparser.EdgeClient;
-import org.wilmascope.graph.Edge;
 import java.awt.geom.Point2D;
-import javax.vecmath.*;
-import javax.media.j3d.*;
+import java.util.Iterator;
+import java.util.Vector;
+
+import javax.media.j3d.Appearance;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.GeometryArray;
+import javax.media.j3d.LineAttributes;
+import javax.media.j3d.LineStripArray;
+import javax.media.j3d.Material;
+import javax.media.j3d.Shape3D;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.vecmath.AxisAngle4f;
+import javax.vecmath.Color3f;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
+
+import org.wilmascope.dotparser.EdgeClient;
+import org.wilmascope.view.EdgeView;
+
 import com.sun.j3d.utils.geometry.Cone;
-import java.util.*;
-import java.util.StringTokenizer;
 /**
  * <p>Title: </p>
  * <p>Description: </p>

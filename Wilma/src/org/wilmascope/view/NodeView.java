@@ -20,15 +20,22 @@
 
 package org.wilmascope.view;
 
+import java.util.Properties;
+
+import javax.media.j3d.Appearance;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.swing.ImageIcon;
+import javax.vecmath.AxisAngle4f;
+import javax.vecmath.Point3d;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
+
 import org.wilmascope.graph.Node;
 
-import javax.vecmath.*;
-import javax.swing.ImageIcon;
-import javax.media.j3d.*;
 import com.sun.j3d.utils.geometry.Cone;
-import com.sun.j3d.utils.picking.behaviors.PickTranslateBehavior;
-import com.sun.j3d.utils.behaviors.mouse.*;
-import java.util.Properties;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular WilmaScope software

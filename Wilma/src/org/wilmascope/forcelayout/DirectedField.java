@@ -19,11 +19,11 @@
  */
 package org.wilmascope.forcelayout;
 
+import javax.vecmath.Vector3f;
+
 import org.wilmascope.graph.Cluster;
-import org.wilmascope.graph.EdgeList;
 import org.wilmascope.graph.Edge;
-import javax.vecmath.*;
-import java.util.Vector;
+import org.wilmascope.graph.EdgeList;
 
 /** A force field that will force all directed edges to align themselves
  * with its direction vector

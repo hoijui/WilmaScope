@@ -4,10 +4,14 @@ package org.wilmascope.rotation;
  * @author Christine
  *
  */
-import javax.media.j3d.*;
-import javax.vecmath.*;
-import java.util.*;
-import java.awt.event.*;
+import java.util.Enumeration;
+
+import javax.media.j3d.Interpolator;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.media.j3d.WakeupOnElapsedTime;
+import javax.vecmath.Matrix4d;
+import javax.vecmath.Vector3d;
 /**AutoRotation is a java3D Interpolator object used to continously rotate the
  * scene graph.
  * <blockquote><pre>

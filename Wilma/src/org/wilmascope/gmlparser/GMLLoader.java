@@ -129,7 +129,7 @@ public class GMLLoader {
 		//r = r.addCluster();
 		//r.hide();
 		org.wilmascope.dotlayout.DotLayout d =
-			new org.wilmascope.dotlayout.DotLayout(r.getCluster());
+			new org.wilmascope.dotlayout.DotLayout();
 		d.setXScale(20f);
 		d.setYScale(6f);
 		r.setLayoutEngine(d);

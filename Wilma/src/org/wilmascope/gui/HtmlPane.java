@@ -30,14 +30,20 @@ package org.wilmascope.gui;
  * redistribute the Software for such purposes.
 
  */
-import javax.swing.*;
-import java.awt.*;
-import java.net.URL;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
-import java.io.*;
-import javax.swing.text.*;
-import javax.swing.event.*;
-import java.awt.event.*;
+import java.net.URL;
+
+import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.Document;
 
 public class HtmlPane extends JScrollPane implements HyperlinkListener {
     JEditorPane html;

@@ -20,36 +20,41 @@
 
 package org.wilmascope.control;
 
-import org.wilmascope.view.ViewManager;
-import org.wilmascope.view.GraphCanvas;
-import org.wilmascope.view.BehaviorClient;
-import org.wilmascope.view.GraphBehavior;
-import org.wilmascope.forcelayout.ForceManager;
-import org.wilmascope.forcelayout.ForceLayout;
-import org.wilmascope.forcelayout.NodeForceLayout;
-import org.wilmascope.forcelayout.EdgeForceLayout;
-import org.wilmascope.forcelayout.Repulsion;
-import org.wilmascope.forcelayout.Spring;
-import org.wilmascope.forcelayout.Origin;
-import org.wilmascope.forcelayout.DirectedField;
-import org.wilmascope.forcelayout.Force;
-import org.wilmascope.forcelayout.BalancedEventClient;
-import org.wilmascope.graph.LayoutEngine;
-import org.wilmascope.graph.GraphElement;
-import org.wilmascope.graph.Cluster;
-import org.wilmascope.graph.Node;
-import org.wilmascope.graph.Edge;
-import org.wilmascope.graph.NodeList;
-import org.wilmascope.graph.EdgeList;
-import org.wilmascope.view.GraphElementView;
-import org.wilmascope.view.ClusterView;
-import org.wilmascope.view.NodeView;
-import org.wilmascope.view.EdgeView;
-import org.wilmascope.view.PickingClient;
-
 import java.util.Iterator;
 import java.util.Vector;
+
 import javax.media.j3d.TransparencyAttributes;
+
+import org.wilmascope.fastlayout.FastLayout;
+import org.wilmascope.forcelayout.BalancedEventClient;
+import org.wilmascope.forcelayout.DirectedField;
+import org.wilmascope.forcelayout.EdgeForceLayout;
+import org.wilmascope.forcelayout.Force;
+import org.wilmascope.forcelayout.ForceLayout;
+import org.wilmascope.forcelayout.ForceManager;
+import org.wilmascope.forcelayout.NodeForceLayout;
+import org.wilmascope.forcelayout.Origin;
+import org.wilmascope.forcelayout.Repulsion;
+import org.wilmascope.forcelayout.Spring;
+import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.Edge;
+import org.wilmascope.graph.EdgeList;
+import org.wilmascope.graph.GraphElement;
+import org.wilmascope.graph.LayoutEngine;
+import org.wilmascope.graph.Node;
+import org.wilmascope.graph.NodeList;
+import org.wilmascope.layoutregistry.LayoutManager;
+import org.wilmascope.layoutregistry.LayoutManager.UnknownLayoutTypeException;
+import org.wilmascope.multiscalelayout.MultiScaleLayout;
+import org.wilmascope.view.BehaviorClient;
+import org.wilmascope.view.ClusterView;
+import org.wilmascope.view.EdgeView;
+import org.wilmascope.view.GraphBehavior;
+import org.wilmascope.view.GraphCanvas;
+import org.wilmascope.view.GraphElementView;
+import org.wilmascope.view.NodeView;
+import org.wilmascope.view.PickingClient;
+import org.wilmascope.view.ViewManager;
 
 /*
  * Title:        WilmaToo
@@ -104,7 +109,8 @@ public class GraphControl {
     /**
      * create a GraphElement with no view or layout
      */
-    GraphElementFacade() {}
+    GraphElementFacade() {
+    }
     GraphElementFacade(GraphElement element) {
       this.element = element;
       element.setUserFacade(this);
@@ -112,7 +118,7 @@ public class GraphControl {
     void initView(GraphElementView view) {
       graphElementView = view;
       graphElementView.initGraphElement();
-      if(label!=null) {
+      if (label != null) {
         setLabel(label);
       }
       pickListener.register(this);
@@ -138,7 +144,7 @@ public class GraphControl {
      * @param green level of green (0-1f)
      */
     public void setColour(float red, float green, float blue) {
-      graphElementView.setColour(red,green,blue);
+      graphElementView.setColour(red, green, blue);
     }
     public void setColour(java.awt.Color colour) {
       graphElementView.setColour(colour);
@@ -208,14 +214,14 @@ public class GraphControl {
      * delete the element, removing all references to it... forever!
      */
     public void delete() {
-      if(element instanceof Edge) {
-        allEdges.remove((Edge)element);
+      if (element instanceof Edge) {
+        allEdges.remove((Edge) element);
       } else {
-        allEdges.removeAll(((Node)element).getEdges());
-        allNodes.remove((Node)element);
+        allEdges.removeAll(((Node) element).getEdges());
+        allNodes.remove((Node) element);
       }
-      if(element instanceof Cluster) {
-        NodeList nodes = ((Cluster)element).getAllNodes();
+      if (element instanceof Cluster) {
+        NodeList nodes = ((Cluster) element).getAllNodes();
         allEdges.removeAll(nodes.getEdges());
         allNodes.removeAll(nodes);
       }
@@ -230,7 +236,8 @@ public class GraphControl {
    * The interface for edges
    */
   public class EdgeFacade extends GraphElementFacade {
-    EdgeFacade() {}
+    EdgeFacade() {
+    }
     /**
      * create a new facade for a predefined edge
      * @param edge the predefined edge: note that the edge must have its view set
@@ -246,7 +253,7 @@ public class GraphControl {
      * @param end the end node
      */
     EdgeFacade(NodeFacade start, NodeFacade end) {
-      this(new Edge(start.getNode(),end.getNode()));
+      this(new Edge(start.getNode(), end.getNode()));
       edge.recalculate();
       this.start = start;
       this.end = end;
@@ -255,7 +262,7 @@ public class GraphControl {
       // we use hide() to remove the old view from the scene graph and set
       // visible to false, (ie so that show() will actually do something)
       hide();
-      if(view != null) {
+      if (view != null) {
         edge.setView(view);
         initView(view);
         show();
@@ -266,7 +273,7 @@ public class GraphControl {
      * @param length the new natural length for the edge
      */
     public void setRelaxedLength(float length) {
-      ((EdgeForceLayout)edge.getLayout()).setRelaxedLength(length);
+      ((EdgeForceLayout) edge.getLayout()).setRelaxedLength(length);
     }
 
     public void reverseDirection() {
@@ -311,7 +318,8 @@ public class GraphControl {
       allNodes.add(n);
     }
     /** create a dummy nodeFacade */
-    NodeFacade(boolean dummy) {}
+    NodeFacade(boolean dummy) {
+    }
     /**
      * create a new node
      */
@@ -326,15 +334,14 @@ public class GraphControl {
     }
     public void setView(NodeView view) {
       hide();
-      if(view != null) {
+      if (view != null) {
         node.setView(view);
         initView(view);
         show();
       }
     }
-    public void setMass( float m )
-    {
-      node.setMass( m ) ;
+    public void setMass(float m) {
+      node.setMass(m);
     }
     public float getMass() {
       return node.getMass();
@@ -347,47 +354,54 @@ public class GraphControl {
     }
     public void setFixedPosition(boolean fixed) {
       node.setFixedPosition(fixed);
-      if(fixed){
-        ((NodeView)node.getView()).showAnchor();
+      if (fixed) {
+        ((NodeView) node.getView()).showAnchor();
       } else {
-        ((NodeView)node.getView()).hideAnchor();
+        ((NodeView) node.getView()).hideAnchor();
       }
     }
     public boolean isFixedPosition() {
       return node.isFixedPosition();
     }
     public void moveToCanvasPos(int x, int y) {
-      ((NodeView)node.getView()).moveToCanvasPos(graphCanvas,x,y);
+      ((NodeView) node.getView()).moveToCanvasPos(graphCanvas, x, y);
     }
     public int getDegree() {
       return node.getDegree();
     }
-    public void setTransparency( float inverse_alpha )
-    {
-      ((org.wilmascope.view.NodeView)this.getNode().getView())
-        .getAppearance().setTransparencyAttributes(
+    public void setTransparency(float inverse_alpha) {
+      ((org.wilmascope.view.NodeView) this.getNode().getView())
+        .getAppearance()
+        .setTransparencyAttributes(
           new TransparencyAttributes(
-            TransparencyAttributes.FASTEST ,
-            inverse_alpha
-        )
-      );
+            TransparencyAttributes.FASTEST,
+            inverse_alpha));
     } // setTransparency
 
     public void setLevelConstraint(int level) {
-      if(node.getLayout() instanceof NodeForceLayout) {
-        ((NodeForceLayout)node.getLayout()).setConstraint(new org.wilmascope.forcelayout.LevelConstraint(level,0.5f));
-        ((ForceLayout)node.getOwner().getLayoutEngine()).setConstrained();
+      if (node.getLayout() instanceof NodeForceLayout) {
+        ((NodeForceLayout) node.getLayout()).setConstraint(
+          new org.wilmascope.forcelayout.LevelConstraint(level, 0.5f));
+        ((ForceLayout) node.getOwner().getLayoutEngine()).setConstrained();
       }
     }
     public int getLevelConstraint() {
-      if(node.getLayout() instanceof NodeForceLayout) {
-        org.wilmascope.forcelayout.LevelConstraint c = (org.wilmascope.forcelayout.LevelConstraint)
-          ((NodeForceLayout)node.getLayout()).getConstraint();
-        if(c!=null) {
+      if (node.getLayout() instanceof NodeForceLayout) {
+        org.wilmascope.forcelayout.LevelConstraint c =
+          (org
+            .wilmascope
+            .forcelayout
+            .LevelConstraint) ((NodeForceLayout) node
+            .getLayout())
+            .getConstraint();
+        if (c != null) {
           return c.getLevel();
         }
-      } else if (node.getLayout() instanceof org.wilmascope.columnlayout.NodeColumnLayout) {
-        org.wilmascope.columnlayout.NodeColumnLayout n = (org.wilmascope.columnlayout.NodeColumnLayout)node.getLayout();
+      } else if (
+        node.getLayout()
+          instanceof org.wilmascope.columnlayout.NodeColumnLayout) {
+        org.wilmascope.columnlayout.NodeColumnLayout n =
+          (org.wilmascope.columnlayout.NodeColumnLayout) node.getLayout();
         return n.getStratum();
       }
       return Integer.MIN_VALUE;
@@ -415,7 +429,7 @@ public class GraphControl {
       super(false);
     }
     ClusterFacade(GraphControl gc, Cluster c) {
-      super((Node)c);
+      super((Node) c);
       cluster = c;
       this.gc = gc;
     }
@@ -423,23 +437,29 @@ public class GraphControl {
       this(gc, new Cluster(view));
       initView(view);
       this.gc = gc;
-      cluster.setLayoutEngine(new ForceLayout(cluster));
+      try {
+        cluster.setLayoutEngine(layoutManager.createLayout("Force Directed"));
+      } catch (UnknownLayoutTypeException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
       show();
     }
     ClusterFacade(GraphControl gc, String viewType)
-    throws ViewManager.UnknownViewTypeException {
+      throws ViewManager.UnknownViewTypeException {
       this(gc, ViewManager.getInstance().createClusterView(viewType));
     }
-    ClusterFacade(GraphControl gc) throws ViewManager.UnknownViewTypeException{
+    ClusterFacade(GraphControl gc)
+      throws ViewManager.UnknownViewTypeException {
       this(gc, ViewManager.getInstance().createClusterView());
     }
     /**
      * deprecated use ((ForceLayout)getLayoutEngine).addForce() instead
      */
     public ForceFacade addForce(String name)
-    throws ForceManager.UnknownForceTypeException {
-      synchronized(gc) {
-        ForceLayout layout = (ForceLayout)cluster.getLayoutEngine();
+      throws ForceManager.UnknownForceTypeException {
+      synchronized (gc) {
+        ForceLayout layout = (ForceLayout) cluster.getLayoutEngine();
         Force f = forceManager.createForce(name);
         layout.addForce(f);
         ForceFacade forceFacade = new ForceFacade(f);
@@ -448,15 +468,15 @@ public class GraphControl {
     }
     public ForceFacade[] getForces() {
       Vector forces = new Vector();
-      ForceLayout layout = (ForceLayout)cluster.getLayoutEngine();
+      ForceLayout layout = (ForceLayout) cluster.getLayoutEngine();
       Vector fs = layout.getForces();
-      for(int i=0;i<fs.size();i++) {
-        forces.add(new ForceFacade((Force)fs.get(i)));
+      for (int i = 0; i < fs.size(); i++) {
+        forces.add(new ForceFacade((Force) fs.get(i)));
       }
-      return (ForceFacade[])forces.toArray(new ForceFacade[0]);
+      return (ForceFacade[]) forces.toArray(new ForceFacade[0]);
     }
     public void removeAllForces() {
-      ForceLayout layout = (ForceLayout)cluster.getLayoutEngine();
+      ForceLayout layout = (ForceLayout) cluster.getLayoutEngine();
       layout.removeAllForces();
     }
     /**
@@ -466,53 +486,53 @@ public class GraphControl {
      * will be called when the graph is balanced
      */
     public void setBalancedEventClient(BalancedEventClient client) {
-      ((ForceLayout)cluster.getLayoutEngine()).setBalancedEventClient(client);
+      ((ForceLayout) cluster.getLayoutEngine()).setBalancedEventClient(client);
     }
     public void deleteAll() {
       NodeList condemned = new NodeList(cluster.getNodes());
-      for(int i=0; i<condemned.size(); i++) {
-        NodeFacade n = (NodeFacade)condemned.get(i).getUserFacade();
+      for (int i = 0; i < condemned.size(); i++) {
+        NodeFacade n = (NodeFacade) condemned.get(i).getUserFacade();
         n.delete();
       }
     }
 
     public LayoutEngine getLayoutEngine() {
-        return cluster.getLayoutEngine();
+      return cluster.getLayoutEngine();
     }
     public void setLayoutEngine(LayoutEngine layoutEngine) {
-        cluster.setLayoutEngine(layoutEngine);
+      cluster.setLayoutEngine(layoutEngine);
     }
 
     /**
      * Add a pre-existing node to the cluster
      */
     public void addNode(NodeFacade n) {
-      synchronized(gc) {
-      Node node = n.getNode();
-      cluster.addNode(node);
+      synchronized (gc) {
+        Node node = n.getNode();
+        cluster.addNode(node);
       }
     }
     public void add(GraphElementFacade e) {
-      synchronized(gc) {
-      if(e instanceof NodeFacade) {
-        addNode((NodeFacade)e);
-      } else if (e instanceof EdgeFacade) {
-        addEdge((EdgeFacade)e);
-      }
+      synchronized (gc) {
+        if (e instanceof NodeFacade) {
+          addNode((NodeFacade) e);
+        } else if (e instanceof EdgeFacade) {
+          addEdge((EdgeFacade) e);
+        }
       }
     }
     public NodeFacade addNode() {
-      synchronized(gc) {
-      try {
-        return addNode(ViewManager.getInstance().createNodeView());
-      } catch (ViewManager.UnknownViewTypeException ex) {
-        ex.printStackTrace();
-        return null;
-      }
+      synchronized (gc) {
+        try {
+          return addNode(ViewManager.getInstance().createNodeView());
+        } catch (ViewManager.UnknownViewTypeException ex) {
+          ex.printStackTrace();
+          return null;
+        }
       }
     }
     public NodeFacade addNode(String nodeType) {
-      synchronized(gc) {
+      synchronized (gc) {
         try {
           return addNode(ViewManager.getInstance().createNodeView(nodeType));
         } catch (ViewManager.UnknownViewTypeException ex) {
@@ -525,19 +545,19 @@ public class GraphControl {
      * create a new node and add it to the cluster
      */
     public NodeFacade addNode(NodeView view) {
-      synchronized(gc) {
-      NodeFacade n = new NodeFacade();
-      n.setView(view);
-      addNode(n);
-      return n;
+      synchronized (gc) {
+        NodeFacade n = new NodeFacade();
+        n.setView(view);
+        addNode(n);
+        return n;
       }
     }
     /**
      * Add a pre-existing edge to a cluster
      */
     private void addEdge(EdgeFacade e) {
-      synchronized(gc) {
-      cluster.addEdge(e.getEdge());
+      synchronized (gc) {
+        cluster.addEdge(e.getEdge());
       }
     }
     /**
@@ -550,13 +570,12 @@ public class GraphControl {
     public EdgeFacade addEdge(
       NodeFacade start,
       NodeFacade end,
-      EdgeView view)
-    {
-      synchronized(gc) {
-      EdgeFacade e = new EdgeFacade(start, end);
-      e.setView(view);
-      addEdge(e);
-      return e;
+      EdgeView view) {
+      synchronized (gc) {
+        EdgeFacade e = new EdgeFacade(start, end);
+        e.setView(view);
+        addEdge(e);
+        return e;
       }
     }
     /**
@@ -569,33 +588,34 @@ public class GraphControl {
     public EdgeFacade addEdge(
       NodeFacade start,
       NodeFacade end,
-      String edgeType)
-    {
-      synchronized(gc) {
-      try {
-        EdgeView view = ViewManager.getInstance().createEdgeView(edgeType);
-        return addEdge(start, end, view);
-      } catch(ViewManager.UnknownViewTypeException ex) {
-        ex.printStackTrace();
-        return null;
-      }
+      String edgeType) {
+      synchronized (gc) {
+        try {
+          EdgeView view = ViewManager.getInstance().createEdgeView(edgeType);
+          return addEdge(start, end, view);
+        } catch (ViewManager.UnknownViewTypeException ex) {
+          ex.printStackTrace();
+          return null;
+        }
       }
     }
     public EdgeFacade addEdge(
       NodeFacade start,
       NodeFacade end,
       String edgeType,
-      float radius)
-    {
-      synchronized(gc) {
-      try {
-        EdgeView view = ViewManager.getInstance().createEdgeView(edgeType);
-        view.setRadius(radius);
-        return addEdge(start, end, view);
-      } catch(ViewManager.UnknownViewTypeException ex) {
-        System.out.println("Warning: view type: "+edgeType+" unknown, edge will be invisible.");
-        return addEdge(start, end, (EdgeView)null);
-      }
+      float radius) {
+      synchronized (gc) {
+        try {
+          EdgeView view = ViewManager.getInstance().createEdgeView(edgeType);
+          view.setRadius(radius);
+          return addEdge(start, end, view);
+        } catch (ViewManager.UnknownViewTypeException ex) {
+          System.out.println(
+            "Warning: view type: "
+              + edgeType
+              + " unknown, edge will be invisible.");
+          return addEdge(start, end, (EdgeView) null);
+        }
       }
     }
     /**
@@ -605,63 +625,65 @@ public class GraphControl {
      * @return the new edge
      */
     public EdgeFacade addEdge(NodeFacade start, NodeFacade end) {
-      synchronized(gc) {
-      try {
-        EdgeView view = ViewManager.getInstance().createEdgeView();
-        return addEdge(start, end, view);
-      } catch(ViewManager.UnknownViewTypeException ex) {
-        ex.printStackTrace();
-        return null;
-      }
+      synchronized (gc) {
+        try {
+          EdgeView view = ViewManager.getInstance().createEdgeView();
+          return addEdge(start, end, view);
+        } catch (ViewManager.UnknownViewTypeException ex) {
+          ex.printStackTrace();
+          return null;
+        }
       }
     }
     /**
      * Create a new cluster and add it as a member of this cluster
      */
     public ClusterFacade addCluster() {
-      synchronized(gc) {
-      try {
-        ClusterFacade c = new ClusterFacade(gc);
-        addNode(c);
-        return c;
-      } catch(ViewManager.UnknownViewTypeException e) {
-        throw new Error("No default ClusterView type set!??!?!");
-      }
+      synchronized (gc) {
+        try {
+          ClusterFacade c = new ClusterFacade(gc);
+          addNode(c);
+          return c;
+        } catch (ViewManager.UnknownViewTypeException e) {
+          throw new Error("No default ClusterView type set!??!?!");
+        }
       }
     }
     /**
      * Create a new cluster and add it as a member of this cluster
      */
     public ClusterFacade addCluster(String viewType) {
-      synchronized(gc) {
-      try {
-        ClusterFacade c = new ClusterFacade(gc, viewType);
-        addNode(c);
-        return c;
-      } catch(ViewManager.UnknownViewTypeException e) {
-        System.err.println("Couldn't find view type: "+viewType
-          + "in the repository, using default");
-        return addCluster();
-      }
+      synchronized (gc) {
+        try {
+          ClusterFacade c = new ClusterFacade(gc, viewType);
+          addNode(c);
+          return c;
+        } catch (ViewManager.UnknownViewTypeException e) {
+          System.err.println(
+            "Couldn't find view type: "
+              + viewType
+              + "in the repository, using default");
+          return addCluster();
+        }
       }
     }
     /**
      * Create a new cluster and add it as a member of this cluster
      */
     public ClusterFacade addCluster(Vector nodeFacades) {
-      synchronized(gc) {
-      try {
-        ClusterFacade c = new ClusterFacade(gc);
-        addNode(c);
-        NodeList nodes = new NodeList();
-        for(int i=0; i<nodeFacades.size(); i++) {
-          nodes.add(((NodeFacade)nodeFacades.get(i)).getNode());
+      synchronized (gc) {
+        try {
+          ClusterFacade c = new ClusterFacade(gc);
+          addNode(c);
+          NodeList nodes = new NodeList();
+          for (int i = 0; i < nodeFacades.size(); i++) {
+            nodes.add(((NodeFacade) nodeFacades.get(i)).getNode());
+          }
+          c.getCluster().addNodes(nodes);
+          return c;
+        } catch (ViewManager.UnknownViewTypeException e) {
+          throw new Error();
         }
-        c.getCluster().addNodes(nodes);
-        return c;
-      } catch(ViewManager.UnknownViewTypeException e) {
-        throw new Error();
-      }
       }
     }
     /**
@@ -679,19 +701,19 @@ public class GraphControl {
       cluster.removeEdge(e.getEdge());
     }
     public void remove(GraphElementFacade e) {
-      if(e instanceof NodeFacade) {
-        removeNode((NodeFacade)e);
+      if (e instanceof NodeFacade) {
+        removeNode((NodeFacade) e);
       } else if (e instanceof EdgeFacade) {
-        removeEdge((EdgeFacade)e);
+        removeEdge((EdgeFacade) e);
       }
     }
     public void expand() {
       cluster.expand(graphCanvas);
-      ((ClusterView)cluster.getView()).setExpandedView();
+      ((ClusterView) cluster.getView()).setExpandedView();
     }
     public void collapse() {
       cluster.collapse();
-      ((ClusterView)cluster.getView()).setCollapsedView();
+      ((ClusterView) cluster.getView()).setCollapsedView();
     }
     /**
      * @return true if the cluster is expanded else false
@@ -724,23 +746,24 @@ public class GraphControl {
      */
     public void childrenPickable() {
       setChildrenPickable(true);
-      org.wilmascope.graph.ClusterList childClusters = cluster.getNodes().getClusters();
-      for(int i = 0; i < childClusters.size(); i++) {
-        ((GraphElementView)childClusters.get(i).getView()).defaultColour();
+      org.wilmascope.graph.ClusterList childClusters =
+        cluster.getNodes().getClusters();
+      for (int i = 0; i < childClusters.size(); i++) {
+        ((GraphElementView) childClusters.get(i).getView()).defaultColour();
       }
       cluster.getView().setPickable(false);
-      setColour(242/255f,200/255f,242/255f);
+      setColour(242 / 255f, 200 / 255f, 242 / 255f);
     }
     /**
      * sets the pickable status of the child members of this cluster
      */
     private void setChildrenPickable(boolean pickable) {
       NodeList nodes = cluster.getNodes();
-      for(int i=0; i<nodes.size(); i++) {
+      for (int i = 0; i < nodes.size(); i++) {
         nodes.get(i).getView().setPickable(pickable);
       }
       EdgeList edges = cluster.getInternalEdges();
-      for(int i=0; i<edges.size(); i++) {
+      for (int i = 0; i < edges.size(); i++) {
         edges.get(i).getView().setPickable(pickable);
       }
     }
@@ -751,14 +774,14 @@ public class GraphControl {
      * (to indicate they are pickable again
      */
     public void setAllPickable(boolean pickable) {
-      for(int i = 0; i < allNodes.size(); i++) {
+      for (int i = 0; i < allNodes.size(); i++) {
         Node node = allNodes.get(i);
         node.getView().setPickable(pickable);
-        if(node instanceof Cluster) {
-          ((GraphElementView)node.getView()).defaultColour();
+        if (node instanceof Cluster) {
+          ((GraphElementView) node.getView()).defaultColour();
         }
       }
-      for(int i = 0; i < allEdges.size(); i++) {
+      for (int i = 0; i < allEdges.size(); i++) {
         allEdges.get(i).getView().setPickable(pickable);
       }
     }
@@ -766,35 +789,35 @@ public class GraphControl {
       return cluster;
     }
     public void showHiddenChildren() {
-      for(int i = 0; i < allNodes.size(); i++) {
+      for (int i = 0; i < allNodes.size(); i++) {
         allNodes.get(i).show(graphCanvas);
       }
-      for(int i = 0; i < allEdges.size(); i++) {
+      for (int i = 0; i < allEdges.size(); i++) {
         allEdges.get(i).show(graphCanvas);
       }
     }
     public NodeFacade[] getNodes() {
       NodeList nodes = cluster.getNodes();
       NodeFacade[] nodeFacades = new NodeFacade[nodes.size()];
-      for(int i=0;i<nodes.size();i++) {
-        nodeFacades[i] = (NodeFacade)nodes.get(i).getUserFacade();
+      for (int i = 0; i < nodes.size(); i++) {
+        nodeFacades[i] = (NodeFacade) nodes.get(i).getUserFacade();
       }
       return nodeFacades;
     }
     public EdgeFacade[] getEdges() {
       EdgeList edges = cluster.getInternalEdges();
       EdgeFacade[] edgeFacades = new EdgeFacade[edges.size()];
-      for(int i=0;i<edges.size();i++) {
-        edgeFacades[i] = (EdgeFacade)edges.get(i).getUserFacade();
+      for (int i = 0; i < edges.size(); i++) {
+        edgeFacades[i] = (EdgeFacade) edges.get(i).getUserFacade();
       }
       return edgeFacades;
     }
     public void setBalancedThreshold(float threshold) {
-      ((ForceLayout)cluster.getLayoutEngine()).setBalancedThreshold(threshold);
+      ((ForceLayout) cluster.getLayoutEngine()).setBalancedThreshold(threshold);
       balancedThreshold = threshold;
     }
     public float getBalancedThreshold() {
-      return ((ForceLayout)cluster.getLayoutEngine()).getBalancedThreshold();
+      return ((ForceLayout) cluster.getLayoutEngine()).getBalancedThreshold();
     }
     public void freeze() {
       gc.freeze();
@@ -826,7 +849,7 @@ public class GraphControl {
     return rootCluster;
   }
   public void setRootCluster(ClusterFacade rootCluster) {
-    this.rootCluster = (ClusterFacade)rootCluster;
+    this.rootCluster = (ClusterFacade) rootCluster;
     // don't want the root cluster in the list of all nodes...
     allNodes.remove(rootCluster.getCluster());
     rootCluster.hide();
@@ -837,56 +860,41 @@ public class GraphControl {
   public GraphControl(int xsize, int ysize) {
     viewManager = ViewManager.getInstance();
     forceManager = ForceManager.getInstance();
-      /* load core views
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.ArrowEdgeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.DirectedEdgeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.InheritanceEdgeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.AggregationEdgeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.TaperedEdgeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.DefaultClusterView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.ConeClusterView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.TubeClusterView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.BoxClusterView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.ColumnClusterView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.DefaultEdgeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.DefaultNodeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.BoxNodeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.LabelNodeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.TubeNodeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.SquareTubeNodeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.SplineTubeEdgeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.SplineRectTubeEdgeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.LineEdgeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.LineNodeView());
-      */
+    layoutManager = LayoutManager.getInstance();
+    layoutManager.addPrototypeLayout(new ForceLayout());
+    layoutManager.addPrototypeLayout(new MultiScaleLayout());
+    layoutManager.addPrototypeLayout(new FastLayout());
     try {
-      viewManager.loadViews(new java.io.File("../classes/org/wilmascope/viewplugin"),"org.wilmascope.viewplugin");
-    } catch(java.io.IOException e) {
-      System.err.println("Couldn't load plugins because "+e.getMessage());
+      viewManager.loadViews(
+        new java.io.File("../classes/org/wilmascope/viewplugin"),
+        "org.wilmascope.viewplugin");
+    } catch (java.io.IOException e) {
+      System.err.println("Couldn't load plugins because " + e.getMessage());
     }
     try {
       viewManager.getEdgeViewRegistry().setDefaultView("Plain Edge");
       viewManager.getNodeViewRegistry().setDefaultView("DefaultNodeView");
       viewManager.getClusterViewRegistry().setDefaultView("Spherical Cluster");
-    } catch(ViewManager.UnknownViewTypeException e) {
+    } catch (ViewManager.UnknownViewTypeException e) {
       e.printStackTrace();
       System.out.println("Fatal Error, stopping.");
       System.exit(1);
     }
-    forceManager.addPrototypeForce(new Repulsion(1.2f,20f));
+    forceManager.addPrototypeForce(new Repulsion(1.2f, 20f));
     forceManager.addPrototypeForce(new Spring(5f));
     forceManager.addPrototypeForce(new Origin(8f));
     forceManager.addPrototypeForce(new DirectedField(1f));
     graphCanvas = new GraphCanvas(xsize, ysize);
     try {
       setRootCluster(new ClusterFacade(this));
-    } catch(ViewManager.UnknownViewTypeException ex) {
+    } catch (ViewManager.UnknownViewTypeException ex) {
       ex.printStackTrace();
       throw new Error();
     }
     balancedThreshold = rootCluster.getBalancedThreshold();
 
-    graphBehavior = (GraphBehavior)graphCanvas.addPerFrameBehavior(new BehaviorClient() {
+    graphBehavior =
+      (GraphBehavior) graphCanvas.addPerFrameBehavior(new BehaviorClient() {
       public void callback() {
         iterate();
       }
@@ -898,17 +906,19 @@ public class GraphControl {
     clientList.add(gc);
   }
   protected synchronized void iterate() {
-    for(int i=0;i<iterationsPerFrame;i++) {
+    for (int i = 0; i < iterationsPerFrame; i++) {
       rootCluster.getCluster().calculateLayout();
       boolean balanced = rootCluster.getCluster().applyLayout();
       layoutIterationsCounter++;
-      if(balanced) {
-        for(Iterator it=clientList.iterator();it.hasNext();) {
-          ((GraphClient)it.next()).balanced();
+      if (balanced) {
+        for (Iterator it = clientList.iterator(); it.hasNext();) {
+          ((GraphClient) it.next()).balanced();
         }
         graphBehavior.setEnable(false);
-        System.out.println("Balanced after: "+(float)(System.currentTimeMillis()-startTime)/1000f);
-        System.out.println("iterations: "+layoutIterationsCounter);
+        System.out.println(
+          "Balanced after: "
+            + (float) (System.currentTimeMillis() - startTime) / 1000f);
+        System.out.println("iterations: " + layoutIterationsCounter);
         break;
       }
     }
@@ -934,7 +944,7 @@ public class GraphControl {
    * Net effect is to unfreeze the layout animation
    */
   public void unfreeze() {
-    startTime=System.currentTimeMillis();
+    startTime = System.currentTimeMillis();
     layoutIterationsCounter = 0;
     graphBehavior.setEnable(true);
   }
@@ -944,7 +954,8 @@ public class GraphControl {
   private ViewManager viewManager;
   private ForceManager forceManager;
   // The constants
-  private static org.wilmascope.global.Constants constants = org.wilmascope.global.Constants.getInstance();
+  private static org.wilmascope.global.Constants constants =
+    org.wilmascope.global.Constants.getInstance();
   private NodeList allNodes = new NodeList();
   private EdgeList allEdges = new EdgeList();
   private long startTime = 0;
@@ -955,4 +966,11 @@ public class GraphControl {
   }
   static PickListener pickListener = new PickListener();
   private GraphBehavior graphBehavior;
+  private LayoutManager layoutManager;
+  /**
+   * @return
+   */
+  public LayoutManager getLayoutManager() {
+    return layoutManager;
+  }
 }
