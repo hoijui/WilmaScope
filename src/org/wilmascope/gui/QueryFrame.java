@@ -227,7 +227,7 @@ public class QueryFrame extends JFrame {
     this.dispose();
   }
   void ownershipQuery(String startFundman) {
-    String url = new String("jdbc:postgresql:citywatch");
+    String url = new String("jdbc:postgresql://mother:5432/citywatch");
     fmList.clear();
     companyList.clear();
     try {
@@ -252,7 +252,7 @@ public class QueryFrame extends JFrame {
 
   }
   void fmMovementQuery(String startDate, String endDate) {
-    String url = new String("jdbc:postgresql:citywatch");
+    String url = new String("jdbc:postgresql://mother/citywatch");
     nodes.clear();
     String maxMinQueryString =
       "select max(val) as maxVal, min(val) as minVal "+

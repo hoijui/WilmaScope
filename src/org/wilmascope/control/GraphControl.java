@@ -361,7 +361,7 @@ public class GraphControl {
       );
     } // setTransparency
     public void setLevelConstraint(int level) {
-      ((NodeForceLayout)node.getLayout()).setConstraint(new org.wilmascope.forcelayout.LevelConstraint(level,0.5f));
+      ((NodeForceLayout)node.getLayout()).setConstraint(new org.wilmascope.forcelayout.LevelConstraint(level,1f));
       ((ForceLayout)node.getOwner().getLayoutEngine()).setConstrained();
     }
 

@@ -6,7 +6,7 @@ then
     cd ${WILMA_HOME}/lib
     if [ x$OS = xWindows_NT ]
     then
-      $JAVA_HOME/bin/java -cp xalan.jar\;crimson.jar\;jaxp.jar\;wilma.jar org.wilmascope.control.WilmaMain
+      $JAVA_HOME/bin/java -Xmx300m -cp postgresql.jar\;xalan.jar\;crimson.jar\;jaxp.jar\;wilma.jar -Djdbc.drivers=org.postgresql.Driver org.wilmascope.control.WilmaMain
     else
       $JAVA_HOME/bin/java -Xmx300m -cp /usr/share/java/postgresql.jar:xalan.jar:crimson.jar:jaxp.jar:wilma.jar -Djdbc.drivers=org.postgresql.Driver org.wilmascope.control.WilmaMain
     fi
