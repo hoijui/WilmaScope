@@ -69,14 +69,14 @@ import org.wilmascope.viewplugin.ColumnClusterView;
  * @version 1.0
  */
 
-public class DotLayout implements LayoutEngine {
+public class DotLayout extends LayoutEngine {
   TreeMap nodeLookup = new TreeMap();
   TreeMap edgeLookup = new TreeMap();
   TreeMap curveLookup = new TreeMap();
   Vector curvelessEdges = new Vector();
 
   public void calculateLayout() {
-    NodeList nodes = root.getNodes();
+    NodeList nodes = getRoot().getNodes();
 
     try {
       String dotPath = GlobalConstants.getInstance().getProperty("DotPath");
@@ -127,7 +127,7 @@ public class DotLayout implements LayoutEngine {
             + "\"];\n";
         in.write(text.getBytes());
       }
-      EdgeList edges = root.getInternalEdges();
+      EdgeList edges = getRoot().getInternalEdges();
       // masterEdgeList is a lookup table which has a list of matching edges for each
       // "master edge".  For a given master Edge a matching edge is one with both nodes
       // in the same columnClusters as the master.
@@ -158,10 +158,10 @@ public class DotLayout implements LayoutEngine {
         Node start = e.getStart();
         Node end = e.getEnd();
         DotEdgeLayout eLayout = (DotEdgeLayout) e.getLayout();
-        if (start.getOwner() != root) {
+        if (start.getOwner() != getRoot()) {
           start = start.getOwner();
         }
-        if (end.getOwner() != root) {
+        if (end.getOwner() != getRoot()) {
           end = end.getOwner();
         }
         String text = new String(start.hashCode() + "->" + end.hashCode());
@@ -327,9 +327,8 @@ public class DotLayout implements LayoutEngine {
     return new DotEdgeLayout();
   }
   public JPanel getControls() {
-    return new ControlPanel((GraphControl.Cluster) root.getUserFacade());
+    return new ControlPanel((GraphControl.Cluster) getRoot().getUserFacade());
   }
-  Cluster root;
   /**
    * @return the horizontal scale for the layout
    */
@@ -358,7 +357,7 @@ public class DotLayout implements LayoutEngine {
     yScale = f;
   }
   public void setStrataSeparation(float sep) {
-    NodeList l = root.getNodes();
+    NodeList l = getRoot().getNodes();
     for (Node n:l) {
       (
         (ColumnLayout) ((Cluster) n)
@@ -368,7 +367,7 @@ public class DotLayout implements LayoutEngine {
     }
   }
   public float getStrataSeparation() {
-    NodeList l = root.getNodes();
+    NodeList l = getRoot().getNodes();
     float s = 0;
     if (l.size()>0) {
       s =
@@ -377,39 +376,20 @@ public class DotLayout implements LayoutEngine {
     }
     return s;
   }
-  Properties properties;
   /* (non-Javadoc)
    * @see org.wilmascope.graph.LayoutEngine#getProperties()
    */
   public Properties getProperties() {
-    if(properties == null) {
-      properties = new Properties(); 
-    }
-    properties.setProperty("XScale", "" + getXScale());
-    properties.setProperty("YScale", "" + getYScale());
-    return properties;
-  }
-  /* (non-Javadoc)
-   * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
-   */
-  public void setProperties(Properties p) {
-    properties=p;
-    resetProperties();
+    super.getProperties().setProperty("XScale", "" + getXScale());
+    super.getProperties().setProperty("YScale", "" + getYScale());
+    return super.getProperties();
   }
   public void resetProperties() {
-    if(properties==null) {
-      return;
-    }
-    setXScale(Float.parseFloat(properties.getProperty("XScale", "1")));
-    setYScale(Float.parseFloat(properties.getProperty("YScale", "1")));
+    super.resetProperties();
+    setXScale(Float.parseFloat(super.getProperties().getProperty("XScale", "1")));
+    setYScale(Float.parseFloat(super.getProperties().getProperty("YScale", "1")));
   }
   public String getName() {
     return "Dot Stratified";
-  }
-  /* (non-Javadoc)
-   * @see org.wilmascope.graph.LayoutEngine#init(org.wilmascope.graph.Cluster)
-   */
-  public void init(Cluster root) {
-    this.root = root;
   }
 }

@@ -63,7 +63,7 @@ public class Cluster extends Node {
     nodes.add(node);
     node.setOwner(this);
     if (layoutEngine != null) {
-      node.setLayout(layoutEngine.createNodeLayout(node));
+      node.setLayout((NodeLayout)layoutEngine.createNodeLayout(node));
     }
     // get this node's edges. Edges between the node to be added and nodes
     // that are members of this cluster will be added to this cluster's
@@ -219,7 +219,7 @@ public class Cluster extends Node {
       // create the appropriate layout details for the edge depending on the
       // layout engine used for this cluster
       if (layoutEngine != null) {
-        e.setLayout(getLayoutEngine().createEdgeLayout(e));
+        e.setLayout((EdgeLayout)getLayoutEngine().createEdgeLayout(e));
       }
     }
     // for the each node of the edge, if the parent of that node is not
@@ -286,6 +286,7 @@ public class Cluster extends Node {
     for (Node orig : original.getNodes()) {
       Node copy = new Node();
       nodeMap.put(orig, copy);
+      copy.setLayout(orig.getLayout());
       copy.setUserFacade(orig);
       addNode(copy);
     }
@@ -293,6 +294,7 @@ public class Cluster extends Node {
       Edge copy = new Edge(nodeMap.get(orig.getStart()), nodeMap.get(orig
           .getEnd()));
       copy.setUserFacade(orig);
+      copy.setLayout(orig.getLayout());
       addEdge(copy);
     }
     setUserFacade(original);
@@ -617,29 +619,32 @@ public class Cluster extends Node {
   public EdgeList getAcyclicEdgeSet_EnhancedGreedy() {
     Cluster copy = new Cluster(this);
     EdgeList acyclicEdges = new EdgeList();
-    NodeList nodes = copy.getNodes();
-    while (nodes.size() > 0) {
-      for (Node sink : nodes.getSinks()) {
+    NodeList V = copy.getNodes();
+    while (V.size() > 0) {
+      while (V.getSinks().size()>0) {
+        Node sink = V.getSinks().get(0);
         acyclicEdges.addAll(sink.getEdges());
         sink.delete();
       }
-      for (Node island : nodes.getIsolated()) {
-        island.delete();
+      while (V.getIsolated().size()>0) {
+        V.getIsolated().get(0).delete();
       }
-      for (Node source : nodes.getSources()) {
+      while (V.getSources().size()>0) {
+        Node source = V.getSources().get(0);
         acyclicEdges.addAll(source.getEdges());
         source.delete();
       }
-      if (nodes.size() > 0) {
+      if (V.size() > 0) {
         int maxDelta = 0;
         Node sourciestNode=null;
-        for (Node v : nodes) {
+        for (Node v : V) {
           int delta = v.getOutDegree() - v.getInDegree();
           if (delta >= maxDelta) {
             maxDelta = delta;
             sourciestNode = v;
           }
         }
+        acyclicEdges.addAll(sourciestNode.getOutEdges());
         sourciestNode.delete();
       }
     }

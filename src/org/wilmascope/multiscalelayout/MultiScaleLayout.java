@@ -29,7 +29,7 @@ import org.wilmascope.graph.NodeList;
  *          unascribed
  *  
  */
-public class MultiScaleLayout implements LayoutEngine {
+public class MultiScaleLayout extends LayoutEngine {
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -39,21 +39,20 @@ public class MultiScaleLayout implements LayoutEngine {
 		return "Multiscale";
 	}
 	public void init(Cluster root) {
-		this.root = root;
+		super.init(root);
 		qGraph = new QuickGraph();
 	}
 	QuickGraph qGraph;
-	Cluster root;
 	boolean reset = true;
 	/**
 	 * calculate the changes required to move the graph to a nicer layout
 	 */
 	public void calculateLayout() {
-		if (reset && root.getNodes().size() > 1) {
+		if (reset && getRoot().getNodes().size() > 1) {
 			qGraph = new QuickGraph();
 			reset = false;
-			NodeList nodes = root.getNodes();
-			EdgeList edges = root.getInternalEdges();
+			NodeList nodes = getRoot().getNodes();
+			EdgeList edges = getRoot().getInternalEdges();
 			for (Node n:nodes) {
 				n.setLayout(createNodeLayout(n));
 			}
@@ -72,11 +71,11 @@ public class MultiScaleLayout implements LayoutEngine {
 		boolean done = true;
 		if (!reset) { // if reset is still true then graph size <= 1
 			done = qGraph.relax();
-			NodeList nodes = root.getNodes();
+			NodeList nodes = getRoot().getNodes();
 			for (Node n : nodes) {
         Point3f p = new Point3f(((MultiScaleNodeLayout) n.getLayout()).position);
         p.scale(scale);
-        p.add(root.getPosition());
+        p.add(getRoot().getPosition());
 				n.setPosition(p);
 			}
 			reset = done;
@@ -90,33 +89,12 @@ public class MultiScaleLayout implements LayoutEngine {
 		return qGraph.createMultiScaleEdgeLayout(e);
 	}
 	public JPanel getControls() {
-		return new MSParamsPanel((GraphControl.Cluster) root.getUserFacade());
+		return new MSParamsPanel((GraphControl.Cluster) getRoot().getUserFacade());
 	}
 	public static float scale = 1f / 10f;
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.wilmascope.graph.LayoutEngine#getProperties()
-	 */
-	public Properties getProperties() {
-		return new Properties();
-	}
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
-	 */
-	public void setProperties(Properties p) {
-		// TODO Auto-generated method stub
-	}
+
 	public String getName() {
 		return "Multiscale";
 	}
-  /* (non-Javadoc)
-   * @see org.wilmascope.graph.LayoutEngine#resetProperties()
-   */
-  public void resetProperties() {
-    // TODO Auto-generated method stub
-    
-  }
+
 }

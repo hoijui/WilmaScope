@@ -37,7 +37,6 @@ class ColourPanel extends JPanel {
   }
   int leftInset, rightInset;
 }
-
 public class EdgeViewFrame extends JFrame {
 
   /** Creates new form EdgeViewFrame */
@@ -45,8 +44,6 @@ public class EdgeViewFrame extends JFrame {
     this.rootCluster = root;
     this.graphControl = gc;
     initComponents();
-    minLabelPanel.setBackground(getColourFromSlider(minHueSlider));
-    maxLabelPanel.setBackground(getColourFromSlider(maxHueSlider));
   }
 
   /** This method is called from within the constructor to
@@ -56,20 +53,12 @@ public class EdgeViewFrame extends JFrame {
     Box optionsBox = Box.createVerticalBox();
     Box hideBox = Box.createHorizontalBox();
     Box hueBox = Box.createHorizontalBox();
-    Box hueSettingsBox = Box.createVerticalBox();
 
     hideApplyButton = new JButton();
     thresholdLabel = new JLabel();
     hueLabel = new JLabel();
     hideThresholdSlider = new JSlider();
     hueApplyButton = new JButton();
-    hueSliderPanel = new ColourPanel(7,7);
-    minLabel = new JLabel();
-    minHueSlider = new JSlider();
-    maxLabel = new JLabel();
-    maxHueSlider = new JSlider();
-    minLabelPanel = new JPanel();
-    maxLabelPanel = new JPanel();
     closePanel = new JPanel();
     closeButton = new JButton();
 
@@ -94,46 +83,8 @@ public class EdgeViewFrame extends JFrame {
 
     hueLabel.setText("Show weight by hue:");
     hueBox.add(hueLabel);
-    hueSliderPanel.setLayout(new BoxLayout(hueSliderPanel, BoxLayout.Y_AXIS));
 
-    minLabel.setText("Min");
-    minLabel.setHorizontalAlignment(SwingConstants.TRAILING);
-    minLabelPanel.setLayout(new BorderLayout());
-    minLabelPanel.add(minLabel,BorderLayout.WEST);
-    hueSettingsBox.add(minLabelPanel);
-
-    minHueSlider.setValue(30);
-    minHueSlider.setPaintTrack(false);
-    minHueSlider.setOpaque(false);
-    minHueSlider.addChangeListener(new ChangeListener() {
-      public void stateChanged(ChangeEvent evt) {
-        minHueSliderStateChanged(evt);
-      }
-    });
-
-    hueSliderPanel.add(minHueSlider);
-
-    maxLabel.setText("Max");
-    maxLabel.setHorizontalAlignment(SwingConstants.TRAILING);
-    maxLabelPanel.setLayout(new BorderLayout());
-    maxLabelPanel.add(maxLabel,BorderLayout.EAST);
-
-    maxHueSlider.setValue(100);
-    maxHueSlider.setOpaque(false);
-    maxHueSlider.setPaintTrack(false);
-    maxHueSlider.addChangeListener(new ChangeListener() {
-      public void stateChanged(ChangeEvent evt) {
-        maxHueSliderStateChanged(evt);
-      }
-    });
-
-    hueSliderPanel.add(maxHueSlider);
-
-    hueSettingsBox.add(hueSliderPanel);
-
-    hueSettingsBox.add(maxLabelPanel);
-
-    hueBox.add(hueSettingsBox);
+    hueBox.add(hueSettingsPanel);
     hueApplyButton.setText("Apply");
     hueApplyButton.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,8 +122,7 @@ public class EdgeViewFrame extends JFrame {
     for(int i=0;i<edges.length;i++) {
       EdgeView v = (EdgeView)edges[i].getView();
       if(v!=null) {
-        v.setHueByWeight(getHueFromSlider(minHueSlider),
-          getHueFromSlider(maxHueSlider));
+        v.setHueByWeight(hueSettingsPanel.getMinHue(),hueSettingsPanel.getMaxHue());
       }
     }
   }
@@ -190,39 +140,19 @@ public class EdgeViewFrame extends JFrame {
     }
   }
 
-  private void maxHueSliderStateChanged(ChangeEvent evt) {
-    maxLabelPanel.setBackground(getColourFromSlider(maxHueSlider));
-  }
-
-  private void minHueSliderStateChanged(ChangeEvent evt) {
-    minLabelPanel.setBackground(getColourFromSlider(minHueSlider));
-  }
-
-  private Color getColourFromSlider(JSlider s) {
-    return Color.getHSBColor(getHueFromSlider(s),1f,1f);
-  }
-  private float getHueFromSlider(JSlider s) {
-    return (float)(100-s.getValue())/100f;
-  }
 
   private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
     dispose();
   }
 
   private JSlider hideThresholdSlider;
-  private ColourPanel hueSliderPanel;
-  private JLabel maxLabel;
-  private JSlider minHueSlider;
   private JButton closeButton;
-  private JLabel minLabel;
   private JButton hideApplyButton;
-  private JSlider maxHueSlider;
   private JButton hueApplyButton;
   private JPanel closePanel;
   private JLabel thresholdLabel;
   private JLabel hueLabel;
-  private JPanel minLabelPanel;
-  private JPanel maxLabelPanel;
+  private HueSettingsPanel hueSettingsPanel = new HueSettingsPanel();
 
   private GraphControl.Cluster rootCluster;
   private GraphControl graphControl;

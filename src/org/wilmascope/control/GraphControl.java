@@ -18,6 +18,8 @@
  */
 package org.wilmascope.control;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -51,12 +53,22 @@ import org.wilmascope.view.ViewManager;
  * 
  * @version 1.0
  */
+class ObservableLayout extends Observable {
+  public void addObserver(LayoutObserver o) {
+    super.addObserver(o);
+  }
 
+  protected void notifyLayoutObservers() {
+    setChanged();
+    notifyObservers();
+  }
+}
 /**
  * GraphControl gives the access point or facade for the WilmaGraph drawing
  * engine.
  */
-public class GraphControl {
+
+public class GraphControl extends ObservableLayout {
   // In {@link PickListener} we have to do what amounts to run-time type
   // checking so I figured why not pass around java.lang.Class variables.
   // In hindsight it probably wasn't the easiest or most elegant way of
@@ -404,11 +416,11 @@ public class GraphControl {
     }
 
     public void setRadius(float radius) {
-      ((org.wilmascope.view.NodeView)node.getView()).setRadius(radius);
+      ((org.wilmascope.view.NodeView) node.getView()).setRadius(radius);
     }
 
     public float getRadius() {
-      return ((org.wilmascope.view.NodeView)node.getView()).getRadius();
+      return ((org.wilmascope.view.NodeView) node.getView()).getRadius();
     }
 
     public void moveToCanvasPos(int x, int y) {
@@ -429,18 +441,21 @@ public class GraphControl {
     public void setProperties(Properties p) {
       node.setProperties(p);
       NodeLayout l = node.getLayout();
-      if(l!=null) {
+      if (l != null) {
         l.resetProperties();
       }
     }
+
     public void setProperty(String key, String value) {
-      node.getProperties().setProperty(key,value);
+      node.getProperties().setProperty(key, value);
       node.getLayout().resetProperties();
     }
+
     public void removeProperty(String key) {
       node.getProperties().remove(key);
       node.getLayout().resetProperties();
     }
+
     public Properties getProperties() {
       return node.getProperties();
     }
@@ -726,7 +741,9 @@ public class GraphControl {
 
     /**
      * move a node out of this cluster and into the parent cluster
-     * @param n node to move
+     * 
+     * @param n
+     *          node to move
      */
     public void moveToParent(Node n) {
       cluster.moveToParent(n.getNode());
@@ -778,7 +795,7 @@ public class GraphControl {
       setChildrenPickable(true);
       org.wilmascope.graph.ClusterList childClusters = cluster.getNodes()
           .getClusters();
-      for (org.wilmascope.graph.Cluster c:childClusters) {
+      for (org.wilmascope.graph.Cluster c : childClusters) {
         ((GraphElementView) c.getView()).defaultColour();
       }
       cluster.getView().setPickable(false);
@@ -933,12 +950,7 @@ public class GraphControl {
       System.exit(1);
     }
     graphCanvas = new GraphCanvas(xsize, ysize);
-    try {
-      setRootCluster(new Cluster(this));
-    } catch (ViewManager.UnknownViewTypeException ex) {
-      WilmaMain.showErrorDialog("Unknown ViewType!", ex);
-      throw new Error();
-    }
+    reset();
     balancedThreshold = ((ForceLayout) rootCluster.getLayoutEngine())
         .getBalancedThreshold();
 
@@ -956,12 +968,16 @@ public class GraphControl {
       rootCluster.getCluster().calculateLayout();
       boolean balanced = rootCluster.getCluster().applyLayout();
       layoutIterationsCounter++;
+      setChanged();
       if (balanced) {
         graphBehavior.setEnable(false);
         System.out.println("Balanced after: "
             + (float) (System.currentTimeMillis() - startTime) / 1000f);
         System.out.println("iterations: " + layoutIterationsCounter);
+        notifyObservers(LayoutObserver.LAYOUT_FINISHED);
         break;
+      } else {
+        notifyObservers(LayoutObserver.LAYOUT_ITERATION);
       }
     }
     rootCluster.getCluster().draw();
@@ -969,14 +985,31 @@ public class GraphControl {
 
   public void centreGraph() {
     NodeList nodes = getRootCluster().getCluster().getAllNodes();
-    getGraphCanvas().reorient(new Vector3f(nodes.getBarycenter()),nodes.getWidth());
+    int canvasHeight = graphCanvas.getHeight();
+    int canvasWidth = graphCanvas.getWidth();
+    float aspectRatio = (float)canvasWidth/(float)canvasHeight;
+    float sceneHeight = nodes.getHeight();
+    float sceneWidth = nodes.getWidth();
+    float diameter = nodes.getWidth()*aspectRatio;
+    if (nodes.getHeight()/aspectRatio > diameter) {
+      diameter = nodes.getHeight()/aspectRatio;
+    }
+    getGraphCanvas().reorient(new Vector3f(nodes.getBarycenter()),
+        diameter);
   }
+
   public GraphCanvas getGraphCanvas() {
     return graphCanvas;
   }
 
   public void setIterationsPerFrame(int iterations) {
     this.iterationsPerFrame = iterations;
+  }
+
+  Observer layoutObserver = null;
+
+  public void setLayoutObserver(Observer o) {
+    this.layoutObserver = o;
   }
 
   public int getIterationsPerFrame() {
@@ -997,6 +1030,21 @@ public class GraphControl {
     startTime = System.currentTimeMillis();
     layoutIterationsCounter = 0;
     graphBehavior.setEnable(true);
+  }
+
+  public synchronized void reset() {
+    try {
+      if (rootCluster != null) {
+        rootCluster.freeze();
+        rootCluster.deleteAll();
+        rootCluster.delete();
+        
+      }
+      setRootCluster(new Cluster(this));
+    } catch (ViewManager.UnknownViewTypeException ex) {
+      WilmaMain.showErrorDialog("Unknown ViewType!", ex);
+      throw new Error();
+    }
   }
 
   private float balancedThreshold = 0.002f;
@@ -1030,4 +1078,5 @@ public class GraphControl {
   private GraphBehavior graphBehavior;
 
   private LayoutManager layoutManager;
+
 }

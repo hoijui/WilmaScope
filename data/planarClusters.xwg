@@ -7,72 +7,84 @@
 <Property Key="Repulsion" Value="1.2"/>
 <Property Key="VelocityAttenuation" Value="0.02"/>
 </LayoutEngineType>
-<Cluster>
-<ViewType Name="Spherical Cluster">
-<Property Key="Radius" Value="0.85719275"/>
+<Node ID="N0">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
 </ViewType>
-<Property Key="Position" Value="0.5142105 0.7714696 -0.36282653"/>
+<Property Key="Position" Value="-0.06980259 0.21548337 1.3873316"/>
+<Property Key="" Value=""/>
+</Node>
+<Cluster>
+<ViewType Name="Ellipsoid Cluster">
+<Property Key="Radius" Value="0.85711557"/>
+</ViewType>
+<Property Key="Position" Value="0.5142246 0.77149403 -0.36281252"/>
+<Property Key="" Value=""/>
 <LayoutEngineType Name="ForceLayout">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
 <Property Key="VelocityAttenuation" Value="0.02"/>
 </LayoutEngineType>
-<Node ID="N13">
+<Node ID="N5">
 <ViewType Name="DefaultNodeView">
 <Property Key="Radius" Value="0.1"/>
 </ViewType>
-<Property Key="Position" Value="0.39307642 0.5421854 -0.5789371"/>
+<Property Key="Position" Value="0.3931492 0.5422835 -0.5790093"/>
+<Property Key="" Value=""/>
 </Node>
-<Node ID="N14">
+<Node ID="N6">
 <ViewType Name="DefaultNodeView">
 <Property Key="Radius" Value="0.1"/>
 </ViewType>
-<Property Key="Position" Value="0.49811038 0.15052208 -0.14819361"/>
+<Property Key="Position" Value="0.4981697 0.15059488 -0.14827275"/>
+<Property Key="" Value=""/>
 </Node>
-<Node ID="N15">
+<Node ID="N7">
 <ViewType Name="DefaultNodeView">
 <Property Key="Radius" Value="0.1"/>
 </ViewType>
-<Property Key="Position" Value="-0.07816605 0.5243088 -0.2217492"/>
+<Property Key="Position" Value="-0.07810951 0.52438337 -0.2218287"/>
+<Property Key="" Value=""/>
 </Node>
-<Node ID="N16">
+<Node ID="N8">
 <ViewType Name="DefaultNodeView">
 <Property Key="Radius" Value="0.1"/>
 </ViewType>
-<Property Key="Position" Value="0.42011973 0.72977346 0.16245186"/>
+<Property Key="Position" Value="0.42019096 0.7298644 0.16235612"/>
+<Property Key="" Value=""/>
 </Node>
-<Edge EndID="N13" StartID="N14">
+<Edge EndID="N5" StartID="N6">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N14" StartID="N15">
+<Edge EndID="N6" StartID="N7">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N13" StartID="N15">
+<Edge EndID="N5" StartID="N7">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N16" StartID="N14">
+<Edge EndID="N8" StartID="N6">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N13" StartID="N16">
+<Edge EndID="N5" StartID="N8">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N15" StartID="N16">
+<Edge EndID="N7" StartID="N8">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
@@ -80,10 +92,11 @@
 </Edge>
 </Cluster>
 <Cluster>
-<ViewType Name="Planar Cluster">
-<Property Key="Radius" Value="1.2107601"/>
+<ViewType Name="Ellipsoid Cluster">
+<Property Key="Radius" Value="1.2107217"/>
 </ViewType>
-<Property Key="Position" Value="-0.71569335 -0.99803597 0.2808989"/>
+<Property Key="Position" Value="-0.7157131 -0.9980626 0.28091785"/>
+<Property Key="" Value=""/>
 <LayoutEngineType Name="ForceLayout">
 <Property Key="Spring" Value="5.8"/>
 <Property Key="Origin" Value="10.0"/>
@@ -91,98 +104,96 @@
 <Property Key="VelocityAttenuation" Value="0.02"/>
 <Property Key="Planar" Value="9.1"/>
 </LayoutEngineType>
-<Node ID="N9">
+<Node ID="N1">
 <ViewType Name="DefaultNodeView">
 <Property Key="Radius" Value="0.1"/>
 </ViewType>
-<Property Key="Position" Value="-0.315194 -0.53932756 -0.52583706"/>
+<Property Key="Position" Value="-0.31520572 -0.53932875 -0.5257515"/>
+<Property Key="" Value=""/>
 </Node>
-<Node ID="N10">
+<Node ID="N2">
 <ViewType Name="DefaultNodeView">
 <Property Key="Radius" Value="0.1"/>
 </ViewType>
-<Property Key="Position" Value="-1.1116207 -0.27843183 0.13490611"/>
+<Property Key="Position" Value="-1.1116642 -0.27849913 0.13497126"/>
+<Property Key="" Value=""/>
 </Node>
-<Node ID="N11">
+<Node ID="N3">
 <ViewType Name="DefaultNodeView">
 <Property Key="Radius" Value="0.1"/>
 </ViewType>
-<Property Key="Position" Value="0.11497725 -1.0740323 0.2914678"/>
+<Property Key="Position" Value="0.11492196 -1.074092 0.2915314"/>
+<Property Key="" Value=""/>
 </Node>
-<Node ID="N12">
+<Node ID="N4">
 <ViewType Name="DefaultNodeView">
 <Property Key="Radius" Value="0.1"/>
 </ViewType>
-<Property Key="Position" Value="-0.69724596 -0.8173372 1.0546235"/>
+<Property Key="Position" Value="-0.6973458 -0.8174807 1.0546769"/>
+<Property Key="" Value=""/>
 </Node>
-<Edge EndID="N9" StartID="N10">
+<Edge EndID="N1" StartID="N2">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N9" StartID="N11">
+<Edge EndID="N1" StartID="N3">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N10" StartID="N11">
+<Edge EndID="N2" StartID="N3">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N12" StartID="N10">
+<Edge EndID="N4" StartID="N2">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N9" StartID="N12">
+<Edge EndID="N1" StartID="N4">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N12" StartID="N11">
+<Edge EndID="N4" StartID="N3">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
 </Cluster>
-<Node ID="N8">
-<ViewType Name="DefaultNodeView">
-<Property Key="Radius" Value="0.1"/>
-</ViewType>
-<Property Key="Position" Value="-0.06978147 0.2155368 1.3874377"/>
-</Node>
-<Edge EndID="N13" StartID="N9">
+<Edge EndID="N5" StartID="N1">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N15" StartID="N10">
+<Edge EndID="N7" StartID="N2">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N14" StartID="N11">
+<Edge EndID="N6" StartID="N3">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N8" StartID="N12">
+<Edge EndID="N0" StartID="N4">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>
 <Property Key="Weight" Value="0.5"/>
 </Edge>
-<Edge EndID="N8" StartID="N16">
+<Edge EndID="N0" StartID="N8">
 <ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.02"/>
 </ViewType>

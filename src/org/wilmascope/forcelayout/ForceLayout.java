@@ -42,13 +42,9 @@ import org.wilmascope.graph.NodeList;
  * incrementally.
  */
 
-public class ForceLayout implements
+public class ForceLayout extends
     LayoutEngine<NodeForceLayout, EdgeForceLayout> {
 
-  public void init(Cluster root) {
-    this.root = root;
-    createElementLayouts();
-  }
 
   public void calculateLayout() {
     // Calculate the force on each node for each of our forces
@@ -69,8 +65,8 @@ public class ForceLayout implements
     // reposition nodes, calculating maxNetForce as you go
     float maxNetForce = 0;
     float currentNetForce = 0;
-    NodeList nodes = root.getNodes();
-    EdgeList edges = root.getInternalEdges();
+    NodeList nodes = getRoot().getNodes();
+    EdgeList edges = getRoot().getInternalEdges();
     for (Node n : nodes) {
       nodeLayout = (NodeForceLayout) (n.getLayout());
       nodeLayout.getNetForce().scale(cool);
@@ -105,7 +101,7 @@ public class ForceLayout implements
       }
     }
     forces.add(force);
-    force.setCluster(root);
+    force.setCluster(getRoot());
   }
 
   /**
@@ -163,16 +159,6 @@ public class ForceLayout implements
     constrained = true;
   }
 
-  public void createElementLayouts() {
-    NodeList nodes = root.getNodes();
-    for (Node n : nodes) {
-      n.setLayout(createNodeLayout(n));
-    }
-    EdgeList edges = root.getInternalEdges();
-    for (Edge e : edges) {
-      e.setLayout(createEdgeLayout(e));
-    }
-  }
 
   public NodeForceLayout createNodeLayout(org.wilmascope.graph.Node n) {
     return new NodeForceLayout();
@@ -191,8 +177,6 @@ public class ForceLayout implements
 
   float velocityAttenuation = Constants.velocityAttenuation;
 
-  Cluster root;
-
   Vector3f vY = new Vector3f(0, 1f, 0);
 
   boolean constrained = false;
@@ -207,7 +191,7 @@ public class ForceLayout implements
    * @see org.wilmascope.graph.LayoutEngine#getControls()
    */
   public JPanel getControls() {
-    return new ForceControlsPanel((GraphControl.Cluster) root.getUserFacade());
+    return new ForceControlsPanel((GraphControl.Cluster) getRoot().getUserFacade());
   }
 
   public String getName() {
@@ -232,46 +216,32 @@ public class ForceLayout implements
    * @see org.wilmascope.graph.LayoutEngine#getProperties()
    */
   public Properties getProperties() {
-    if (properties == null) {
-      properties = new Properties();
-      if (levels >= 0) {
-        properties.setProperty("Levels", "" + levels);
-        properties.setProperty("LevelSeparation", "" + levelSeparation);
-      }
-      for (Iterator i = forces.iterator(); i.hasNext();) {
-        Force f = (Force) i.next();
-        properties.setProperty(f.getTypeName(), "" + f.getStrengthConstant());
-      }
-      properties.setProperty("VelocityAttenuation", ""
-          + getVelocityAttenuation());
+    if (levels >= 0) {
+      super.getProperties().setProperty("Levels", "" + levels);
+      super.getProperties().setProperty("LevelSeparation", "" + levelSeparation);
     }
-    return properties;
-  }
+    for (Iterator i = forces.iterator(); i.hasNext();) {
+      Force f = (Force) i.next();
+      super.getProperties().setProperty(f.getTypeName(), "" + f.getStrengthConstant());
+    }
+    super.getProperties()
+        .setProperty("VelocityAttenuation", "" + getVelocityAttenuation());
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
-   */
-  public void setProperties(Properties p) {
-    this.properties = p;
-    resetProperties();
+    return super.getProperties();
   }
 
   public void resetProperties() {
-    if (properties == null) {
-      return;
-    }
+    super.resetProperties();
     ForceManager m = ForceManager.getInstance();
-    for (Enumeration k = properties.keys(); k.hasMoreElements();) {
+    for (Enumeration k = super.getProperties().keys(); k.hasMoreElements();) {
       String key = (String) k.nextElement();
-      float strength = Float.parseFloat(properties.getProperty(key));
+      float strength = Float.parseFloat(super.getProperties().getProperty(key));
       if (key.equals("VelocityAttenuation")) {
         setVelocityAttenuation(strength);
       } else if (key.equals("Levels")) {
-        levels = Integer.parseInt(properties.getProperty(key));
+        levels = Integer.parseInt(super.getProperties().getProperty(key));
       } else if (key.equals("LevelSeparation")) {
-        levelSeparation = Float.parseFloat(properties.getProperty(key));
+        levelSeparation = Float.parseFloat(super.getProperties().getProperty(key));
       } else {
         try {
           Force f = m.createForce(key);
@@ -283,9 +253,6 @@ public class ForceLayout implements
       }
     }
   }
-
-  Properties properties;
-
   public static ForceLayout createDefaultForceLayout(Cluster root) {
     ForceLayout fl = new ForceLayout();
     fl.init(root);

@@ -101,7 +101,9 @@ public class Node extends GraphElement {
    * are attached to it
    */
   public void delete() {
-    owner.remove(this);
+    if (owner != null) {
+      owner.remove(this);
+    }
     if (view != null) {
       view.delete();
       view = null;
@@ -243,15 +245,16 @@ public class Node extends GraphElement {
   public int getInDegree() {
     return getInEdges().size();
   }
-  
+
   public Properties getProperties() {
-    if(properties==null) {
+    if (properties == null) {
       properties = new Properties();
     }
     Point3f pos = getPosition();
     properties.setProperty("Position", pos.x + " " + pos.y + " " + pos.z);
     return properties;
   }
+
   public void setProperties(Properties p) {
     properties = p;
     String position = p.getProperty("Position");
@@ -261,7 +264,9 @@ public class Node extends GraphElement {
           .parseFloat(st.nextToken()), Float.parseFloat(st.nextToken())));
     }
   }
+
   private Properties properties;
+
   private EdgeList edges = new EdgeList();
 
   private Point3f position = new Point3f();

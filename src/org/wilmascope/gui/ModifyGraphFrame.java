@@ -67,7 +67,7 @@ public class ModifyGraphFrame extends JFrame {
     okButton.addActionListener(new ActionListener() {
 
       public void actionPerformed(ActionEvent e) {
-        modifier.modify(gc.getRootCluster().getCluster());
+        modifier.modify(gc.getRootCluster());
       }
       
     });

@@ -23,19 +23,17 @@ package org.wilmascope.file;
  * @author Tim Dwyer
  * @version 1.0
  */
+import java.io.File;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.filechooser.FileFilter;
-import javax.vecmath.Point3f;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.WilmaMain;
-import org.wilmascope.degreelayout.DegreeLayout;
-import org.wilmascope.fadelayout.FadeLayout;
+import org.wilmascope.control.GraphControl.Node;
 import org.wilmascope.forcelayout.ForceLayout;
 import org.wilmascope.gmlparser.GMLLoader;
 import org.wilmascope.graph.LayoutEngine;
@@ -76,8 +74,15 @@ public class FileHandler {
 
   boolean needsLayout = true;
 
+  // at the moment it's possible for there to be multiple instances of FileHandler,
+  // so we'll make the lastFile static to ensure it really is the last File loaded
+  static File lastFile;
+  
   public FileHandler(GraphControl graphControl) {
     this.graphControl = graphControl;
+  }
+  public File getLastFile() {
+    return lastFile;
   }
 
   public void load(String fileName) {
@@ -85,8 +90,9 @@ public class FileHandler {
       XMLGraph xmlGraph = new XMLGraph(fileName);
       try {
         xmlGraph.load();
+        lastFile = xmlGraph.getFile();
         nodeLookup = new Hashtable();
-        //graphControl.getRootCluster().removeAllForces();
+        graphControl.reset();
         graphControl.freeze();
         long startTime = System.currentTimeMillis();
         loadCluster(xmlGraph.getRootCluster(), graphControl.getRootCluster());
@@ -222,12 +228,8 @@ public class FileHandler {
       e = new org.wilmascope.columnlayout.ColumnLayout();
     } else if (type.equals("MultiScaleLayout")) {
       e = new MultiScaleLayout();
-    } else if (type.equals("FadeLayout")) {
-      e = new FadeLayout();
     } else if (type.equals("HighDimensionLayout")) {
       e = new HighDimensionLayout();
-    } else if (type.equals("DegreeLayout")) {
-      e = new DegreeLayout();
     }
     c.setLayoutEngine(e);
     e.setProperties(l.getProperties());
@@ -243,18 +245,11 @@ public class FileHandler {
     idLookup = new Hashtable();
     saveCluster(graphControl.getRootCluster(), xmlGraph.getRootCluster());
     xmlGraph.save();
+    lastFile = xmlGraph.getFile();
   }
 
   private void saveCluster(GraphControl.Cluster graphCluster,
       XMLGraph.Cluster xmlCluster) {
-   	//  Save the property of cluster
-  	ClusterView v = (ClusterView) graphCluster.getView();
-  	if (graphCluster.getView() != null) {
-  		XMLGraph.ViewType xv = xmlCluster.setViewType(v.getTypeName());
-  		xv.setProperties(v.getProperties());
-  		}
-  	xmlCluster.setProperties(graphCluster.getProperties());
-  	 //     	
     saveLayoutEngine(graphCluster, xmlCluster);
     GraphControl.Node[] nodes = graphCluster.getNodes();
     Hashtable clusters = new Hashtable();
@@ -297,13 +292,9 @@ public class FileHandler {
       l = xmlCluster.setLayoutEngineType("ColumnLayout");
     } else if (gl instanceof MultiScaleLayout) {
       l = xmlCluster.setLayoutEngineType("MultiScaleLayout");
-    } else if (gl instanceof FadeLayout) {
-      l = xmlCluster.setLayoutEngineType("FadeLayout");
     } else if (gl instanceof HighDimensionLayout) {
       l = xmlCluster.setLayoutEngineType("HighDimensionLayout");
-    } else if (gl instanceof DegreeLayout) {
-      l = xmlCluster.setLayoutEngineType("DegreeLayout");
-    }
+    } 
     l.setProperties(gl.getProperties());
   }
 }

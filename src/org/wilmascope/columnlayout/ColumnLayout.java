@@ -23,7 +23,7 @@ import java.util.Vector;
  * Column layout simply places each node in the cluster at the same x,y position
  * as the root cluster but with the z determined by each node's stratum
  */
-public class ColumnLayout implements LayoutEngine {
+public class ColumnLayout extends LayoutEngine {
   Vector extraSpacing = new Vector();
   public void setExtraSpacing(Vector extraSpacing) {
     this.extraSpacing = extraSpacing;
@@ -34,9 +34,9 @@ public class ColumnLayout implements LayoutEngine {
   public void calculateLayout() {
   }
   public boolean applyLayout() {
-    Point3f rootPosition = root.getPosition();
-    NodeList nodes = root.getNodes();
-    root.setMass(1f);
+    Point3f rootPosition = getRoot().getPosition();
+    NodeList nodes = getRoot().getNodes();
+    getRoot().setMass(1f);
     for (Node node : nodes) {
       Point3f position = node.getPosition();
       NodeColumnLayout nodeLayout = (NodeColumnLayout) node.getLayout();
@@ -77,7 +77,6 @@ public class ColumnLayout implements LayoutEngine {
   }
   public void reset() {
   }
-  Cluster root;
   public void setStrataSeparation(float strataSeparation) {
     this.strataSeparation = strataSeparation;
   }
@@ -85,7 +84,7 @@ public class ColumnLayout implements LayoutEngine {
     return strataSeparation;
   }
   public float getHeight() {
-    NodeList nodes = root.getAllNodes();
+    NodeList nodes = getRoot().getAllNodes();
     float zMax = Float.MIN_VALUE, zMin = Float.MAX_VALUE;
     for (org.wilmascope.graph.Node n : nodes) {
       Point3f t = n.getPosition();
@@ -113,53 +112,22 @@ public class ColumnLayout implements LayoutEngine {
     return null;
   }
 
-  Properties properties;
   /* (non-Javadoc)
    * @see org.wilmascope.graph.LayoutEngine#getProperties()
    */
   public Properties getProperties() {
-    if(properties==null) {
-      properties = new Properties();
-    }
-    properties.setProperty("BaseLevel", "" + getBaseStratum());
-    properties.setProperty("LevelSeparation", "" + getStrataSeparation());
-    return properties;
+    super.getProperties().setProperty("BaseLevel", "" + getBaseStratum());
+    super.getProperties().setProperty("LevelSeparation", "" + getStrataSeparation());
+    return super.getProperties();
   }
 
-  /* (non-Javadoc)
-   * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
-   */
-  public void setProperties(Properties p) {
-    this.properties = p;
-    resetProperties();
-  }
   public void resetProperties() {
-    setBaseStratum(Integer.parseInt(properties.getProperty("BaseLevel", "0")));
+    setBaseStratum(Integer.parseInt(super.getProperties().getProperty("BaseLevel", "0")));
     setStrataSeparation(
-      Float.parseFloat(properties.getProperty("LevelSeparation", "1.0")));
+      Float.parseFloat(super.getProperties().getProperty("LevelSeparation", "1.0")));
   }
   public String getName() {
     return "Column";
   }
 
-  /* (non-Javadoc)
-   * @see org.wilmascope.graph.LayoutEngine#init(org.wilmascope.graph.Cluster)
-   */
-  public void init(Cluster root) {
-    this.root = root;
-    strataSeparation = 1f;
-    //		float scale=17f;
-    //		extraSpacing.add(new Float(35f/scale));
-    //		extraSpacing.add(new Float(0f/scale));
-    //		extraSpacing.add(new Float(3f/scale));
-    //		extraSpacing.add(new Float(3f/scale));
-    //		extraSpacing.add(new Float(6f/scale));
-    //		extraSpacing.add(new Float(0f/scale));
-    //		extraSpacing.add(new Float(3f/scale));
-    //		extraSpacing.add(new Float(10f/scale));
-    //		extraSpacing.add(new Float(9f/scale));
-    //		extraSpacing.add(new Float(12f/scale));
-    //		extraSpacing.add(new Float(18f/scale));
-    //		extraSpacing.add(new Float(10f/scale));
-  }
 }

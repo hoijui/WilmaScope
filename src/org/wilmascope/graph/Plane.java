@@ -20,9 +20,11 @@
 package org.wilmascope.graph;
 
 import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 import Jama.Matrix;
+import Jama.SingularValueDecomposition;
 
 /**
  * A plane defined by a normal vector and a point in the plane
@@ -33,6 +35,8 @@ public class Plane {
   Point3f centroid;
 
   Vector3f normal;
+
+  SingularValueDecomposition svd;
 
   public Plane(Point3f centroid, Vector3f normal) {
     this.centroid = centroid;
@@ -46,7 +50,7 @@ public class Plane {
    */
   public Plane(NodeList nodes) {
     centroid = nodes.getBarycenter();
-    normal = new Vector3f(0,1,0);
+    normal = new Vector3f(0, 1, 0);
     if (nodes.size() > 1) {
       Matrix M = new Matrix(nodes.size(), 3);
       int i = 0;
@@ -59,10 +63,19 @@ public class Plane {
         M.set(i++, 2, pc.z);
       }
       // plane of best fit
-      Matrix V = M.svd().getV();
+      svd = M.svd();
+      Matrix V = svd.getV();
       normal = new Vector3f((float) V.get(0, 2), (float) V.get(1, 2), (float) V
           .get(2, 2));
     }
+    //System.out.println("Single values: "+new Vector3d(getSingularValues()));
+  }
+
+  public double[] getSingularValues() {
+    if (svd == null)
+      return new double[] {0,0,0};
+    else
+      return svd.getSingularValues();
   }
 
   /**

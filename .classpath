@@ -3,5 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/Jama-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/dwyer/workspace/Wilma/lib/j3d-vrml97.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/dwyer/workspace/jung/jung-1.4.3.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/dwyer/workspace/apache-commons/commons-collections-3.1-src/commons-collections-3.1/commons-collections-3.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

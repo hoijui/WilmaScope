@@ -23,10 +23,10 @@ import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.CyclicBarrier;
 
 import javax.swing.JPanel;
 
+import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.WilmaMain;
 import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.Edge;
@@ -59,29 +59,44 @@ public class LongestPathLayering extends GraphModifier {
    * 
    * @see org.wilmascope.graphmodifiers.GraphModifier#modify(org.wilmascope.graph.Cluster)
    */
-  public void modify(Cluster cluster) {
-    this.cluster = cluster;
+  public void modify(GraphControl.Cluster clusterFacade) {
+    this.cluster = clusterFacade.getCluster();
     try {
       GraphModifier cycleRemoval = ModifierManager.getInstance().getPlugin("Directed Cycle Removal");
-      cycleRemoval.modify(cluster);
+      cycleRemoval.modify(clusterFacade);
     } catch (UnknownTypeException e) {
       WilmaMain.showErrorDialog("Directed Cycle Removal plugin not available!",e);
       return;
     }
     longestPathLayering(); 
     promoteLayering(); //optional improvement heuristic
+    for(Edge e:cluster.getInternalEdges()) {
+      int uLayer = getLayer(e.getStart());
+      int vLayer = getLayer(e.getEnd());
+      assert(uLayer>vLayer);
+      if(uLayer<=vLayer) {
+        String m = "Layering Didn't Work!!!";
+        WilmaMain.showErrorDialog(m,new Exception(m));
+      }
+    }
     int maxLayer=0;
+    int minLayer=Integer.MAX_VALUE;
     for(Node v:cluster.getNodes()) {
       int l = getLayer(v);
       if(l>maxLayer) {
         maxLayer=l;
       }
-      v.getProperties().setProperty("LevelConstraint",""+l);
+      if(l<minLayer) {
+        minLayer=l;
+      }
+    }
+    for(Node v:cluster.getNodes()) {
+      int l = getLayer(v);
+      v.getProperties().setProperty("LevelConstraint",""+(l-minLayer));
       v.getLayout().resetProperties();
     }
-    cluster.getLayoutEngine().getProperties().setProperty("Levels",""+(maxLayer+1));
+    cluster.getLayoutEngine().getProperties().setProperty("Levels",""+(maxLayer-minLayer+1));
     cluster.getLayoutEngine().resetProperties();
-    
   }
 
   /*
@@ -96,14 +111,7 @@ public class LongestPathLayering extends GraphModifier {
   ////////////////////////////////////////// //
   //  the longest-path algorithm main function
   void longestPathLayering() {
-    getSinkSort();
-    for(Node v:layering.keySet()) {
-      assignLayer(v,getLayer(v));
-    }
-  }
-
-  //  the actual function that finds the longest path layering
-  void getSinkSort() {
+    layering = new Hashtable<Node, Integer>();
     int max_value, max, compare;
     Queue<Node> Q = new LinkedList<Node>();
     max_value = 2 * cluster.getNodes().size();
@@ -155,15 +163,6 @@ public class LongestPathLayering extends GraphModifier {
         }
       }
     } while (significant_promotions > 0);
-    int min_layer = Integer.MAX_VALUE;
-    for (Node v : cluster.getNodes()) {
-      if (getLayer(v) < min_layer) {
-        min_layer = getLayer(v);
-      }
-    }
-    for (Node v : cluster.getNodes()) {
-      assignLayer(v, getLayer(v) - min_layer - 1);
-    }
   }
 
   // pushes a node and all its predecessors on the layer above, up a layer
@@ -187,5 +186,5 @@ public class LongestPathLayering extends GraphModifier {
   int getLayer(Node n) {
     return layering.get(n).intValue();
   }
-  Map<Node, Integer> layering = new Hashtable<Node, Integer>();
+  Map<Node, Integer> layering;
 }

@@ -39,10 +39,10 @@ import org.wilmascope.view.*;
  */
 
 public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
-  public EdgeOptionsMenu(Component parent, GraphControl.Cluster rootCluster) {
+  public EdgeOptionsMenu(Component parent, GraphControl graphControl) {
     this();
     this.parent = parent;
-    this.rootCluster = rootCluster;
+    this.graphControl = graphControl;
   }
   public void callback(java.awt.event.MouseEvent e, GraphControl.GraphElementFacade edge) {
     this.edge = (GraphControl.Edge)edge;
@@ -122,7 +122,7 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
 
   void deleteMenuItem_actionPerformed(ActionEvent e) {
     edge.delete();
-    rootCluster.unfreeze();
+    graphControl.getRootCluster().unfreeze();
   }
   void weightMenuItem_actionPerformed(ActionEvent e) {
     String s = (String)JOptionPane.showInputDialog(parent,
@@ -186,13 +186,19 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
   public static GraphControl.Edge getSelectedEdge() {
     return edge;
   }
+  public void setParent(Component parent) {
+    this.parent=parent;
+  }
+  public void setGraphControl(GraphControl gc) {
+    this.graphControl=gc;
+  }
   JMenuItem deleteMenuItem = new JMenuItem();
   JMenuItem weightMenuItem = new JMenuItem();
   JMenuItem detailsMenuItem = new JMenuItem();
   ActionListener customListener = null;
   private Component parent;
   static private GraphControl.Edge edge;
-  private GraphControl.Cluster rootCluster;
+  private GraphControl graphControl;
   JMenuItem hideMenuItem = new JMenuItem();
   JMenu edgeTypeMenu = new JMenu();
   JMenuItem reverseMenuItem = new JMenuItem();
@@ -215,6 +221,6 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
     } catch(NumberFormatException ex) {
       JOptionPane.showMessageDialog(parent, "Invalid edge weight entered... enter a floating point number between 0 and 1", "Invalid edge weight", JOptionPane.ERROR_MESSAGE);
     }
-    rootCluster.unfreeze();
+    graphControl.getRootCluster().unfreeze();
   }
 }

@@ -60,10 +60,13 @@ public class XMLGraph {
 
   private DocumentBuilderFactory factory;
 
-  private String fileName;
-
   private Element root;
-
+  File file;
+  
+  public File getFile() {
+    return file;
+  }
+  
   /**
    * Create and load the Graph data structures from the data held in the
    * specified file
@@ -72,7 +75,7 @@ public class XMLGraph {
    *          the name of the xml file containing the graph data
    */
   public XMLGraph(String fileName) {
-    this.fileName = fileName;
+    this.file = new File(fileName);
     factory = DocumentBuilderFactory.newInstance();
   }
 
@@ -99,7 +102,7 @@ public class XMLGraph {
     //
     // turn the filename into a fully qualified URL
     //
-    String uri = new File(fileName).getAbsolutePath();
+    String uri = file.getAbsolutePath();
     System.out.println(uri);
 
     factory.setNamespaceAware(true);
@@ -430,7 +433,7 @@ public class XMLGraph {
    */
   public void save() {
     try {
-      FileWriter out = new FileWriter(fileName);
+      FileWriter out = new FileWriter(file);
       // Use a Transformer for output
       TransformerFactory tFactory = TransformerFactory.newInstance();
       Transformer transformer = tFactory.newTransformer();

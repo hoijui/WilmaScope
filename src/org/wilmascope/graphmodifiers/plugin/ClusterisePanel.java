@@ -1,4 +1,4 @@
-package org.wilmascope.gui;
+package org.wilmascope.graphmodifiers.plugin;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -15,7 +15,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import org.wilmascope.control.GraphControl;
-import org.wilmascope.control.GraphTransformer;
 import org.wilmascope.forcelayout.ForceLayout;
 
 
@@ -26,35 +25,18 @@ import org.wilmascope.forcelayout.ForceLayout;
  * @version 1.0
  */
 
-public class ClusteriseFrame extends JFrame {
+public class ClusterisePanel extends JPanel {
   JTabbedPane ClusterChoicePane = new JTabbedPane();
   Box kMeansBox;
   JPanel jPanel1 = new JPanel();
-  JPanel jPanel3 = new JPanel();
-  JButton okButton = new JButton();
-  JButton cancelButton = new JButton();
   JLabel jLabel1 = new JLabel();
   JTextField kField = new JTextField();
   JPanel jPanel2 = new JPanel();
   JLabel jLabel2 = new JLabel();
   JTextField keepField = new JTextField();
 
-  public ClusteriseFrame(GraphControl.Cluster rootCluster, String windowTitle) {
-    super(windowTitle);
-    this.rootCluster = rootCluster;
+  public ClusterisePanel() {
     kMeansBox = Box.createVerticalBox();
-    okButton.setText("OK");
-    okButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        okButton_actionPerformed(e);
-      }
-    });
-    cancelButton.setText("Cancel");
-    cancelButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        cancelButton_actionPerformed(e);
-      }
-    });
     jLabel1.setText("Clusters to examine (k)");
     kField.setPreferredSize(new Dimension(50, 27));
     kField.setText("10");
@@ -62,10 +44,8 @@ public class ClusteriseFrame extends JFrame {
     keepField.setPreferredSize(new Dimension(50, 27));
     keepField.setText("5");
     expandedCheckBox.setText("Show Expanded");
-    this.getContentPane().add(ClusterChoicePane, BorderLayout.CENTER);
-    this.getContentPane().add(jPanel3,  BorderLayout.SOUTH);
-    jPanel3.add(okButton, null);
-    jPanel3.add(cancelButton, null);
+    expandedCheckBox.setSelected(true);
+    add(ClusterChoicePane, BorderLayout.CENTER);
     ClusterChoicePane.add(kMeansBox,    "k-Means");
     kMeansBox.add(jPanel1, null);
     jPanel1.add(jLabel1, null);
@@ -75,11 +55,10 @@ public class ClusteriseFrame extends JFrame {
     jPanel2.add(keepField, null);
     kMeansBox.add(jPanel4, null);
     jPanel4.add(expandedCheckBox, null);
-    pack();
   }
 
-  void okButton_actionPerformed(ActionEvent e) {
-    GraphTransformer transformer = new GraphTransformer();
+  public void applyClustering(GraphControl.Cluster rootCluster) {
+    KMeans transformer = new KMeans();
     int k = Integer.parseInt(kField.getText());
     int n = Integer.parseInt(keepField.getText());
     Vector[] clusters = transformer.kMeansClustering(rootCluster, k, n);
@@ -91,11 +70,14 @@ public class ClusteriseFrame extends JFrame {
       }
     }
   }
+  public void setK(int value) {
+    kField.setText(""+value);
+  }
+  public void setN(int value) {
+    keepField.setText(""+value);
+  }
   GraphControl.Cluster rootCluster;
   JPanel jPanel4 = new JPanel();
   JCheckBox expandedCheckBox = new JCheckBox();
 
-  void cancelButton_actionPerformed(ActionEvent e) {
-    this.dispose();
-  }
 }

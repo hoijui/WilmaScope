@@ -19,9 +19,16 @@
  */
 package org.wilmascope.graphgen.plugin;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
+
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
@@ -29,7 +36,10 @@ import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.graph.LayoutEngine;
+import org.wilmascope.graphgen.GeneratorManager;
 import org.wilmascope.graphgen.GraphGenerator;
+import org.wilmascope.graphmodifiers.GraphModifier;
+import org.wilmascope.graphmodifiers.ModifierManager;
 import org.wilmascope.gui.SpinnerSlider;
 
 /**
@@ -124,10 +134,30 @@ public class RandomGraphGenerator extends GraphGenerator {
      * trigger layout... if we do this then we don't need the above call to draw
      */
     // root.unfreeze();
+    if(layeredDAG) {
+      createLayeredDirectedAcyclicGraph(gc);
+    }
+  }
+
+  public void createLayeredDirectedAcyclicGraph(GraphControl graphControl) {
+    try {
+      GraphModifier gm = ModifierManager.getInstance().getPlugin(
+          "Longest Path Layering");
+      gm.modify(graphControl.getRootCluster());
+      GeneratorManager.getInstance().getPlugin("Insert Dummy Nodes").generate(
+          graphControl);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   JPanel controlPanel = new JPanel();
 
+  void enableStratifiedControls() {
+    for(Component c : enabledGroup) {
+      c.setEnabled(stratified);
+    }
+  }
   /**
    * set up controlPanel with controls for setting parameters
    */
@@ -155,14 +185,26 @@ public class RandomGraphGenerator extends GraphGenerator {
     });
     final JCheckBox stratifiedCB = new JCheckBox("Levels");
     stratifiedCB.setSelected(stratified);
+    final JRadioButton randomLevelsButton = new JRadioButton("Random Levels");
+    enabledGroup.add(randomLevelsButton);
+    JRadioButton layeredDAGButton = new JRadioButton("Layered DAG");
+    enabledGroup.add(layeredDAGButton);
+    layeredDAGButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        layeredDAG = true;
+      }
+    });
     SpinnerNumberModel sm = new SpinnerNumberModel(levels, 0, 20, 1);
     final JSpinner levelsSpinner = new JSpinner(sm);
-    levelsSpinner.setEnabled(stratified);
-    stratifiedCB.addChangeListener(new ChangeListener() {
-      public void stateChanged(ChangeEvent e) {
+    enabledGroup.add(levelsSpinner);
+    enableStratifiedControls();
+    stratifiedCB.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
         stratified = stratifiedCB.isSelected();
-        levelsSpinner.setEnabled(stratified);
+        enableStratifiedControls();
+        randomLevelsButton.setSelected(true);
       }
+
     });
     levelsSpinner.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
@@ -171,16 +213,23 @@ public class RandomGraphGenerator extends GraphGenerator {
     });
     Box sliders = Box.createVerticalBox();
     Box options = Box.createVerticalBox();
+    ButtonGroup bg = new ButtonGroup();
+    bg.add(randomLevelsButton);
+    bg.add(layeredDAGButton);
     sliders.add(nodesSlider);
     sliders.add(edgesSlider);
     options.add(threeDimButton);
     options.add(stratifiedCB);
+    options.add(randomLevelsButton);
+    options.add(layeredDAGButton);
     options.add(levelsSpinner);
     controlPanel.add(sliders);
     controlPanel.add(options);
   }
 
+  Vector<Component> enabledGroup = new Vector<Component>();
   public JPanel getControls() {
     return controlPanel;
   }
+  boolean layeredDAG = false;
 }

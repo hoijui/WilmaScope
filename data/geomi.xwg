@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
+<WilmaGraph>
+<Cluster>
+<LayoutEngineType Name="ForceLayout">
+<Property Key="Spring" Value="5.0"/>
+<Property Key="Origin" Value="2.0"/>
+<Property Key="Repulsion" Value="1.2"/>
+<Property Key="Planar" Value="1.0"/>
+<Property Key="VelocityAttenuation" Value="0.02"/>
+</LayoutEngineType>
+<Node ID="N0">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="0.5562155 0.84406304 1.1493901"/>
+<Property Key="FixedPosition" Value="true"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N1">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.3"/>
+</ViewType>
+<Property Key="Position" Value="0.16197883 0.07450603 0.48485482"/>
+<Property Key="FixedPosition" Value="true"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N2">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.0 1.0 1.0"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-0.53138095 0.04994855 -0.9329478"/>
+<Property Key="FixedPosition" Value="true"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N3">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.0 1.0 1.0"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-0.054101706 -0.6179141 -0.8777826"/>
+<Property Key="FixedPosition" Value="true"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N4">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="1.0134648 0.049875814 0.8565674"/>
+<Property Key="FixedPosition" Value="true"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N5">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="0.024861334 1.7528428 0.36955675"/>
+<Property Key="FixedPosition" Value="true"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N6">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.0 1.0 1.0"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-0.7142202 0.67683184 -0.43247935"/>
+<Property Key="FixedPosition" Value="true"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N7">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="1.5542964 -0.13566202 0.22358806"/>
+<Property Key="FixedPosition" Value="true"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N8">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.0 1.0 1.0"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="0.47172645 -0.91207236 -0.3175622"/>
+<Property Key="FixedPosition" Value="true"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N9">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-0.075063355 0.28402832 0.17848647"/>
+<Property Key="FixedPosition" Value="true"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N10">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-0.0721318 0.36518928 0.43747097"/>
+<Property Key="FixedPosition" Value="true"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N11">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-1.6288265 1.1753339 -0.8123138"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N12">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-1.3785534 -0.16308528 -1.6494756"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N13">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-0.3951707 -1.3967174 -1.6067612"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N14">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="0.8078554 -1.8770846 -0.7218764"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N15">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="1.9664085 -1.1416667 0.4937119"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N16">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="1.8201132 -0.08704621 1.5546134"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N17">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-0.74944353 2.3317416 0.65435255"/>
+<Property Key="" Value=""/>
+</Node>
+<Node ID="N18">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="0.8297787 1.5503485 1.8182384"/>
+<Property Key="" Value=""/>
+</Node>
+<Edge EndID="N1" StartID="N0">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N2" StartID="N1">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N3" StartID="N1">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N4" StartID="N1">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N5" StartID="N1">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N6" StartID="N1">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N7" StartID="N1">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N8" StartID="N1">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N9" StartID="N1">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N10" StartID="N1">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N11" StartID="N6">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N12" StartID="N2">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N13" StartID="N3">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N14" StartID="N8">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N15" StartID="N7">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N16" StartID="N4">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N17" StartID="N5">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N18" StartID="N0">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+</Cluster>
+</WilmaGraph>

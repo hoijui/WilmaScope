@@ -21,7 +21,7 @@ package org.wilmascope.graphmodifiers;
 
 import javax.swing.JPanel;
 
-import org.wilmascope.graph.Cluster;
+import org.wilmascope.control.GraphControl.Cluster;
 import org.wilmascope.util.Plugin;
 
 /**

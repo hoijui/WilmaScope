@@ -51,13 +51,13 @@ import org.wilmascope.graphgen.GeneratorManager;
 public class MenuBar extends JMenuBar {
 	JMenu fileMenu;
 	JMenu helpMenu = new JMenu();
-	JMenu editMenu;
-	JMenuItem exitMenuItem = new JMenuItem();
-  JMenuItem queryMenuItem = new JMenuItem();
+  JMenu editMenu;
+  JMenu toolsMenu;
+  //JMenuItem queryMenuItem = new JMenuItem();
+  JMenuItem exitMenuItem = new JMenuItem();
   JMenuItem screenCaptureMenuItem = new JMenuItem();
   JMenuItem animatedCaptureMenuItem = new JMenuItem();
 	JMenuItem importMenuItem = new JMenuItem();
-	JMenuItem testMenuItem = new JMenuItem();
 	JMenu viewMenu;
 	JCheckBoxMenuItem antialiasingCheckBoxMenuItem = new JCheckBoxMenuItem();
 	JCheckBoxMenuItem parallelCheckBoxMenuItem = new JCheckBoxMenuItem();
@@ -84,13 +84,10 @@ public class MenuBar extends JMenuBar {
     this.frame = frame;
 		this.graphControl = graphControl;
 		this.controlPanel = controlPanel;
-		editMenu = actions.getEditMenu();
+    editMenu = actions.getEditMenu();
+    toolsMenu = actions.getToolsMenu();
 		fileMenu = actions.getFileMenu();
 		viewMenu = actions.getViewMenu();
-		fileMenu.setText("File");
-		fileMenu.setMnemonic('F');
-		editMenu.setText("Edit");
-		editMenu.setMnemonic('E');
 		helpMenu.setText("Help");
 		helpMenu.setMnemonic('H');
 		importMenuItem.setText("Import");
@@ -100,13 +97,13 @@ public class MenuBar extends JMenuBar {
 				importMenuItem_actionPerformed(e);
 			}
 		});
-    queryMenuItem.setText("Query");
-    queryMenuItem.setMnemonic('Q');
-    queryMenuItem.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        queryMenuItem_actionPerformed(e);
-      }
-    });
+//    queryMenuItem.setText("Query");
+//    queryMenuItem.setMnemonic('Q');
+//    queryMenuItem.addActionListener(new java.awt.event.ActionListener() {
+//      public void actionPerformed(ActionEvent e) {
+//        queryMenuItem_actionPerformed(e);
+//      }
+//    });
     screenCaptureMenuItem.setText("Screen Capture");
     screenCaptureMenuItem.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -119,13 +116,6 @@ public class MenuBar extends JMenuBar {
         animatedCaptureMenuItem_actionPerformed(e);
       }
     });
-
-		testMenuItem.setText("Create test graph...");
-		testMenuItem.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				testMenuItem_actionPerformed(e);
-			}
-		});
 		exitMenuItem.setText("Exit");
 		exitMenuItem.setMnemonic('x');
 		exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -133,8 +123,6 @@ public class MenuBar extends JMenuBar {
 				exitMenuItem_actionPerformed(e);
 			}
 		});
-		viewMenu.setText("View");
-		viewMenu.setMnemonic('V');
 		fullScreenCheckBoxMenuItem.setText("Full Screen Mode");
 		fullScreenCheckBoxMenuItem.setMnemonic('F');
 		fullScreenCheckBoxMenuItem
@@ -229,11 +217,11 @@ public class MenuBar extends JMenuBar {
 
 		this.add(fileMenu);
 		this.add(editMenu);
-		this.add(viewMenu);
+    this.add(viewMenu);
+    this.add(toolsMenu);
 		this.add(helpMenu);
 		fileMenu.add(importMenuItem);
-		fileMenu.add(queryMenuItem);
-    fileMenu.add(testMenuItem);
+//		fileMenu.add(queryMenuItem);
     fileMenu.add(screenCaptureMenuItem);
     fileMenu.add(animatedCaptureMenuItem);
 		fileMenu.add(exitMenuItem);

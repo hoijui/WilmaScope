@@ -20,6 +20,8 @@
 
 package org.wilmascope.viewplugin;
 
+import java.util.Properties;
+
 import org.wilmascope.view.Colours;
 import org.wilmascope.view.LODSphere;
 import org.wilmascope.view.NodeView;
@@ -51,6 +53,5 @@ public class DefaultNodeView extends NodeView {
     LODSphere sphere = new LODSphere(1f,getAppearance());
     sphere.makePickable(this);
     sphere.addToTransformGroup(getTransformGroup());
-    setUserData(new DefaultNodeData());
   }
 }

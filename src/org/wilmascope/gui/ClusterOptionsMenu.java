@@ -51,11 +51,9 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 	public ClusterOptionsMenu(
 		Component parent,
 		GraphControl gc,
-    GraphControl.Cluster r,
-		ControlPanel controlPanel) {
+    ControlPanel controlPanel) {
 		this();
     this.graphControl = gc;
-		this.rootCluster = r;
 		this.parent = parent;
 		this.controlPanel = controlPanel;
 	}
@@ -238,7 +236,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 
 	void removeFromMenuItem_actionPerformed(ActionEvent e) {
 		controlPanel.add(
-			new RemoveFromClusterPanel(controlPanel, cluster, rootCluster));
+			new RemoveFromClusterPanel(controlPanel, cluster, graphControl.getRootCluster()));
 		controlPanel.updateUI();
 		cluster.makeJustChildrenPickable();
 		GraphControl.getPickListener().enableMultiPicking(
@@ -272,7 +270,6 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 		controlPanel.setMessage();
 		cluster.setLabel(label);
 	}
-	private GraphControl.Cluster rootCluster;
 	JMenuItem hideNonNeighboursMenuItem = new JMenuItem();
 
 	private void traceNeighbours(NodeList neighbours, Cluster c, int depth) {
@@ -295,7 +292,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 		Cluster c = cluster.getCluster();
 		NodeList neighbours = new NodeList();
 		traceNeighbours(neighbours, c, depth);
-		NodeList allNodes = new NodeList(rootCluster.getCluster().getNodes());
+		NodeList allNodes = new NodeList(graphControl.getRootCluster().getCluster().getNodes());
 		for (Node n:allNodes) {
 			if (n != c && !neighbours.contains(n)) {
 				n.delete();

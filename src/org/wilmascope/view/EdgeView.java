@@ -90,6 +90,7 @@ implements org.wilmascope.graph.EdgeView, View2D {
     }
     return v;
   }
+
   public void setMultiEdgeOffset(int edgeIndex, int edgeCount, int direction) {
     multiEdgeOffset = ((float)edgeIndex - ((float)edgeCount-1f)/2f) * 0.05f;
     this.direction = direction;

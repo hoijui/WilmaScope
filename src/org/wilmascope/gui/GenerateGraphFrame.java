@@ -19,6 +19,7 @@ import org.wilmascope.control.WilmaMain;
 import org.wilmascope.graphgen.GeneratorManager;
 import org.wilmascope.graphgen.GraphGenerator;
 import org.wilmascope.util.Registry.UnknownTypeException;
+import org.wilmascope.view.ViewManager;
 
 /**
  * @author dwyer
@@ -35,9 +36,9 @@ public class GenerateGraphFrame extends JFrame implements ActionListener {
 
   ButtonGroup radioGroup = new ButtonGroup();
 
-  JRadioButton lineRadio = new JRadioButton("Lines", lineRend);
+  JRadioButton lineRadio = new JRadioButton("Line Primitives (for faster rendering)", lineRend);
 
-  JRadioButton primitiveRadio = new JRadioButton("3D Primitives", !lineRend);
+  JRadioButton primitiveRadio = new JRadioButton("3D Primitives (defaults from panel)", !lineRend);
 
   ButtonGroup radioGroup2 = new ButtonGroup();
 
@@ -103,7 +104,7 @@ public class GenerateGraphFrame extends JFrame implements ActionListener {
       generator = GeneratorManager.getInstance().getPlugin(
           (String) generatorsComboBox.getSelectedItem());
     } catch (UnknownTypeException e1) {
-      WilmaMain.showErrorDialog("Unknown generator error!",e1);
+      WilmaMain.showErrorDialog("Unknown generator error!", e1);
     }
     if (controlPanel != null) {
       boxLayout.remove(controlPanel);
@@ -115,10 +116,13 @@ public class GenerateGraphFrame extends JFrame implements ActionListener {
 
   public void actionPerformed(ActionEvent e) {
     if (e.getActionCommand().equals("OK")) {
-      if (lineRend)
+      if (lineRend) {
         generator.setView("LineNode", "LineEdge");
-      else
-        generator.setView("DefaultNodeView", "Arrow");
+      } else {
+        String nodeView = ViewManager.getInstance().getDefaultNodeViewType();
+        String edgeView = ViewManager.getInstance().getDefaultEdgeViewType();
+        generator.setView(nodeView, edgeView);
+      }
       generator.generate(gc);
     } else if (e.getActionCommand().equals("line")) {
       lineRend = true;

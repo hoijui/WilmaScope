@@ -19,13 +19,19 @@
  */
 package org.wilmascope.graphmodifiers.plugin;
 
-import javax.swing.JPanel;
+import java.util.HashSet;
+import java.util.Vector;
 
-import org.wilmascope.graph.Cluster;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import org.wilmascope.control.GraphControl.Cluster;
 import org.wilmascope.graph.Edge;
 import org.wilmascope.graph.EdgeList;
-import org.wilmascope.graph.Node;
-import org.wilmascope.graph.NodeList;
 import org.wilmascope.graphmodifiers.GraphModifier;
 
 /**
@@ -35,9 +41,29 @@ import org.wilmascope.graphmodifiers.GraphModifier;
  */
 public class DirectedCycleRemoval extends GraphModifier {
   JPanel controls;
-
+  static final int GREEDY=0;
+  static final int ENHANCED=1;
+  int algorithm = ENHANCED; 
   public DirectedCycleRemoval() {
     controls = new JPanel();
+    Box box=Box.createVerticalBox();
+    JRadioButton greedyButton = new JRadioButton("Greedy Algorithm");
+    JRadioButton enhancedButton = new JRadioButton("Enhanced Greedy Algorithm");
+    ButtonGroup bg = new ButtonGroup();
+    bg.add(greedyButton);
+    bg.add(enhancedButton);
+    box.add(greedyButton);
+    box.add(enhancedButton);
+    greedyButton.addChangeListener(new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        algorithm = GREEDY;
+      }
+    });
+    enhancedButton.addChangeListener(new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        algorithm = ENHANCED;
+      }
+    });
   }
 
   /**
@@ -51,18 +77,18 @@ public class DirectedCycleRemoval extends GraphModifier {
    * @see org.wilmascope.graphmodifiers.GraphModifier#modify(org.wilmascope.graph.Cluster)
    */
   public void modify(Cluster cluster) {
-    for (Edge e : getAcyclicEdgeSet_Greedy(cluster)) {
+    EdgeList acyclicEdges=null;
+    switch(algorithm) {
+      case GREEDY:
+        acyclicEdges = cluster.getCluster().getAcyclicEdgeSet_Greedy();
+        break;
+      case ENHANCED:
+        acyclicEdges = cluster.getCluster().getAcyclicEdgeSet_EnhancedGreedy();
+    }
+    for (Edge e : acyclicEdges) {
       e.reverseDirection();
     }
     cluster.draw();
-  }
-
-  EdgeList getAcyclicEdgeSet_Greedy(Cluster cluster) {
-    return cluster.getAcyclicEdgeSet_Greedy();
-  }
-
-  EdgeList getAcyclicEdgeSet_EnhancedGreedy(Cluster cluster) {
-    return cluster.getAcyclicEdgeSet_EnhancedGreedy();
   }
 
   /*

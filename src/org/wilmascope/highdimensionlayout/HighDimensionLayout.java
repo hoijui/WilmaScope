@@ -27,7 +27,7 @@ import java.util.LinkedList;
  * @author cmurray
  *  
  */
-public class HighDimensionLayout implements LayoutEngine {
+public class HighDimensionLayout extends LayoutEngine {
   /*
    * (non-Javadoc)
    * 
@@ -38,12 +38,10 @@ public class HighDimensionLayout implements LayoutEngine {
 
   public static final int k = 3; // must equal 2 or 3
 
-  Cluster root;
-
   public void calculateLayout() {
     // how should graph-theoretic distance work for unconnected graphs
 
-    NodeList nodes = root.getNodes();
+    NodeList nodes = getRoot().getNodes();
     Random rand = new Random(System.currentTimeMillis());
     int n = nodes.size();
     Node pivot = nodes.get(rand.nextInt(n));
@@ -186,8 +184,8 @@ public class HighDimensionLayout implements LayoutEngine {
    * @see org.wilmascope.graph.LayoutEngine#applyLayout()
    */
   public boolean applyLayout() {
-    NodeList nodes = root.getNodes();
-    EdgeList edges = root.getInternalEdges();
+    NodeList nodes = getRoot().getNodes();
+    EdgeList edges = getRoot().getInternalEdges();
     for (Node n : nodes) {
       ((HDNodeLayout) (n.getLayout())).setPos();
     }
@@ -226,22 +224,6 @@ public class HighDimensionLayout implements LayoutEngine {
     return new HDEdgeLayout();
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.wilmascope.graph.LayoutEngine#getProperties()
-   */
-  public Properties getProperties() {
-    return new Properties();
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
-   */
-  public void setProperties(Properties p) {
-  }
 
   /*
    * (non-Javadoc)
@@ -252,36 +234,4 @@ public class HighDimensionLayout implements LayoutEngine {
     return new JPanel();
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.wilmascope.graph.LayoutEngine#init(org.wilmascope.graph.Cluster)
-   */
-  public void init(Cluster root) {
-    this.root = root;
-    createElementLayouts();
-  }
-
-  public void createElementLayouts() {
-    NodeList nodes = root.getNodes();
-    //Random rand = new Random(System.currentTimeMillis());
-    for (Node n : nodes) {
-      n.setLayout(createNodeLayout(n));
-      //n.setPosition(new Point3f(rand.nextFloat()*20.0f-10.0f,
-      // rand.nextFloat()*20.0f-10.0f, rand.nextFloat()*20.0f-10.0f));
-    }
-    EdgeList edges = root.getInternalEdges();
-    for (Edge e : edges) {
-      e.setLayout(createEdgeLayout(e));
-      //e.recalculate();
-    }
-  }
-
-  /* (non-Javadoc)
-   * @see org.wilmascope.graph.LayoutEngine#resetProperties()
-   */
-  public void resetProperties() {
-    // TODO Auto-generated method stub
-    
-  }
 }

@@ -26,6 +26,8 @@ import org.wilmascope.control.*;
 import org.wilmascope.view.PickingClient;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.ElementData;
+import org.wilmascope.viewplugin.DefaultNodeData;
+
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.event.*;
@@ -40,11 +42,10 @@ import javax.vecmath.Vector3f;
  */
 
 public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
-  public NodeOptionsMenu(Component parent, GraphControl graphControl, GraphControl.Cluster rootCluster, ControlPanel controlPanel) {
+  public NodeOptionsMenu(Component parent, GraphControl graphControl, ControlPanel controlPanel) {
     this();
     this.parent = parent;
     this.graphControl = graphControl;
-    this.rootCluster = rootCluster;
     this.controlPanel = controlPanel;
   }
   ActionListener customListener = null;
@@ -53,6 +54,10 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     Object userData;
     detailsMenuItem.setEnabled(false);
     detailsMenuItem.setText("Show Details...");
+    DefaultNodeData data = new DefaultNodeData();
+    String str = ((GraphControl.Node)node).getNode().getProperties().toString();
+    data.setData(str);
+    node.setUserData(data);
     if((userData = node.getUserData()) != null && userData instanceof ElementData) {
       if(customListener != null ) {
         detailsMenuItem.removeActionListener(customListener);
@@ -162,8 +167,8 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     GraphControl.getPickListener().setSinglePickClient(new PickClient() {
       public void callback(GraphControl.GraphElementFacade edgeNode) {
         if(edgeNode!=node) {
-          rootCluster.addEdge(node,(GraphControl.Node)edgeNode);
-          rootCluster.unfreeze();
+          graphControl.getRootCluster().addEdge(node,(GraphControl.Node)edgeNode);
+          graphControl.getRootCluster().unfreeze();
         }
         node.defaultColour();
         controlPanel.setMessage();
@@ -173,7 +178,6 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
 
   private Component parent;
   private GraphControl.Node node;
-  private GraphControl.Cluster rootCluster;
   private ControlPanel controlPanel;
   JMenuItem addNodeMenuItem = new JMenuItem();
   JMenuItem setLabelMenuItem = new JMenuItem();
@@ -182,10 +186,10 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
   JCheckBoxMenuItem fixedCheckBoxMenuItem = new JCheckBoxMenuItem();
 
   void addNodeMenuItem_actionPerformed(ActionEvent e) {
-    GraphControl.Node newNode = rootCluster.addNode();
+    GraphControl.Node newNode = graphControl.getRootCluster().addNode();
     newNode.setPosition(node.getPosition());
-    rootCluster.addEdge(node,newNode);
-    rootCluster.unfreeze();
+    graphControl.getRootCluster().addEdge(node,newNode);
+    graphControl.getRootCluster().unfreeze();
   }
 
   void centerNodeMenuItem_actionPerformed(ActionEvent e) {
@@ -201,7 +205,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
 
   void deleteMenuItem_actionPerformed(ActionEvent e) {
     node.delete();
-    rootCluster.unfreeze();
+    graphControl.getRootCluster().unfreeze();
   }
 
   void setLabelMenuItem_actionPerformed(ActionEvent e) {
@@ -271,7 +275,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
       private void reposition(MouseEvent e) {
         if(!e.isAltDown() && e.isMetaDown()) {
           node.moveToCanvasPos(e.getX(),e.getY());
-          rootCluster.unfreeze();
+          graphControl.getRootCluster().unfreeze();
         }
       }
     };

@@ -1,8 +1,14 @@
-package org.wilmascope.control;
+package org.wilmascope.graphmodifiers.plugin;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Vector;
 
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
-import java.util.*;
+
+import org.wilmascope.control.GraphControl;
 
 /**
  * Methods for restructuring a graph.
@@ -11,8 +17,8 @@ import java.util.*;
  * @version 1.0
  */
 
-public class GraphTransformer {
-  public GraphTransformer() {
+public class KMeans {
+  public KMeans() {
     random = org.wilmascope.global.RandomGenerator.getRandom();
   }
   public Vector[] kMeansClustering(GraphControl.Cluster cf, int k, int n) {
@@ -41,7 +47,7 @@ public class GraphTransformer {
   public Vector[] kMeansClustering(GraphControl.Cluster cf, int k) {
     Vector nodes = new Vector(Arrays.asList(cf.getNodes()));
     if(k > nodes.size()) {
-      throw new IllegalArgumentException("k > number nodes in cluster facade");
+      throw new IllegalArgumentException("k > number nodes in cluster");
     }
     Vector[] clusters = new Vector[k];
     Point3f[] clusterBarycenters = new Point3f[k];

@@ -32,7 +32,7 @@ import javax.swing.JPanel;
  * @version $Id$
  *
  */
-public interface LayoutEngine<N extends NodeLayout,E extends EdgeLayout> {
+public abstract class LayoutEngine<N extends NodeLayout,E extends EdgeLayout> {
   /**
    * calculate the changes required to move the graph to a nicer layout.  This method
    * does not actually update the position of the nodes, rather this should be done by the
@@ -42,34 +42,72 @@ public interface LayoutEngine<N extends NodeLayout,E extends EdgeLayout> {
    * In practice this has not yet been utilised and such
    * decisions are usually made internally to the layout engine.
    */
-  public void calculateLayout();
+  public abstract void calculateLayout();
   /**
    * apply the changes calculated by
    * {@link #calculateLayout}
    * @return true when a stable state is reached
    */
-  public boolean applyLayout();
+  public abstract boolean applyLayout();
   /**
    * Return a string descriptor for the layout engine type.  Useful in GUI elements
    * such as comboboxes
    */
-  public String getName();
+  public abstract String getName();
   /**
    * Factory method to create a new NodeLayout implementation compatible with
    * the layout engine implementing this interface.
    */
-  public N createNodeLayout(Node n);
+  public abstract N createNodeLayout(Node n);
   /**
    * Factory method to create a new EdgeLayout implementation compatible with
    * the layout engine implementing this interface.
    */
-  public E createEdgeLayout(Edge e);
-  public Properties getProperties();
-  public void setProperties(Properties p);
-  public void resetProperties();
-  public JPanel getControls();
+  public abstract E createEdgeLayout(Edge e);
+  Properties properties;
+  /**
+   * If you want custom properties for your layout you will need
+   * to override this method but be sure to super.getProperties()
+   * @return properties of this layout
+   */
+  public Properties getProperties() {
+    // lazy instantiation
+    if (properties == null) {
+      properties = new Properties();
+    }
+    return properties;
+  }
+  public final void setProperties(Properties p) {
+    this.properties = p;
+    resetProperties();
+  }
+  /**
+   * process your custom properties by overriding this method,
+   * but, again call super.resetProperties in your overriding implementation
+   *
+   */
+  public void resetProperties() {
+    if (properties == null) {
+      return;
+    }
+  }
+  public abstract JPanel getControls();
   /**
    * The LayoutEngine should have no constructor.  It should be initialised with this method.
    */
-  public void init(Cluster root);
+  public void init(Cluster root) {
+    this.root = root;
+    NodeList nodes = root.getNodes();
+    for (Node n : nodes) {
+      n.setLayout(createNodeLayout(n));
+    }
+    EdgeList edges = root.getInternalEdges();
+    for (Edge e : edges) {
+      e.setLayout(createEdgeLayout(e));
+    }
+  }
+  public Cluster getRoot() {
+    return root;
+  }
+  private Cluster root;
 }

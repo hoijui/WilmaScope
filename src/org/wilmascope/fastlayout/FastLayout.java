@@ -27,10 +27,7 @@ import org.wilmascope.graph.NodeList;
  * @version      1.1
  */
 
-public class FastLayout implements LayoutEngine {
-
-  // the cluster containing the nodes to be laid out
-  Cluster root;
+public class FastLayout extends LayoutEngine {
 
   Random rand = new Random();
 
@@ -482,7 +479,7 @@ public class FastLayout implements LayoutEngine {
     phase = BOILING;
     barrierRate = maxBarrierRate;
     maxJump = boilJump;
-    nodes = root.getNodes();
+    nodes = getRoot().getNodes();
   }
 
   public DensityMatrix getUniverse() {
@@ -490,30 +487,14 @@ public class FastLayout implements LayoutEngine {
   }
 
   public NodeLayout createNodeLayout(org.wilmascope.graph.Node n) {
-    return null;
+    return new NodeLayout() {};
   }
 
   public EdgeLayout createEdgeLayout(org.wilmascope.graph.Edge e) {
-    return null;
+    return new EdgeLayout() {};
   }
   public JPanel getControls() {
-    return new ParamsPanel((GraphControl.Cluster) root.getUserFacade());
-  }
-
-  /* (non-Javadoc)
-   * @see org.wilmascope.graph.LayoutEngine#getProperties()
-   */
-  public Properties getProperties() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  /* (non-Javadoc)
-   * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
-   */
-  public void setProperties(Properties p) {
-    // TODO Auto-generated method stub
-
+    return new ParamsPanel((GraphControl.Cluster) getRoot().getUserFacade());
   }
   public String getName() {
     return "Simulated Annealing";
@@ -523,7 +504,7 @@ public class FastLayout implements LayoutEngine {
    * @see org.wilmascope.graph.LayoutEngine#init(org.wilmascope.graph.Cluster)
    */
   public void init(Cluster root) {
-    this.root = root;
+    super.init(root);
     nodes = root.getNodes();
     updateJumpDec();
     updateBarrierDec();

@@ -11,7 +11,12 @@ Changes Since 3.0.1
 - GraphModifier plugins now defined for methods that change
   the structure of an existing graph (cluster), eg: DirectedCycleRemoval
 - Added various methods to Cluster: inDegree, inEdges, outEdges, acyclicEdges etc
-- Save the property of cluster
+- LongestPathLayering plugin added
+- FileHandler now keeps track of the last file loaded or saved and this is now the
+  default in the FileChooser dialogs
+- New views: Ellipsoid clusters, Star shaped nodes (loaded from vrml)
+- GraphAnalysis plugins defined and interface for mapping analysis results to visual
+  attributes
 
 Changes Since 3.0
 -----------------

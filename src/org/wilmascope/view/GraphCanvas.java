@@ -35,6 +35,7 @@ package org.wilmascope.view;
  *  
  */
 import java.awt.Dimension;
+import java.net.URL;
 
 import javax.media.j3d.Alpha;
 import javax.media.j3d.Appearance;
@@ -45,6 +46,7 @@ import javax.media.j3d.Bounds;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.ExponentialFog;
+import javax.media.j3d.ImageComponent2D;
 import javax.media.j3d.PhysicalBody;
 import javax.media.j3d.Screen3D;
 import javax.media.j3d.Transform3D;
@@ -56,7 +58,6 @@ import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 import org.wilmascope.centernode.CenterNode;
-import org.wilmascope.control.GraphControl;
 import org.wilmascope.light.LightManager;
 import org.wilmascope.rotation.RotationBehavior;
 
@@ -150,6 +151,7 @@ public class GraphCanvas extends Canvas3D {
     background.setApplicationBounds(bounds);
     background.setCapability(Background.ALLOW_COLOR_WRITE);
     background.setCapability(Background.ALLOW_COLOR_READ);
+    background.setCapability(Background.ALLOW_IMAGE_WRITE);
     transformGroup.addChild(background);
     // Set up fog
     fog = new ExponentialFog();
@@ -172,9 +174,11 @@ public class GraphCanvas extends Canvas3D {
     centerNode.setSchedulingBounds(bounds);
     centerNode.setEnable(false);
     bg.addChild(centerNode);
+    //setBackgroundTexture("org/wilmascope/images/sky.jpg");
+
   }
 
-  public void setBackgroundTexture(String imagePath) {
+  public void setSphericalBackgroundTexture(String imagePath) {
     // set up sky background
     BranchGroup backGeoBranch = new BranchGroup();
     Sphere sphereObj = new Sphere(1.0f, Sphere.GENERATE_NORMALS
@@ -187,6 +191,17 @@ public class GraphCanvas extends Canvas3D {
       backgroundApp.setTexture(tex.getTexture());
     else
       System.err.println("Couldn't load background texture!");
+  }
+  public void setBackgroundTexture(String imagePath) {
+    TextureLoader myLoader=new TextureLoader(imagePath, this);
+    ImageComponent2D myImage = myLoader.getImage();
+    background.setImage(myImage);
+  }
+
+  public void setBackgroundTexture(URL url) {
+    TextureLoader myLoader=new TextureLoader(url, this);
+    ImageComponent2D myImage = myLoader.getImage();
+    background.setImage(myImage);
   }
 
   public Bounds getBoundingSphere() {
