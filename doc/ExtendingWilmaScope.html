@@ -7,15 +7,12 @@
 <h1>Extending WilmaScope</h1>
 <h2>A developer&#8217;s guide to extending the WilmaScope 3D graph
 visualisation system</h2>
-<h3>Tim Dwyer &#8211; 6th October 2004</h3>
+<h3>Tim Dwyer &#8211; 14th October 2004</h3>
 <h3>Accurate for WilmaScope Version 3.0.1</h3>
 <h2>Contents</h2>
 <ul>
   <li><a href="#Introduction">Introduction </a></li>
   <li><a href="#Nomenclature">Nomenclature</a></li>
-  <li><a href="#Getting_the_WilmaScope_Source_Code">Getting the
-WilmaScope Source Code</a><br>
-  </li>
   <li><a href="#Architecture">Architecture</a></li>
   <ul>
     <li><a href="#Graph_Model">Graph Model</a> </li>
@@ -45,6 +42,10 @@ Based on GraphCanvas</a></li>
   <li><a href="#Creating_New_Graph_Element_Glyphs">Creating New Graph
 Element Glyphs</a></li>
   <li><a href="#Creating_New_Layout_Engines">Creating New Layout Engines</a></li>
+  <li><a
+ href="ExtendingWilmaScope.html#Getting_the_WilmaScope_Source_Code">Getting
+the
+WilmaScope Source Code</a></li>
   <li><a href="#Code_Conventions">Code Conventions</a></li>
 </ul>
 <h2><a name="Introduction"></a>Introduction</h2>
@@ -95,36 +96,6 @@ runtime.&nbsp; Resides in WILMA_HOME/lib directory</td>
   </tbody>
 </table>
 <br>
-<h2><a name="Getting_the_WilmaScope_Source_Code"></a>Getting the
-WilmaScope Source Code</h2>
-As of Version 3.0 the WilmaScope binary distribution includes source
-code in the WILMA_HOME/src directory.&nbsp; However, it is recommended
-that you obtain the most recent source version by accessing the CVS
-repository.&nbsp; The easiest way to do this is with the <a
- href="http://www.eclipse.org">Eclipse IDE</a> as
-follows:<br>
-<ul>
-  <li>Download and install version 3.1 or higher of Eclipse from
-www.eclipse.org </li>
-  <li>Switch to the&nbsp; CVS Repository Exploring perspective (You may
-have
-to first&nbsp; open this perspective). </li>
-  <li>Create a new repository location (Right click within the&nbsp;
-CVS
-Repositories View, New &gt;&nbsp; Repository Location) with these
-settings: </li>
-  <ul>
-    <li>Host: cvs.sourceforge.net </li>
-    <li>Repository Path: /cvsroot/wilma </li>
-    <li>User: anonymous </li>
-    <li>Connection type: pserver </li>
-  </ul>
-  <li>Navigate into
-:pserver:anonymous@cvs.sourceforge.net:/cvsroot/wilma
-&gt; HEAD and check out the "Wilma" module (Select "Wilma" and right
-click &gt; Check Out as Project).&nbsp; Note that "WilmaScope" and
-"WilmaToo" are both obsolete. </li>
-</ul>
 <h2><a name="Architecture"></a>Architecture</h2>
 Wilma is a typical example of a Model-View-Controller (MVC)
 architecture (see <a href="#WilmaScope_MVC_Architecture_Figure_1:_MV">Figure
@@ -155,7 +126,7 @@ conveyed by <a href="#WilmaScope_MVC_Architecture_Figure_2:_Wi">Figure
  alt="WilmaScope MVC Architecture"
  src="ExtendingWilmaScope_files/WilmaMVC.jpg"
  style="width: 658px; height: 454px;"><br>
-Figure 2: WilmaScope MVC Architecture<br>
+Figure 2a: WilmaScope MVC Architecture<br>
 </div>
 <br>
 These three conceptual components are realised in the WilmaScope
@@ -163,8 +134,8 @@ architecture as follows:<br>
 <ul>
   <li>model&#8212;classes in the <a
  href="org/wilmascope/graph/package-summary.html">graph</a> package. </li>
-  <li>view&#8212;classes extending one of the abstract classes found in the
-    <a href="org/wilmascope/view/package-summary.html">view
+  <li>view&#8212;classes extending one of the abstract classes found in the <a
+ href="org/wilmascope/view/package-summary.html">view
 package</a>. </li>
   <li>controller&#8212;the <a
  href="org/wilmascope/control/GraphController.html">GraphController</a>
@@ -175,27 +146,45 @@ updating the graph model </li>
 The entities indicated within the controller component indicate some of
 the ways a user might interact with WilmaScope, or that a programmer
 might write extensions to construct or maintain a graph.&nbsp; These
-are:<br>
+are (see Figure 2b):<br>
 <ul>
-  <li>A user can load a WilmaScope <a
- href="#XML_Wilma_Graph_XWG_File_Format">.xwg file</a> or import a
-supported
-external
-format file to create a graph (see File Formats). </li>
-  <li>A user can interact with the WilmaScope GUI to add or edit graph
-components (see the user help documentation). </li>
-  <li>A programmer might call methods provided by the WilmaScope API to
-construct a graph (see <a href="#Creating_Applications_Based_on">Creating
-Applications Based on GraphCanvas</a> and
-also the <a href="index.html">WilmaScope Javadoc</a>). </li>
+  <li>WilmaScope XML Graph (<a
+ href="ExtendingWilmaScope.html#XML_Wilma_Graph_XWG_File_Format">.xwg</a>)
+files can be created by another program, converted from other XML
+formats using XSTL, or constructed in text or XML editor, and loaded
+into the standard WilmaScope frontend.</li>
   <li>A user can use the Graph Generator menus to automatically create
 a
-generic graph, or a programmer can implement a new procedure for
-constructing a graph by implementing the GraphGenerator framework (see
-    <a href="#Creating_Test_Graphs">Creating Test Graphs</a>). </li>
-  <li>A programmer can implement new layout algorithms by extending the
-    <a href="#Creating_New_Layout_Engines">LayoutEngine framework</a>. </li>
+generic graph, or a programmer can implement a new plugin based
+procedure for
+constructing a graph by implementing the GraphGenerator framework (see <a
+ href="ExtendingWilmaScope.html#Creating_Test_Graphs">Creating Test
+Graphs</a>).</li>
+  <li><>New layout algorithms can also be added as plugins by extending
+the WilmaScope </><a
+ href="ExtendingWilmaScope.html#Creating_New_Layout_Engines">LayoutEngine
+framework</a><>. Such layout algorithms can use the WilmaScope graph
+data structures or they can use external graph datastructure</>
+libraries such as Leda or yFiles. They can also potentially use other
+programs such as DOT (see Section 4). Developers can add plugins for
+new graphical representations for graph elements (glyphs). <br>
+  </li>
+  <li>Developers can create standalone applications which use the
+WilmaScope GraphCanvas and API in a custom GUI (see <a
+ href="ExtendingWilmaScope.html#Creating_Applications_Based_on">Creating
+Applications Based on GraphCanvas</a> and
+also the <a href="index.html">WilmaScope Javadoc</a>).</li>
+  <></><li>A user can interact with the WilmaScope GUI to add or edit
+graph
+components (see the user help documentation).</li>
 </ul>
+<div style="text-align: center;"><img
+ alt="Different ways of using Wilma"
+ src="ExtendingWilmaScope_files/wilmausage.png"
+ style="width: 698px; height: 496px;"><br>
+Figure 2b: Different ways to use Wilma for custom applications<br>
+</div>
+<br>
 Conceptually, the graph model includes definitions of what we call
 Layout Engines.&nbsp; A layout engine is an implementation of a layout
 algorithm.&nbsp; That is, an automated system for finding positions for
@@ -206,9 +195,9 @@ view of WilmaScope&#8217;s internal architecture is shown in <a
  href="#Wilma_UML_Class_Diagram_Figure_3:_graph_">Figure 3</a>.&nbsp; <br>
 <br>
 <a name="Wilma_UML_Class_Diagram_Figure_3:_graph_"></a>
-<div style="text-align: center;"><img alt="Wilma UML Class Diagram"
+<div style="text-align: center;"><img alt="wilma classes"
  src="ExtendingWilmaScope_files/image006.jpg"
- style="width: 576px; height: 463px;"><br>
+ style="width: 743px; height: 588px;"><br>
 Figure 3: graph and view packages and example packages in which the
 various interfaces are implemented.<br>
 </div>
@@ -251,11 +240,11 @@ built.&nbsp; As a basic example consider the following code fragment:<br>
 <div style="margin-left: 40px;"><span style="font-style: italic;">//
 add elements to an existing instance of graphControl</span><br
  style="font-style: italic;">
-<span style="font-style: italic;">GraphControl.ClusterFacade root =
+<span style="font-style: italic;">GraphControl.Cluster root =
 graphControl.getRootCluster();</span><br style="font-style: italic;">
-<span style="font-style: italic;">GraphControl.NodeFacade a =
+<span style="font-style: italic;">GraphControl.Node a =
 root.addNode();</span><br style="font-style: italic;">
-<span style="font-style: italic;">GraphControl.NodeFacade b =
+<span style="font-style: italic;">GraphControl.Node b =
 root.addNode();</span><br style="font-style: italic;">
 <span style="font-style: italic;">root.addEdge(a,b);</span><br>
 </div>
@@ -758,6 +747,78 @@ File Format file format. Better support is planned.<br>
 Element Glyphs</h2>
 <h2><a name="Creating_New_Layout_Engines"></a>Creating New Layout
 Engines</h2>
+To create a new layout engine plugin, a developer must implement the
+LayoutEngine interface below, and also extend the NodeLayout and
+EdgeLayout abstract classes which are used to store any layout specific
+properties for nodes and edges.<br>
+<pre><i><font color="#b22222">/**<br> * Classes which determine layout for a particular cluster must implement this<br> * interface.<br> *<br> * @author Tim Dwyer<br> * @version $Id$<br> *<br> */</font></i><br><b><font
+ color="#a020f0">public</font></b> <b><font color="#a020f0">interface</font></b> LayoutEngine&lt;N <b><font
+ color="#a020f0">extends</font></b> NodeLayout,E <b><font
+ color="#a020f0">extends</font></b> EdgeLayout&gt; {<br>  <i><font
+ color="#b22222">/**<br>   * calculate the changes required to move the graph to a nicer layout.  This method<br>   * does not actually update the position of the nodes, rather this should be done by the<br>   * {@link #applyLayout} method.  Potentially, this means that<br>   * the caller can calculate new positions (stored in the NodeLayouts), then opt not to<br>   * apply the changes if it does not lead to an improvement.  <br>   * In practice this has not yet been utilised and such<br>   * decisions are usually made internally to the layout engine.<br>   */</font></i><br>  <b><font
+ color="#a020f0">public</font></b> <b><font color="#a020f0">void</font></b> calculateLayout();<br>  <i><font
+ color="#b22222">/**<br>   * apply the changes calculated by<br>   * {@link #calculateLayout}<br>   * @return true when a stable state is reached<br>   */</font></i><br>  <b><font
+ color="#a020f0">public</font></b> <b><font color="#a020f0">boolean</font></b> applyLayout();<br>  <i><font
+ color="#b22222">/**<br>   * Return a string descriptor for the layout engine type.  Useful in GUI elements<br>   * such as comboboxes<br>   */</font></i><br>  <b><font
+ color="#a020f0">public</font></b> String getName();<br>  <i><font
+ color="#b22222">/**<br>   * Factory method to create a new NodeLayout implementation compatible with<br>   * the layout engine implementing this interface.<br>   */</font></i><br>  <b><font
+ color="#a020f0">public</font></b> N createNodeLayout(Node n);<br>  <i><font
+ color="#b22222">/**<br>   * Factory method to create a new EdgeLayout implementation compatible with<br>   * the layout engine implementing this interface.<br>   */</font></i><br>  <b><font
+ color="#a020f0">public</font></b> E createEdgeLayout(Edge e);<br>  <b><font
+ color="#a020f0">public</font></b> Properties getProperties();<br>  <b><font
+ color="#a020f0">public</font></b> <b><font color="#a020f0">void</font></b> setProperties(Properties p);<br>  <b><font
+ color="#a020f0">public</font></b> JPanel getControls();<br>  <i><font
+ color="#b22222">/**<br>   * The LayoutEngine should have no constructor.  It should be initialised with this method.<br>   */</font></i><br>  <b><font
+ color="#a020f0">public</font></b> <b><font color="#a020f0">void</font></b> init(Cluster root);<br>}<br><br></pre>
+Once these classes have been defined and compiled you should add the
+fully qualified path for your LayoutEngine class to the
+WILMA_CONSTANTS.properties file, and optionally set it as the default
+layout, eg:<br>
+<pre>LayoutPlugins=org.wilmascope.forcelayout.ForceLayout,org.wilmascope.multiscalelayout.MultiScaleLayout,org.wilmascope.fastlayout.FastLayout,org.wilmascope.fadelayout.FadeLayout,org.wilmascope.highdimensionlayout.HighDimensionLayout,org.wilmascope.degreelayout.DegreeLayout</pre>
+<pre>DefaultLayout=Force Directed</pre>
+Then, run WilmaScope, ensuring the path to your new classes is added to
+the classpath, eg:<br>
+<pre>java -cp %WILMA_HOME%/lib;%PATH_TO_YOUR_LAYOUT_CLASS% -jar %WILMA_HOME%/lib/wilma.jar</pre>
+<h2><a name="Getting_the_WilmaScope_Source_Code"></a>Getting the
+WilmaScope Source Code</h2>
+As
+discussed throughout this document, modifying the Wilma source code is
+not usually necessary to extend the system with plugins or to use it
+inside another application.&nbsp; However, it may be useful to look at
+the
+source to find out how something works or to fix a bug that you can't
+wait for us to fix (if you do so, please send as details of the
+fix!).&nbsp;
+<br>
+<br>
+As of Version 3.0 the WilmaScope binary distribution includes source
+code in the WILMA_HOME/src directory.&nbsp; However, it is recommended
+that you obtain the most recent source version by accessing the CVS
+repository.&nbsp; The easiest way to do this is with the <a
+ href="http://www.eclipse.org/">Eclipse IDE</a> as
+follows:<br>
+<ul>
+  <li>Download and install version 3.1 or higher of Eclipse from
+www.eclipse.org </li>
+  <li>Switch to the&nbsp; CVS Repository Exploring perspective (You may
+have
+to first&nbsp; open this perspective). </li>
+  <li>Create a new repository location (Right click within the&nbsp;
+CVS
+Repositories View, New &gt;&nbsp; Repository Location) with these
+settings: </li>
+  <ul>
+    <li>Host: cvs.sourceforge.net </li>
+    <li>Repository Path: /cvsroot/wilma </li>
+    <li>User: anonymous </li>
+    <li>Connection type: pserver </li>
+  </ul>
+  <li>Navigate into
+:pserver:anonymous@cvs.sourceforge.net:/cvsroot/wilma
+&gt; HEAD and check out the "Wilma" module (Select "Wilma" and right
+click &gt; Check Out as Project).&nbsp; Note that "WilmaScope" and
+"WilmaToo" are both obsolete. </li>
+</ul>
 <h2><a name="Code_Conventions"></a>Code Conventions</h2>
 </body>
 </html>
