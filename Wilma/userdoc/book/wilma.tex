@@ -240,7 +240,6 @@ of the system described further in \ref{sec:3duml}.
   in the Force Directed Layout Engine implementation.}
 \end{figure}
 
-<<<<<<< wilma.tex
 \subsection{User Interface Design}
 \ref{fig-controls}
 \begin{figure}[h]
@@ -250,11 +249,11 @@ of the system described further in \ref{sec:3duml}.
 \end{figure}
 
 \begin{figure}
-  \subfigure[Controls for generating random graphs for testing layout
-  algorithms]{
-    \label{fig-randomcontrols}
-\scalebox{0.3}{
-\includegraphics{figures/wilma-randomcontrols.eps}}}
+  %\subfigure[Controls for generating random graphs for testing layout
+  %algorithms]{
+    %\label{fig-randomcontrols}
+%\scalebox{0.3}{
+%\includegraphics{figures/wilma-randomcontrols.eps}}}
   \subfigure[Controls for the force directed layout engine]{
     \label{fig-forcecontrols}
 \scalebox{0.3}{
@@ -271,21 +270,19 @@ of the system described further in \ref{sec:3duml}.
   \caption{The various control windows in Wilma.}
 \end{figure}
 
-=======
 \subsection{Platform}
 
 WilmaScope has been implemented in Java, using the Java3D graphics library.
 Java provides a good tradeoff between high level language constructs,
-portability and performance.  Java3D is an excellent high-level 3D graphics
-API; its only drawback is its proprietary license (unfortunately, there are
-no free graphics libraries which currently provide comparable functionality).
+portability and performance.  Java3D provides access to 3D graphics accellerator hardware through
+a high-level Java API and nice features such as a scene graph
+structure and methods for coupling animation into the render cycle.
 
->>>>>>> 1.21
 \subsection{Layout Algorithms}
 \subsubsection{Force Directed} \label{sec:forcedirectedlayout}
 The first layout algorithm implemented in Wilma was Force Directed
 layout the basic principles of which are described in Chapter
-\ref{chap-intro}.  There were several reasons that led us to
+\ref{chap-intro}.  There were several factors that led us to
 implement this algorithm first, notably:
 \begin{itemize}
 \item it is relatively easy to obtain good results for most types of
