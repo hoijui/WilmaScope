@@ -104,9 +104,10 @@ public class TestChatClient
       a.setPickingClient(pickingClientRef);
       a.setLabel("Nudge Me!");
 
-      // Create a larger node (will also have larger mass or static repulsion)
+      // Create another node
       Node b = addNode(r);
-      b.setRadius(0.2f);
+      // b.setRadius(0.2f); set radius isn't too healthy just at the moment.
+      // if anyone wants it I'll fix it.  Otherwise, stuff it.
 
       // This is a nice lilac colour on my monitor.  It'll probably look like
       // spew elsewhere but you get the idea
