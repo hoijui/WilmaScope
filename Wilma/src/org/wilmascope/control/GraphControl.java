@@ -175,7 +175,6 @@ public class GraphControl {
      * @param label the label to show
      */
     public void setLabel(String label) {
-      this.label = label;
       graphElementView.setLabel(label);
     }
     /**

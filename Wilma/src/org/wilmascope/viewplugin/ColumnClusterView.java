@@ -28,7 +28,6 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
-import org.wilmascope.columnlayout.ColumnLayout;
 import org.wilmascope.columnlayout.NodeColumnLayout;
 import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.Node;

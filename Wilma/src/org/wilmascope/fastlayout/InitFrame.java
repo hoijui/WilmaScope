@@ -161,8 +161,8 @@ public class InitFrame extends JFrame implements ActionListener {
       else test.setView("DefaultNodeView", "Plain Edge");
 
       if(gen == RANDOM) test.genRandom(nodesSlider.getValue(), edgesSlider.getValue(), threeD);
-      else if(gen == GRID) test.genRandom2(nodesSlider.getValue(), edgesSlider.getValue(), threeD);
-      else test.genRandom3(nodesSlider.getValue(), edgesSlider.getValue(), threeD);
+      else if(gen == GRID) test.genGrid(nodesSlider.getValue(), edgesSlider.getValue(), threeD);
+      else test.genClustered(nodesSlider.getValue(), edgesSlider.getValue(), threeD);
 
       this.hide();
     }

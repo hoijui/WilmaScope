@@ -55,7 +55,7 @@ import com.sun.j3d.utils.geometry.NormalGenerator;
  * @version 1.0
  */
 
-public class TubeNodeView extends NodeView implements SizeAdjustableNodeView, View2D {
+public class TubeNodeView extends NodeView implements SizeAdjustableNodeView {
 	//
 	// create the basic reference geometries from the shape sections of a cylinder
 	//

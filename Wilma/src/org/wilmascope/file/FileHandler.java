@@ -40,13 +40,21 @@ import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.ViewManager;
 class GraphFileFilter extends FileFilter {
-	public boolean accept(java.io.File file) {
-		return file.isDirectory() || file.getName().endsWith(".xwg")
-				|| file.getName().endsWith(".gml");
-	}
-	public String getDescription() {
-		return "XML Wilma Graph data files (.xwg) or common graph (.gml)";
-	}
+  public boolean accept(java.io.File file) {
+    return file.isDirectory() || file.getName().endsWith(".xwg")
+        || file.getName().endsWith(".gml");
+  }
+  public String getDescription() {
+    return "XML Wilma Graph data files (.xwg) or common graph (.gml)";
+  }
+}
+class JPEGFileFilter extends FileFilter {
+  public boolean accept(java.io.File file) {
+    return file.isDirectory() || file.getName().endsWith(".jpg");
+  }
+  public String getDescription() {
+    return "JPEG Image Files (.jpg)";
+  }
 }
 public class FileHandler {
 	GraphControl graphControl;
@@ -71,6 +79,8 @@ public class FileHandler {
 			loadCluster(xmlGraph.getRootCluster(), graphControl.getRootCluster());
 			long endTime = System.currentTimeMillis();
 			long time = endTime - startTime;
+			System.out.println(graphControl.getRootCluster().getCluster().getAllNodes().size()+" nodes");
+			System.out.println(graphControl.getRootCluster().getCluster().getInternalEdges().size()+" edges");
 			System.out.println("Loaded... in milliseconds: " + time);
 			graphControl.getRootCluster().getCluster().draw();
 			if (needsLayout) {
@@ -80,9 +90,12 @@ public class FileHandler {
 			GMLLoader gmlLoader = new GMLLoader(graphControl, fileName);
 		}
 	}
-	public FileFilter getFileFilter() {
-		return new GraphFileFilter();
-	}
+  public static FileFilter getFileFilter() {
+    return new GraphFileFilter();
+  }
+  public static FileFilter getJPEGFileFilter() {
+    return new JPEGFileFilter();
+  }
 	private void loadEdgeProperties(XMLGraph.Edge xe, GraphControl.EdgeFacade ge) {
 		XMLGraph.ViewType viewType = xe.getViewType();
 		if (viewType != null) {

@@ -17,20 +17,19 @@
  *
  * -- Tim Dwyer, 2001
  */
-
 package org.wilmascope.view;
-
 /*
  * GraphCanvas.java
- *
+ * 
  * Created on 16 April 2000, 17:06
  */
-
 /**
- *
- * @author  $Author$
+ * @author $Author$
  * @version $Version:$
  */
+import java.awt.Dimension;
+import java.awt.GraphicsConfiguration;
+import java.awt.image.BufferedImage;
 import javax.media.j3d.Alpha;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Background;
@@ -40,7 +39,10 @@ import javax.media.j3d.Bounds;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.ExponentialFog;
+import javax.media.j3d.ImageComponent;
+import javax.media.j3d.ImageComponent2D;
 import javax.media.j3d.PhysicalBody;
+import javax.media.j3d.Screen3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.media.j3d.View;
@@ -48,11 +50,9 @@ import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
-
 import org.wilmascope.centernode.CenterNode;
 import org.wilmascope.light.LightManager;
 import org.wilmascope.rotation.RotationBehavior;
-
 import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
 import com.sun.j3d.utils.behaviors.mouse.MouseTranslate;
 import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
@@ -72,23 +72,18 @@ public class GraphCanvas extends Canvas3D {
 	private Bounds bounds;
 	private SimpleUniverse universe;
 	private LightManager lightManager;
-
 	private MouseRotate MouseRotate;
 	private MouseTranslate MouseTranslate;
 	private MouseZoom MouseZoom;
-
 	private Alpha rotationAlpha;
 	private RotationBehavior rotationBehavior;
-
 	private boolean toggled;
 	private CenterNode centerNode;
 	/** Creates new GraphScene */
-	public GraphCanvas(
-		int xsize,
-		int ysize) { // Create the root of the branch graph
+	public GraphCanvas(int xsize, int ysize) { // Create the root of the branch
+		// graph
 		super(SimpleUniverse.getPreferredConfiguration());
 		constants = Constants.getInstance();
-
 		setSize(xsize, ysize);
 		setLocation(5, 5);
 		bg = new BranchGroup();
@@ -112,19 +107,15 @@ public class GraphCanvas extends Canvas3D {
 		rotationTransformGroup.setCapability(TransformGroup.ALLOW_CHILDREN_WRITE);
 		rotationTransformGroup.setCapability(TransformGroup.ALLOW_CHILDREN_READ);
 		rotationTransformGroup.setCapability(TransformGroup.ENABLE_PICK_REPORTING);
-		rotationTransformGroup.setCapability(
-			TransformGroup.ALLOW_LOCAL_TO_VWORLD_READ);
-
+		rotationTransformGroup
+				.setCapability(TransformGroup.ALLOW_LOCAL_TO_VWORLD_READ);
 		Transform3D yAxis = new Transform3D();
-
 		//rotator.setEnable(false);
 		rotationBehavior = new RotationBehavior(bg, transformGroup, bounds);
 		rotationBehavior.setSchedulingBounds(bounds);
 		rotationBehavior.setEnable(false);
 		toggled = false;
-
 		bg.addChild(rotationBehavior);
-
 		Transform3D stretch = new Transform3D();
 		stretch.setScale(new Vector3d(1, 1, 1));
 		transformGroup.setTransform(stretch);
@@ -134,7 +125,6 @@ public class GraphCanvas extends Canvas3D {
 		background.setCapability(Background.ALLOW_COLOR_WRITE);
 		background.setCapability(Background.ALLOW_COLOR_READ);
 		transformGroup.addChild(background);
-
 		// Set up fog
 		fog = new ExponentialFog();
 		fog.setCapability(ExponentialFog.ALLOW_DENSITY_WRITE);
@@ -142,18 +132,15 @@ public class GraphCanvas extends Canvas3D {
 		fog.setDensity(constants.getFloatValue("FogDensity"));
 		fog.setColor(constants.getColor3f("FogColour"));
 		bg.addChild(fog);
-
-		pb =
-			new GraphPickBehavior(bg, (Canvas3D) this, bounds, PickCanvas.GEOMETRY);
+		pb = new GraphPickBehavior(bg, (Canvas3D) this, bounds, PickCanvas.GEOMETRY);
 		pb.setSchedulingBounds(bounds);
 		transformGroup.addChild(pb);
-
-		//when the lightManager was initialized, it will read in the light configuration in the
+		//when the lightManager was initialized, it will read in the light
+		// configuration in the
 		//specified property file.
 		lightManager = new LightManager(bg, bounds, "WILMA_CONSTANTS.properties");
 		addMouseRotators(bounds);
 		bg.addChild(transformGroup);
-
 		//attach the centerNode behavior to the branch group
 		centerNode = new CenterNode(transformGroup);
 		centerNode.setSchedulingBounds(bounds);
@@ -163,13 +150,8 @@ public class GraphCanvas extends Canvas3D {
 	public void setBackgroundTexture(String imagePath) {
 		// set up sky background
 		BranchGroup backGeoBranch = new BranchGroup();
-		Sphere sphereObj =
-			new Sphere(
-				1.0f,
-				Sphere.GENERATE_NORMALS
-					| Sphere.GENERATE_NORMALS_INWARD
-					| Sphere.GENERATE_TEXTURE_COORDS,
-				45);
+		Sphere sphereObj = new Sphere(1.0f, Sphere.GENERATE_NORMALS
+				| Sphere.GENERATE_NORMALS_INWARD | Sphere.GENERATE_TEXTURE_COORDS, 45);
 		Appearance backgroundApp = sphereObj.getAppearance();
 		backGeoBranch.addChild(sphereObj);
 		background.setGeometry(backGeoBranch);
@@ -178,12 +160,10 @@ public class GraphCanvas extends Canvas3D {
 			backgroundApp.setTexture(tex.getTexture());
 		else
 			System.err.println("Couldn't load background texture!");
-
 	}
 	public Bounds getBoundingSphere() {
 		return bounds;
 	}
-
 	public void toggleRotator() {
 		if (toggled == false) {
 			rotationBehavior.setEnable(true);
@@ -196,16 +176,14 @@ public class GraphCanvas extends Canvas3D {
 	}
 	public void createUniverse() {
 		bg.compile();
-
 		// Create a universe with the Java3D universe utility.
 		universe = new SimpleUniverse(this);
-
 		// This will move the ViewPlatform back a bit so the
 		// objects in the scene can be viewed.
 		universe.getViewingPlatform().setNominalViewingTransform();
-    universe.getViewer().getView().setTransparencySortingPolicy(
-      View.TRANSPARENCY_SORT_NONE);
-    universe.getViewer().getView().setDepthBufferFreezeTransparent(false);
+		universe.getViewer().getView().setTransparencySortingPolicy(
+				View.TRANSPARENCY_SORT_NONE);
+		universe.getViewer().getView().setDepthBufferFreezeTransparent(false);
 		setStereoSeparation(0.006);
 		this.getView().setBackClipDistance(100);
 		this.getView().setFrontClipDistance(0.1);
@@ -245,7 +223,6 @@ public class GraphCanvas extends Canvas3D {
 		bg.addChild(gb);
 		return gb;
 	}
-
 	private void addMouseRotators(Bounds bounds) {
 		MouseRotate = new MouseRotate();
 		MouseRotate.setTransformGroup(transformGroup);
@@ -259,7 +236,6 @@ public class GraphCanvas extends Canvas3D {
 		MouseZoom.setTransformGroup(transformGroup);
 		MouseZoom.setSchedulingBounds(bounds);
 		transformGroup.addChild(MouseZoom);
-
 	}
 	public MouseTranslate getMouseTranslate() {
 		return MouseTranslate;
@@ -285,7 +261,6 @@ public class GraphCanvas extends Canvas3D {
 	}
 	public void behaviorWakeup() {
 	}
-
 	public BranchGroup getBranchGroup() {
 		return bg;
 	}
@@ -296,7 +271,6 @@ public class GraphCanvas extends Canvas3D {
 	public void reorient(Vector3f position) {
 		centerNode.setOriginPosition(position);
 		centerNode.setEnable(true);
-
 	}
 	public void reorient(javax.media.j3d.Transform3D reorientTransform) {
 		transformGroup.setTransform(reorientTransform);
@@ -324,12 +298,38 @@ public class GraphCanvas extends Canvas3D {
 	public void setPickingEnabled(boolean enabled) {
 		pb.setEnable(enabled);
 	}
-	// method related to light source 
+	// method related to light source
 	public LightManager getLightManager() {
 		return lightManager;
 	}
 	public RotationBehavior getRotationBehavior() {
 		return rotationBehavior;
 	}
+	public void writeJPEG(String path, float scale) {
+    OffScreenCanvas3D offScreenCanvas = new OffScreenCanvas3D(SimpleUniverse.getPreferredConfiguration());
 
+    // set the offscreen to match the onscreen
+    Screen3D sOn = getScreen3D();
+    Screen3D sOff = offScreenCanvas.getScreen3D();
+    sOff.setSize(sOn.getSize());
+    sOff.setPhysicalScreenWidth(sOn.getPhysicalScreenWidth());
+    sOff.setPhysicalScreenHeight(sOn.getPhysicalScreenHeight());
+
+    //setAntialiasingEnabled(true);
+    Dimension dim = getSize();
+    dim.width *= scale;
+    dim.height *= scale;
+
+    // attach the same view to the offscreen canvas and render an extra frame to make sure it's ready    
+    View  view = universe.getViewer().getView();
+    view.addCanvas3D( offScreenCanvas );
+    view.stopView();
+    view.renderOnce();
+    view.startView();
+
+    offScreenCanvas.print(path, dim, true);
+    
+    //setAntialiasingEnabled(false);
+    view.removeCanvas3D( offScreenCanvas ); 
+  }
 }

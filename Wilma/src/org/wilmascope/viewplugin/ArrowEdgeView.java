@@ -47,7 +47,7 @@ import com.sun.j3d.utils.geometry.Cone;
  * @version 1.0
  */
 
-public class ArrowEdgeView extends EdgeView implements View2D {
+public class ArrowEdgeView extends EdgeView {
 	public ArrowEdgeView() {
 		setTypeName("Arrow");
 	}

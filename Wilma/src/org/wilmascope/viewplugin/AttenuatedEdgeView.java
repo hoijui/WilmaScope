@@ -24,6 +24,7 @@ import javax.media.j3d.GeometryStripArray;
 import javax.media.j3d.Material;
 import javax.media.j3d.Shape3D;
 import javax.swing.ImageIcon;
+import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
@@ -32,10 +33,12 @@ import org.wilmascope.graph.Edge;
 import org.wilmascope.view.Colours;
 import org.wilmascope.view.Constants;
 import org.wilmascope.view.EdgeView;
+import org.wilmascope.view.NodeView;
 
 import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.GeometryInfo;
 import com.sun.j3d.utils.geometry.NormalGenerator;
+import com.sun.j3d.utils.geometry.Stripifier;
 
 /**
  * Graphical representation of the edge
@@ -44,7 +47,7 @@ import com.sun.j3d.utils.geometry.NormalGenerator;
  * @version 1.0
  */
 
-public class TaperedEdgeView extends EdgeView {
+public class AttenuatedEdgeView extends EdgeView {
   //
   // create the basic reference geometries from the shape sections of a cylinder
   //
@@ -76,15 +79,20 @@ public class TaperedEdgeView extends EdgeView {
   }
 
   float length = 1.0f;
-  public TaperedEdgeView() {
-    setTypeName("Tapered Edge");
+  public AttenuatedEdgeView() {
+    setTypeName("Attenuated Edge");
   }
   protected void setupDefaultMaterial() {
-    Material material = new Material();
-    material.setDiffuseColor(0.0f, 0.0f, 1.0f);
-    material.setAmbientColor(0f, 0f, 0.4f);
-    material.setShininess(50.0f);
-    setupDefaultAppearance(material);
+
+    Color3f aColor  = new Color3f(0.1f, 0.1f, 0.1f);
+    Color3f eColor  = new Color3f(0.0f, 0.0f, 0.0f);
+    Color3f dColor  = new Color3f(0.6f, 0.6f, 0.6f);
+    Color3f sColor  = new Color3f(1.0f, 1.0f, 1.0f);
+
+    Material m = new Material(aColor, eColor, dColor, sColor, 100.0f);
+    m.setLightingEnable(true);
+ 
+    setupDefaultAppearance(m);
   }
   protected void setupHighlightMaterial() {
     setupHighlightAppearance(Colours.yellowMaterial);
@@ -103,8 +111,15 @@ public class TaperedEdgeView extends EdgeView {
     bottomRadius = r;
   }
   public void init() {
-    Point3f[] taperedTubePoints = new Point3f[tubePoints.length];
     setRadius(0.1f);
+    Color3f startColour = new Color3f(((NodeView)getEdge().getStart().getView()).getColour());
+    Color3f endColour = new Color3f(((NodeView)getEdge().getEnd().getView()).getColour());
+    setTopRadius(getEdge().getStart().getRadius()*9.5f);
+    setBottomRadius(getEdge().getEnd().getRadius()*9.5f);
+
+    Point3f[] taperedTubePoints = new Point3f[tubePoints.length];    
+    Color3f[] tubeColours = new Color3f[tubePoints.length];
+
     for (int i = 0; i < tubePoints.length; i++) {
       if (i % 2 == 0) {
         taperedTubePoints[i] =
@@ -112,19 +127,24 @@ public class TaperedEdgeView extends EdgeView {
             tubePoints[i].x * topRadius,
             tubePoints[i].y,
             tubePoints[i].z * topRadius);
+        tubeColours[i] = endColour;
       } else {
         taperedTubePoints[i] =
           new Point3f(
-            tubePoints[i].x * bottomRadius,
+            -tubePoints[i].x * bottomRadius,
             tubePoints[i].y,
-            tubePoints[i].z * bottomRadius);
+            -tubePoints[i].z * bottomRadius);
+        tubeColours[i] = startColour;
       }
     }
     GeometryInfo gi = new GeometryInfo(GeometryInfo.TRIANGLE_STRIP_ARRAY);
     gi.setCoordinates(taperedTubePoints);
-    gi.setStripCounts(tubeStripCounts);
+    gi.setColors(tubeColours);
+    gi.setStripCounts(tubeStripCounts); 
+    gi.recomputeIndices();
     normalGenerator.generateNormals(gi);
     Shape3D tubeShape = new Shape3D(gi.getGeometryArray(), getAppearance());
+    makePickable(tubeShape);
     addTransformGroupChild(tubeShape);
   }
   /**
@@ -145,6 +165,6 @@ public class TaperedEdgeView extends EdgeView {
     setFullTransform(new Vector3d(getRadius(), l, getRadius()), v, getPositionAngle());
   }
   public ImageIcon getIcon() {
-    return new ImageIcon("images/taperedEdge.png");
+    return new ImageIcon("images/attenuatedEdge.png");
   }
 }

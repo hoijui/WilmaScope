@@ -3,6 +3,8 @@ package org.wilmascope.gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.PrintStream;
+
 import javax.swing.border.*;
 import org.wilmascope.control.*;
 
@@ -165,11 +167,14 @@ public class GenerateTestGraphFrame extends JFrame implements ActionListener {
       else test.setView("DefaultNodeView", "Plain Edge");
 
       if(gen == RANDOM) test.genRandom(nodesSlider.getValue(), edgesSlider.getValue(), threeD);
-      else if(gen == GRID) test.genRandom2(nodesSlider.getValue(), edgesSlider.getValue(), threeD);
-      else if(gen == STRATIFIED) test.genRandomStratified(nodesSlider.getValue(), edgesSlider.getValue());
-      else test.genRandom3(nodesSlider.getValue(), edgesSlider.getValue(), threeD);
+      else if(gen == GRID) test.genGrid(nodesSlider.getValue(), edgesSlider.getValue(), threeD);
+      else if(gen == STRATIFIED) test.genStratified(nodesSlider.getValue(), edgesSlider.getValue());
+      else if(gen == CLUSTER) test.genClustered(nodesSlider.getValue(), edgesSlider.getValue(), threeD);
+      else {
+        throw new Error("Unknown graph type!");
+      }
 
-      this.hide();
+      setVisible(false);
     }
     else if(e.getActionCommand().equals("random")){
       gen = RANDOM;
