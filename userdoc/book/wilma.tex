@@ -77,11 +77,13 @@
      Madsen Building F09,
      University of Sydney,
      NSW 2006,
-     Australia
-\and Department of Computer Science,
+     Australia.
+		 E-mail: \url{dwyer@cs.usyd.edu.au}
+\and Department of Computer Science \& Software Engineering,
      University of Melbourne,
      Victoria 3010,
-     Australia}
+     Australia.
+		 E-mail: \url{pde@cs.mu.oz.au}}
 
 \maketitle              % typesets the title of the contribution
 
@@ -94,13 +96,28 @@
 \section{Introduction}\label{sec:intro}
 
 \subsection{Witty Survey Subsection}
-\em{survey previous stuff.}
+{\em survey previous stuff.}
 
 \subsection{Debonair aims for the sultry Wilma}
 \label{motivation}
 
-\em{motivation for wilma.}
-%
+Despite, or perhaps because of, the extensive research literature on 
+graph drawing techniques, there is a lack of general-purpose visualisation
+systems, particularly for application to 3-dimensional embeddings.
+
+\paragraph{}
+
+Graph drawing problems are, of course, exsitent within an enourmous range of
+fields; a key motivation for creating a general purpose 3D visualisation
+system is to provide easy-to-use components which can be employed by future
+software across these application domains.
+
+\paragraph{}
+
+Within the graph drawing community itself, a system may also aspire to 
+streamline, elucidate and beautify the work of algorithm design, comparison
+and optimisation.
+
 \section{Design}\label{sec:design}
 \subsection{Architecture}
 Conceived as a research project with open ended goals, Wilma was
@@ -112,6 +129,8 @@ layout algorithm implementations to be added or removed easily.
 Therefore the design needed to decouple these components as much as
 possible so that altering one component would have minimal impact on
 the other components.
+
+\paragraph{}
 
 To achieve this we began by exploring the well known Model-View-Controller
 architecture (MVC) \cite{gangoffour}.  In an MVC architecture the Model is the core
@@ -125,12 +144,16 @@ not require change one of the components is modified in some way.  The
 standard data flow diagram for the MVC architecture is shown in Figure
 \ref{fig:mvc}.
 
+\paragraph{}
+
 In our system the Model is further broken down into two components:
 the Graph data structure itself, capable of representing the structure
 and state of the graph including its arrangement in space, and
 the Layout Engine, which is an abstraction of the basic methods required for
 an implementation of any layout algorithm that will change the graphs
 arrangement in space.
+
+\paragraph{}
 
 A further requirement for our system is that the graph data model and
 the layout engine should able to be controlled either interactively by
@@ -142,6 +165,8 @@ programmatic interface to the Model.  The methods provided by this
 bridge layer can then be called by either the GUI interface component,
 a component providing a CORBA interface for RPC or a component which
 can load and save files to an XML format.
+
+\paragraph{}
 
 Figure \ref{fig:arch} shows a collaboration diagram for this overall
 architecture. 
