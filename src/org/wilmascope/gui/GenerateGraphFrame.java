@@ -118,7 +118,7 @@ public class GenerateGraphFrame extends JFrame implements ActionListener {
       if (lineRend)
         generator.setView("LineNode", "LineEdge");
       else
-        generator.setView("DefaultNodeView", "Attenuated Edge");
+        generator.setView("DefaultNodeView", "Arrow");
       generator.generate(gc);
     } else if (e.getActionCommand().equals("line")) {
       lineRend = true;

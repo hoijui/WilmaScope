@@ -51,8 +51,8 @@ public class DirectedCycleRemoval extends GraphModifier {
    * @see org.wilmascope.graphmodifiers.GraphModifier#modify(org.wilmascope.graph.Cluster)
    */
   public void modify(Cluster cluster) {
-    for (Edge e : getAcyclicEdgeSet_EnhancedGreedy(cluster)) {
-      ((Edge) e.getUserFacade()).reverseDirection();
+    for (Edge e : getAcyclicEdgeSet_Greedy(cluster)) {
+      e.reverseDirection();
     }
     cluster.draw();
   }
