@@ -177,8 +177,8 @@ A further requirement for our system is that the graph data model and
 the layout engine should able to be controlled either interactively by
 the user, by loading data from a file or even by remote
 procedure call from a program running in another process or possibly on
-another machine.  Therefore the Controller component was also broken
-down into several components.  A "bridge" layer provides a common
+another machine (Wilma's APIs are described in Section~\ref{API}).  Therefore the Controller component was also broken
+down into several components.  A ``bridge'' layer provides a common
 programmatic interface to the Model.  The methods provided by this
 bridge layer can then be called by either the GUI interface component,
 a component providing a CORBA interface for RPC or a component which
@@ -274,6 +274,7 @@ algorithmic experiments can be performed at optimal speeds.
 \subsubsection{DOT: heirarchical layout}
 \subsection{User Interfaces}
 \subsection{Programming Interfaces}
+\label{API}
 
 A key design goal for Wilma was the provision of graph visualisation
 facilities for other programs with very low barriers to development.  In order
