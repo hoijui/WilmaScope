@@ -95,12 +95,8 @@
 %nor too short but to the point!
 %\end{abstract}
 
-\section{Introduction}\label{sec:intro}
-
-\subsection{Witty Survey Subsection}
-{\em survey previous stuff.}
-
-\subsection{The Motivation for WilmaScope}
+\section{Introduction: The Motivation for Wilmascope}
+\label{sec:intro}
 \label{motivation}
 
 Despite, or perhaps because of, the extensive research literature on graph
@@ -126,10 +122,10 @@ In this chapter, we describe WilmaScope (or ``Wilma'', for short), a
 sophisticated graph visualisation infrastructure, which attempts to meet
 these goals.  In Section~\ref{sec:design}, we describe the Wilma
 architecture, modular subsystems, and facilities for control by human users
-and other software.  Section~\ref{sec:results} demonstrates Wilma in
-action, with examples of graphical results, domain specific applications and
-feedback from users.  Finally, Section~\ref{sec:conclusions} reviews Wilma's
-contribution and identifies directions for future development.
+and other software.  Section~\ref{sec:results} demonstrates Wilma in action,
+with examples of graphical results and domain specific applications.
+Finally, Section~\ref{sec:conclusions} reviews Wilma's contribution and
+identifies directions for future development.
 
 \section{Design}\label{sec:design}
 \subsection{High Level Architecture}
@@ -563,14 +559,13 @@ marshaling and type requirements for a sophisticated API, programmers using
 languages which support CORBA can take advantage of these facilities without
 writing additional code.
 
-\section{Results: The Importance of being Wilma}
+\section{Applications: The Importance of being Wilma}
 \label{sec:results}
 Wilma was designed to be as open and extensible as possible and
 evidence for the success of this design is shown in the array of
 domains to which Wilma has been applied.
 
-\subsection{Applications}
-\subsubsection{3D UML Visualisation} \label{sec:3duml}
+\subsection{3D UML Visualisation} \label{sec:3duml}
 The first application of Wilma was an investigation into a 3D
 extension of the Unified Modelling Language\cite{dwyer013D-UML}.
 UML diagram elements were translated into 3D glyphs and a simple class
@@ -582,7 +577,7 @@ layout engine could help a software architect to understand structure
 within a reasonably complex system.  An example of such a diagram is
 shown in Figure \ref{fig-wilmaclasses3D}.
 
-\subsubsection{Fund Manager Flow Visualisation} \label{sec:fmflow}
+\subsection{Fund Manager Flow Visualisation} \label{sec:fmflow}
 Most stock market visualisations involve a fairly straightforward
 mapping of share attributes into 2 or 3 dimensional space.  The most
 obvious example is share price time series charts.  In an experiment
@@ -625,7 +620,7 @@ used in these layout algorithms to suit such stratified graphs.
   \label{fig-fm}
 \end{figure}
 
-\subsubsection{Web Structure Visualisation}
+\subsection{Web Structure Visualisation}
 
 One early application of Wilma was to the representation of web structure, and
 to visualising clustering algorithms for categorising such
@@ -644,7 +639,7 @@ The clusters are defined over similarity between pages; also note the set of
 \end{center}
 \end{figure}
 
-\subsubsection{Concept Maps}
+\subsection{Concept Maps}
 
 A common application of automated graph drawing systems is to visualise
 ``concept map'' graphs, in which nodes represent ideas and edges, the
