@@ -41,6 +41,7 @@ import org.wilmascope.gmlparser.GMLLoader;
 import org.wilmascope.graph.LayoutEngine;
 import org.wilmascope.highdimensionlayout.HighDimensionLayout;
 import org.wilmascope.multiscalelayout.MultiScaleLayout;
+import org.wilmascope.view.ClusterView;
 import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.ViewManager;
@@ -246,6 +247,14 @@ public class FileHandler {
 
   private void saveCluster(GraphControl.Cluster graphCluster,
       XMLGraph.Cluster xmlCluster) {
+   	//  Save the property of cluster
+  	ClusterView v = (ClusterView) graphCluster.getView();
+  	if (graphCluster.getView() != null) {
+  		XMLGraph.ViewType xv = xmlCluster.setViewType(v.getTypeName());
+  		xv.setProperties(v.getProperties());
+  		}
+  	xmlCluster.setProperties(graphCluster.getProperties());
+  	 //     	
     saveLayoutEngine(graphCluster, xmlCluster);
     GraphControl.Node[] nodes = graphCluster.getNodes();
     Hashtable clusters = new Hashtable();
