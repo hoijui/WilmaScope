@@ -1,0 +1,15 @@
+#!/bin/sh
+if [ x$WILMAHOST = x ]
+then
+  WILMAHOST=localhost
+fi
+if [ x$WILMAPORT = x ]
+then
+  WILMAPORT=8088
+fi
+echo starting an example Wilma CORBA client with:
+echo "  InitialHost = $WILMAHOST"
+echo "  InitialPort = $WILMAPORT"
+echo
+echo pick the node labeled Nudge Me and see what happens...
+java -cp classes org.wilmascope.TestChatClient -ORBInitialHost $WILMAHOST -ORBInitialPort $WILMAPORT
