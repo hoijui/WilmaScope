@@ -331,8 +331,6 @@ achieves a net result similar to the ``dummy node'' approach of Huang
 and Eades\cite{Huang:GD98} however repulsive forces do not need to be
 calculated between nodes inside different clusters.
 
-\subsubsection{Multiscale Force Directed}
-
 \subsubsection{Fast Simulated Annealing}
 
 As we stated in Section~\ref{motivation}, a major design goal for Wilma
@@ -388,6 +386,17 @@ algorithmic experiments can be performed at optimal speeds.
   \label{fig-fastlayout}
 \end{figure}
 
+
+\subsubsection{Multiscale Force Directed}
+
+Althought the fast simulated annealing approach described above had not proved
+perfect as an efficient replacement for iterated, force-directed layout, there
+are other algorithms in the literature which might be brought to bear.
+
+We have implemented one of these - the ``Multilevel Force-Directed'' approach
+of Walshaw~\cite{walshaw00multilevel}.  The primary insight of this
+multi-scaled approach is that the effects of repulsion forces at different
+ranges are equivalently 
 
 \subsubsection{DOT: heirarchical layout}
 \subsection{User Interfaces}
@@ -492,7 +501,9 @@ GNU General Public License, or LGPL
 the user community, guarantees an open development ecology and thus encourage
 creative hacking all round.
 
-See you at \url{http://www.wilmascope.org}!
+\paragraph{}
+
+See you at \url{www.wilmascope.org}!
 
 \begin{itemize}
 \item megalomaniacal rants
