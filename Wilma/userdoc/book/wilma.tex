@@ -108,7 +108,7 @@ drawing techniques, there is a lack of state-of-the-art, general-purpose
 visualisation systems, particularly for application to 3-dimensional
 embeddings.
 
-Graph drawing problems are, of course, exsitent within an enourmous range of
+Graph drawing problems are, of course, existent within an enormous range of
 fields; a key motivation for creating a general purpose 3D visualisation
 system is to provide easy-to-use components which can be employed by future
 software across these application domains.
@@ -126,7 +126,7 @@ In this chapter, we describe WilmaScope (or ``Wilma'', for short), a
 sophisticated graph visualisation infrastructure, which attempts to meet
 these goals.  In Section~\ref{sec:design}, we describe the Wilma
 architecture, modular subsystems, and facilities for control by human users
-and other software.  Section~\ref{sec:results} we demonstrate Wilma in
+and other software.  Section~\ref{sec:results} demonstrates Wilma in
 action, with examples of graphical results, domain specific applications and
 feedback from users.  Finally, Section~\ref{sec:conclusions} reviews Wilma's
 contribution and identifies directions for future development.
@@ -218,7 +218,7 @@ provides a common interface to an implementation of a layout algorithm
 for arranging the graph in 2 or 3 dimensional space.  Since the
 details of the algorithm are kept separate it is easy to mix and match
 different layout styles to different graphs or even clusters within
-the one graph.  A similar class hierarchy was developed independantly
+the one graph.  A similar class hierarchy was developed independently
 by Marshall et.  al\cite{marshall00object} around the same time.
 Figure \ref{fig-wilmaclasses} shows a UML diagram depicting this
 graph class hierarchy, and also shows how this relates to a force
@@ -274,7 +274,7 @@ of the system described further in \ref{sec:3duml}.
 
 WilmaScope has been implemented in Java, using the Java3D graphics library.
 Java provides a good tradeoff between high level language constructs,
-portability and performance.  Java3D provides access to 3D graphics accellerator hardware through
+portability and performance.  Java3D provides access to 3D graphics accelerator hardware through
 a high-level Java API and nice features such as a scene graph
 structure and methods for coupling animation into the render cycle.
 
@@ -293,7 +293,7 @@ special pre or post-processing it is easy to use in a dynamic graph
 editor, where the graph structure may be changed by the user even
 before the layout has stabilised.
 \item similarly it is easy to animate the layout process in a dynamic
-graph visualization to preserve a user's ``mental map''\cite{Misue:VLC95}
+graph visualisation to preserve a user's ``mental map''\cite{Misue:VLC95}
 between changes in the graph structure.  We can animate simply by
 redrawing the graph between each iteration of the algorithm.
 \item different layout
@@ -325,7 +325,7 @@ oriented clustered graph model.  As mentioned previously each cluster
 has its own layout engine but when the force directed engine is used,
 edges connecting nodes in different clusters exert a force on
 the nodes inside these clusters.  The nodes inside a cluster are
-attracted to the centroid of the cluster by a ``gravitional force''.
+attracted to the centroid of the cluster by a ``gravitational force''.
 The gravitational force then balances the inter-cluster forces.  This
 achieves a net result similar to the ``dummy node'' approach of Huang
 and Eades\cite{Huang:GD98} however repulsive forces do not need to be
@@ -342,7 +342,7 @@ wide range of graph visualisation problems.  One variation on these
 algorithms, advocated by Fruchtermann \&
 Rheingold~\cite{fruchtermann90force-directed} and Davidson {\em et.
 al.}~\cite{davidson01noise}, attempts to avoid calculation of repulsion force
-vectors, which is $O(n^2)$ in the number of verticies:  
+vectors, which is $O(n^2)$ in the number of vertices:  
 
 \begin{equation}
 \vec{R}_i \equiv \sum_{j \in G, j \neq i} \vec{r}_{i,j}
@@ -389,8 +389,8 @@ algorithmic experiments can be performed at optimal speeds.
 
 \subsubsection{Multiscale Force Directed}
 
-Althought the fast simulated annealing approach described above had not proved
-perfect as an efficient replacement for iterated, force-directed layout, there
+Although the fast simulated annealing approach described above did not prove
+perfect as a universal replacement for iterated, force-directed layout, there
 are other algorithms in the literature which might be brought to bear.
 
 We have implemented one of these - the ``Multilevel Force-Directed'' approach
@@ -398,7 +398,7 @@ of Walshaw~\cite{walshaw00multilevel}.  The primary insight of this
 multi-scaled approach is that the effects of repulsion forces at different
 ranges are equivalently 
 
-\subsubsection{DOT: heirarchical layout}
+\subsubsection{DOT: hierarchical layout}
 \subsection{User Interfaces}
 \subsection{Programming Interfaces}
 \label{API}
@@ -413,7 +413,7 @@ Wilma CORBA interface.
 \subsubsection{WilmaChat: A Dialogue on Graph Structure}
 
 The simplest and lowest-energy programming interface to Wilma is the WilmaChat
-language.  WilmaChat operates by creating a server daemon which listens on a
+language.  WilmaChat operates by invoking a server daemon which listens on a
 socket or pipe on the machine in question.
 
 Clients can connect to WilmaChat and control graphs by passing commands
@@ -421,7 +421,7 @@ in a simple language which allows them to instantiate arbitrary graph
 structures.
 
 The advantage of WilmaChat is that it requires extremely little infrastructure
-from the developers's programming environment.  The ability to traverse
+from the developer's programming environment.  The ability to traverse
 internal graph structures and print a simple, formalised description of them
 is enough to produce navigable 3D output.
 
@@ -440,7 +440,7 @@ In order to meet these more sophisticated requirements, we have implemented a
 Wilma control interface which sits atop CORBA (the Common Object Request
 Broker Archicture --- see \url{http://www.corba.org}).  Since CORBA provides
 its own access control mechanisms, and good CORBA bindings handle all the
-marshalling and type requirements for a sophisticated API, programmers using
+marshaling and type requirements for a sophisticated API, programmers using
 languages which support CORBA can take advantage of these facilities without
 writing additional code.
 
@@ -484,14 +484,14 @@ The clusters are defined over similarity between pages; also note the set of
 \label{sec:conclusions}
 
 We hope that the reader will by now be convinced that WilmaScope presents an
-invalulable addition to the graph coniseur's toolbox.  
+invaluable addition to the graph connoisseur's[D[D[D[D[ toolbox.  
 
 Wilma provides its users with animated, interactive 3D rendering, which takes
-advantage of modern accelearated graphics hardware.  These facilties are, of
-course, available by other means --- but Wilma's API and user inteface
+advantage of modern accelerated graphics hardware.  These facilities are, of
+course, available by other means --- but Wilma's API and user interface
 endeavours to provide them at a minimum of user labour and/or coding.
 
-It has a general purpose, extensible architecutre, enabling creative
+It has a general purpose, extensible architecture, enabling creative
 experimentation, domain-dependent extensions, and successive layers of
 functionality-transparency for users.
 
