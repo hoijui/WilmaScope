@@ -83,7 +83,7 @@ public class FileHandler {
     }
     String data;
     if((data = xn.getData())!=null && data.length()!=0) {
-      gn.setData(data);
+      //gn.setData(data);
     }
   }
   private void setXMLNodeData(GraphControl.NodeFacade graphNode,XMLGraph.Node xmlNode) {
@@ -92,9 +92,11 @@ public class FileHandler {
       xmlNode.setLabel(label);
     }
     String data;
+    /*
     if((data = graphNode.getData())!=null && data.length()!=0) {
       xmlNode.setData(data);
     }
+    */
     if(!graphNode.isDefaultColour()) {
       xmlNode.setColour(graphNode.getColour());
     }
