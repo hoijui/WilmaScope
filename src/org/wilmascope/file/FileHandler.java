@@ -102,10 +102,18 @@ public class FileHandler {
 		XMLGraph.ViewType viewType = xe.getViewType();
 		if (viewType != null) {
 			try {
+        String viewTypeString = viewType.getName();
 				EdgeView v = ViewManager.getInstance().createEdgeView(
-						viewType.getName());
+						viewTypeString);
 				ge.setView(v);
 				v.setProperties(viewType.getProperties());
+        {
+          Point3f s = ge.getStartNode().getPosition();
+          Point3f e = ge.getEndNode().getPosition();
+          if(s.z<e.z) {
+            System.out.println("Backward Edge, type="+viewTypeString+", startLabel="+ge.getStartNode().getLabel()+", endLabel="+ge.getEndNode().getLabel());
+          }
+        }
 			} catch (ViewManager.UnknownViewTypeException e) {
 				e.printStackTrace();
 			}
