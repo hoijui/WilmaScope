@@ -34,7 +34,13 @@ import javax.swing.JPanel;
  */
 public interface LayoutEngine<N extends NodeLayout,E extends EdgeLayout> {
   /**
-   * calculate the changes required to move the graph to a nicer layout
+   * calculate the changes required to move the graph to a nicer layout.  This method
+   * does not actually update the position of the nodes, rather this should be done by the
+   * {@link #applyLayout} method.  Potentially, this means that
+   * the caller can calculate new positions (stored in the NodeLayouts), then opt not to
+   * apply the changes if it does not lead to an improvement.  
+   * In practice this has not yet been utilised and such
+   * decisions are usually made internally to the layout engine.
    */
   public void calculateLayout();
   /**
@@ -65,9 +71,4 @@ public interface LayoutEngine<N extends NodeLayout,E extends EdgeLayout> {
    * The LayoutEngine should have no constructor.  It should be initialised with this method.
    */
   public void init(Cluster root);
-  /**
-   * A clone method
-   * @return a new uninitialised LayoutEngine
-   */
-  public LayoutEngine create();
 }

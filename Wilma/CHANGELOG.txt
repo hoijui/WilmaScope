@@ -1,5 +1,6 @@
 Changes Since 3.0
 -----------------
+- removed stupid "create" method from LayoutEngine interface
 - LayoutEngines now loaded as plugins
 - GraphControl.NodeFacade/EdgeFacade/ClusterFacade renamed to
   GraphControl.Node/Edge/Cluster

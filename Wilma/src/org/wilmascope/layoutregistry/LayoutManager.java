@@ -79,7 +79,14 @@ public class LayoutManager {
     if (prototype == null) {
       throw (new UnknownLayoutTypeException(layoutType));
     }
-    return (LayoutEngine) prototype.create();
+    try {
+      return (LayoutEngine)prototype.getClass().newInstance();
+    } catch (InstantiationException e) {
+      WilmaMain.showErrorDialog("Couldn't instantiate LayoutEngine (InstantiationException): "+layoutType,e);
+    } catch (IllegalAccessException e) {
+      WilmaMain.showErrorDialog("Couldn't instantiate LayoutEngine (IllegalAccessException): "+layoutType,e);
+    }
+    return null;
   }
 
   public void addPrototypeLayout(LayoutEngine prototype) {

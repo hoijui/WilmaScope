@@ -528,12 +528,6 @@ public class DegreeLayout implements LayoutEngine {
 		this.root = root;
 		createElementLayouts();
 	}
-	/* (non-Javadoc)
-	 * @see org.wilmascope.graph.LayoutEngine#create()
-	 */
-	public LayoutEngine create() {
-		return new DegreeLayout();
-	}
 	
 	public void createElementLayouts() {
 	    NodeList nodes = root.getNodes();

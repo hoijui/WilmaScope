@@ -44,15 +44,6 @@ import org.wilmascope.graph.NodeList;
 
 public class ForceLayout implements LayoutEngine<NodeForceLayout,EdgeForceLayout> {
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.wilmascope.layoutregistry.LayoutPrototype#create()
-   */
-  public LayoutEngine create() {
-    return new ForceLayout();
-  }
-
   public void init(Cluster root) {
     this.root = root;
     createElementLayouts();

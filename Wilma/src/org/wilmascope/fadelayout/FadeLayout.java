@@ -372,15 +372,6 @@ public class FadeLayout implements LayoutEngine {
     createElementLayouts();
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.wilmascope.graph.LayoutEngine#create()
-   */
-  public LayoutEngine create() {
-    return new FadeLayout();
-  }
-
   public void createElementLayouts() {
     NodeList nodes = root.getNodes();
     //Random rand = new Random(System.currentTimeMillis());
