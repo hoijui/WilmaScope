@@ -103,7 +103,6 @@ public class XMLGraph {
     // turn the filename into a fully qualified URL
     //
     String uri = file.getAbsolutePath();
-    System.out.println(uri);
 
     factory.setNamespaceAware(true);
     factory.setValidating(true);
@@ -196,7 +195,7 @@ public class XMLGraph {
       return elements;
     }
 
-    protected Properties getProperties() {
+    public Properties getProperties() {
       Properties ps = new Properties();
       Element[] children = getChildElements("Property");
       for (int i = 0; i < children.length; i++) {
@@ -207,7 +206,7 @@ public class XMLGraph {
       return ps;
     }
 
-    protected ViewType getViewType() {
+    public ViewType getViewType() {
       Element es[] = getChildElements("ViewType");
       if (es.length > 0) {
         return new ViewType(es[0]);
