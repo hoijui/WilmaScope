@@ -24,6 +24,7 @@ import javax.media.j3d.GeometryStripArray;
 import javax.media.j3d.Material;
 import javax.media.j3d.Shape3D;
 import javax.swing.ImageIcon;
+import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
@@ -32,6 +33,7 @@ import org.wilmascope.graph.Edge;
 import org.wilmascope.view.Colours;
 import org.wilmascope.view.Constants;
 import org.wilmascope.view.EdgeView;
+import org.wilmascope.view.NodeView;
 
 import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.GeometryInfo;
@@ -104,6 +106,12 @@ public class TaperedEdgeView extends EdgeView {
   }
   public void init() {
     Point3f[] taperedTubePoints = new Point3f[tubePoints.length];
+    Color3f[] tubeColours = new Color3f[tubePoints.length];
+    Color3f startColour = new Color3f(((NodeView)getEdge().getStart().getView()).getColour());
+    Color3f endColour = new Color3f(((NodeView)getEdge().getEnd().getView()).getColour());
+    setBottomRadius(getEdge().getStart().getRadius()*9.5f);
+    setTopRadius(getEdge().getEnd().getRadius()*9.5f);
+    
     setRadius(0.1f);
     for (int i = 0; i < tubePoints.length; i++) {
       if (i % 2 == 0) {
@@ -112,19 +120,23 @@ public class TaperedEdgeView extends EdgeView {
             tubePoints[i].x * topRadius,
             tubePoints[i].y,
             tubePoints[i].z * topRadius);
+        tubeColours[i] = endColour;
       } else {
         taperedTubePoints[i] =
           new Point3f(
             tubePoints[i].x * bottomRadius,
             tubePoints[i].y,
             tubePoints[i].z * bottomRadius);
+        tubeColours[i] = startColour;
       }
     }
     GeometryInfo gi = new GeometryInfo(GeometryInfo.TRIANGLE_STRIP_ARRAY);
     gi.setCoordinates(taperedTubePoints);
+    gi.setColors(tubeColours);
     gi.setStripCounts(tubeStripCounts);
     normalGenerator.generateNormals(gi);
     Shape3D tubeShape = new Shape3D(gi.getGeometryArray(), getAppearance());
+    makePickable(tubeShape);
     addTransformGroupChild(tubeShape);
   }
   /**
