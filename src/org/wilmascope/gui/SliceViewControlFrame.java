@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
+import java.util.Vector;
 
 import org.wilmascope.columnlayout.ColumnLayout;
 import org.wilmascope.control.GraphClient;
@@ -65,6 +66,7 @@ public class SliceViewControlFrame extends JFrame {
           ColumnLayout c = (ColumnLayout)((Cluster)n).getLayoutEngine();
           strataSeparation = c.getStrataSeparation();
           strataCount = c.getStrataCount();
+          extraSpacing = c.getExtraSpacing();
           break;
         }
       }
@@ -203,7 +205,12 @@ public class SliceViewControlFrame extends JFrame {
     upButton.setEnabled(selectedStratum==(strataCount-1)?false:true);
     drawingPanel.setStratum(selectedStratum);
     Transform3D trans = new Transform3D();
-    centroid.z=bottomLeft.z+strataSeparation*selectedStratum;
+    float extraSpace=0;
+    for(int i=0;i<selectedStratum&&i<extraSpacing.size();i++) {
+      extraSpace+=((Float)extraSpacing.get(i)).floatValue();
+    }
+    centroid.z = bottomLeft.z + strataSeparation * selectedStratum
+           + extraSpace;
     trans.setTranslation(new Vector3f(centroid));
     axisPlaneTG.setTransform(trans);
   }
@@ -245,6 +252,7 @@ public class SliceViewControlFrame extends JFrame {
   float strataSeparation;
   int strataCount;
   int selectedStratum = 0;
+  Vector extraSpacing;
   GraphCanvas canvas;
   GraphControl.ClusterFacade root;
   TransformGroup axisPlaneTG;

@@ -3,19 +3,49 @@
  * @author Christine
  */
 package org.wilmascope.light;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.util.Enumeration;
+
+import javax.media.j3d.AmbientLight;
+import javax.media.j3d.Bounds;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.DirectionalLight;
+import javax.media.j3d.Light;
+import javax.media.j3d.PointLight;
+import javax.media.j3d.SpotLight;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
-import javax.vecmath.*;
-import javax.media.j3d.*;
-import com.sun.j3d.utils.behaviors.picking.*;
-import com.sun.j3d.utils.picking.PickCanvas;
-import com.sun.j3d.utils.geometry.Sphere;
-import javax.swing.filechooser.*;
-import java.io.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.vecmath.Color3f;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
 
  /** This class is an gui to control light sources,
  *   including create, delete, turn on/off, and change the lights' 

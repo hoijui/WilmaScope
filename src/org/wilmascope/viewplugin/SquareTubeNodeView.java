@@ -21,7 +21,6 @@
 package org.wilmascope.viewplugin;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.util.Properties;
 
 import javax.media.j3d.Appearance;
@@ -38,10 +37,10 @@ import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
-import org.wilmascope.view.*;
 import org.wilmascope.view.Colours;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.Renderer2D;
+import org.wilmascope.view.SizeAdjustableNodeView;
 import org.wilmascope.view.View2D;
 
 import com.sun.j3d.utils.geometry.Cylinder;

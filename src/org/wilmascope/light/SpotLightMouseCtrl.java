@@ -3,13 +3,22 @@
  *
  */
 package org.wilmascope.light;
-import com.sun.j3d.utils.geometry.*;
-import com.sun.j3d.utils.behaviors.mouse.*;
-import javax.media.j3d.*;
-import javax.vecmath.*;
-import java.util.*;
-import java.awt.event.*;
-import java.awt.*;
+import java.awt.AWTEvent;
+import java.awt.event.MouseEvent;
+import java.util.Enumeration;
+
+import javax.media.j3d.SpotLight;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.media.j3d.WakeupCriterion;
+import javax.media.j3d.WakeupOnAWTEvent;
+import javax.media.j3d.WakeupOr;
+import javax.vecmath.Color3f;
+import javax.vecmath.Matrix4d;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
+
+import com.sun.j3d.utils.behaviors.mouse.MouseBehavior;
 /** This class enables using mouse to adjust the position, direction, spreadangle of the spotlight
  */
 public class SpotLightMouseCtrl extends MouseBehavior{

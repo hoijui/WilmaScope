@@ -19,12 +19,8 @@
  */
 package org.wilmascope.forcelayout;
 
-import org.wilmascope.graph.Cluster;
-import org.wilmascope.graph.LayoutEngine;
-import org.wilmascope.graph.NodeLayout;
-import org.wilmascope.graph.EdgeLayout;
-
-import java.util.*;
+import java.util.Collection;
+import java.util.Hashtable;
 
 /*
  * Title:        WilmaToo

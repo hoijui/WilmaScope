@@ -29,7 +29,7 @@ public class TestGraph {
   public void genRandomStratified(int colCount, int edgeCount) {
     GraphControl.ClusterFacade r = gc.getRootCluster();
     r = r.addCluster();
-    r.setLayoutEngine(new org.wilmascope.dotlayout.DotLayout(r.getCluster()));
+    r.setLayoutEngine(new org.wilmascope.dotlayout.DotLayout());
     r.hide();
     ColumnCluster.setColumnStyle(ColumnCluster.DOTCOLUMNS);
     ColumnCluster ca = new ColumnCluster("ABC", r, 1.0f, 1.0f, 0, "Tube");
@@ -164,7 +164,7 @@ public class TestGraph {
     if (n == null) {
       n = root.addNode(nodeView);
       //n.setColour(rand.nextFloat(),rand.nextFloat(),rand.nextFloat());
-      n.setColour(1f, 1f, 1f);
+      n.setColour(0.5f, 0.5f, 0.5f);
       n.setPosition(
         new Point3f(
           (rand.nextFloat() - 0.5f) * 5f,

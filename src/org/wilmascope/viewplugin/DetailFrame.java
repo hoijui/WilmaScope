@@ -20,14 +20,17 @@
 
 package org.wilmascope.viewplugin;
 
-import javax.swing.*;
-import java.awt.*;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.io.*;
-import javax.swing.text.*;
-import javax.swing.event.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import org.wilmascope.gui.HtmlPane;
 
 /**

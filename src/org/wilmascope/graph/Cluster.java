@@ -267,6 +267,7 @@ public class Cluster extends Node {
    */
   public void setLayoutEngine(LayoutEngine l) {
     layoutEngine = l;
+    l.init(this);
   }
 
   /**

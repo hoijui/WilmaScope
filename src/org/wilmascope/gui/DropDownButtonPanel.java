@@ -20,22 +20,24 @@
 
 package org.wilmascope.gui;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JRootPane;
 
-/**
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular Wilma graph drawing engine
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaOrg
- * @author Tim Dwyer
- * @version 1.0
- */
-import org.wilmascope.view.ViewManager;
-import java.util.Vector;
 import org.wilmascope.patterns.Prototype;
+import org.wilmascope.view.ViewManager;
 public class DropDownButtonPanel extends JPanel {
   JButton actionButton;
   JButton typeButton = new JButton();

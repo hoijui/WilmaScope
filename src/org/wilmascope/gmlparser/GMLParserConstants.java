@@ -4,19 +4,19 @@ package org.wilmascope.gmlparser;
 public interface GMLParserConstants {
 
   int EOF = 0;
-  int GRAPH = 14;
-  int VERSION = 15;
-  int DIRECTED = 16;
-  int NAME = 17;
-  int NODE = 18;
-  int EDGE = 19;
-  int ID = 20;
-  int LABEL = 21;
-  int SOURCE = 22;
-  int TARGET = 23;
-  int NUM = 24;
-  int DEC = 25;
-  int CTLSTRING = 26;
+  int GRAPH = 15;
+  int VERSION = 16;
+  int DIRECTED = 17;
+  int NAME = 18;
+  int NODE = 19;
+  int EDGE = 20;
+  int ID = 21;
+  int LABEL = 22;
+  int SOURCE = 23;
+  int TARGET = 24;
+  int NUM = 25;
+  int DEC = 26;
+  int CTLSTRING = 27;
 
   int DEFAULT = 0;
   int IN_IGNORABLE = 1;
@@ -33,9 +33,10 @@ public interface GMLParserConstants {
     "\"node_style\"",
     "\"edge_style\"",
     "\"style\"",
+    "\"edgeAnchor\"",
     "\"[\"",
     "\"]\"",
-    "<token of kind 13>",
+    "<token of kind 14>",
     "\"graph\"",
     "\"version\"",
     "\"directed\"",
@@ -57,8 +58,10 @@ public interface GMLParserConstants {
     "\"w\"",
     "\"h\"",
     "\"type\"",
+    "\"visible\"",
     "\"arrow\"",
     "\"capstyle\"",
+    "\"splinesteps\"",
   };
 
 }

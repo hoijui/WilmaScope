@@ -20,11 +20,10 @@
 
 package org.wilmascope.gui;
 
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
 
-import org.wilmascope.control.*;
+import org.wilmascope.control.GraphControl;
+import org.wilmascope.control.PickListener;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular Wilma graph drawing engine

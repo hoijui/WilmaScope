@@ -20,14 +20,9 @@
 
 package org.wilmascope.viewplugin;
 
-import org.wilmascope.view.*;
-
-import javax.media.j3d.*;
-import javax.vecmath.*;
-import com.sun.j3d.utils.geometry.Cylinder;
-import com.sun.j3d.utils.geometry.Cone;
-
-import com.sun.j3d.utils.picking.PickTool;
+import org.wilmascope.view.Colours;
+import org.wilmascope.view.EdgeView;
+import org.wilmascope.view.LODCylinder;
 
 /**
  * Graphical representation of the edge

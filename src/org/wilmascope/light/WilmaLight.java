@@ -2,9 +2,14 @@
  * @author Christine
  */
 package org.wilmascope.light;
-import javax.media.j3d.*;
-import javax.vecmath.*;
-import java.util.*;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.DirectionalLight;
+import javax.media.j3d.Light;
+import javax.media.j3d.PointLight;
+import javax.media.j3d.SpotLight;
+import javax.vecmath.Color3f;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
 
 /**
  * The class serves as a memory for the light and it's parent branch group.

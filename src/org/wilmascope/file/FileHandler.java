@@ -220,15 +220,15 @@ public class FileHandler {
     String type = l.getName();
     LayoutEngine e = null;
     if (type.equals("ForceLayout")) {
-      e=new ForceLayout(c.getCluster());
+      e=new ForceLayout();
     } else if (type.equals("DotLayout")) {
-      e=new org.wilmascope.dotlayout.DotLayout(c.getCluster());
+      e=new org.wilmascope.dotlayout.DotLayout();
       needsLayout=true;
     } else if (type.equals("ColumnLayout")) {
-      e=new org.wilmascope.columnlayout.ColumnLayout(c.getCluster());
+      e=new org.wilmascope.columnlayout.ColumnLayout();
     }
-    e.setProperties(l.getProperties());
     c.setLayoutEngine(e);
+    e.setProperties(l.getProperties());
   }
   public void save(String fileName) {
     if (!fileName.endsWith(".xwg")) {

@@ -7,13 +7,18 @@
  * Window>Preferences>Java>Code Generation.
  */
 package org.wilmascope.light;
-import java.awt.*;
-import java.util.*;
-import javax.media.j3d.*;
-import java.io.*;
-import javax.vecmath.*;
-import javax.swing.*;
-import java.util.*;
+import java.util.Vector;
+
+import javax.media.j3d.AmbientLight;
+import javax.media.j3d.Bounds;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.DirectionalLight;
+import javax.media.j3d.PointLight;
+import javax.media.j3d.SpotLight;
+import javax.media.j3d.Transform3D;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
+
 import org.wilmascope.global.Constants;
 /**
  * LightManager is the main class to control the light sources.

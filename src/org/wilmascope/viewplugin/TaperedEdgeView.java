@@ -20,15 +20,22 @@
 
 package org.wilmascope.viewplugin;
 
-import org.wilmascope.view.*;
-import org.wilmascope.graph.Edge;
-
-import javax.media.j3d.*;
-import javax.vecmath.*;
+import javax.media.j3d.GeometryStripArray;
+import javax.media.j3d.Material;
+import javax.media.j3d.Shape3D;
 import javax.swing.ImageIcon;
-import com.sun.j3d.utils.geometry.*;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
 
-import com.sun.j3d.utils.picking.PickTool;
+import org.wilmascope.graph.Edge;
+import org.wilmascope.view.Colours;
+import org.wilmascope.view.Constants;
+import org.wilmascope.view.EdgeView;
+
+import com.sun.j3d.utils.geometry.Cylinder;
+import com.sun.j3d.utils.geometry.GeometryInfo;
+import com.sun.j3d.utils.geometry.NormalGenerator;
 
 /**
  * Graphical representation of the edge

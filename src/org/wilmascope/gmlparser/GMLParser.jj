@@ -38,6 +38,7 @@ TOKEN_MGR_DECLS: { static int nestingLevel = 0; }
 |"node_style" : IN_IGNORABLE
 |"edge_style" : IN_IGNORABLE
 |"style" : IN_IGNORABLE
+|"edgeAnchor" : IN_IGNORABLE
 }
 
 <IN_IGNORABLE> SKIP:
@@ -105,8 +106,8 @@ void stmt(GraphClient g) : { NodeClient n; Token t1, t2, t3, t4, w, h; }
     } 
   "]"
 | <EDGE> "[" { t3 = null; t4 = null; }
-    ( <SOURCE> t1=<NUM> <TARGET> t2=<NUM> ( <LABEL> t3=<CTLSTRING> )?
-      "graphics" "[" ( "arrow" t4=<CTLSTRING> | "capstyle" <CTLSTRING> )* "]" )
+    ( <SOURCE> t1=<NUM> <TARGET> t2=<NUM> ( <LABEL> t3=<CTLSTRING> | "visible" <NUM> )*
+      "graphics" "[" ( "arrow" t4=<CTLSTRING> | "capstyle" <CTLSTRING> | "splinesteps" <NUM>)* "]" )
     { if(t3==null) {
         g.addEdge(t1.image, t2.image, t4.image);
       } else {
