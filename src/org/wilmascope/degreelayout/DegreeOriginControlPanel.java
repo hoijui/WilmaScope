@@ -26,13 +26,13 @@ import org.wilmascope.control.GraphControl;
 
 public class DegreeOriginControlPanel extends javax.swing.JPanel {
   //private String forceName;
-  private GraphControl.ClusterFacade cluster;
+  private GraphControl.Cluster cluster;
   private DegreeLayout degreeLayout;
   JCheckBox enabledCheckBox = new JCheckBox();
   JSlider forceSlider = new JSlider();
   TitledBorder titledBorder1;
 
-  public DegreeOriginControlPanel(final GraphControl.ClusterFacade cluster) {
+  public DegreeOriginControlPanel(final GraphControl.Cluster cluster) {
     this.cluster = cluster;
     //this.forceName = forceName;
     this.degreeLayout = (DegreeLayout)cluster.getLayoutEngine();

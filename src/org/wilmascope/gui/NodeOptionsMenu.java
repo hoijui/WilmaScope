@@ -40,7 +40,7 @@ import javax.vecmath.Vector3f;
  */
 
 public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
-  public NodeOptionsMenu(Component parent, GraphControl graphControl, GraphControl.ClusterFacade rootCluster, ControlPanel controlPanel) {
+  public NodeOptionsMenu(Component parent, GraphControl graphControl, GraphControl.Cluster rootCluster, ControlPanel controlPanel) {
     this();
     this.parent = parent;
     this.graphControl = graphControl;
@@ -49,7 +49,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
   }
   ActionListener customListener = null;
   public void callback(java.awt.event.MouseEvent e, GraphControl.GraphElementFacade node) {
-    this.node = (GraphControl.NodeFacade)node;
+    this.node = (GraphControl.Node)node;
     Object userData;
     detailsMenuItem.setEnabled(false);
     detailsMenuItem.setText("Show Details...");
@@ -157,7 +157,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     GraphControl.getPickListener().setSinglePickClient(new PickClient() {
       public void callback(GraphControl.GraphElementFacade edgeNode) {
         if(edgeNode!=node) {
-          rootCluster.addEdge(node,(GraphControl.NodeFacade)edgeNode);
+          rootCluster.addEdge(node,(GraphControl.Node)edgeNode);
           rootCluster.unfreeze();
         }
         node.defaultColour();
@@ -167,8 +167,8 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
   }
 
   private Component parent;
-  private GraphControl.NodeFacade node;
-  private GraphControl.ClusterFacade rootCluster;
+  private GraphControl.Node node;
+  private GraphControl.Cluster rootCluster;
   private ControlPanel controlPanel;
   JMenuItem addNodeMenuItem = new JMenuItem();
   JMenuItem setLabelMenuItem = new JMenuItem();
@@ -177,7 +177,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
   JCheckBoxMenuItem fixedCheckBoxMenuItem = new JCheckBoxMenuItem();
 
   void addNodeMenuItem_actionPerformed(ActionEvent e) {
-    GraphControl.NodeFacade newNode = rootCluster.addNode();
+    GraphControl.Node newNode = rootCluster.addNode();
     newNode.setPosition(node.getPosition());
     rootCluster.addEdge(node,newNode);
     rootCluster.unfreeze();
@@ -211,7 +211,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
   }
 
   void expandMenuItem_actionPerformed(ActionEvent e) {
-    ((GraphControl.ClusterFacade)node).expand();
+    ((GraphControl.Cluster)node).expand();
   }
 
   void hideMenuItem_actionPerformed(ActionEvent e) {

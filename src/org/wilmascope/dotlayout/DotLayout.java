@@ -329,7 +329,7 @@ public class DotLayout implements LayoutEngine {
     return new DotEdgeLayout();
   }
   public JPanel getControls() {
-    return new ControlPanel((GraphControl.ClusterFacade) root.getUserFacade());
+    return new ControlPanel((GraphControl.Cluster) root.getUserFacade());
   }
   Cluster root;
   /**

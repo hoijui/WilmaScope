@@ -26,7 +26,7 @@ public abstract class ClusterView extends NodeView {
    */
   public void draw() {
     Node n = getNode();
-    double radius = (double)n.getRadius();
+    double radius = (double)getRadius();
     setResizeTranslateTransform(
       new Vector3d(radius,radius,radius),
       new Vector3f(n.getPosition()));
@@ -43,7 +43,7 @@ public abstract class ClusterView extends NodeView {
    */
   public void setCollapsedView() {
     getAppearance().setTransparencyAttributes(null);
-    getCluster().setRadius(getCollapsedRadius(density));
+    setRadius(getCollapsedRadius(density));
   }
   protected float getCollapsedRadius(float density) {
     return (float)Math.pow(3f * getCluster().getMass()/(4f * density* Math.PI),1.0d/3.0d);

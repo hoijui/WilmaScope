@@ -32,4 +32,6 @@ package org.wilmascope.graph;
  */
 
 public interface NodeView extends Viewable, NodeAbility {
+  public void setRadius(float radius);
+  public float getRadius();
 }

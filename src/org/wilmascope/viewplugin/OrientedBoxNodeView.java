@@ -47,7 +47,7 @@ public class OrientedBoxNodeView extends NodeView {
     setupHighlightAppearance(Colours.yellowMaterial);
   }
   protected void init() {
-    float radius = getNode().getRadius();
+    float radius = getRadius();
     // make the main box that will carry the texture mapped label
     box = new OrientedLabelCube(getAppearance(), 1.0f, 1.0f);
     makePickable(box);

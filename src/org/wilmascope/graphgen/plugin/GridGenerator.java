@@ -73,7 +73,7 @@ public class GridGenerator extends GraphGenerator {
     controlPanel.add(threeDimButton);
   }
 
-  GraphControl.ClusterFacade root;
+  GraphControl.Cluster root;
 
   public String getName() {
     return "Grid";
@@ -113,8 +113,8 @@ public class GridGenerator extends GraphGenerator {
         getEdgeView());
   }
 
-  private GraphControl.NodeFacade lookupNode(String id, boolean threeD) {
-    GraphControl.NodeFacade n = (GraphControl.NodeFacade) lookup.get(id);
+  private GraphControl.Node lookupNode(String id, boolean threeD) {
+    GraphControl.Node n = (GraphControl.Node) lookup.get(id);
     if (n == null) {
       n = root.addNode(getNodeView());
       //n.setColour(rand.nextFloat(),rand.nextFloat(),rand.nextFloat());

@@ -69,7 +69,7 @@ class JPEGFileFilter extends FileFilter {
 public class FileHandler {
   GraphControl graphControl;
 
-  Hashtable<String,GraphControl.NodeFacade> nodeLookup;
+  Hashtable<String,GraphControl.Node> nodeLookup;
 
   Hashtable idLookup;
 
@@ -114,7 +114,7 @@ public class FileHandler {
     return new JPEGFileFilter();
   }
 
-  private void loadEdgeProperties(XMLGraph.Edge xe, GraphControl.EdgeFacade ge) {
+  private void loadEdgeProperties(XMLGraph.Edge xe, GraphControl.Edge ge) {
     XMLGraph.ViewType viewType = xe.getViewType();
     if (viewType != null) {
       try {
@@ -135,12 +135,12 @@ public class FileHandler {
     }
   }
 
-  private void loadNodeProperties(XMLGraph.Node xn, GraphControl.NodeFacade gn) {
+  private void loadNodeProperties(XMLGraph.Node xn, GraphControl.Node gn) {
     XMLGraph.ViewType viewType = xn.getViewType();
     if (viewType != null) {
       try {
         NodeView v;
-        if (gn instanceof GraphControl.ClusterFacade) {
+        if (gn instanceof GraphControl.Cluster) {
           v = ViewManager.getInstance().createClusterView(viewType.getName());
           gn.setView(ViewManager.getInstance().createClusterView(
               viewType.getName()));
@@ -172,7 +172,7 @@ public class FileHandler {
     }
   }
 
-  private void saveEdgeProperties(GraphControl.EdgeFacade ge, XMLGraph.Edge xe) {
+  private void saveEdgeProperties(GraphControl.Edge ge, XMLGraph.Edge xe) {
     EdgeView v = (EdgeView) ge.getView();
     if (ge.getView() != null) {
       XMLGraph.ViewType xv = xe.setViewType(v.getTypeName());
@@ -183,7 +183,7 @@ public class FileHandler {
     xe.setProperties(p);
   }
 
-  private void saveNodeProperties(GraphControl.NodeFacade gn, XMLGraph.Node xn) {
+  private void saveNodeProperties(GraphControl.Node gn, XMLGraph.Node xn) {
     NodeView v = (NodeView) gn.getView();
     if (gn.getView() != null) {
       XMLGraph.ViewType xv = xn.setViewType(v.getTypeName());
@@ -207,7 +207,7 @@ public class FileHandler {
   }
 
   private void loadCluster(XMLGraph.Cluster xmlRoot,
-      GraphControl.ClusterFacade graphRoot) {
+      GraphControl.Cluster graphRoot) {
     Vector<XMLGraph.Node> nodes = new Vector<XMLGraph.Node>();
     Vector<XMLGraph.Edge> edges = new Vector<XMLGraph.Edge>();
     Vector forces = new Vector();
@@ -217,16 +217,16 @@ public class FileHandler {
     loadLayoutEngine(layoutEngine, graphRoot);
     loadNodeProperties(xmlRoot, graphRoot);
     for (XMLGraph.Node xmlNode:nodes) {
-      GraphControl.NodeFacade n = graphRoot.addNode();
+      GraphControl.Node n = graphRoot.addNode();
       loadNodeProperties(xmlNode, n);
       nodeLookup.put(xmlNode.getID(), n);
     }
     for (XMLGraph.Cluster xc:clusters) {
-      GraphControl.ClusterFacade gc = graphRoot.addCluster();
+      GraphControl.Cluster gc = graphRoot.addCluster();
       loadCluster(xc, gc);
     }
     for (XMLGraph.Edge xmlEdge:edges) {
-      GraphControl.EdgeFacade e = graphRoot.addEdge(
+      GraphControl.Edge e = graphRoot.addEdge(
           nodeLookup.get(xmlEdge.getStartID()),
           nodeLookup.get(xmlEdge.getEndID()));
       loadEdgeProperties(xmlEdge, e);
@@ -234,7 +234,7 @@ public class FileHandler {
   }
 
   private void loadLayoutEngine(XMLGraph.LayoutEngineType l,
-      GraphControl.ClusterFacade c) {
+      GraphControl.Cluster c) {
     if(l==null) return;
     String type = l.getName();
     LayoutEngine e = null;
@@ -270,15 +270,15 @@ public class FileHandler {
     xmlGraph.save();
   }
 
-  private void saveCluster(GraphControl.ClusterFacade graphCluster,
+  private void saveCluster(GraphControl.Cluster graphCluster,
       XMLGraph.Cluster xmlCluster) {
     saveLayoutEngine(graphCluster, xmlCluster);
-    GraphControl.NodeFacade[] nodes = graphCluster.getNodes();
+    GraphControl.Node[] nodes = graphCluster.getNodes();
     Hashtable clusters = new Hashtable();
     for (int i = 0; i < nodes.length; i++) {
-      GraphControl.NodeFacade graphNode = nodes[i];
+      GraphControl.Node graphNode = nodes[i];
       XMLGraph.Node xmlNode;
-      if (graphNode instanceof GraphControl.ClusterFacade) {
+      if (graphNode instanceof GraphControl.Cluster) {
         xmlNode = xmlCluster.addCluster();
         clusters.put(graphNode, xmlNode);
       } else {
@@ -288,12 +288,12 @@ public class FileHandler {
       saveNodeProperties(graphNode, xmlNode);
     }
     for (Enumeration e = clusters.keys(); e.hasMoreElements();) {
-      GraphControl.ClusterFacade graphChildCluster = (GraphControl.ClusterFacade) e
+      GraphControl.Cluster graphChildCluster = (GraphControl.Cluster) e
           .nextElement();
       saveCluster(graphChildCluster, (XMLGraph.Cluster) clusters
           .get(graphChildCluster));
     }
-    GraphControl.EdgeFacade[] edges = graphCluster.getEdges();
+    GraphControl.Edge[] edges = graphCluster.getEdges();
     for (int i = 0; i < edges.length; i++) {
       XMLGraph.Edge xmlEdge = xmlCluster.addEdge((String) idLookup.get(edges[i]
           .getStartNode()), (String) idLookup.get(edges[i].getEndNode()));
@@ -301,7 +301,7 @@ public class FileHandler {
     }
   }
 
-  private void saveLayoutEngine(GraphControl.ClusterFacade graphRoot,
+  private void saveLayoutEngine(GraphControl.Cluster graphRoot,
       XMLGraph.Cluster xmlCluster) {
     XMLGraph.LayoutEngineType l = null;
     Properties p = new Properties();

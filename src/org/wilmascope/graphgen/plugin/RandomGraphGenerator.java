@@ -64,7 +64,7 @@ public class RandomGraphGenerator extends GraphGenerator {
    * @see org.wilmascope.graphgen.GraphGenerator#generate(org.wilmascope.control.GraphControl)
    */
   public void generate(GraphControl gc) {
-    GraphControl.ClusterFacade root = gc.getRootCluster();
+    GraphControl.Cluster root = gc.getRootCluster();
     /* The default layout engine will be used unless
      * an alternative is set up as follows: */ 
     
@@ -74,15 +74,15 @@ public class RandomGraphGenerator extends GraphGenerator {
     // clean up before we start
     root.deleteAll();
 
-    GraphControl.NodeFacade[] nodes = new GraphControl.NodeFacade[nodeCount];
+    GraphControl.Node[] nodes = new GraphControl.Node[nodeCount];
 
     for (int i = 0; i < nodeCount; i++) {
       nodes[i] = addRandomNode(root, threeDimensional);
     }
     for (int i = 1; i < edgeCount; i++) {
-      GraphControl.NodeFacade a = nodes[GraphGenerator.getRandom().nextInt(
+      GraphControl.Node a = nodes[GraphGenerator.getRandom().nextInt(
           nodeCount)];
-      GraphControl.NodeFacade b = nodes[GraphGenerator.getRandom().nextInt(
+      GraphControl.Node b = nodes[GraphGenerator.getRandom().nextInt(
           nodeCount)];
       if (a != b) {
         root.addEdge(a, b, getEdgeView());
@@ -91,8 +91,8 @@ public class RandomGraphGenerator extends GraphGenerator {
       }
     }
     // for each node a randomly pick another b and create an edge from a to b
-    for (GraphControl.NodeFacade a : nodes) {
-      GraphControl.NodeFacade b;
+    for (GraphControl.Node a : nodes) {
+      GraphControl.Node b;
       do {
         b = nodes[GraphGenerator.getRandom().nextInt(nodeCount)];
       } while (a == b);

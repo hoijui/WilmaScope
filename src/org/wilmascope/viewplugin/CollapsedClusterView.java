@@ -60,6 +60,6 @@ public class CollapsedClusterView extends ClusterView {
 
     org.wilmascope.graph.Cluster c = (org.wilmascope.graph.Cluster)getNode();
     float r = (float)Math.pow(3.0f*c.getMass()/(4.0f*Math.PI),1.0d/3.0d)/4.0f;
-    c.setRadius(r);
+    setRadius(r);
   }
 }

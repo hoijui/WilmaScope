@@ -34,7 +34,7 @@ import org.wilmascope.view.PickingClient;
  * @version 1.0
  */
 public class RootClusterMenu extends JPopupMenu implements PickingClient {
-  public RootClusterMenu(java.awt.Component parent, GraphControl.ClusterFacade rootCluster, ControlPanel controlPanel) {
+  public RootClusterMenu(java.awt.Component parent, GraphControl.Cluster rootCluster, ControlPanel controlPanel) {
     this();
     this.rootCluster = rootCluster;
     this.controlPanel = controlPanel;
@@ -45,7 +45,7 @@ public class RootClusterMenu extends JPopupMenu implements PickingClient {
       show(parent,e.getX(),e.getY());
     }
   }
-  GraphControl.ClusterFacade rootCluster;
+  GraphControl.Cluster rootCluster;
   JMenuItem addNodeMenuItem = new JMenuItem();
   JMenuItem addEdgeMenuItem = new JMenuItem();
   JMenuItem addClusterMenuItem = new JMenuItem();
@@ -98,7 +98,7 @@ public class RootClusterMenu extends JPopupMenu implements PickingClient {
   }
 
   void addNodeMenuItem_actionPerformed(ActionEvent e) {
-    GraphControl.NodeFacade n = rootCluster.addNode();
+    GraphControl.Node n = rootCluster.addNode();
     rootCluster.unfreeze();
   }
 

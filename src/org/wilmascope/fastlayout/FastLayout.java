@@ -11,8 +11,6 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
 import org.wilmascope.control.GraphControl;
-import org.wilmascope.control.GraphControl.EdgeFacade;
-import org.wilmascope.control.GraphControl.NodeFacade;
 import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.Edge;
 import org.wilmascope.graph.EdgeLayout;
@@ -219,10 +217,10 @@ public class FastLayout implements LayoutEngine {
       // scale the current colour by newPotential
       if (colourFlag) {
         if (newPotential < RED_LIMIT)
-          ((NodeFacade) (current.getUserFacade())).setColour(
+          ((GraphControl.Node) (current.getUserFacade())).setColour(
             (Color) colours.get((int) ((newPotential / RED_LIMIT) * 100d)));
         else
-           ((NodeFacade) (current.getUserFacade())).setColour(Color.red);
+           ((GraphControl.Node) (current.getUserFacade())).setColour(Color.red);
       }
 
       // very wasteful in terms of efficiency - used only for visual appeal
@@ -231,17 +229,17 @@ public class FastLayout implements LayoutEngine {
         for (edges.resetIterator(); edges.hasNext();) {
           Edge temp = edges.nextEdge();
           Color colour1 =
-            ((NodeFacade) temp.getStart().getUserFacade()).getColour();
+            ((GraphControl.Node) temp.getStart().getUserFacade()).getColour();
           Color colour2 =
-            ((NodeFacade) temp.getEnd().getUserFacade()).getColour();
+            ((GraphControl.Node) temp.getEnd().getUserFacade()).getColour();
           Color3f edgeColour = new Color3f();
           edgeColour.interpolate(
             new Color3f(colour1),
             new Color3f(colour2),
             0.5f);
-          ((EdgeFacade) temp.getUserFacade()).setColour(edgeColour.get());
+          ((GraphControl.Edge) temp.getUserFacade()).setColour(edgeColour.get());
         }
-        current.setRadius((float) (newPotential / POTENTIAL_SCALE));
+        ((GraphControl.Node)current.getUserFacade()).setRadius((float) (newPotential / POTENTIAL_SCALE));
       }
 
     }
@@ -503,7 +501,7 @@ public class FastLayout implements LayoutEngine {
     return null;
   }
   public JPanel getControls() {
-    return new ParamsPanel((GraphControl.ClusterFacade) root.getUserFacade());
+    return new ParamsPanel((GraphControl.Cluster) root.getUserFacade());
   }
 
   /* (non-Javadoc)

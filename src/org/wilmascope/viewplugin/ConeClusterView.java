@@ -28,7 +28,7 @@ public class ConeClusterView extends ClusterView {
   }
   public void draw() {
     org.wilmascope.graph.Cluster c = (org.wilmascope.graph.Cluster)getNode();
-    double radius = (double)c.getRadius();
+    double radius = (double)getRadius();
     setFullTransform(
       new Vector3d(radius,radius,radius),
       new Vector3f(c.getPosition()),

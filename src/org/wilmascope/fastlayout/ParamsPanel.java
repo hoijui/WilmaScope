@@ -18,7 +18,7 @@ public class ParamsPanel extends JPanel implements ActionListener {
 
   FastLayout layout;
 
-  GraphControl.ClusterFacade root;
+  GraphControl.Cluster root;
 
   JSlider attractSlider = new JSlider(0, 20, Defaults.ATTRACTION);
 
@@ -82,7 +82,7 @@ public class ParamsPanel extends JPanel implements ActionListener {
 
   Box boxLayout2;
 
-  public ParamsPanel(GraphControl.ClusterFacade root) {
+  public ParamsPanel(GraphControl.Cluster root) {
     this.layout = (FastLayout) root.getLayoutEngine();
     this.root = root;
     bigBox = Box.createVerticalBox();

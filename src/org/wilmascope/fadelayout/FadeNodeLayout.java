@@ -54,7 +54,7 @@ public class FadeNodeLayout extends NodeLayout {
 		// Move the node
 		node.reposition(force);
 		
-		if (VariableForces.layering == VariableForces.year)
+		if (VariableForces.layering == VariableForces.levelConstraint)
 		{
 			if (levelConstraint >= 0) {
 				Point3f p = node.getPosition();
@@ -95,7 +95,7 @@ public class FadeNodeLayout extends NodeLayout {
 	    	}
 		}
 		
-		if (VariableForces.layering == VariableForces.sphereYear /*&& (node.getView() instanceof LineNodeView)*/)
+		if (VariableForces.layering == VariableForces.spherelevelConstraint /*&& (node.getView() instanceof LineNodeView)*/)
 		{
 			float radius = 0f;
 			
@@ -149,58 +149,58 @@ public class FadeNodeLayout extends NodeLayout {
 	    	node.setPosition(new Point3f(new_pos));	
 		}
 		
-		if (VariableForces.colouring == VariableForces.yearColouring && (node.getView() instanceof LineNodeView))
+		if (VariableForces.colouring == VariableForces.levelConstraintColouring && (node.getView() instanceof LineNodeView))
 		{
-			Color3f yearColour = new Color3f();
+			Color3f levelConstraintColour = new Color3f();
 			if (levelConstraint == 0)
 			{
-				yearColour.set(0.0f, 0.8f, 0.8f);
+				levelConstraintColour.set(0.0f, 0.8f, 0.8f);
 			}
 			if (levelConstraint == 1)
 			{
-				yearColour.set(1.0f, 1.0f, 0.2f);
+				levelConstraintColour.set(1.0f, 1.0f, 0.2f);
 			}
 			if (levelConstraint == 2)
 			{
-				yearColour.set(1.0f, 0.8f, 0.8f);
+				levelConstraintColour.set(1.0f, 0.8f, 0.8f);
 			}
 			if (levelConstraint == 3)
 			{
-				yearColour.set(0.8f, 0.0f, 0.8f);
+				levelConstraintColour.set(0.8f, 0.0f, 0.8f);
 			}
 			if (levelConstraint == 4)
 			{
-				yearColour.set(0.0f, 0.2f, 0.2f);
+				levelConstraintColour.set(0.0f, 0.2f, 0.2f);
 			}
 			if (levelConstraint == 5)
 			{
-				yearColour.set(0.0f, 0.0f, 0.8f);
+				levelConstraintColour.set(0.0f, 0.0f, 0.8f);
 			}
 			if (levelConstraint == 6)
 			{
-				yearColour.set(1.0f, 0.4f, 1.0f);
+				levelConstraintColour.set(1.0f, 0.4f, 1.0f);
 			}
 			if (levelConstraint == 7)
 			{
-				yearColour.set(0.8f, 0.0f, 0.2f);
+				levelConstraintColour.set(0.8f, 0.0f, 0.2f);
 			}
 			if (levelConstraint == 8)
 			{
-				yearColour.set(0.8f, 0.6f, 0.0f);
+				levelConstraintColour.set(0.8f, 0.6f, 0.0f);
 			}
 			if (levelConstraint == 9)
 			{
-				yearColour.set(1.0f, 0.4f, 0.0f);
+				levelConstraintColour.set(1.0f, 0.4f, 0.0f);
 			}
 			if (levelConstraint == 10)
 			{
-				yearColour.set(0.2f, 1.0f, 0.0f);
+				levelConstraintColour.set(0.2f, 1.0f, 0.0f);
 			}
 			if (levelConstraint == 11)
 			{
-				yearColour.set(0.7f, 0.1f, 0.6f);
+				levelConstraintColour.set(0.7f, 0.1f, 0.6f);
 			}
-			setNodeColour(yearColour.x,yearColour.y, yearColour.z);
+			setNodeColour(levelConstraintColour.x,levelConstraintColour.y, levelConstraintColour.z);
 		}
 		
 		if (VariableForces.colouring == VariableForces.degreeColouring && (node.getView() instanceof LineNodeView))
@@ -249,9 +249,9 @@ public class FadeNodeLayout extends NodeLayout {
 	public void setLevelConstraint(int level) {
 		levelConstraint = level;
 	}
-	/*public void setYearColour(Color3f colour)
+	/*public void setlevelConstraintColour(Color3f colour)
 	{
-		yearColour = colour;
+		levelConstraintColour = colour;
 	}*/
 	
 	int levelConstraint = -1;

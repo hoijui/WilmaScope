@@ -101,7 +101,7 @@ public class MultiScaleLayout implements LayoutEngine {
 		return qGraph.createMultiScaleEdgeLayout(e);
 	}
 	public JPanel getControls() {
-		return new MSParamsPanel((GraphControl.ClusterFacade) root.getUserFacade());
+		return new MSParamsPanel((GraphControl.Cluster) root.getUserFacade());
 	}
 	public static float scale = 1f / 10f;
 	/*

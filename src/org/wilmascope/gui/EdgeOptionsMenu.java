@@ -39,13 +39,13 @@ import org.wilmascope.view.*;
  */
 
 public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
-  public EdgeOptionsMenu(Component parent, GraphControl.ClusterFacade rootCluster) {
+  public EdgeOptionsMenu(Component parent, GraphControl.Cluster rootCluster) {
     this();
     this.parent = parent;
     this.rootCluster = rootCluster;
   }
   public void callback(java.awt.event.MouseEvent e, GraphControl.GraphElementFacade edge) {
-    this.edge = (GraphControl.EdgeFacade)edge;
+    this.edge = (GraphControl.Edge)edge;
     Object userData;
     detailsMenuItem.setEnabled(false);
     detailsMenuItem.setText("Show Details...");
@@ -183,7 +183,7 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
       edge.setColour(colour);
     }
   }
-  public static GraphControl.EdgeFacade getSelectedEdge() {
+  public static GraphControl.Edge getSelectedEdge() {
     return edge;
   }
   JMenuItem deleteMenuItem = new JMenuItem();
@@ -191,8 +191,8 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
   JMenuItem detailsMenuItem = new JMenuItem();
   ActionListener customListener = null;
   private Component parent;
-  static private GraphControl.EdgeFacade edge;
-  private GraphControl.ClusterFacade rootCluster;
+  static private GraphControl.Edge edge;
+  private GraphControl.Cluster rootCluster;
   JMenuItem hideMenuItem = new JMenuItem();
   JMenu edgeTypeMenu = new JMenu();
   JMenuItem reverseMenuItem = new JMenuItem();

@@ -525,7 +525,7 @@ public class DegreeLayout implements LayoutEngine {
 	 * @see org.wilmascope.graph.LayoutEngine#getControls()
 	 */
 	public JPanel getControls() {
-		return new DegreeControlsPanel((GraphControl.ClusterFacade) root.getUserFacade());
+		return new DegreeControlsPanel((GraphControl.Cluster) root.getUserFacade());
 	}
 	/* (non-Javadoc)
 	 * @see org.wilmascope.graph.LayoutEngine#init(org.wilmascope.graph.Cluster)

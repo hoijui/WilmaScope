@@ -15,7 +15,7 @@ public class GraphTransformer {
   public GraphTransformer() {
     random = org.wilmascope.global.RandomGenerator.getRandom();
   }
-  public Vector[] kMeansClustering(GraphControl.ClusterFacade cf, int k, int n) {
+  public Vector[] kMeansClustering(GraphControl.Cluster cf, int k, int n) {
     if(k < n) {
       throw new IllegalArgumentException("k must be >= n");
     }
@@ -38,7 +38,7 @@ public class GraphTransformer {
     return largestClusters;
   }
 
-  public Vector[] kMeansClustering(GraphControl.ClusterFacade cf, int k) {
+  public Vector[] kMeansClustering(GraphControl.Cluster cf, int k) {
     Vector nodes = new Vector(Arrays.asList(cf.getNodes()));
     if(k > nodes.size()) {
       throw new IllegalArgumentException("k > number nodes in cluster facade");
@@ -46,12 +46,12 @@ public class GraphTransformer {
     Vector[] clusters = new Vector[k];
     Point3f[] clusterBarycenters = new Point3f[k];
 
-    GraphControl.NodeFacade n;
+    GraphControl.Node n;
     Point3f p;
     // randomly select starting nodes for clusters
     for(int i = 0; i < k; i++) {
       int r = random.nextInt(nodes.size());
-      n = (GraphControl.NodeFacade)nodes.remove(r);
+      n = (GraphControl.Node)nodes.remove(r);
       clusters[i] = new Vector();
       clusters[i].add(n);
       clusterBarycenters[i] = n.getPosition();
@@ -60,7 +60,7 @@ public class GraphTransformer {
     // add nodes to their closest clusters
     float newClusterDistance = Float.MAX_VALUE, d;
     for(int j=0; j < nodes.size();j++) {
-      n = (GraphControl.NodeFacade)nodes.get(j);
+      n = (GraphControl.Node)nodes.get(j);
       p = n.getPosition();
       int newCluster = 0;
       for(int i = 0; i < k; i++) {
@@ -89,13 +89,13 @@ public class GraphTransformer {
     return vec.lengthSquared();
   }
   private int improveKClusters(int k, Vector[] clusters, Point3f[] clusterBarycenters) {
-    GraphControl.NodeFacade n;
+    GraphControl.Node n;
     Point3f p;
     int moved = 0, newCluster;
     float oldDistance, newDistance;
     for(int i = 0; i < k; i++) {
       for(int h = 0; h < clusters[i].size(); h++) {
-        n = (GraphControl.NodeFacade)clusters[i].get(h);
+        n = (GraphControl.Node)clusters[i].get(h);
         p = n.getPosition();
         oldDistance = distanceSquared(p, clusterBarycenters[i]);
         newCluster = -1;
@@ -123,7 +123,7 @@ public class GraphTransformer {
   private Point3f getBarycenter(Vector nodes) {
     Point3f barycenter = new Point3f();
     for(Iterator i = nodes.iterator(); i.hasNext();) {
-      barycenter.add(((GraphControl.NodeFacade)i.next()).getPosition());
+      barycenter.add(((GraphControl.Node)i.next()).getPosition());
     }
     barycenter.scale(1f/(float)nodes.size());
     return barycenter;

@@ -28,7 +28,7 @@ import javax.swing.*;
 
 public class FadeEdgeControlPanel extends javax.swing.JPanel {
   //private String forceName;
-  private GraphControl.ClusterFacade cluster;
+  private GraphControl.Cluster cluster;
   private FadeLayout fadeLayout;
   JCheckBox enabledCheckBox = new JCheckBox();
   JSlider forceSlider = new JSlider();
@@ -37,7 +37,7 @@ public class FadeEdgeControlPanel extends javax.swing.JPanel {
   JCheckBox degreeCheckBox = new JCheckBox("In-Degree Only");
   JCheckBox weightCheckBox = new JCheckBox("Weights");
 
-  public FadeEdgeControlPanel(final GraphControl.ClusterFacade cluster) {
+  public FadeEdgeControlPanel(final GraphControl.Cluster cluster) {
     this.cluster = cluster;
     //this.forceName = forceName;
     this.fadeLayout = (FadeLayout)cluster.getLayoutEngine();

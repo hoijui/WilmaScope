@@ -42,7 +42,7 @@ public class ForceControlsPanel extends JPanel {
 
   ForceLayout forceLayout;
 
-  GraphControl.ClusterFacade cluster;
+  GraphControl.Cluster cluster;
 
   // Variables declaration
   JSlider velocityAttenuationSlider = new JSlider();
@@ -65,7 +65,7 @@ public class ForceControlsPanel extends JPanel {
 
   JSlider balancedThresholdSlider = new JSlider();
 
-  public ForceControlsPanel(GraphControl.ClusterFacade cluster) {
+  public ForceControlsPanel(GraphControl.Cluster cluster) {
     this.cluster = cluster;
     this.forceLayout = (ForceLayout) cluster.getLayoutEngine();
     boxLayout = Box.createVerticalBox();

@@ -27,7 +27,7 @@ import org.wilmascope.control.PickListener;
 import org.wilmascope.forcelayout.ForceLayout;
 public class ClusterPanel extends MultiPickPanel {
 
-  public ClusterPanel(ControlPanel controlPanel, GraphControl.ClusterFacade cluster) {
+  public ClusterPanel(ControlPanel controlPanel, GraphControl.Cluster cluster) {
     super(controlPanel, cluster);
   }
 
@@ -38,10 +38,10 @@ public class ClusterPanel extends MultiPickPanel {
     }
     Vector nodes = new Vector();
     while(pl.getPickedListSize()>0) {
-      GraphControl.NodeFacade element = (GraphControl.NodeFacade)pl.pop();
+      GraphControl.Node element = (GraphControl.Node)pl.pop();
       nodes.add(element);
     }
-    GraphControl.ClusterFacade newCluster = cluster.addCluster(nodes);
+    GraphControl.Cluster newCluster = cluster.addCluster(nodes);
     newCluster.setLayoutEngine(ForceLayout.createDefaultClusterForceLayout(newCluster.getCluster()));
     cluster.unfreeze();
     cleanup();

@@ -88,7 +88,7 @@ public class ClusteredGraphGenerator extends GraphGenerator {
    * @see org.wilmascope.graphgen.GraphGenerator#generate(org.wilmascope.control.GraphControl)
    */
   public void generate(GraphControl gc) {
-    GraphControl.ClusterFacade root = gc.getRootCluster();
+    GraphControl.Cluster root = gc.getRootCluster();
     //LayoutEngine layout = new FastLayout(cluster, threeD);
     //root.setLayoutEngine(layout);
 
@@ -98,16 +98,16 @@ public class ClusteredGraphGenerator extends GraphGenerator {
 
     for (int j = 0; j < number; j++) { // create each cluster
       Vector nodevec = new Vector();
-      GraphControl.NodeFacade temp;
+      GraphControl.Node temp;
       for (int i = 0; i < size; i++) {
         temp = addRandomNode(root,threeDimensional);
         nodevec.add(temp);
         allnodes.add(temp);
       }
       for (int i = 0; i < 2 * size; i++) {
-        GraphControl.NodeFacade a = (GraphControl.NodeFacade) nodevec
+        GraphControl.Node a = (GraphControl.Node) nodevec
             .get(GraphGenerator.getRandom().nextInt(nodevec.size()));
-        GraphControl.NodeFacade b = (GraphControl.NodeFacade) nodevec
+        GraphControl.Node b = (GraphControl.Node) nodevec
             .get(GraphGenerator.getRandom().nextInt(nodevec.size()));
         if (a != b) {
           root.addEdge(a, b, getEdgeView());
@@ -117,7 +117,7 @@ public class ClusteredGraphGenerator extends GraphGenerator {
       }
       for (int i = 0; i < nodevec.size(); i++) { // remove all disconnected
                                                  // nodes
-        temp = (GraphControl.NodeFacade) nodevec.get(i);
+        temp = (GraphControl.Node) nodevec.get(i);
         if (temp.getDegree() == 0) {
           root.removeNode(temp);
           allnodes.remove(temp);
@@ -125,9 +125,9 @@ public class ClusteredGraphGenerator extends GraphGenerator {
       }
     }
     for (int i = 0; i < number * (size / 20d); i++) {
-      GraphControl.NodeFacade a = (GraphControl.NodeFacade) allnodes
+      GraphControl.Node a = (GraphControl.Node) allnodes
           .get(GraphGenerator.getRandom().nextInt(allnodes.size()));
-      GraphControl.NodeFacade b = (GraphControl.NodeFacade) allnodes
+      GraphControl.Node b = (GraphControl.Node) allnodes
           .get(GraphGenerator.getRandom().nextInt(allnodes.size()));
       root.addEdge(a, b, getEdgeView());
     }

@@ -32,7 +32,7 @@ import org.wilmascope.control.PickListener;
 
 public class AddToClusterPanel extends MultiPickPanel {
 
-  public AddToClusterPanel(ControlPanel controlPanel, GraphControl.ClusterFacade cluster) {
+  public AddToClusterPanel(ControlPanel controlPanel, GraphControl.Cluster cluster) {
     super(controlPanel, cluster);
   }
   String getLabel() {

@@ -28,7 +28,7 @@ public class DegreeControlsPanel extends JPanel {
 
   DegreeLayout degreeLayout;
 
-  GraphControl.ClusterFacade cluster;
+  GraphControl.Cluster cluster;
 
   // Variables declaration
   //JSlider velocityAttenuationSlider = new JSlider();
@@ -47,7 +47,7 @@ public class DegreeControlsPanel extends JPanel {
 
   JSlider balancedThresholdSlider = new JSlider();
 
-  public DegreeControlsPanel(GraphControl.ClusterFacade cluster) {
+  public DegreeControlsPanel(GraphControl.Cluster cluster) {
     this.cluster = cluster;
     this.degreeLayout = (DegreeLayout) cluster.getLayoutEngine();
     boxLayout = Box.createVerticalBox();

@@ -71,7 +71,7 @@ public class WilmaMain extends JFrame {
 		MenuBar menuBar = new MenuBar(this, actions, graphControl, controlPanel);
 		setJMenuBar(menuBar);
 		//graphControl.setRootPickingClient(rootMenu);
-		GraphControl.ClusterFacade r = graphControl.getRootCluster();
+		GraphControl.Cluster r = graphControl.getRootCluster();
 		GraphControl.getPickListener().setNodeOptionsClient(
 				new NodeOptionsMenu(graphCanvas, graphControl, r, controlPanel));
 		GraphControl.getPickListener().setClusterOptionsClient(

@@ -271,7 +271,7 @@ public class QueryFrame extends JFrame {
 		/**
 		 * add a node to this node's list of neighbours
 		 */
-		void addNeighbour(GraphControl.NodeFacade n, String key) {
+		void addNeighbour(GraphControl.Node n, String key) {
 			neighbours.put(key, n);
 		}
 		/**
@@ -291,13 +291,13 @@ public class QueryFrame extends JFrame {
 		/** list of neighbours for this node */
 		Hashtable neighbours = new Hashtable();
 		/** a reference back to the node which uses this class */
-		GraphControl.NodeFacade node;
+		GraphControl.Node node;
 	}
 	/**
 	 * UserData class for company nodes.
 	 */
 	public class CompanyNodeData extends QueryNodeData {
-		public CompanyNodeData(GraphControl.NodeFacade companyNode, Statement stmt,
+		public CompanyNodeData(GraphControl.Node companyNode, Statement stmt,
 				String epic) {
 			this.stmt = stmt;
 			this.epic = epic;
@@ -311,7 +311,7 @@ public class QueryFrame extends JFrame {
 		void collapseNeighbours() {
 			for (Enumeration e = neighbours.keys(); e.hasMoreElements();) {
 				String fmcode = (String) e.nextElement();
-				GraphControl.NodeFacade n = (GraphControl.NodeFacade) fmList
+				GraphControl.Node n = (GraphControl.Node) fmList
 						.get(fmcode);
 				// if there are no other references to this fund manager then delete it
 				// from the visible Wilma graph, remove it from the list of all visible
@@ -342,7 +342,7 @@ public class QueryFrame extends JFrame {
 				while (r.next() && i++ < 10) {
 					String fmcode = r.getString("fmcode");
 					String fundman = r.getString("fund_man");
-					GraphControl.NodeFacade n = (GraphControl.NodeFacade) fmList
+					GraphControl.Node n = (GraphControl.Node) fmList
 							.get(fmcode);
 					if (n == null) {
 						n = graphRoot.addNode("DefaultNodeView");
@@ -357,7 +357,7 @@ public class QueryFrame extends JFrame {
 					}
 					if (neighbours.get(fmcode) == null) {
 						neighbours.put(fmcode, n);
-						GraphControl.EdgeFacade e = graphRoot.addEdge(n, node,
+						GraphControl.Edge e = graphRoot.addEdge(n, node,
 								"Plain Edge", 0.005f);
 					}
 				}
@@ -375,7 +375,7 @@ public class QueryFrame extends JFrame {
 	 * collapsing the fund managers neighbouring company nodes.
 	 */
 	public class FMNodeData extends QueryNodeData {
-		public FMNodeData(GraphControl.NodeFacade fmnode, Statement stmt,
+		public FMNodeData(GraphControl.Node fmnode, Statement stmt,
 				String fmcode) {
 			this.stmt = stmt;
 			this.fmcode = fmcode;
@@ -389,7 +389,7 @@ public class QueryFrame extends JFrame {
 		void collapseNeighbours() {
 			for (Enumeration e = neighbours.keys(); e.hasMoreElements();) {
 				String epic = (String) e.nextElement();
-				GraphControl.NodeFacade n = (GraphControl.NodeFacade) companyList
+				GraphControl.Node n = (GraphControl.Node) companyList
 						.get(epic);
 				if (n.getDegree() == 1) {
 					companyList.remove(epic);
@@ -415,7 +415,7 @@ public class QueryFrame extends JFrame {
 				while (r.next() && i++ < 10) {
 					String epic = r.getString("epic");
 					String fullName = r.getString("full_name");
-					GraphControl.NodeFacade n = (GraphControl.NodeFacade) companyList
+					GraphControl.Node n = (GraphControl.Node) companyList
 							.get(epic);
 					if (n == null) {
 						n = graphRoot.addNode("DefaultNodeView");
@@ -428,7 +428,7 @@ public class QueryFrame extends JFrame {
 					}
 					if (neighbours.get(epic) == null) {
 						neighbours.put(epic, n);
-						GraphControl.EdgeFacade e = graphRoot.addEdge(node, n,
+						GraphControl.Edge e = graphRoot.addEdge(node, n,
 								"Plain Edge", 0.005f);
 					}
 				}
@@ -452,7 +452,7 @@ public class QueryFrame extends JFrame {
 			r.next();
 			String fmcode = r.getString("fmcode");
 			String fundman = r.getString("fund_man");
-			GraphControl.NodeFacade n = graphRoot.addNode("DefaultNodeView");
+			GraphControl.Node n = graphRoot.addNode("DefaultNodeView");
 			n.setColour(0f, 0.8f, 0f);
 			n.setLabel(fundman);
 			n.setUserData(new FMNodeData(n, stmt, fmcode));
@@ -711,16 +711,16 @@ public class QueryFrame extends JFrame {
 					addColumn((String) secnamemap.get(new Integer(sec)), v, c);
 				}
 				for (Iterator it = decreased.iterator(); it.hasNext();) {
-					GraphControl.NodeFacade start = (GraphControl.NodeFacade) it.next();
+					GraphControl.Node start = (GraphControl.Node) it.next();
 					ColumnData sd = (ColumnData) start.getUserData();
 					ColumnData sl = sd.last;
 					for (Iterator jt = increased.iterator(); jt.hasNext();) {
-						GraphControl.NodeFacade end = (GraphControl.NodeFacade) jt.next();
+						GraphControl.Node end = (GraphControl.Node) jt.next();
 						ColumnData ed = (ColumnData) end.getUserData();
 						ColumnData el = ed.last;
 						float move = (ed.shareCount - el.shareCount) * el.shareValue
 								+ (sl.shareCount - sd.shareCount) * sl.shareValue;
-						GraphControl.EdgeFacade edge;
+						GraphControl.Edge edge;
 						if (ColumnCluster.getColumnStyle() == ColumnCluster.DOTCOLUMNS) {
 							edge = graphRoot.addEdge(start, end, "SplineTube", move / maxmc);
 						} else {
@@ -737,14 +737,14 @@ public class QueryFrame extends JFrame {
 					if (c.getNextLevel() < level) {
 						System.out.println("id=" + id);
 						float radius = c.getTopNode().getRadius();
-						GraphControl.NodeFacade n = c.addNode(radius);
+						GraphControl.Node n = c.addNode(radius);
 						n.setColour(0f, 0f, 0f);
 					}
 				}
 			}
 			float edgeMinRadius = Float.parseFloat(dotEdgeMinField.getText());
 			float edgeMaxRadius = Float.parseFloat(dotEdgeMaxField.getText());
-			GraphControl.EdgeFacade[] edges = graphRoot.getEdges();
+			GraphControl.Edge[] edges = graphRoot.getEdges();
 			float minRadius = Float.MAX_VALUE, maxRadius = 0;
 			for (int i = 0; i < edges.length; i++) {
 				float r = ((EdgeView) edges[i].getView()).getRadius();
@@ -822,7 +822,7 @@ public class QueryFrame extends JFrame {
 					if (r.next()) {
 						radius = r.getFloat("share_pric");
 					}
-					GraphControl.NodeFacade n = c.addNode(radius);
+					GraphControl.Node n = c.addNode(radius);
 					n.setColour(0.9f, 0.9f, 1f * (float) (level - 1) / (float) maxLevel);
 				}
 			}
@@ -844,7 +844,7 @@ public class QueryFrame extends JFrame {
 			columns.put(id, c);
 		}
 		if (c.getNextLevel() < level + 1) {
-			GraphControl.NodeFacade n = c.addNode(value);
+			GraphControl.Node n = c.addNode(value);
 			n.setColour(0.9f, 0.9f, 1f * (float) level / (float) maxLevel);
 		}
 		return c;
@@ -862,7 +862,7 @@ public class QueryFrame extends JFrame {
 	int columnThreshold = 10;
 	float edgeThreshold = 0.05f;
 	float maxmc = 0;
-	GraphControl.ClusterFacade companyCluster;
+	GraphControl.Cluster companyCluster;
 	ColumnCluster addColumn(String id, float shareValue, long count) {
 		ColumnData d = new ColumnData();
 		float nodeScale = Float.parseFloat(dotColumnScaleField.getText());
@@ -873,7 +873,7 @@ public class QueryFrame extends JFrame {
 		ColumnCluster c = (ColumnCluster) columns.get(id);
 		if (c == null) {
 			StringTokenizer st = new StringTokenizer(id, " ");
-			GraphControl.ClusterFacade parent = graphRoot;
+			GraphControl.Cluster parent = graphRoot;
 			int i = 0;
 			String firstToken = st.nextToken();
 			String[] idStrings = new String[st.countTokens()];
@@ -904,7 +904,7 @@ public class QueryFrame extends JFrame {
 		}
 		//if(c.getNextLevel() < level + 1) {
 		ColumnData l = d;
-		GraphControl.NodeFacade ln = c.getTopNode();
+		GraphControl.Node ln = c.getTopNode();
 		if (ln != null) {
 			l = (ColumnData) ln.getUserData();
 		}
@@ -912,7 +912,7 @@ public class QueryFrame extends JFrame {
 			l = d;
 		}
 		d.last = l;
-		GraphControl.NodeFacade n = c.addVariableNode(nodeScale * value / maxmc);
+		GraphControl.Node n = c.addVariableNode(nodeScale * value / maxmc);
 		// colour the node according to change in share value:
 		// white if no change
 		// shade toward green if value increases, red if it decreases
@@ -951,9 +951,9 @@ public class QueryFrame extends JFrame {
 	void addColumnEdge(ColumnCluster from, ColumnCluster to, float weight,
 			EdgeOption edgeOption) {
 		float radius = 0.005f * (2 * weight + 1);
-		GraphControl.NodeFacade start = from.getTopNode();
-		GraphControl.NodeFacade end = to.getTopNode();
-		GraphControl.EdgeFacade edge;
+		GraphControl.Node start = from.getTopNode();
+		GraphControl.Node end = to.getTopNode();
+		GraphControl.Edge edge;
 		if (ColumnCluster.getColumnStyle() == ColumnCluster.DOTCOLUMNS) {
 			edge = graphRoot.addEdge(start, end, "SplineTube", radius);
 		} else {
@@ -969,7 +969,7 @@ public class QueryFrame extends JFrame {
 			setActionDescription("Show Fund Manager details...");
 			setActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					GraphControl.EdgeFacade edge = org.wilmascope.gui.EdgeOptionsMenu
+					GraphControl.Edge edge = org.wilmascope.gui.EdgeOptionsMenu
 							.getSelectedEdge();
 					System.out.println(startEPIC + "->" + endEPIC);
 					String queryString = new String(
@@ -1014,24 +1014,24 @@ public class QueryFrame extends JFrame {
 	}
 	void addNode(String id, String label) {
 		if (!nodes.containsKey(id)) {
-			GraphControl.NodeFacade n = graphRoot.addNode("LabelOnly");
+			GraphControl.Node n = graphRoot.addNode("LabelOnly");
 			n.setLabel(label);
 			nodes.put(id, n);
 		}
 	}
 	void addEdge(String fromID, String toID, float weight) {
 		float radius = 0.005f * (2 * weight + 1);
-		GraphControl.NodeFacade start = (GraphControl.NodeFacade) nodes.get(fromID);
-		GraphControl.NodeFacade end = (GraphControl.NodeFacade) nodes.get(toID);
-		GraphControl.EdgeFacade edge = graphRoot.addEdge(start, end, "Arrow",
+		GraphControl.Node start = (GraphControl.Node) nodes.get(fromID);
+		GraphControl.Node end = (GraphControl.Node) nodes.get(toID);
+		GraphControl.Edge edge = graphRoot.addEdge(start, end, "Arrow",
 				radius);
 		edge.setWeight(weight);
 	}
 	void addEdge(String fromID, String toID, float weight, String type) {
 		float radius = 0.01f * (weight);
-		GraphControl.NodeFacade start = (GraphControl.NodeFacade) nodes.get(fromID);
-		GraphControl.NodeFacade end = (GraphControl.NodeFacade) nodes.get(toID);
-		GraphControl.EdgeFacade edge = graphRoot.addEdge(start, end, type, radius);
+		GraphControl.Node start = (GraphControl.Node) nodes.get(fromID);
+		GraphControl.Node end = (GraphControl.Node) nodes.get(toID);
+		GraphControl.Edge edge = graphRoot.addEdge(start, end, type, radius);
 		float defaultStiffness = ((org.wilmascope.forcelayout.EdgeForceLayout) edge
 				.getEdge().getLayout()).getStiffness();
 		((org.wilmascope.forcelayout.EdgeForceLayout) edge.getEdge().getLayout())
@@ -1107,7 +1107,7 @@ public class QueryFrame extends JFrame {
 	 */
 	void addSectorNode(String id, boolean planar, Connection con) {
 		if (!nodes.containsKey(id)) {
-			GraphControl.NodeFacade n = graphRoot.addNode();
+			GraphControl.Node n = graphRoot.addNode();
 			n.setUserData(new SectorNodeData(id));
 			nodes.put(id, n);
 			String query = "select case when short_sec is null then to_char(sector,'99') else short_sec end as name, "
@@ -1163,7 +1163,7 @@ public class QueryFrame extends JFrame {
 	//=========================================================================
 	// global variables - DOH!
 	/** the root cluster to which we will add all nodes and edges */
-	public static GraphControl.ClusterFacade graphRoot;
+	public static GraphControl.Cluster graphRoot;
 	// handy reference for use in anonymous inner classes
 	QueryFrame thisframe = this;
 	/** User name for connecting to SQL database */

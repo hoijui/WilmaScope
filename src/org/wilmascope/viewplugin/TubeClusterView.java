@@ -32,7 +32,7 @@ public class TubeClusterView extends ClusterView {
   }
   public void draw() {
     org.wilmascope.graph.Cluster c = (org.wilmascope.graph.Cluster)getNode();
-    double radius = (double)c.getRadius();
+    double radius = (double)getRadius();
     setFullTransform(
       new Vector3d(radius,radius,1d),
       new Vector3f(c.getPosition()),

@@ -27,7 +27,7 @@ public class FadeControlsPanel extends JPanel {
   public FadeControlsPanel() {
   }
   FadeLayout fadeLayout;
-  GraphControl.ClusterFacade cluster;
+  GraphControl.Cluster cluster;
 
   // Variables declaration
   //JSlider velocityAttenuationSlider = new JSlider();
@@ -42,7 +42,7 @@ public class FadeControlsPanel extends JPanel {
   JPanel jPanel1 = new JPanel();
   JSlider balancedThresholdSlider = new JSlider();
 
-  public FadeControlsPanel(GraphControl.ClusterFacade cluster) {
+  public FadeControlsPanel(GraphControl.Cluster cluster) {
       this.cluster = cluster;
       this.fadeLayout = (FadeLayout)cluster.getLayoutEngine();
     boxLayout = Box.createVerticalBox();
@@ -107,12 +107,12 @@ public class FadeControlsPanel extends JPanel {
       }
       noneLayerButton.setActionCommand(new String("noneLayer"));
       
-      JRadioButton yearLayerButton = new JRadioButton("Year");
-      if (VariableForces.layering == VariableForces.year)
+      JRadioButton levelConstraintLayerButton = new JRadioButton("levelConstraint");
+      if (VariableForces.layering == VariableForces.levelConstraint)
       {
-      	yearLayerButton.setSelected(true);
+      	levelConstraintLayerButton.setSelected(true);
       }
-      yearLayerButton.setActionCommand(new String("yearLayer"));
+      levelConstraintLayerButton.setActionCommand(new String("levelConstraintLayer"));
       
       JRadioButton degreeLayerButton = new JRadioButton("Degree");
       if (VariableForces.layering == VariableForces.degree)
@@ -121,12 +121,12 @@ public class FadeControlsPanel extends JPanel {
       }
       degreeLayerButton.setActionCommand(new String("degreeLayer"));
       
-      JRadioButton sphereYearLayerButton = new JRadioButton("Sphere Year");
-      if (VariableForces.layering == VariableForces.sphereYear)
+      JRadioButton spherelevelConstraintLayerButton = new JRadioButton("Sphere levelConstraint");
+      if (VariableForces.layering == VariableForces.spherelevelConstraint)
       {
-      	sphereYearLayerButton.setSelected(true);
+      	spherelevelConstraintLayerButton.setSelected(true);
       }
-      sphereYearLayerButton.setActionCommand(new String("sphereYearLayer"));
+      spherelevelConstraintLayerButton.setActionCommand(new String("spherelevelConstraintLayer"));
       
       JRadioButton sphereDegreeLayerButton = new JRadioButton("Sphere Degree");
       if (VariableForces.layering == VariableForces.sphereDegree)
@@ -137,20 +137,20 @@ public class FadeControlsPanel extends JPanel {
       
       ButtonGroup layerGroup = new ButtonGroup();
       layerGroup.add(noneLayerButton);
-      layerGroup.add(yearLayerButton);
+      layerGroup.add(levelConstraintLayerButton);
       layerGroup.add(degreeLayerButton);
-      layerGroup.add(sphereYearLayerButton);
+      layerGroup.add(spherelevelConstraintLayerButton);
       layerGroup.add(sphereDegreeLayerButton);
       
       layerBox.add(noneLayerButton);
-      layerBox.add(yearLayerButton);
+      layerBox.add(levelConstraintLayerButton);
       layerBox.add(degreeLayerButton);
-      layerBox.add(sphereYearLayerButton);
+      layerBox.add(spherelevelConstraintLayerButton);
       layerBox.add(sphereDegreeLayerButton);
       
       fadeControlsBox.add(layerBox);
       
-      yearLayerButton.addActionListener(new java.awt.event.ActionListener() {
+      levelConstraintLayerButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(ActionEvent e) {
           changedLayerButton_actionPerformed(e);
         }
@@ -168,7 +168,7 @@ public class FadeControlsPanel extends JPanel {
         }
     });
       
-      sphereYearLayerButton.addActionListener(new java.awt.event.ActionListener() {
+      spherelevelConstraintLayerButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(ActionEvent e) {
           changedLayerButton_actionPerformed(e);
         }
@@ -190,12 +190,12 @@ public class FadeControlsPanel extends JPanel {
       }
       defaultColourButton.setActionCommand(new String("defaultColour"));
       
-      JRadioButton yearColourButton = new JRadioButton("Year");
-      if (VariableForces.colouring == VariableForces.yearColouring)
+      JRadioButton levelConstraintColourButton = new JRadioButton("levelConstraint");
+      if (VariableForces.colouring == VariableForces.levelConstraintColouring)
       {
-      	yearColourButton.setSelected(true);
+      	levelConstraintColourButton.setSelected(true);
       }
-      yearColourButton.setActionCommand(new String("yearColour"));
+      levelConstraintColourButton.setActionCommand(new String("levelConstraintColour"));
       
       JRadioButton degreeColourButton = new JRadioButton("Degree");
       if (VariableForces.colouring == VariableForces.degreeColouring)
@@ -205,16 +205,16 @@ public class FadeControlsPanel extends JPanel {
       degreeColourButton.setActionCommand(new String("degreeColour"));
       
       ButtonGroup colourGroup = new ButtonGroup();
-      colourGroup.add(yearColourButton);
+      colourGroup.add(levelConstraintColourButton);
       colourGroup.add(degreeColourButton);
       
       
-      colourBox.add(yearColourButton);
+      colourBox.add(levelConstraintColourButton);
       colourBox.add(degreeColourButton);
       
       fadeControlsBox.add(colourBox);
       
-      yearColourButton.addActionListener(new java.awt.event.ActionListener() {
+      levelConstraintColourButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(ActionEvent e) {
           changedLayerButton_actionPerformed(e);
         }
@@ -234,25 +234,25 @@ public class FadeControlsPanel extends JPanel {
   	{
   		VariableForces.layering = VariableForces.none;
   	}
-  	if (e.getActionCommand().equals(new String("yearLayer")))
+  	if (e.getActionCommand().equals(new String("levelConstraintLayer")))
   	{
-  		VariableForces.layering = VariableForces.year;
+  		VariableForces.layering = VariableForces.levelConstraint;
   	}
   	if (e.getActionCommand().equals(new String("degreeLayer")))
   	{
   		VariableForces.layering = VariableForces.degree;
   	}
-  	if (e.getActionCommand().equals(new String("sphereYearLayer")))
+  	if (e.getActionCommand().equals(new String("spherelevelConstraintLayer")))
   	{
-  		VariableForces.layering = VariableForces.sphereYear;
+  		VariableForces.layering = VariableForces.spherelevelConstraint;
   	}
   	if (e.getActionCommand().equals(new String("sphereDegreeLayer")))
   	{
   		VariableForces.layering = VariableForces.sphereDegree;
   	}
-  	if (e.getActionCommand().equals(new String("yearColour")))
+  	if (e.getActionCommand().equals(new String("levelConstraintColour")))
   	{
-  		VariableForces.colouring = VariableForces.yearColouring;
+  		VariableForces.colouring = VariableForces.levelConstraintColouring;
   	}
   	if (e.getActionCommand().equals(new String("degreeColour")))
   	{

@@ -54,7 +54,7 @@ implements org.wilmascope.graph.EdgeView, View2D {
       l=edge.getVector().length();
     }
     // length of the edge should not include the radii of the nodes
-    l-=edge.getStart().getRadius()+edge.getEnd().getRadius();
+    l-=edge.getStart().getView().getRadius()+edge.getEnd().getView().getRadius();
     setFullTransform(
       new Vector3d(radius,l,radius),
       getPositionVector(),
@@ -72,10 +72,10 @@ implements org.wilmascope.graph.EdgeView, View2D {
   public Vector3f getPositionVector() {
     Vector3f v = new Vector3f(edge.getVector());
     v.scaleAdd(0.5f,edge.getStart().getPosition());
-    if(edge.getEnd().getRadius()!=edge.getStart().getRadius()) {
+    if(edge.getEnd().getView().getRadius()!=edge.getStart().getView().getRadius()) {
       Vector3f offset = new Vector3f(edge.getVector());
       offset.normalize();
-      offset.scale((edge.getEnd().getRadius()-edge.getStart().getRadius())/2f);
+      offset.scale((edge.getEnd().getView().getRadius()-edge.getStart().getView().getRadius())/2f);
       v.sub(offset);
     }
     // Calculate the offset from other edges

@@ -53,7 +53,7 @@ public class ColumnClusterView
 				SizeAdjustableNodeView tnv = (SizeAdjustableNodeView) n.getView();
 				if (t.z > p.z) {
 					p.set(t);
-					c.setRadius(tnv.getTopRadius());
+					setRadius(tnv.getTopRadius());
 					NodeColumnLayout l = (NodeColumnLayout)n.getLayout();
 					if (l != null) {
 						nodeHeight = l.getHeight();
@@ -63,7 +63,7 @@ public class ColumnClusterView
 			Vector3f v = new Vector3f(p);
 			// want the label floating just above (0.01f) the top node
 			v.z += nodeHeight / 2f + 0.01f;
-			double r = c.getRadius()/2f;
+			double r = getRadius()/2f;
 			// center(ish) label
 			v.x -= 0.15f * r;
 			v.y -= 0.04f * r;
