@@ -170,12 +170,6 @@ import org.omg.CORBA.*;
       return new NodeTie(servant);
     }
     /**
-     * Add a pre-existing edge to a cluster
-     */
-    public void addEdge(Edge e) {
-      cluster.addEdge(((EdgeServant)e).getEdge());
-    }
-    /**
      * Create a new adge between two nodes and add it to the cluster
      */
     public Edge addNewEdge(Node start, Node end) {
@@ -250,7 +244,7 @@ class GraphControlServant extends _GraphControlImplBase {
    * get a reference to the root cluster of the graph
    */
   public Cluster getRootCluster() {
-    ClusterServant servant = new ClusterServant(gc.getRootCluster()); 
+    ClusterServant servant = new ClusterServant(gc.getRootCluster());
     return new Cluster_Tie(servant);
   }
   public void setRootCluster(Cluster rootCluster) {

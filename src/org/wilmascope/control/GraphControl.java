@@ -32,6 +32,7 @@ import org.wilmascope.forcelayout.Spring;
 import org.wilmascope.forcelayout.Origin;
 import org.wilmascope.forcelayout.DirectedField;
 import org.wilmascope.forcelayout.Force;
+import org.wilmascope.forcelayout.Planar;
 import org.wilmascope.forcelayout.BalancedEventClient;
 import org.wilmascope.graph.GraphElement;
 import org.wilmascope.graph.Cluster;
@@ -40,6 +41,7 @@ import org.wilmascope.graph.Edge;
 import org.wilmascope.graph.NodeList;
 import org.wilmascope.graph.EdgeList;
 import org.wilmascope.view.GraphElementView;
+import org.wilmascope.view.ClusterView;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.PickingClient;
@@ -66,8 +68,8 @@ public class GraphControl {
   // interesting excercise, so it can stay.
   {
     edgeClass = (new EdgeFacade()).getClass();
-    clusterClass = (new ClusterFacade()).getClass();
-    nodeClass = clusterClass.getSuperclass();
+    clusterClass = (new ClusterFacade(false)).getClass();
+    nodeClass = (new NodeFacade(false)).getClass();
     // GraphElementFacade is abstract so we have to get the class as follows:
     graphElementClass = nodeClass.getSuperclass();
   }
@@ -260,6 +262,9 @@ public class GraphControl {
     }
     public void reverseDirection() {
       edge.reverseDirection();
+      NodeFacade n = start;
+      start = end;
+      end = n;
     }
     public NodeFacade getStartNode() {
       return start;
@@ -317,7 +322,20 @@ public class GraphControl {
     public void setRadius(float radius) {
       node.setRadius(radius);
     }
-
+    public void setFixedPosition(boolean fixed) {
+      node.setFixedPosition(fixed);
+      if(fixed){
+        ((NodeView)node.getView()).showAnchor();
+      } else {
+        ((NodeView)node.getView()).hideAnchor();
+      }
+    }
+    public boolean isFixedPosition() {
+      return node.isFixedPosition();
+    }
+    public void moveToCanvasPos(int x, int y) {
+      ((NodeView)node.getView()).moveToCanvasPos(graphCanvas,x,y);
+    }
     /**
      * get the node underlying this facade
      */
@@ -332,13 +350,22 @@ public class GraphControl {
    * to a cluster using the {@link #addNode(GraphControl.NodeFacade)} method
    */
   public class ClusterFacade extends NodeFacade {
-    ClusterFacade(Cluster c) {
+    GraphControl gc;
+    /**
+     * dummy constructor for creating dummy cluster objects, don't use.
+     */
+    ClusterFacade(boolean dummy) {
+      super(false);
+    }
+    ClusterFacade(GraphControl gc, Cluster c) {
       super((Node)c);
       cluster = c;
+      this.gc = gc;
     }
-    ClusterFacade(NodeView view) {
-      this(new Cluster(view));
+    ClusterFacade(GraphControl gc, NodeView view) {
+      this(gc, new Cluster(view));
       initView(view);
+      this.gc = gc;
       ForceLayout layoutEngine = new ForceLayout(cluster);
       layoutEngine.setIterations(1);
       cluster.setLayoutEngine(layoutEngine);
@@ -346,34 +373,44 @@ public class GraphControl {
       cluster.setLayout(layout);
       show();
     }
-    ClusterFacade(String viewType) throws ViewManager.UnknownViewTypeException {
-      this(ViewManager.getInstance().createNodeView(viewType));
+    ClusterFacade(GraphControl gc, String viewType) throws ViewManager.UnknownViewTypeException {
+      this(gc, ViewManager.getInstance().createClusterView(viewType));
     }
-    ClusterFacade() {
-      super(false);
+    ClusterFacade(GraphControl gc) throws ViewManager.UnknownViewTypeException{
+      this(gc, ViewManager.getInstance().createClusterView());
     }
     public ClusterFacade addNewCluster() {
+      synchronized(gc) {
       try {
-        ClusterFacade c = new ClusterFacade("DefaultClusterView");
+        ClusterFacade c = new ClusterFacade(gc);
         cluster.addNode(c.getCluster());
         return c;
       } catch (ViewManager.UnknownViewTypeException ex) {
         ex.printStackTrace();
         return null;
       }
+      }
     }
     /**
      * deprecated use ((ForceLayout)getLayoutEngine).addForce() instead
      */
     public ForceFacade addForce(String name) {
+      synchronized(gc) {
       ForceLayout layout = (ForceLayout)cluster.getLayoutEngine();
       Force f = forceManager.createForce(name);
       layout.addForce(f);
       ForceFacade forceFacade = new ForceFacade(f);
       forces.add(forceFacade);
       return forceFacade;
+      }
     }
     public ForceFacade[] getForces() {
+      forces.clear();
+      ForceLayout layout = (ForceLayout)cluster.getLayoutEngine();
+      Vector fs = layout.getForces();
+      for(int i=0;i<fs.size();i++) {
+        forces.add(new ForceFacade((Force)fs.get(i)));
+      }
       return (ForceFacade[])forces.toArray(new ForceFacade[0]);
     }
     public void removeAllForces() {
@@ -398,48 +435,60 @@ public class GraphControl {
      * Add a pre-existing node to the cluster
      */
     public void addNode(NodeFacade n) {
+      synchronized(gc) {
       Node node = n.getNode();
       NodeForceLayout nodeLayout = (NodeForceLayout)node.getLayout();
       cluster.addNode(node);
       NodeForceLayout clusterLayout = (NodeForceLayout)cluster.getLayout();
+      }
     }
     public void add(GraphElementFacade e) {
+      synchronized(gc) {
       if(e instanceof NodeFacade) {
         addNode((NodeFacade)e);
       } else if (e instanceof EdgeFacade) {
         addEdge((EdgeFacade)e);
       }
+      }
     }
     public NodeFacade addNode() {
+      synchronized(gc) {
       try {
         return addNode(ViewManager.getInstance().createNodeView());
       } catch (ViewManager.UnknownViewTypeException ex) {
         ex.printStackTrace();
         return null;
       }
+      }
     }
     public NodeFacade addNode(String nodeType) {
+      synchronized(gc) {
       try {
         return addNode(ViewManager.getInstance().createNodeView(nodeType));
       } catch (ViewManager.UnknownViewTypeException ex) {
         ex.printStackTrace();
         return null;
       }
+      }
     }
     /**
      * create a new node and add it to the cluster
      */
     public NodeFacade addNode(NodeView view) {
+      synchronized(gc) {
       NodeFacade n = new NodeFacade();
       n.setView(view);
       addNode(n);
       return n;
+      }
     }
     /**
      * Add a pre-existing edge to a cluster
      */
-    public void addEdge(EdgeFacade e) {
-      cluster.addInternalEdge(e.getEdge());
+    private void addEdge(EdgeFacade e) {
+      synchronized(gc) {
+      cluster.addEdge(e.getEdge());
+      }
     }
     /**
      * Create a new edge between two nodes and add it to the cluster
@@ -453,10 +502,12 @@ public class GraphControl {
       NodeFacade end,
       EdgeView view)
     {
+      synchronized(gc) {
       EdgeFacade e = new EdgeFacade(start, end);
       e.setView(view);
       addEdge(e);
       return e;
+      }
     }
     /**
      * Add a new edge
@@ -470,12 +521,14 @@ public class GraphControl {
       NodeFacade end,
       String edgeType)
     {
+      synchronized(gc) {
       try {
         EdgeView view = ViewManager.getInstance().createEdgeView(edgeType);
         return addEdge(start, end, view);
       } catch(ViewManager.UnknownViewTypeException ex) {
         ex.printStackTrace();
         return null;
+      }
       }
     }
     /**
@@ -485,6 +538,7 @@ public class GraphControl {
      * @return the new edge
      */
     public EdgeFacade addEdge(NodeFacade start, NodeFacade end) {
+      synchronized(gc) {
       try {
         EdgeView view = ViewManager.getInstance().createEdgeView();
         return addEdge(start, end, view);
@@ -492,25 +546,45 @@ public class GraphControl {
         ex.printStackTrace();
         return null;
       }
+      }
     }
     /**
      * Create a new cluster and add it as a member of this cluster
      */
     public ClusterFacade addCluster() {
+      synchronized(gc) {
       try {
-        ClusterFacade c = new ClusterFacade("DefaultClusterView");
+        ClusterFacade c = new ClusterFacade(gc);
         addNode(c);
         return c;
       } catch(ViewManager.UnknownViewTypeException e) {
-        throw new Error();
+        throw new Error("No default ClusterView type set!??!?!");
+      }
+      }
+    }
+    /**
+     * Create a new cluster and add it as a member of this cluster
+     */
+    public ClusterFacade addCluster(String viewType) {
+      synchronized(gc) {
+      try {
+        ClusterFacade c = new ClusterFacade(gc, viewType);
+        addNode(c);
+        return c;
+      } catch(ViewManager.UnknownViewTypeException e) {
+        System.err.println("Couldn't find view type: "+viewType
+          + "in the repository, using default");
+        return addCluster();
+      }
       }
     }
     /**
      * Create a new cluster and add it as a member of this cluster
      */
     public ClusterFacade addCluster(Vector nodeFacades) {
+      synchronized(gc) {
       try {
-        ClusterFacade c = new ClusterFacade("DefaultClusterView");
+        ClusterFacade c = new ClusterFacade(gc);
         addNode(c);
         NodeList nodes = new NodeList();
         for(int i=0; i<nodeFacades.size(); i++) {
@@ -520,6 +594,7 @@ public class GraphControl {
         return c;
       } catch(ViewManager.UnknownViewTypeException e) {
         throw new Error();
+      }
       }
     }
     /**
@@ -545,21 +620,11 @@ public class GraphControl {
     }
     public void expand() {
       cluster.expand(graphCanvas);
-      try {
-        setView(ViewManager.getInstance().createNodeView("DefaultClusterView"));
-      } catch(ViewManager.UnknownViewTypeException e) {
-        e.printStackTrace();
-        System.exit(1);
-      }
+      ((ClusterView)cluster.getView()).setExpandedView();
     }
     public void collapse() {
       cluster.collapse();
-      try {
-        setView(ViewManager.getInstance().createNodeView("CollapsedClusterView"));
-      } catch(ViewManager.UnknownViewTypeException e) {
-        e.printStackTrace();
-        System.exit(1);
-      }
+      ((ClusterView)cluster.getView()).setCollapsedView();
     }
     /**
      * @return true if the cluster is expanded else false
@@ -616,7 +681,7 @@ public class GraphControl {
       for(int i=0; i<nodes.size(); i++) {
         nodes.get(i).getView().setPickable(pickable);
       }
-      EdgeList edges = cluster.getEdges();
+      EdgeList edges = cluster.getInternalEdges();
       for(int i=0; i<edges.size(); i++) {
         edges.get(i).getView().setPickable(pickable);
       }
@@ -728,10 +793,14 @@ public class GraphControl {
     forceManager = ForceManager.getInstance();
       // load core views
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.ArrowEdgeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.CollapsedClusterView());
+      viewManager.addPrototypeView(new org.wilmascope.viewplugin.InheritanceEdgeView());
+      viewManager.addPrototypeView(new org.wilmascope.viewplugin.AggregationEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.DefaultClusterView());
+      viewManager.addPrototypeView(new org.wilmascope.viewplugin.ConeClusterView());
+      viewManager.addPrototypeView(new org.wilmascope.viewplugin.BoxClusterView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.DefaultEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.DefaultNodeView());
+      viewManager.addPrototypeView(new org.wilmascope.viewplugin.BoxNodeView());
       /*
     try {
       viewManager.loadViews(new java.io.File("plugin"),"plugin");
@@ -742,6 +811,7 @@ public class GraphControl {
     try {
       viewManager.getEdgeViewRegistry().setDefaultView("Plain Edge");
       viewManager.getNodeViewRegistry().setDefaultView("DefaultNodeView");
+      viewManager.getClusterViewRegistry().setDefaultView("Spherical Cluster");
     } catch(ViewManager.UnknownViewTypeException e) {
       e.printStackTrace();
       System.out.println("Fatal Error, stopping.");
@@ -751,9 +821,10 @@ public class GraphControl {
     forceManager.addPrototypeForce(new Spring(5f));
     forceManager.addPrototypeForce(new Origin(8f));
     forceManager.addPrototypeForce(new DirectedField(1f));
+    forceManager.addPrototypeForce(new Planar(1f));
     graphCanvas = new GraphCanvas(xsize, ysize);
     try {
-      setRootCluster(new ClusterFacade("DefaultClusterView"));
+      setRootCluster(new ClusterFacade(this));
     } catch(ViewManager.UnknownViewTypeException ex) {
       ex.printStackTrace();
       throw new Error();
@@ -762,7 +833,13 @@ public class GraphControl {
 
     graphCanvas.addPerFrameBehavior(new BehaviorClient() {
       public void callback() {
-        if(!balanced) {
+        iterate();
+      }
+    });
+    graphCanvas.createUniverse();
+  }
+  protected synchronized void iterate() {
+        if(!balanced&&!stalled) {
           for(int i=0;i<1;i++) {
             float energy = rootCluster.getCluster().layout();
             energy = ((ForceLayout)rootCluster.getCluster().getLayoutEngine()).applyForces(allNodes,allEdges);
@@ -775,14 +852,22 @@ public class GraphControl {
           }
         }
         rootCluster.getCluster().draw();
-      }
-    });
-    graphCanvas.createUniverse();
+  }
+
+  /**
+   * brute force method to turn off layout
+   */
+  public void stall() {
+    stalled = true;
+  }
+  public void unstall() {
+    stalled = false;
   }
 
   public GraphCanvas getGraphCanvas() {
     return graphCanvas;
   }
+  private boolean stalled = false;
   private boolean balanced = true;
   private float balancedThreshold = 0;
   private ClusterFacade rootCluster;
