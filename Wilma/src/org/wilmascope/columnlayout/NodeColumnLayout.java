@@ -29,4 +29,21 @@ public class NodeColumnLayout extends NodeForceLayout {
         ((NodeForceLayout)getNode().getOwner().getLayout()).subForce(f);
     }
     int level;
+    float height;
+		/**
+		 * @return height of the node, often different from radius for nodes 
+     * in Column Clusters
+		 */
+		public float getHeight() {
+			return height;
+		}
+
+		/** 
+		 * @param f height of the node, often different from radius for nodes 
+     * in Column Clusters
+		 */
+		public void setHeight(float f) {
+			height = f;
+		}
+
 }

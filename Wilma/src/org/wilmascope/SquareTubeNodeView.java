@@ -38,6 +38,7 @@ import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
+import org.wilmascope.view.*;
 import org.wilmascope.view.Colours;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.Renderer2D;
@@ -52,7 +53,7 @@ import com.sun.j3d.utils.geometry.NormalGenerator;
  * @version 1.0
  */
 
-public class SquareTubeNodeView extends NodeView implements TubeView, View2D {
+public class SquareTubeNodeView extends NodeView implements SizeAdjustableNodeView, View2D {
 	//
 	// create the basic reference geometries from the shape sections of a cylinder
 	//
@@ -297,6 +298,12 @@ public class SquareTubeNodeView extends NodeView implements TubeView, View2D {
 	public float getTopRadius() {
 		return topRadius;
 	}
+  public float getDepth() {
+    return topRadius;
+  }
+  public int getShape() {
+    return BOX;
+  }
 	Point3f[] taperedTubePoints;
 	Point3f[] scaledTopPoints;
 	Point3f[] scaledBottomPoints;

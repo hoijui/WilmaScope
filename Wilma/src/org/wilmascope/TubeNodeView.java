@@ -37,6 +37,8 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
+import org.wilmascope.columnlayout.NodeColumnLayout;
+import org.wilmascope.view.*;
 import org.wilmascope.view.Colours;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.Renderer2D;
@@ -51,7 +53,7 @@ import com.sun.j3d.utils.geometry.NormalGenerator;
  * @version 1.0
  */
 
-public class TubeNodeView extends NodeView implements TubeView, View2D {
+public class TubeNodeView extends NodeView implements SizeAdjustableNodeView, View2D {
 	//
 	// create the basic reference geometries from the shape sections of a cylinder
 	//
@@ -98,13 +100,21 @@ public class TubeNodeView extends NodeView implements TubeView, View2D {
 		}
 	}
 	public void draw() {
-    setResizeTranslateTransform(new Vector3d(1,1,(double)height),new Vector3f(getNode().getPosition()));
+    NodeColumnLayout l = (NodeColumnLayout)getNode().getLayout();
+    double height = 0;
+    if(l!=null) {
+      height = l.getHeight();
+    } else {
+      // shouldn't really be drawing nodes before we have a layout!
+      return;
+    }
+    setResizeTranslateTransform(new Vector3d(1,1,height),new Vector3f(getNode().getPosition()));
 	}
   public void draw2D(Renderer2D r, Graphics2D g) {
     r.fillCircle(g,getNode().getPosition(),getNode().getRadius());
   }
 	public TubeNodeView() {
-		setTypeName("Tube");
+		setTypeName("Tube Node");
 	}
 	protected void setupDefaultMaterial() {
 		setupDefaultAppearance(Colours.defaultMaterial);
@@ -215,7 +225,9 @@ public class TubeNodeView extends NodeView implements TubeView, View2D {
 	 * @parameter bottomRadius bottom radius xScale factor
 	 * @parameter topRadius top radius xScale factor
 	 */
-	public void setEndRadii(final float bottomRadius, final float topRadius) {
+	public void setEndRadii(float br, float tr) {
+    final float bottomRadius = (float)Math.sqrt(br);
+    final float topRadius = (float)Math.sqrt(tr);
 		tubeGeometryArray.updateData(new GeometryUpdater() {
 			public void updateData(Geometry blah) {
 				for (int i = 0; i < taperedTubePoints.length; i++) {
@@ -251,9 +263,6 @@ public class TubeNodeView extends NodeView implements TubeView, View2D {
 		getNode().setRadius(
 			getNode().getRadius() * (topRadius + bottomRadius) / 2f);
 	}
-	public void setHeight(float height) {
-    this.height = height;
-	}
 	public void setProperties(Properties p) {
 		super.setProperties(p);
 		float topRadius = Float.parseFloat(p.getProperty("TopRadius"));
@@ -272,6 +281,12 @@ public class TubeNodeView extends NodeView implements TubeView, View2D {
 	public float getTopRadius() {
 		return topRadius;
 	}
+  public int getShape() {
+    return DISC;
+  }
+  public float getDepth() {
+    return topRadius;
+  }
 	Point3f[] taperedTubePoints;
 	Point3f[] scaledTopPoints;
 	Point3f[] scaledBottomPoints;
@@ -279,5 +294,4 @@ public class TubeNodeView extends NodeView implements TubeView, View2D {
 	GeometryArray topGeometryArray;
 	GeometryArray bottomGeometryArray;
 	float topRadius, bottomRadius;
-  float height = 1f;
 }

@@ -50,7 +50,8 @@ import org.wilmascope.graph.LayoutEngine;
 import org.wilmascope.graph.Node;
 import org.wilmascope.graph.NodeLayout;
 import org.wilmascope.graph.NodeList;
-import org.wilmascope.viewplugin.TubeView;
+import org.wilmascope.view.SizeAdjustableNodeView;
+import org.wilmascope.viewplugin.ColumnClusterView;
 
 /**
  * <p>A layout engine which uses the dot program to find node and edge positions.
@@ -80,9 +81,9 @@ public class DotLayout implements LayoutEngine {
       String dotPath = Constants.getInstance().getProperty("DotPath");
       FileOutputStream in = new FileOutputStream(new File("in.dot"));
       in.write(
-        "digraph d { graph [concentrate=false]; node [shape=circle "
+        "digraph d { graph [concentrate=false]; node [ "
           .getBytes());
-      in.write("fixedsize=true ".getBytes());
+      //in.write("fixedsize=true ".getBytes());
       in.write("layer=all ".getBytes());
       in.write("];\n".getBytes());
       int numLayers = ((Cluster) nodes.get(0)).getNodes().size();
@@ -95,29 +96,24 @@ public class DotLayout implements LayoutEngine {
       layersString = layersString + "\"\n";
       in.write(layersString.getBytes());
       for (nodes.resetIterator(); nodes.hasNext();) {
-        float rad = 0;
         Node n = nodes.nextNode();
-        NodeList children = ((Cluster) n).getNodes();
-        for (children.resetIterator(); children.hasNext();) {
-          org.wilmascope.graph.Node c = children.nextNode();
-          Point3f t = n.getPosition();
-          float r;
-          r = ((TubeView) c.getView()).getTopRadius();
-          if (r > rad) {
-            rad = r;
-          }
-        }
-        System.out.println("radius=" + rad);
+        float rad = ((ColumnClusterView)n.getView()).getMaxRadius();
         String id = "" + n.hashCode();
         nodeLookup.put(id, n);
+        String shape = "circle";
+        float height = rad, width = rad;
+        if(((SizeAdjustableNodeView)n.getView()).getShape() == SizeAdjustableNodeView.BOX) {
+          shape = "box";
+          height = ((SizeAdjustableNodeView)n.getView()).getDepth();
+        }
         String text =
           id
             + " [label=\""
             + ((org.wilmascope.view.GraphElementView)n.getView()).getLabel()
-            + "\" shape=circle width=\""
-            + rad / 6f
+            + "\" shape="+shape+" width=\""
+            + width / 6f
             + "\" height=\""
-            + rad / 6f
+            + height / 6f
             + "\"];\n";
         in.write(text.getBytes());
       }

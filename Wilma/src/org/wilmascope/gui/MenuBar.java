@@ -380,7 +380,7 @@ public class MenuBar extends JMenuBar {
 	}
 	void axisPlaneMenuItem_actionPerformed(ActionEvent e) {
 		if (axisPlaneControlFrame == null) {
-			axisPlaneControlFrame = new AxisPlaneControlFrame(graphControl);
+			axisPlaneControlFrame = new SliceViewControlFrame(graphControl);
 			axisPlaneControlFrame.pack();
 		}
 		axisPlaneControlFrame.show();
@@ -394,5 +394,5 @@ public class MenuBar extends JMenuBar {
 			axisPlaneControlFrame = null;
 		}
 	}
-	AxisPlaneControlFrame axisPlaneControlFrame;
+	SliceViewControlFrame axisPlaneControlFrame;
 }

@@ -100,11 +100,21 @@ public class Renderer2D {
     }
   }
   public void fillSquare(Graphics2D g, Point3f pos, float size) {
+    fillRect(g,pos,size,size);
+  }
+  public void fillRect(Graphics2D g, Point3f pos, float width, float height) {
     Point2f p = getScreenPoint(pos);
-    int rx = (int)scaleX(size);
-    int ry = (int)scaleY(size);
+    int rx = (int)scaleX(width);
+    int ry = (int)scaleY(height);
     g.fillRect((int)p.x-rx,(int)p.y-ry,rx*2,ry*2);
   }
+  public void drawRect(Graphics2D g, Point3f pos, float width, float height) {
+    Point2f p = getScreenPoint(pos);
+    int rx = (int)scaleX(width);
+    int ry = (int)scaleY(height);
+    g.drawRect((int)p.x-rx,(int)p.y-ry,rx*2,ry*2);
+  }
+  
   public void fillCircle(Graphics2D g, Point3f pos, float size) {
     Point2f p = getScreenPoint(pos);
     int rx = (int)scaleX(size);

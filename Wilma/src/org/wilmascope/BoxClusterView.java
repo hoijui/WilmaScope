@@ -34,11 +34,6 @@ public class BoxClusterView extends ClusterView {
   }
   public void init() {
     setExpandedView();
-    /*
-    LODSphere sphere = new LODSphere(getAppearance());
-    sphere.makePickable(this);
-    sphere.addToTransformGroup(getTransformGroup());
-    */
     Box box = new Box(1f,1f,1f,getAppearance());
     getTransformGroup().addChild(box);
     makePickable(box.getShape(Box.FRONT));
