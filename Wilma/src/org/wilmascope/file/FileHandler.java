@@ -96,6 +96,7 @@ public class FileHandler {
         if (needsLayout) {
           graphControl.unfreeze();
         }
+        graphControl.centreGraph();
       } catch (java.io.IOException ex) {
         WilmaMain.showErrorDialog("IOException loading xml graph file.", ex);
       }

@@ -63,10 +63,7 @@ implements org.wilmascope.graph.EdgeView, View2D {
   // Returns the angle between the initVector and the target vector
   // used by redraw.
   public AxisAngle4f getPositionAngle() {
-    Vector3f norm = new Vector3f();
-    Vector3f v = edge.getVector();
-    norm.cross(initVector,v);
-    return new AxisAngle4f(norm.x,norm.y,norm.z,initVector.angle(v));
+    return getAxisAngle4f(initVector,edge.getVector());
   }
   // return the current position, mid-point, of the edge
   public Vector3f getPositionVector() {

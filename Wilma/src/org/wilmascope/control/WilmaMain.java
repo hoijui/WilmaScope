@@ -75,7 +75,7 @@ public class WilmaMain extends JFrame {
 		GraphControl.getPickListener().setNodeOptionsClient(
 				new NodeOptionsMenu(graphCanvas, graphControl, r, controlPanel));
 		GraphControl.getPickListener().setClusterOptionsClient(
-				new ClusterOptionsMenu(graphCanvas, r, controlPanel));
+				new ClusterOptionsMenu(graphCanvas, graphControl, r, controlPanel));
 		GraphControl.getPickListener().setEdgeOptionsClient(
 				new EdgeOptionsMenu(graphCanvas, r));
 		r.setLayoutEngine(ForceLayout.createDefaultForceLayout(r.getCluster()));

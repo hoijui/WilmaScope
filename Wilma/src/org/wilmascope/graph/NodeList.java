@@ -102,6 +102,9 @@ public class NodeList extends List<Node>{
     barycenter.scale(1f/(float)elements.size());
     return barycenter;
   }
+  /**
+   * @return maximum X value - minimum X value
+   */
   public float getWidth() {
     float xMin=Float.MAX_VALUE, xMax=Float.MIN_VALUE;
     for(Node n:elements) {
@@ -111,6 +114,12 @@ public class NodeList extends List<Node>{
     }
     return xMax - xMin;
   }
+  public Plane getBestFitPlane() {
+    return new Plane(this);
+  }
+  /**
+   * @return maximum Y value - minimum Y value
+   */
   public float getHeight() {
     float yMin=Float.MAX_VALUE, yMax=Float.MIN_VALUE;
     for(Node n:elements) {

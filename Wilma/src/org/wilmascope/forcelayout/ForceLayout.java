@@ -99,6 +99,13 @@ public class ForceLayout implements LayoutEngine<NodeForceLayout,EdgeForceLayout
    * Add a force to ForceLayout's list of forces to apply
    */
   public void addForce(Force force) {
+    // Only want one of each force!
+    for(Iterator<Force> i=forces.iterator();i.hasNext();) {
+      Force f = i.next();
+      if(f.getTypeName()==force.getTypeName()) {
+        i.remove();
+      }
+    }
     forces.add(force);
     force.setCluster(root);
   }
@@ -107,7 +114,9 @@ public class ForceLayout implements LayoutEngine<NodeForceLayout,EdgeForceLayout
    * Remove a force from ForceLayout's list of forces to apply
    */
   public void removeForce(Force force) {
-    forces.remove(force);
+    if(!forces.remove(force)) {
+      WilmaMain.showErrorDialog("Removing non existant force!",new Exception("Removing non existant force exception!"));
+    }
   }
 
   public void removeAllForces() {
@@ -181,7 +190,7 @@ public class ForceLayout implements LayoutEngine<NodeForceLayout,EdgeForceLayout
   }
 
   // an array of the forces to apply
-  Vector forces = new Vector();
+  Vector<Force> forces = new Vector<Force>();
 
   float velocityAttenuation = Constants.velocityAttenuation;
 

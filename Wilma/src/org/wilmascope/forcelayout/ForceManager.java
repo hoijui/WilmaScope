@@ -47,6 +47,7 @@ public class ForceManager {
     addPrototypeForce(new Spring(5f));
     addPrototypeForce(new Origin(8f));
     addPrototypeForce(new DirectedField(1f));
+    addPrototypeForce(new Planar(1f));
   }
   public class UnknownForceTypeException extends Exception {
     public UnknownForceTypeException(String forceType) {
@@ -54,7 +55,7 @@ public class ForceManager {
     }
   }
   public Force createForce(String forceType) throws UnknownForceTypeException {
-    Force prototype = (Force)forces.get(forceType);
+    Force prototype = forces.get(forceType);
     if(prototype==null) {
       throw(new UnknownForceTypeException(forceType));
     }
@@ -63,9 +64,9 @@ public class ForceManager {
   public void addPrototypeForce(Force prototype) {
     forces.put(prototype.getTypeName(), prototype);
   }
-  public Collection getAvailableForces() {
+  public Collection<Force> getAvailableForces() {
     return forces.values();
   }
-  private Hashtable forces = new Hashtable();
+  private Hashtable<String,Force> forces = new Hashtable<String,Force>();
   private static final ForceManager instance = new ForceManager();
 }

@@ -1,5 +1,7 @@
 Changes Since 3.0
 -----------------
+- "Planar force" now works by calculating the plane of best fit for clusters,
+  seems to work quite well
 - removed stupid "create" method from LayoutEngine interface
 - LayoutEngines now loaded as plugins
 - GraphControl.NodeFacade/EdgeFacade/ClusterFacade renamed to

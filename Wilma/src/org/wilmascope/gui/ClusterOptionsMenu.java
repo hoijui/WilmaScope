@@ -27,6 +27,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.event.MenuEvent;
+import javax.vecmath.Vector3f;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.OptionsClient;
@@ -35,6 +36,7 @@ import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.Edge;
 import org.wilmascope.graph.Node;
 import org.wilmascope.graph.NodeList;
+import org.wilmascope.view.NodeView;
 import org.wilmascope.view.ViewManager;
 
 /**
@@ -43,13 +45,17 @@ import org.wilmascope.view.ViewManager;
  */
 
 public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
-	JMenuItem deleteMenuItem = new JMenuItem();
+  JMenuItem deleteMenuItem = new JMenuItem();
+  JMenuItem centreMenuItem = new JMenuItem();
+  GraphControl graphControl;
 	public ClusterOptionsMenu(
 		Component parent,
-		GraphControl.Cluster rootCluster,
+		GraphControl gc,
+    GraphControl.Cluster r,
 		ControlPanel controlPanel) {
 		this();
-		this.rootCluster = rootCluster;
+    this.graphControl = gc;
+		this.rootCluster = r;
 		this.parent = parent;
 		this.controlPanel = controlPanel;
 	}
@@ -69,6 +75,12 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 		updateUI();
 	}
 	public ClusterOptionsMenu() {
+    centreMenuItem.setText("Centre");
+    centreMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        centerMenuItem_actionPerformed(e);
+      }
+    });
 		deleteMenuItem.setText("Delete");
 		deleteMenuItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -143,6 +155,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 				hideNonNeighboursMenuItem_actionPerformed(e);
 			}
 		});
+    this.add(centreMenuItem);
 		this.add(deleteMenuItem);
 		this.add(hideMenuItem);
 		this.add(contentsPickingMenuItem);
@@ -174,7 +187,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 	}
 
 	void clusterTypeMenu_menuSelected(MenuEvent e) {
-		ViewManager.Registry reg = ViewManager.getInstance().getNodeViewRegistry();
+		ViewManager.Registry reg = ViewManager.getInstance().getClusterViewRegistry();
 		String[] names = reg.getViewNames();
 		clusterTypeMenu.removeAll();
 		for (int i = 0; i < names.length; i++) {
@@ -185,7 +198,8 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 				public void actionPerformed(ActionEvent e) {
 					System.out.println(name);
 					try {
-						cluster.setView(ViewManager.getInstance().createNodeView(name));
+						cluster.setView(ViewManager.getInstance().createClusterView(name));
+            cluster.draw();
 					} catch (ViewManager.UnknownViewTypeException ex) {
             WilmaMain.showErrorDialog("Unknown View Type!",ex);
           } 
@@ -195,6 +209,14 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 		}
 	}
 
+  void centerMenuItem_actionPerformed(ActionEvent e) {
+    Vector3f position = new Vector3f(cluster.getPosition());
+    javax.media.j3d.Transform3D localToVworld = new javax.media.j3d.Transform3D();
+    ((NodeView)cluster.getView()).getTransformGroup().getLocalToVworld(localToVworld);
+    Vector3f realpos = new Vector3f(position);
+    localToVworld.transform(position);
+    graphControl.getGraphCanvas().reorient(position,cluster.getRadius()*2f);
+  }
 	void contentsPickingMenuItem_actionPerformed(ActionEvent e) {
 		cluster.childrenPickable();
 	}

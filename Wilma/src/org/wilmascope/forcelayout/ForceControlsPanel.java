@@ -124,11 +124,8 @@ public class ForceControlsPanel extends JPanel {
         });
     forceLayoutControlsBox.add(balancedThresholdSlider);
 
-    java.util.Vector forces = new Vector(ForceManager.getInstance()
-        .getAvailableForces());
-    for (int i = 0; i < forces.size(); i++) {
-      forceControlsBox.add(new ForceControlPanel(cluster, (Force) forces
-          .elementAt(i)));
+    for (Force f : ForceManager.getInstance().getAvailableForces()) {
+      forceControlsBox.add(new ForceControlPanel(cluster, f));
     }
   }
 }
