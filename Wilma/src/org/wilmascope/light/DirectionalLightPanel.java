@@ -105,10 +105,10 @@ private JPanel createDirLightPane()
  */   
 public void EnableEdit()
 {
-	 
-	 xDir.setEnabled(true);
-	 yDir.setEnabled(true);
-	 zDir.setEnabled(true);
+	
+	 xDir.setEditable(true);
+	 yDir.setEditable(true);
+	 zDir.setEditable(true);
  }
  /** Reenables the OK button if any changes are made in the textfields
   */

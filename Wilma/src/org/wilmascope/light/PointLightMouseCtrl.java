@@ -29,16 +29,11 @@ public class PointLightMouseCtrl  extends MouseBehavior{
 	private PointLightPanel pointPane;
 	private Color3f color=new Color3f();
    
-     public  PointLightMouseCtrl(PointLightSphere sphere,PointLight pointLight,PointLightPanel pointPane) 
+     public  PointLightMouseCtrl(PointLightPanel pointPane) 
      {
-     	super(sphere);
-		this.sphere=sphere;
-		this.pointLight=pointLight;
+     	super(new TransformGroup());
 		this.pointPane=pointPane;
-		pointLight.getPosition(position);
-		sphere.setPosition(position);
-		pointLight.getColor(color);
-        sphere.setColor(color);
+		
      }
  /**  Initialize the wake up event
 	 */   	
@@ -87,8 +82,8 @@ public void processStimulus(Enumeration criteria){
                   dy=dy*0.005;
                   x_last=x;
                   y_last=y; 
-                
-                  if((Math.abs(dx)>0.5)||(Math.abs(dy)>0.5))
+                   
+                  if((Math.abs(dx)>0.3)||(Math.abs(dy)>0.3))
                       continue;
                   sphere.getTransform(oldPos);
                   oldPos.get(transMatrix);
@@ -97,10 +92,11 @@ public void processStimulus(Enumeration criteria){
                   oldPos.set(transMatrix);
                   sphere.setTransform(oldPos);
                   
+                  pointLight.getPosition(position);
                   position.x+=dx;
                   position.y+=dy;
                   pointLight.setPosition( position);
-                  
+                 
                   pointPane.xPos.setText(""+position.x);
                   pointPane.yPos.setText(""+position.y);
                   pointPane.zPos.setText(""+position.z);
@@ -111,7 +107,7 @@ public void processStimulus(Enumeration criteria){
                   &&(sphere!=null)){
                   //right button to zoom
                   x= ((MouseEvent)event[i]).getX();
-                  dz = (x- x_last)*0.015;
+                  dz = (x-x_last)*0.015;
                                             
                   x_last=x;
                   y_last=y;
@@ -123,6 +119,7 @@ public void processStimulus(Enumeration criteria){
                   oldPos.set(transMatrix);
                   sphere.setTransform(oldPos);
                   
+                   pointLight.getPosition(position);
                   position.z+=dz;
                   pointLight.setPosition(position);
                   
@@ -139,6 +136,13 @@ public void processStimulus(Enumeration criteria){
      wakeupOn(mouseCriterion);
   }
  
-     
-      }
+   public void setSphere(PointLightSphere sphere)
+  {
+       this.sphere=sphere;
+  }
+   public void setLight(PointLight light)
+   {
+      this.pointLight=light;
+    }        
+  }
     

@@ -116,6 +116,31 @@ public class NodeList extends List{
     }
     return yMax - yMin;
   }
+  /**
+   * Finds the extreme corners of the bounding box around these nodes
+   * @param bottomLeft bottom left corner of the bounding box
+   * @param topRight top right corner of the bounding box
+   * @param centroid midway between bottomLeft and topRight
+   */
+  public void getBoundingBoxCorners(Point3f bottomLeft, Point3f topRight, Point3f centroid) {
+    bottomLeft.x=Float.MAX_VALUE;
+    topRight.x=Float.MIN_VALUE;
+    bottomLeft.y=Float.MAX_VALUE;
+    topRight.y=Float.MIN_VALUE;
+    bottomLeft.z=Float.MAX_VALUE;
+    topRight.z=Float.MIN_VALUE;
+    for(resetIterator();hasNext();) {
+      Point3f p = nextNode().getPosition();
+      if(p.x<bottomLeft.x) { bottomLeft.x = p.x; }
+      if(p.x>topRight.x) { topRight.x = p.x; }
+      if(p.y<bottomLeft.y) { bottomLeft.y = p.y; }
+      if(p.y>topRight.y) { topRight.y = p.y; }
+      if(p.z<bottomLeft.z) { bottomLeft.z = p.z; }
+      if(p.z>topRight.z) { topRight.z = p.z; }
+    }
+    centroid.add(bottomLeft,topRight);
+    centroid.scale(1f/2f);
+  }
 
   public final Node nextNode() {
     return (Node)next();

@@ -265,39 +265,39 @@ private JTabbedPane createSpotLightPane()
 	 Linear.setText("");
 	 Quadratic.setText("");
 	 
-	 xPos.setEnabled(false);
-	 yPos.setEnabled(false);
-	 zPos.setEnabled(false);
+	 xPos.setEditable(false);
+	 yPos.setEditable(false);
+	 zPos.setEditable(false);
 	 
-	 xDir.setEnabled(false);
-	 yDir.setEnabled(false);
-	 zDir.setEnabled(false);
+	 xDir.setEditable(false);
+	 yDir.setEditable(false);
+	 zDir.setEditable(false);
 	 
-	 SpreadAngle.setEnabled(false);
-	 Concentration.setEnabled(false);
+	 SpreadAngle.setEditable(false);
+	 Concentration.setEditable(false);
 	  
-	 Constant.setEnabled(false);
-	 Linear.setEnabled(false);
-	 Quadratic.setEnabled(false);
+	 Constant.setEditable(false);
+	 Linear.setEditable(false);
+	 Quadratic.setEditable(false);
 }
 /** Makes the textsfields editable
  */
 public void EnableEdit()
 {
-	 xPos.setEnabled(true);
-	 yPos.setEnabled(true);
-	 zPos.setEnabled(true);
+	 xPos.setEditable(true);
+	 yPos.setEditable(true);
+	 zPos.setEditable(true);
 	 
-	 xDir.setEnabled(true);
-	 yDir.setEnabled(true);
-	 zDir.setEnabled(true);
+	 xDir.setEditable(true);
+	 yDir.setEditable(true);
+	 zDir.setEditable(true);
 	 
-	 SpreadAngle.setEnabled(true);
-	 Concentration.setEnabled(true);
+	 SpreadAngle.setEditable(true);
+	 Concentration.setEditable(true);
 	  
-	 Constant.setEnabled(true);
-	 Linear.setEnabled(true);
-	 Quadratic.setEnabled(true);
+	 Constant.setEditable(true);
+	 Linear.setEditable(true);
+	 Quadratic.setEditable(true);
 }
 /** Reenable the OK button if any changes are made in the textfields
   */	

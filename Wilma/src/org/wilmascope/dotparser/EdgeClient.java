@@ -1,6 +1,7 @@
 package org.wilmascope.dotparser;
 import java.util.Vector;
 import java.awt.Point;
+import java.util.StringTokenizer;
 public abstract class EdgeClient {
   public class ArrowPosition {
     public ArrowPosition(int curveIndex, boolean arrowAtStart, Point position) {
@@ -17,6 +18,30 @@ public abstract class EdgeClient {
     this.end = end;
   }
   public abstract void setCurves(java.util.Vector curves);
+  public void setCurves(String curvesString) {
+    Vector curves = new Vector();
+    for(StringTokenizer st = new StringTokenizer(curvesString,";");st.hasMoreTokens();) {
+      addCurve(curves,st.nextToken());
+    }
+    setCurves(curves);
+  }
+  private void addCurve(Vector curves, String curve) {
+    Vector pnts = new Vector();
+    for(StringTokenizer st = new StringTokenizer(curve," ");st.hasMoreTokens();) {
+      for(StringTokenizer pt = new StringTokenizer(st.nextToken(),",");pt.hasMoreTokens();) {
+        String s = pt.nextToken();
+        if(s.equals("e")||s.equals("s")) {
+          addArrow(curves.size(),s.equals("s")?true:false, point(pt.nextToken(),pt.nextToken()));
+        } else {
+          pnts.add(point(s,pt.nextToken()));
+        }
+      }
+    }
+    curves.add(pnts);
+  }
+  private Point point(String a, String b) {
+    return new Point(Integer.parseInt(a),Integer.parseInt(b));
+  }
   public void addArrow(int curveIndex, boolean arrowAtStart, Point position) {
     arrowPositions.add(new ArrowPosition(curveIndex, arrowAtStart, position));
   }

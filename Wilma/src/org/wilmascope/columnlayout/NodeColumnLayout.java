@@ -19,7 +19,7 @@ public class NodeColumnLayout extends NodeForceLayout {
     public void setLevel(int level) {
         this.level = level;
     }
-    public int getLevel() {
+    public int getStratum() {
         return level;
     }
     public void addForce(Vector3f f) {

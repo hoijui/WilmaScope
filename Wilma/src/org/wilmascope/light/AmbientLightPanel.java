@@ -11,7 +11,7 @@ import java.util.*;
 /** This class creates a panel to show the parameters of the AmbientLight
  */
 public class AmbientLightPanel extends JPanel {
- /**a label to represent the color of the ambient light
+ /**A label to represent the color of the ambient light
   */
  public JLabel label = new JLabel();
   public AmbientLightPanel() {

@@ -109,6 +109,19 @@ public class Node extends GraphElement {
     return edges;
   }
   /**
+   * @return list of edges for which this is the start node
+   */
+  public EdgeList getOutEdges() {
+    EdgeList out = new EdgeList();
+    for(edges.resetIterator();edges.hasNext();) {
+      Edge e = edges.nextEdge();
+      if(e.getStart()==this) {
+        out.add(e);
+      }
+    }
+    return out;
+  }
+  /**
    * set the edges by which this node is connected to other nodes
    * copies the values in to preserve external references to the original list
    */

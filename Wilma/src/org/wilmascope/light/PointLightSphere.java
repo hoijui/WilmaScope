@@ -23,8 +23,13 @@ public class PointLightSphere extends TransformGroup{
     private Appearance a = new Appearance();
     
     private Transform3D translate=new Transform3D();
-    private Sphere sphere;
-    public PointLightSphere()
+    private Sphere transparentSphere=new Sphere(0.03f);
+     private Material sphereMaterial = new Material();
+      private TransparencyAttributes transparencyAttributes
+   = new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.7f);
+   private Appearance sphereAppearance = new Appearance();
+    private Sphere lightSphere;
+   public PointLightSphere()
     {
     
       m.setCapability(Material.ALLOW_COMPONENT_READ);
@@ -33,8 +38,20 @@ public class PointLightSphere extends TransformGroup{
 	  a.setMaterial(m);
 	  a.setCapability(Appearance.ALLOW_MATERIAL_WRITE);
 	  a.setCapability(Appearance.ALLOW_MATERIAL_READ);
-	  sphere=new Sphere(0.02f,a);
-      this.addChild(sphere);
+	  lightSphere=new Sphere(0.02f,a);
+	  
+	  transparencyAttributes.setCapability(TransparencyAttributes.ALLOW_VALUE_WRITE);
+  	  sphereMaterial.setDiffuseColor(eColor);
+  	  sphereMaterial.setCapability(Appearance.ALLOW_MATERIAL_WRITE);
+	  sphereMaterial.setCapability(Appearance.ALLOW_MATERIAL_READ);
+  	  sphereAppearance.setMaterial(sphereMaterial);
+  	  sphereAppearance.setTransparencyAttributes(transparencyAttributes);
+  	  sphereAppearance.setCapability(Appearance.ALLOW_TRANSPARENCY_ATTRIBUTES_WRITE);
+  	  transparentSphere=new Sphere(0.16f,sphereAppearance);	  
+      
+      this.addChild(lightSphere);
+      this.addChild(transparentSphere);
+      
       this.setTransform(translate);
 	  this.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
       this.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -52,8 +69,11 @@ public class PointLightSphere extends TransformGroup{
 	public void setColor(Color3f color)
 	{
 		m.setEmissiveColor(color);
-		a.setMaterial(m);
+		sphereMaterial.setDiffuseColor(color);
 	}
-	
+	public void setTransparency(float tranparency)
+	{
+			transparencyAttributes.setTransparency(tranparency);
+	}
  
 }

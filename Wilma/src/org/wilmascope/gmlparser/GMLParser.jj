@@ -42,8 +42,8 @@ TOKEN_MGR_DECLS: { static int nestingLevel = 0; }
 
 <IN_IGNORABLE> SKIP:
 {
-  "[" { nestingLevel++; System.err.println("anon bracket, nestingLevel="+nestingLevel); }
-| "]" { if (--nestingLevel == 0 ) SwitchTo(DEFAULT); System.err.println("nesting level="+nestingLevel);}
+  "[" { nestingLevel++; }
+| "]" { if (--nestingLevel == 0 ) SwitchTo(DEFAULT); }
 }
 
 <IN_IGNORABLE> MORE:
@@ -65,7 +65,6 @@ TOKEN:
 | < TARGET: "target" >
 | < NUM: ( ["0"-"9"] )+ >
 | < DEC: "." <NUM> | <NUM> ( "." <NUM> )?  >
-| < GRAPHICSARG: ["a"-"z"]( " " | "\t" | "\n" | "\r" )+ <DEC> >
 | < CTLSTRING: "\""(~["\""])*"\""> {matchedToken.image = matchedToken.image.substring(1, lengthOfMatch - 1); } 
 } 
 
@@ -78,24 +77,36 @@ void graph(GraphClient g) : {}
 
 void stmtList(GraphClient g) : {String s;}
 {
-	{
-	  System.out.println("Parsing the GML graph...");
-	}
+  {
+    System.out.println("Parsing the GML graph...");
+  }
   ( stmt(g) )*
 }
 
-void stmt(GraphClient g) : { NodeClient n; Token t1, t2, t3, t4; }
+void stmt(GraphClient g) : { NodeClient n; Token t1, t2, t3, t4, w, h; }
 {
   <VERSION> <NUM>
 | <DIRECTED> <NUM>
-| <NODE> "["
-    ( <ID> t1=<NUM> <LABEL> t2=<CTLSTRING> ) 
-    { g.addNode(t1.image,t2.image); }
-    "graphics" "[" (<GRAPHICSARG>)* "]"
+| <NODE> "[" { t1=t2=w=h=null; }
+    (( <ID> t1=<NUM> 
+    | <LABEL> t2=<CTLSTRING> 
+    | "graphics" "[" 
+      ( "x" t3=<DEC> | "y" t3=<DEC> | "w" w=<DEC> | "h" h=<DEC> | "type" t3=<CTLSTRING> )* "]"
+    )+) {
+      float width=0,height=0;
+      if(w!=null) width=Float.parseFloat(w.image);
+      if(h!=null) height=Float.parseFloat(h.image);
+      if(t2==null) {
+        System.err.println("WARNING: Node id="+t1.image+" has no label!");
+        g.addNode(t1.image,"",width,height); 
+      } else {
+        g.addNode(t1.image,t2.image,width,height);
+      }
+    } 
   "]"
-| <EDGE> "[" { t3 = null; }
+| <EDGE> "[" { t3 = null; t4 = null; }
     ( <SOURCE> t1=<NUM> <TARGET> t2=<NUM> ( <LABEL> t3=<CTLSTRING> )?
-      "graphics" "[" "arrow" t4=<CTLSTRING> "]" )
+      "graphics" "[" ( "arrow" t4=<CTLSTRING> | "capstyle" <CTLSTRING> )* "]" )
     { if(t3==null) {
         g.addEdge(t1.image, t2.image, t4.image);
       } else {

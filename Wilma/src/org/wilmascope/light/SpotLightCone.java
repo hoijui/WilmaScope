@@ -33,7 +33,13 @@ public class SpotLightCone extends TransformGroup{
     private TransformGroup ScaleGroup=new TransformGroup();
     private Vector3f xAxis=new Vector3f(1,0,0);
     private Vector3f yAxis=new Vector3f(0,1,0);
-	
+    //transparent sphere
+	 private Sphere transparentSphere;
+     private Material sphereMaterial = new Material();
+      private TransparencyAttributes transparencyAttributes
+      = new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.7f);
+    private Appearance sphereAppearance = new Appearance();
+    
 	public SpotLightCone()
 	{
       //sets the material of the cone		
@@ -50,11 +56,28 @@ public class SpotLightCone extends TransformGroup{
   	  t.rotX(Math.PI);
   	  t.setTranslation(new Vector3f(0f,0.075f,0f));
   	  TransformGroup transCone=new TransformGroup(t);
+  	  
+  	  //transparent sphere
+  	  transparencyAttributes.setCapability(TransparencyAttributes.ALLOW_VALUE_WRITE);
+  	  sphereMaterial.setDiffuseColor(eColor);
+  	  sphereMaterial.setCapability(Appearance.ALLOW_MATERIAL_WRITE);
+	  sphereMaterial.setCapability(Appearance.ALLOW_MATERIAL_READ);
+  	  sphereAppearance.setMaterial(sphereMaterial);
+  	  sphereAppearance.setTransparencyAttributes(transparencyAttributes);
+  	  sphereAppearance.setCapability(Appearance.ALLOW_TRANSPARENCY_ATTRIBUTES_WRITE);
+  	  transparentSphere=new Sphere(0.16f,sphereAppearance);
+  	  Transform3D t1=new Transform3D();
+  	  t1.setTranslation(new Vector3f(0f,0.08f,0f));	
+  	  TransformGroup transSphere=new TransformGroup(t1);
+  	  transSphere.addChild(transparentSphere);
+  	  
   	  transCone.addChild(cone);
   	  ScaleGroup.addChild(transCone);
   	  ZGroup.addChild(ScaleGroup);
+  	  ZGroup.addChild(transSphere);
   	  YGroup.addChild(ZGroup);
       this.addChild(YGroup); 	
+      
       YGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
       YGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
       ZGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
@@ -72,7 +95,7 @@ public class SpotLightCone extends TransformGroup{
 	public void setColor(Color3f color)
 	{
 		m.setEmissiveColor(color);
-		a.setMaterial(m);
+		sphereMaterial.setDiffuseColor(color);
 	}
 	/** Sets the spreadAngle of the cone
 	 * @param spreadAngle spreadangle of the spot light
@@ -117,5 +140,9 @@ public class SpotLightCone extends TransformGroup{
    	 YGroup.setTransform(tempY);
  
      }
-  
+    public void setTransparency(float tranparency)
+	{
+	  transparencyAttributes.setTransparency(tranparency);
+	}
+ 
 }

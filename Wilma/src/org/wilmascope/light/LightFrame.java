@@ -1,4 +1,7 @@
 
+/**
+ * @author Christine
+ */
 package org.wilmascope.light;
 import java.awt.*;
 import java.awt.event.*;
@@ -14,8 +17,7 @@ import com.sun.j3d.utils.geometry.Sphere;
 import javax.swing.filechooser.*;
 import java.io.*;
 
- /**  @author Christine
-  * This class is an gui to control light sources,
+ /** This class is an gui to control light sources,
  *   including create, delete, turn on/off, and change the lights' 
  *   parameters
  *
@@ -37,7 +39,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
   //indicate the light panel currently using
   private JPanel lightPane;
   //four light panel
- private DirectionalLightPanel dirPane = new DirectionalLightPanel(this);
+  private DirectionalLightPanel dirPane = new DirectionalLightPanel(this);
   private PointLightPanel pointPane = new PointLightPanel(this);
   private SpotLightPanel spotPane = new SpotLightPanel(this);
   private AmbientLightPanel ambPane = new AmbientLightPanel();
@@ -78,13 +80,19 @@ public class LightFrame extends JFrame implements ListSelectionListener {
   private JPanel rightButtonPane = new JPanel();
   
   //light visualization
-  private Arrow arrow;
+  //all the arrows, spheres and mouse controls are attached to visualGroup
+  private BranchGroup  visualGroup=new BranchGroup();
   private SpotLightCone cone;
   private PointLightSphere sphere;
-  private BranchGroup visualGroup;
-  private DirLightMouseCtrl dirLightMouseCtrl; 
-  private SpotLightMouseCtrl spotLightMouseCtrl; 
-  private PointLightMouseCtrl pointLightMouseCtrl; 
+  private BranchGroup behaviorGroup;
+   
+   private DirLightMouseCtrl dirLightMouseCtrl=new DirLightMouseCtrl(dirPane) ; 
+   private BranchGroup dirMouseCtrlGroup=new BranchGroup();
+   private SpotLightMouseCtrl spotMouseCtrl; 
+  private PointLightMouseCtrl pointLightMouseCtrl=new PointLightMouseCtrl(pointPane); 
+   private BranchGroup pointLightMouseCtrlGroup=new BranchGroup();
+    private SpotLightMouseCtrl spotLightMouseCtrl=new SpotLightMouseCtrl(spotPane); 
+   private BranchGroup spotLightMouseCtrlGroup=new BranchGroup();
   //indicate the new button is pressed
    
  
@@ -92,18 +100,21 @@ public class LightFrame extends JFrame implements ListSelectionListener {
     super("Light Source");
     this.lightManager = lightManager;
     bounds=lightManager.getBoundingSphere();
+    
     initLightList();
+    initVisualObj();
    
     //right
     rightPane.setLayout(new BoxLayout(rightPane, BoxLayout.Y_AXIS));
     rightPane.add(createRadioButtonPane());
-       
     lightPane = dirPane;
     rightPane.add(lightPane);
     lightType="Directional";
+    visualLight();
     showDirectionalLight(0);
     createRightButtonPane();
     rightPane.add(rightButtonPane);
+    
     //left
     leftPane.setLayout(new BoxLayout(leftPane, BoxLayout.Y_AXIS));
     listScrollPane = new JScrollPane(dirList);
@@ -127,17 +138,14 @@ public class LightFrame extends JFrame implements ListSelectionListener {
     
     this.addWindowListener(new WindowAdapter() {
         public void windowClosing(WindowEvent e) {
-        	
-            if(visualGroup!=null)
-                visualGroup.detach();
-            }
-    });
+           cleanup();   	
+       }});
     
     this.setResizable(false);
     //file initialize
      fc = new JFileChooser();
      fc.addChoosableFileFilter(new PropertyFileFilter());
-     fc.setCurrentDirectory(new File("."));   
+     fc.setCurrentDirectory(new File("c:/christine/Wilma/lib"));   
     //help text label 
       text="<html>\n" +
            "<ul>\n" +
@@ -148,6 +156,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
       helpText.setPreferredSize(new Dimension(370,100));
       helpText.setVerticalAlignment(SwingConstants.CENTER);
       helpText.setHorizontalAlignment(SwingConstants.LEFT);
+    
 
 
   }
@@ -191,7 +200,32 @@ public class LightFrame extends JFrame implements ListSelectionListener {
     selectedList=dirList;
     
   }
-
+ // initialize the visualGroup, the light mouse control behavior
+   private void initVisualObj()
+   {
+   	//the branch group to attach the arrows, spheres,cones 
+    visualGroup.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
+    visualGroup.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
+     visualGroup.setCapability(BranchGroup.ALLOW_CHILDREN_READ);
+    lightManager.getBranchGroup().addChild(visualGroup);
+    
+     //for the light Behavior
+    dirMouseCtrlGroup=new BranchGroup();
+    dirMouseCtrlGroup.setCapability(BranchGroup.ALLOW_DETACH);
+    dirLightMouseCtrl.setSchedulingBounds(bounds);
+    dirMouseCtrlGroup.addChild(dirLightMouseCtrl);
+    
+    //for the point light    
+    pointLightMouseCtrlGroup=new BranchGroup();
+    pointLightMouseCtrlGroup.setCapability(BranchGroup.ALLOW_DETACH);
+    pointLightMouseCtrl.setSchedulingBounds(bounds);
+    pointLightMouseCtrlGroup.addChild(pointLightMouseCtrl);
+     //for the spot light    
+    spotLightMouseCtrlGroup=new BranchGroup();
+    spotLightMouseCtrlGroup.setCapability(BranchGroup.ALLOW_DETACH);
+    spotLightMouseCtrl.setSchedulingBounds(bounds);
+    spotLightMouseCtrlGroup.addChild(spotLightMouseCtrl);
+   }
    private JPanel createLeftButtonPane() {
     JPanel buttonPane = new JPanel();
     buttonPane.setPreferredSize(new Dimension(150,0));
@@ -236,7 +270,8 @@ public class LightFrame extends JFrame implements ListSelectionListener {
 // show the selected lights when selection changed   
  public void valueChanged(ListSelectionEvent e) {
       int index = selectedList.getSelectedIndex();
-      	    if (lightType == "Ambient")        	    	   
+    
+            if (lightType == "Ambient")        	    	   
                 showAmbientLight(index);
             if (lightType == "Directional") 
            	    showDirectionalLight(index); 
@@ -246,19 +281,18 @@ public class LightFrame extends JFrame implements ListSelectionListener {
                  showSpotLight(index);
      if(index>=0)
         deleteButton.setEnabled(true); 
-             
+                  
 
    }
  //use different panel when different kind of lights was selected  
   class RadioButtonListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       lightType = e.getActionCommand();
-      
-       if(visualGroup!=null){
-           	visualGroup.detach(); 
-           	visualGroup=null;
-         } 
-       disableOK();	    	
+     //when changes to display a different light type, detach the orginal 3D shapes that
+     //  represent the lights and detach the mouse behavior to control the lights
+       cleanup();
+       disableOK();
+          	
        if (lightType == "Ambient") {
       	rightPane.setVisible(false);
         rightPane.remove(lightPane);
@@ -292,6 +326,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
         selectedList = dirList;
         listScrollPane.setViewportView(selectedList);
         leftPane.setVisible(true);
+        visualLight();	  
         if(dirListModel.size()>0){
        	     deleteButton.setEnabled(true); 
        	     showDirectionalLight(0);
@@ -300,6 +335,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
        		 showDirectionalLight(-1); 
        		 helpText.setText("  ");
        	     }
+         
       }
       if (lightType == "Point") {
       	 
@@ -315,6 +351,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
         selectedList = pointList;
         listScrollPane.setViewportView(selectedList);
         leftPane.setVisible(true);
+          visualLight();
         if(pointListModel.size()>0){
        	     deleteButton.setEnabled(true); 
        	     showPointLight(0);
@@ -339,7 +376,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
         selectedList = spotList;
         listScrollPane.setViewportView(selectedList);
         leftPane.setVisible(true);
-        
+        visualLight();
         if(spotListModel.size()>0){
         	       deleteButton.setEnabled(true); 
        	           showSpotLight(0);
@@ -353,6 +390,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
         
       }
     }
+   
   }
   
   private void showAmbientLight(int index)
@@ -391,19 +429,27 @@ public class LightFrame extends JFrame implements ListSelectionListener {
   { 
   	WilmaLight w;
   	DirectionalLight dirLight;
-  	
-    
+  	for(int i=0;i<lightManager.getDirLightVector().size();i++)
+  	   {
+  	   	w= (WilmaLight)lightManager.getDirLightVector().get(i);        
+  	    w.getArrow().setTransparency(1f);
+  	    }  
     if((index<dirListModel.size())&&(index>=0)){
     	colorButton.setEnabled(true);
     	dirPane.EnableEdit();
        w= (WilmaLight) lightManager.getDirLightVector().get(index);
+       w.getArrow().setTransparency(0.7f);
+       //tells the dirLightMouseCtrl which arrow and light to control
+       dirLightMouseCtrl.setArrow(w.getArrow());
        dirLight=(DirectionalLight)w.getLight();
+       dirLightMouseCtrl.setLight(dirLight);
+       
        dirLight.getDirection(direction);
        dirPane.xDir.setText(String.valueOf(direction.x));
        dirPane.yDir.setText(String.valueOf(direction.y));
        dirPane.zDir.setText(String.valueOf(direction.z));
-       visualLight(dirLight);
-      if(dirLight.getEnable()==true)
+       
+       if(dirLight.getEnable()==true)
             {
             	onButton.setEnabled(false);
                 offButton.setEnabled(true);
@@ -431,14 +477,23 @@ public class LightFrame extends JFrame implements ListSelectionListener {
   {  
   	 WilmaLight w;
   	 PointLight pointLight;
-  	
+  	for(int i=0;i<lightManager.getPointLightVector().size();i++)
+  	   {
+  	   	w= (WilmaLight)lightManager.getPointLightVector().get(i);        
+  	    w.getSphere().setTransparency(1f);
+  	    }  
   
-  	if((index<pointListModel.size())&&index>=0)
+  	if((index<pointListModel.size())&&(index>=0))
         {
         colorButton.setEnabled(true);
     	pointPane.EnableEdit();
         w= (WilmaLight) lightManager.getPointLightVector().get(index);
-        pointLight=(PointLight)w.getLight(); 
+        w.getSphere().setTransparency(0.7f);
+        
+        pointLight=(PointLight)w.getLight();
+        //tells the pointLightMouseCtrl which sphere and light to control
+        pointLightMouseCtrl.setSphere(w.getSphere());
+        pointLightMouseCtrl.setLight(pointLight); 
         //position
         pointLight.getPosition(position);
         pointPane.xPos.setText(String.valueOf(position.x));
@@ -457,7 +512,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
         	 onButton.setEnabled(true); 
              offButton.setEnabled(false);  
               }
-       visualLight(pointLight); 
+       
        text="<html>\n" +
                          "<ul>\n" +
                          "<li><font color=blue>Left mouse+drag to change the light's X/Y position.</font>\n" +
@@ -477,12 +532,23 @@ public class LightFrame extends JFrame implements ListSelectionListener {
   private void showSpotLight(int index){
   	SpotLight spotLight;
   	WilmaLight w;
+  	for(int i=0;i<lightManager.getSpotLightVector().size();i++)
+  	   {
+  	   	w= (WilmaLight)lightManager.getSpotLightVector().get(i);        
+  	    w.getCone().setTransparency(1f);
+  	    }  
   	if((index<spotListModel.size())&&(index>=0))
           {
         colorButton.setEnabled(true);
     	spotPane.EnableEdit();
+        
         w= (WilmaLight) lightManager.getSpotLightVector().get(index);
-        spotLight=(SpotLight)w.getLight(); 	
+        w.getCone().setTransparency(0.7f);
+        //tells the spotLightMouseCtrl which cone and light to control
+        spotLight=(SpotLight)w.getLight();
+        spotLightMouseCtrl.setCone(w.getCone());
+        spotLightMouseCtrl.setLight(spotLight);  	
+        
         spotLight.getDirection(direction);
         spotPane.xDir.setText(String.valueOf(direction.x));
         spotPane.yDir.setText(String.valueOf(direction.y));
@@ -512,8 +578,6 @@ public class LightFrame extends JFrame implements ListSelectionListener {
         	 onButton.setEnabled(true); 
              offButton.setEnabled(false);  
               }
-        //attach the cone for the spotLight
-          visualLight(spotLight);
         String text="<html>\n" +
                     "<ul>\n" +
                     "<li><font color=blue>Left mouse+drag to change thelight's direction</font>\n" +
@@ -532,54 +596,46 @@ public class LightFrame extends JFrame implements ListSelectionListener {
           } 
          
    }
- //create the mouse control and representation for the selected light
- private void visualLight(Light l)
+ //attaches the 3D shapes represent the lights and light mouse control behavior
+ //to visualGroup
+ private void visualLight()
  {     
  	   Point3f position=new Point3f();
  	   Vector3f direction=new Vector3f(); 
  	   Color3f color=new Color3f();
+ 	   WilmaLight w;
  	   float spreadAngle;
- 	   if(visualGroup!=null)
-           {
-           	visualGroup.detach(); 
-           	visualGroup=null;
-           
-           }  
- 	   visualGroup=new BranchGroup();
-       visualGroup.setCapability(BranchGroup.ALLOW_DETACH);
-       visualGroup.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
+ 	   
+ 	   
        if (lightType == "Directional") 
            {
-              arrow=new Arrow();
-             //create a mouse control to rotate  the light       	                    	
-             dirLightMouseCtrl=new DirLightMouseCtrl(arrow,(DirectionalLight)l,dirPane); 
-             dirLightMouseCtrl.setSchedulingBounds(bounds);
-             //attach the arrow to the scene graph to represent the directional light
-             visualGroup.addChild(dirLightMouseCtrl);
-             visualGroup.addChild(arrow);
-          
-            }
+             for(int i=0;i<lightManager.getDirLightVector().size();i++)
+                     {
+                       w= (WilmaLight)lightManager.getDirLightVector().get(i);
+                       visualGroup.addChild(w.getObjGroup());
+                     }
+             visualGroup.addChild(dirMouseCtrlGroup);
+             
+           }
        if (lightType == "Point") 
              {  
-               sphere=new PointLightSphere();
-               pointLightMouseCtrl=new PointLightMouseCtrl(sphere,(PointLight)l,pointPane);
-               pointLightMouseCtrl.setSchedulingBounds(bounds);
-              visualGroup.addChild(pointLightMouseCtrl);
-               visualGroup.addChild(sphere);
+               for(int i=0;i<lightManager.getPointLightVector().size();i++)
+                     {
+                       w= (WilmaLight)lightManager.getPointLightVector().get(i);
+                       visualGroup.addChild(w.getObjGroup());
+                     }
+               visualGroup.addChild(pointLightMouseCtrlGroup);
               }
-       if (lightType == "Spot") 
-              {  
-            	
-               	cone=new SpotLightCone();
-                
-                spotLightMouseCtrl=new SpotLightMouseCtrl(cone,(SpotLight)l,spotPane);
-               	spotLightMouseCtrl.setSchedulingBounds(bounds);
-               	visualGroup.addChild(spotLightMouseCtrl);
-                visualGroup.addChild(cone);
-                
-               
-               }
-               lightManager.getBranchGroup().addChild(visualGroup);  
+      if (lightType == "Spot") 
+             {  
+               for(int i=0;i<lightManager.getSpotLightVector().size();i++)
+                     {
+                       w= (WilmaLight)lightManager.getSpotLightVector().get(i);
+                       visualGroup.addChild(w.getObjGroup());
+                     }
+               visualGroup.addChild(spotLightMouseCtrlGroup);
+              }
+            
        }  
  private void buildConstraints(GridBagConstraints gbc, int gx,int gy,int gw,int gh,int wx,int wy){
        gbc.gridx=gx;
@@ -661,7 +717,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
                 if(newColour!=null)
                   {
                    ((DirectionalLight)w.getLight()).setColor(new Color3f(newColour));
-                    arrow.setColor(new Color3f(newColour));
+                    w.getArrow().setColor(new Color3f(newColour));
                   }
                  
             }
@@ -672,7 +728,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
                    if(newColour!=null)
                   {
                    ((PointLight)w.getLight()).setColor(new Color3f(newColour));
-                   sphere.setColor(new Color3f(newColour));
+                   w.getSphere().setColor(new Color3f(newColour));
                   }
                    
             } 
@@ -683,7 +739,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
                   if(newColour!=null)
                   {
                   ((SpotLight)w.getLight()).setColor(new Color3f(newColour));
-                   cone.setColor(new Color3f(newColour));
+                   w.getCone().setColor(new Color3f(newColour));
                   }
             } 
           
@@ -696,20 +752,18 @@ public class LightFrame extends JFrame implements ListSelectionListener {
           if (lightType == "Ambient") {
                  ambPane.setDefaultValue();
             }
-           if (lightType == "Directional") {
+         if (lightType == "Directional") {
                  dirPane.setDefaultValue();
                  
                  
             }
-           if (lightType == "Point") {
+        if (lightType == "Point") {
                   pointPane.setDefaultValue();
                              } 
-             if (lightType == "Spot") {
+        if (lightType == "Spot") {
                   spotPane.setDefaultValue();
               }
-           if(visualGroup!=null)
-                       visualGroup.detach();  
-           createNewLight();              
+       createNewLight();              
     }
   }
  
@@ -723,7 +777,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
         if(index>=0){        	   
                  if (lightType == "Ambient"){   
                          lightManager.deleteAmbLight(index);
-                         //if the vector is empty after remove, clear the textfield of the panel                  
+                         //if the light vector is empty after remove, clear the textfield of the panel                  
                          if(lightManager.getAmbLightVector().size()==0){
                          	deleteButton.setEnabled(false);
        	                    ambPane.clear();   
@@ -742,10 +796,11 @@ public class LightFrame extends JFrame implements ListSelectionListener {
                    
                      }
                 if (lightType == "Directional"){
+                	     WilmaLight w=(WilmaLight)lightManager.getDirLightVector().get(index);
+                          w.deleteObj();
                          lightManager.deleteDirLight(index);
                          if(lightManager.getDirLightVector().size()==0){
-                         	    visualGroup.detach();//delete the arrow
-       	                     	deleteButton.setEnabled(false);  
+                         	   deleteButton.setEnabled(false);  
        	                        dirPane.clear();
        	                          dirList.setSelectedIndex(-1);
        	                        dirListModel.removeAllElements();   
@@ -757,13 +812,15 @@ public class LightFrame extends JFrame implements ListSelectionListener {
        	                        dirList.setSelectedIndex(0);
                                
        	                      }
-                       
+                      
                    }
                if (lightType == "Point"){ 
+               	      WilmaLight w=(WilmaLight)lightManager.getPointLightVector().get(index);
+                          w.deleteObj();
                     lightManager.deletePointLight(index);    
                     if(lightManager.getPointLightVector().size()==0)
        	                   {
-       	                   	visualGroup.detach();//delete the sphere
+       	                   	
        	                   	deleteButton.setEnabled(false); 
        	                   	 pointPane.clear(); 
        	                   	  pointList.setSelectedIndex(-1);
@@ -779,9 +836,11 @@ public class LightFrame extends JFrame implements ListSelectionListener {
        	         
                    } 
               if (lightType == "Spot"){
-                       lightManager.deleteSpotLight(index);
+              	    WilmaLight w=(WilmaLight)lightManager.getSpotLightVector().get(index);
+                    w.deleteObj();
+                     lightManager.deleteSpotLight(index);
                       if( lightManager.getSpotLightVector().size()==0){
-                      	    visualGroup.detach();//delete the cone
+                      	    
                       	    spotListModel.removeAllElements();
        	                  	deleteButton.setEnabled(false);
        	                    spotPane.clear();  
@@ -827,12 +886,15 @@ public class LightFrame extends JFrame implements ListSelectionListener {
                  
                   file = fc.getSelectedFile();
                   name = file.getName();
+               
                   //load the light configuration                
-                  lightManager.loadFile(name);   
+                  lightManager.loadFile(name);
+                  cleanup();   
                   ambListModel.clear(); 
                   dirListModel.clear();
                   pointListModel.clear();
                   spotListModel.clear();
+                  
                   for (int i = 0; i < lightManager.getAmbLightVector().size(); i++)
                      ambListModel.addElement("Ambient Light" + i);
                   for (int i = 0; i < lightManager.getDirLightVector().size(); i++)
@@ -841,14 +903,18 @@ public class LightFrame extends JFrame implements ListSelectionListener {
                      pointListModel.addElement("Point Light" + i);
                   for (int i = 0; i < lightManager.getSpotLightVector().size(); i++)
                      spotListModel.addElement("Spot Light" + i);    
-                  if(ambListModel.size()>0) 
-                       ambList.setSelectedIndex(0);   
+                if(ambListModel.size()>0) 
+                       ambList.setSelectedIndex(0); 
+                         
                   if(dirListModel.size()>0) 
-                       dirList.setSelectedIndex(0);    
+                       dirList.setSelectedIndex(0);
+                        
                   if(pointListModel.size()>0) 
                      pointList.setSelectedIndex(0); 
+                  
                   if(spotListModel.size()>0) 
-                     spotList.setSelectedIndex(0);       
+                     spotList.setSelectedIndex(0);      
+                  visualLight();   
                  } 
          }
     }
@@ -869,8 +935,8 @@ public class LightFrame extends JFrame implements ListSelectionListener {
                   else {
                   	  if(!name.endsWith(".properties"))
                   	        name+=".properties";
-                  	  lightManager.setPropertyFileName(name);
-                  	  lightManager.saveToNewFile();    
+                  	 
+                  	  lightManager.saveToNewFile(name);    
                        }
                     
                   
@@ -881,27 +947,20 @@ public class LightFrame extends JFrame implements ListSelectionListener {
      private void createNewLight()
      {        
      	      try{
-     	       BranchGroup bg=lightManager.getBranchGroup();
-               int size =selectedList.getModel().getSize();
-              
-               
-               BranchGroup lightGroup=new BranchGroup();
-               lightGroup.setCapability(BranchGroup.ALLOW_DETACH);
-               lightGroup.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
-              
-               WilmaLight w=new WilmaLight();
+     	       int size =selectedList.getModel().getSize();
+             
                if (lightType == "Ambient") {
                   lightManager.createAmbLight();
     	          ambListModel.addElement("Ambient Light"+size);
     	          selectedList.setSelectedIndex(size);
                   }
               if (lightType == "Directional") { 
-         	     
-         	                   
-                  //create new directional light
+         	     //create new directional light
                   lightManager.createDirLight();
     	          dirListModel.addElement("Directional Light"+size);
     	          selectedList.setSelectedIndex(size);
+    	           WilmaLight w=(WilmaLight) lightManager.getDirLightVector().get(size);
+    	           visualGroup.addChild(w.getObjGroup());
                  }
               if (lightType == "Point") {  
          	     
@@ -909,12 +968,16 @@ public class LightFrame extends JFrame implements ListSelectionListener {
     	          // add to the list
     	          pointListModel.addElement("Point Light"+size);
     	          selectedList.setSelectedIndex(size);
+    	          WilmaLight w=(WilmaLight) lightManager.getPointLightVector().get(size);
+    	          visualGroup.addChild(w.getObjGroup());
     	          
                  }     
              if (lightType == "Spot") {  
           	     lightManager.createSpotLight();
           	     spotListModel.addElement("Spot Light"+size);	
     	          selectedList.setSelectedIndex(size);
+    	         WilmaLight w=(WilmaLight) lightManager.getSpotLightVector().get(size);
+    	         visualGroup.addChild(w.getObjGroup()); 
     	        }
      	      }catch(Exception e){
      	      	 JOptionPane.showMessageDialog(new JFrame(), " Input parameters error. Please check again.",
@@ -939,7 +1002,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
                   WilmaLight lightSelected=(WilmaLight)lightManager.getDirLightVector().get(index);
                   DirectionalLight dirLight=(DirectionalLight)lightSelected.getLight();
                   dirLight.setDirection(direction);
-                  arrow.setDirection(direction);
+                  lightSelected.getArrow().setDirection(direction);
                }
               if (lightType == "Point") {  
          	     //position
@@ -955,7 +1018,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
                 PointLight pointLight=(PointLight)lightSelected.getLight();
                 pointLight.setPosition(position);
                 pointLight.setAttenuation(attenuation);
-                sphere.setPosition(position);
+                lightSelected.getSphere().setPosition(position);
                }     
              if (lightType == "Spot") {  
           	      //direction 
@@ -982,12 +1045,12 @@ public class LightFrame extends JFrame implements ListSelectionListener {
                  spotLight.setAttenuation(attenuation);
                  spotLight.setSpreadAngle(SpreadAngle);
                  spotLight.setConcentration(Concentration);
-                 Concentration=spotLight.getConcentration();
+                
                 
                  if(SpreadAngle>Math.PI/2) SpreadAngle=(float)Math.PI;
-                 cone.setSpreadAngle(SpreadAngle);
-                 cone.setDirection(direction);
-                 cone.setPosition(position);
+                 lightSelected.getCone().setSpreadAngle(SpreadAngle);
+                 lightSelected.getCone().setDirection(direction);
+                 lightSelected.getCone().setPosition(position);
               }   
           }
        catch (Exception e)
@@ -1001,8 +1064,7 @@ public class LightFrame extends JFrame implements ListSelectionListener {
   
   /**
    *Enables the OK button 
-   * 
-   * */
+  * */
   
    void enableOK()
     {
@@ -1080,6 +1142,16 @@ public class LightFrame extends JFrame implements ListSelectionListener {
    {
    	return selectedList;
    }
-   
+//detach all the children from visualGroup
+   private void cleanup()
+   {
+   	
+   	 Enumeration e=visualGroup.getAllChildren();
+   	 while(e.hasMoreElements())  	
+   	     {
+   	      BranchGroup b=(BranchGroup)e.nextElement();
+   	      b.detach();
+   	     }
+    }
 
 }

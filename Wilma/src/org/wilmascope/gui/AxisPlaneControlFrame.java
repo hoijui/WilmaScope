@@ -1,12 +1,30 @@
 package org.wilmascope.gui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.print.PageFormat;
+import java.awt.print.PrinterJob;
+
+import javax.media.j3d.Appearance;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Material;
+import javax.media.j3d.Shape3D;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.media.j3d.TransparencyAttributes;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
+
+import org.wilmascope.columnlayout.ColumnLayout;
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.Node;
+import org.wilmascope.graph.NodeList;
 import org.wilmascope.view.GraphCanvas;
-import javax.vecmath.*;
-import javax.media.j3d.*;
-import java.awt.event.*;
 
 import com.sun.j3d.utils.picking.PickTool;
 /**
@@ -19,24 +37,35 @@ import com.sun.j3d.utils.picking.PickTool;
  */
 
 public class AxisPlaneControlFrame extends JFrame {
-  GridLayout gridLayout1 = new GridLayout();
 
   public AxisPlaneControlFrame() {
     try {
-      jbInit();
     }
     catch(Exception e) {
       e.printStackTrace();
     }
   }
   public AxisPlaneControlFrame(GraphControl gc) {
-    this();
     canvas = gc.getGraphCanvas();
     root = gc.getRootCluster();
-    org.wilmascope.graph.NodeList l = root.getCluster().getAllNodes();
-    Point3f c = l.getBarycenter();
-    float width = l.getWidth();
-    float height = l.getHeight();
+    NodeList l = root.getCluster().getAllNodes();
+    for(l.resetIterator();l.hasNext();) {
+      Node n = l.nextNode();
+      if(n instanceof Cluster) {
+        if(((Cluster)n).getLayoutEngine() instanceof ColumnLayout) {
+          ColumnLayout c = (ColumnLayout)((Cluster)n).getLayoutEngine();
+          strataSeparation = c.getStrataSeparation();
+          strataCount = c.getStrataCount();
+          break;
+        }
+      }
+    }
+    bottomLeft = new Point3f();
+    Point3f topRight = new Point3f();
+    centroid = new Point3f();
+    l.getBoundingBoxCorners(bottomLeft,topRight,centroid);
+    float width = topRight.x - bottomLeft.x;
+    float height = topRight.y - bottomLeft.y;
     System.out.println("width="+width+",height="+height);
     axisPlaneBG = new BranchGroup();
     axisPlaneBG.setCapability(BranchGroup.ALLOW_DETACH);
@@ -63,26 +92,31 @@ public class AxisPlaneControlFrame extends JFrame {
     axisPlaneBG.compile();
     showAxisPlane();
 
-    centroid = new Vector3f(c);
     Transform3D trans = new Transform3D();
-    trans.setTranslation(centroid);
+    trans.setTranslation(new Vector3f(centroid));
     axisPlaneTG.setTransform(trans);
+    
+    Cluster r = root.getCluster();
+    while(r.getNodes().size()==1) {
+      r = (Cluster)r.getNodes().get(0);
+    }
+    drawingPanel = new DrawingPanel(r, bottomLeft, topRight);
+    setSelectedStratum(0);
+    jbInit();
   }
-  private void jbInit() throws Exception {
-    box1 = Box.createHorizontalBox();
-    box2 = Box.createVerticalBox();
-    box3 = Box.createVerticalBox();
-    this.getContentPane().setLayout(gridLayout1);
+  private void jbInit() {
+    hBox = Box.createHorizontalBox();
+    vBox = Box.createVerticalBox();
     upButton.setText("Up");
     upButton.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        upButton_actionPerformed(e);
+        setSelectedStratum(++selectedStratum);
       }
     });
     downButton.setText("Down");
     downButton.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        downButton_actionPerformed(e);
+        setSelectedStratum(--selectedStratum);
       }
     });
     showButton.setText("Show");
@@ -97,38 +131,30 @@ public class AxisPlaneControlFrame extends JFrame {
         hideButton_actionPerformed(e);
       }
     });
-    this.getContentPane().add(box1, null);
-    box1.add(box2, null);
-    box2.add(upButton, null);
-    box2.add(downButton, null);
-    box1.add(box3, null);
-    box3.add(showButton, null);
-    box3.add(hideButton, null);
+    printButton.setText("Print");
+    printButton.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        printButton_actionPerformed(e);
+      }
+    });
+    this.getContentPane().add(hBox, null);
+    vBox.add(upButton, null);
+    vBox.add(downButton, null);
+    vBox.add(showButton, null);
+    vBox.add(hideButton, null);
+    vBox.add(printButton, null);
+    hBox.add(vBox);
+    hBox.add(drawingPanel);
   }
-  GraphCanvas canvas;
-  GraphControl.ClusterFacade root;
-  TransformGroup axisPlaneTG;
-  BranchGroup axisPlaneBG;
-  javax.swing.Box box1;
-  javax.swing.Box box2;
-  JButton upButton = new JButton();
-  JButton downButton = new JButton();
-  Box box3;
-  JButton showButton = new JButton();
-  JButton hideButton = new JButton();
-
-  void upButton_actionPerformed(ActionEvent e) {
+  
+  void setSelectedStratum(int selectedStratum) {
+    this.selectedStratum = selectedStratum;
+    downButton.setEnabled(selectedStratum==0?false:true);
+    upButton.setEnabled(selectedStratum==(strataCount-1)?false:true);
+    drawingPanel.setStratum(selectedStratum);
     Transform3D trans = new Transform3D();
-    centroid.z+=0.2f;
-    trans.setTranslation(centroid);
-    axisPlaneTG.setTransform(trans);
-  }
-  Vector3f centroid;
-
-  void downButton_actionPerformed(ActionEvent e) {
-    Transform3D trans = new Transform3D();
-    centroid.z-=0.2f;
-    trans.setTranslation(centroid);
+    centroid.z=bottomLeft.z+strataSeparation*selectedStratum;
+    trans.setTranslation(new Vector3f(centroid));
     axisPlaneTG.setTransform(trans);
   }
 
@@ -141,9 +167,42 @@ public class AxisPlaneControlFrame extends JFrame {
   void showButton_actionPerformed(ActionEvent e) {
     showAxisPlane();
   }
+  
+  void printButton_actionPerformed(ActionEvent e) {
+    PrinterJob printJob = PrinterJob.getPrinterJob();
+    printJob.setPrintable(drawingPanel);
+    PageFormat pf = printJob.pageDialog(printJob.defaultPage());
+    if (printJob.printDialog()) {
+      try {
+        printJob.print();
+      } catch (Exception ex) {
+      }
+    }
+  }
+  
   void showAxisPlane() {
     canvas.getTransformGroup().addChild(axisPlaneBG);
     showButton.setEnabled(false);
     hideButton.setEnabled(true);
   }
+
+  void kill() {
+    show(false);
+    axisPlaneBG.detach();
+  }
+  Point3f centroid, bottomLeft;
+  float strataSeparation;
+  int strataCount;
+  int selectedStratum = 0;
+  GraphCanvas canvas;
+  GraphControl.ClusterFacade root;
+  TransformGroup axisPlaneTG;
+  BranchGroup axisPlaneBG;
+  JButton upButton = new JButton();
+  JButton downButton = new JButton();
+  Box hBox, vBox;
+  JButton showButton = new JButton();
+  JButton hideButton = new JButton();
+  JButton printButton = new JButton();
+  DrawingPanel drawingPanel;
 }

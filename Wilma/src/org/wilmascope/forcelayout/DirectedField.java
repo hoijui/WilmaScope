@@ -61,7 +61,7 @@ public class DirectedField extends Force {
         t.cross(vector, edgeVector);
         r.cross(edgeVector, t);
         //r.scale(edge.getMagnetism());
-        r.scale(strengthConstant);
+        r.scale(strengthConstant/10f);
         ((NodeForceLayout)edge.getEnd().getLayout()).addForce(r);
         ((NodeForceLayout)edge.getStart().getLayout()).subForce(r);
       }

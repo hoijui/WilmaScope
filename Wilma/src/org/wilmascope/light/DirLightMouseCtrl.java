@@ -4,7 +4,6 @@ package org.wilmascope.light;
  * 
  */
 
-import com.sun.j3d.utils.geometry.*;
 import com.sun.j3d.utils.behaviors.mouse.*;
 import javax.media.j3d.*;
 import javax.vecmath.*;
@@ -34,16 +33,11 @@ public class DirLightMouseCtrl  extends MouseBehavior{
     private  WakeupOr mouseCriterion;
     private DirectionalLightPanel dirPane;
   
-    public DirLightMouseCtrl(Arrow arrow,DirectionalLight dirLight, DirectionalLightPanel panel)
+    public DirLightMouseCtrl(DirectionalLightPanel panel)
     	{
-		 super(arrow);
-		 this.dirLight=dirLight;
-		 this.arrow=arrow;
-		dirPane=panel;
-		dirLight.getDirection(direction);
-		dirLight.getColor(color);
-		arrow.setDirection(direction);
-		arrow.setColor(color);
+		 super(new TransformGroup());
+		 dirPane=panel;
+		
 	}
  /**  Initializes the wake up event
 	 */
@@ -81,8 +75,7 @@ public class DirLightMouseCtrl  extends MouseBehavior{
                	       x_last=x;
                        y_last=y;
                    }
-             if((buttonMask==MouseEvent.BUTTON1_MASK)&&(id==MouseEvent.MOUSE_DRAGGED)
-                 &&(arrow!=null)){
+             if((buttonMask==MouseEvent.BUTTON1_MASK)&&(id==MouseEvent.MOUSE_DRAGGED)){
                //rotate with the x and y axis
                //move x direction to rotate around the y axis
                //move y direction to rotate around the x axis                   
@@ -95,15 +88,17 @@ public class DirLightMouseCtrl  extends MouseBehavior{
                   temp1.rotY(angleY);
                   temp2.rotX(angleX);
                   temp2.mul(temp1);
+                   dirLight.getDirection(direction);
                   temp2.transform(direction);
                   dirLight.setDirection(direction);
                   arrow.setDirection(direction);
                   dirPane.xDir.setText(""+direction.x);
                   dirPane.yDir.setText(""+direction.y);
                   dirPane.zDir.setText(""+direction.z);
+                  
+   	  
                }
-             if((buttonMask==MouseEvent.BUTTON3_MASK)&&(id==MouseEvent.MOUSE_DRAGGED)
-                 &&(arrow!=null)){
+             if((buttonMask==MouseEvent.BUTTON3_MASK)&&(id==MouseEvent.MOUSE_DRAGGED)){
                   dx = x- x_last;
                   dy = -(y- y_last);
                   dx=dx*0.005;
@@ -126,8 +121,19 @@ public class DirLightMouseCtrl  extends MouseBehavior{
            wakeupOn(mouseCriterion);
        }     
    }
-   
-  
+
+public void setArrow(Arrow arrow)
+{
+      this.arrow=arrow;
+     
+   	  
+}  
+public void setLight(DirectionalLight light)
+{
+      this.dirLight=light;
+     
+      
+}    
 }
 
 
