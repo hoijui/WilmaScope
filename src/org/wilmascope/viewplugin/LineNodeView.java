@@ -8,8 +8,8 @@ import org.wilmascope.graph.Node;
 import javax.swing.ImageIcon;
 
 /**
- * Use with LineEdge... the node itself is invisible but this node type ensures that the line edge colours are set according to the node colour
- *
+ * Basically the following is an invisible dummy node...
+ * might replace it with an OpenGL dot
  */
 public class LineNodeView extends NodeView {
 
@@ -22,29 +22,6 @@ public class LineNodeView extends NodeView {
   }
   protected void init() {
   }
-  public void setColour(Color3f c) {
-    super.setColour(c);
-    Node n = getNode();
-    this.colour = c;
-    EdgeList edges = n.getEdges();
-    for(edges.resetIterator();edges.hasNext();) {
-      Edge e = edges.nextEdge();
-      if(!(e.getView() instanceof LineEdgeView)) {
-        System.err.println("WARNING: LineNodeView is only really useful when using LineEdgeViews");
-        return;
-      }
-      LineEdgeView v = (LineEdgeView)e.getView();
-      if(e.getStart() == n) {
-        v.setStartColour(c);
-      } else {
-        v.setEndColour(c);
-      }
-    }
-  }
-  public Color3f getColor3f() {
-    return colour;
-  }
-  Color3f colour = Colours.white;
   public ImageIcon getIcon() {
     return new ImageIcon(org.wilmascope.images.Images.class.getResource("dot.png"));
   }

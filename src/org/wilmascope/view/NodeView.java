@@ -36,7 +36,10 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
+import org.wilmascope.graph.Edge;
+import org.wilmascope.graph.EdgeList;
 import org.wilmascope.graph.Node;
+import org.wilmascope.viewplugin.LineEdgeView;
 
 import com.sun.j3d.utils.geometry.Cone;
 /**
@@ -157,6 +160,26 @@ public abstract class NodeView extends GraphElementView implements org.wilmascop
     localToVworld.invert();
     localToVworld.transform(pos);
     node.setPosition(pos);
+  }
+  /*
+   * LineEdges need to be updated when one of their end nodes change colour
+   */
+  public void setColour(Color3f c) {
+    super.setColour(c);
+    Node n = getNode();
+    EdgeList edges = n.getEdges();
+    for(edges.resetIterator();edges.hasNext();) {
+      Edge e = edges.nextEdge();
+      if(!(e.getView() instanceof LineEdgeView)) {
+        return;
+      }
+      LineEdgeView v = (LineEdgeView)e.getView();
+      if(e.getStart() == n) {
+        v.setStartColour(c);
+      } else {
+        v.setEndColour(c);
+      }
+    }
   }
   public void setProperties(Properties p) {
     super.setProperties(p);

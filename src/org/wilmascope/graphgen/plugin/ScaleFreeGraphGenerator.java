@@ -82,7 +82,7 @@ public class ScaleFreeGraphGenerator extends GraphGenerator implements Runnable 
             .getValue();
       }
     });
-    probabilitySlider.addChangeListener(new ChangeListener() {
+    delaySlider.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
         delay = delaySlider.getValue();
       }
@@ -114,7 +114,7 @@ public class ScaleFreeGraphGenerator extends GraphGenerator implements Runnable 
 
     root.deleteAll();
     for (int i = 0; i < initSize; i++) {
-      GraphControl.NodeFacade v = root.addNode(getNodeView());
+      GraphControl.NodeFacade v = root.addNode();
       setColour(v);
     }
     new Thread(this).start();
@@ -128,7 +128,7 @@ public class ScaleFreeGraphGenerator extends GraphGenerator implements Runnable 
   }
 
   private void setColour(GraphControl.NodeFacade n) {
-    float d = (float) n.getNode().degree();
+    float d = (float) n.getDegree();
     float h = 2 * d / 360f;
     float sb = 0.5f + d / 20f;
     n.setColour(Color.getHSBColor(h, sb, sb));
@@ -172,9 +172,10 @@ public class ScaleFreeGraphGenerator extends GraphGenerator implements Runnable 
       }
       GraphControl.NodeFacade[] l = root.getNodes();
       GraphControl.NodeFacade u = root.addNode();
+      setColour(u);
       int totalDegree = 1;
       for (GraphControl.NodeFacade n : l) {
-        totalDegree += n.getNode().degree();
+        totalDegree += n.getDegree();
       }
       ProbableNode[] nodes = new ProbableNode[l.length];
       for (int j = 0; j < l.length; j++) {
