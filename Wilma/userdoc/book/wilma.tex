@@ -157,12 +157,16 @@ the other components is via a carefully defined interface which should
 not require change one of the components is modified in some way.  The
 standard data flow diagram for the MVC architecture is shown in Figure
 \ref{fig-mvc}.
-\begin{figure}
-\begin{center}
-\scalebox{0.8}{\includegraphics{figures/mvc.eps}} \\
-\caption{{\sc WilmaScope Visualisation of Web Site Structure}}
-\label{fig-mvc}
-\end{center}
+
+\begin{figure}[h]
+  \centering
+  \subfigure[MVC Architecture]{
+    \label{fig-mvc}
+    \includegraphics[width=0.4\textwidth]{figures/mvc.eps}}
+  \subfigure[Wilma Architecture]{
+    \label{fig-wilmamvc}
+    \includegraphics[width=0.5\textwidth]{figures/wilmamvc.eps}}
+  \caption{The classic MVC framework and Wilma's utilisation of MVC.}
 \end{figure}
 
 \paragraph{}
@@ -189,7 +193,7 @@ can load and save files to an XML format.
 
 \paragraph{}
 
-Figure \ref{fig:arch} shows a collaboration diagram for this overall
+Figure \ref{fig-wilmamvc} shows a collaboration diagram for this overall
 architecture. 
 
 \subsection{Layout Algorithms}
