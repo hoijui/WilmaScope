@@ -312,14 +312,6 @@ implements org.wilmascope.graph.Viewable {
       System.out.println("Not setting bits on already setup shared geometry");
     }
   }
-
-  /**
-   * A stub for adding code to popup user defined options
-   */
-  public javax.swing.JMenuItem getUserOptionsMenuItem(java.awt.Component parent) {
-    return null;
-  }
-
   public void hide() {
     bg.detach();
   }
@@ -344,9 +336,11 @@ implements org.wilmascope.graph.Viewable {
   public void setPickable(boolean pickable) {
     this.pickable = pickable;
   }
-  public void setData(String data) {};
-  public String getData() {
-    return null;
+  public void setUserData(Object data) {
+    this.userData = data;
+  };
+  public Object getUserData() {
+    return userData;
   }
   protected void addLiveBranch(BranchGroup b) {
     labelBranch.addChild(b);
@@ -374,4 +368,5 @@ implements org.wilmascope.graph.Viewable {
   private boolean defaultColourSet = true;
   private Material highlightMaterial;
   private boolean pickable = true;
+  private Object userData;
 }

@@ -44,26 +44,6 @@ public class DefaultNodeView extends NodeView {
   protected void setupHighlightMaterial() {
     setupHighlightAppearance(Colours.yellowMaterial);
   }
-  public javax.swing.JMenuItem getUserOptionsMenuItem(java.awt.Component parent) {
-    javax.swing.JMenuItem menuItem = new javax.swing.JMenuItem();
-    menuItem.setText("Show Details...");
-    menuItem.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent e) {
-        menuItemActionPerformed();
-      }
-    });
-    return menuItem;
-  }
-  public void menuItemActionPerformed() {
-    DetailFrame details = new DetailFrame(this, "text/html",text);
-    details.show();
-  }
-  public void setData(String text) {
-    this.text = text;
-  }
-  public String getData() {
-    return text;
-  }
   protected void init() {
     /*
     Sphere sphere = new Sphere(1.0f,Sphere.GENERATE_NORMALS,10,getAppearance());
@@ -73,6 +53,6 @@ public class DefaultNodeView extends NodeView {
     LODSphere sphere = new LODSphere(getNode().getRadius(),getAppearance());
     sphere.makePickable(this);
     sphere.addToTransformGroup(getTransformGroup());
+    //setUserData(new DefaultNodeData());
   }
-  private String text = new String();
 }
