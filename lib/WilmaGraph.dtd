@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
   <!ELEMENT WilmaGraph (Cluster)>
   <!ELEMENT Cluster (Force*,Node*,Cluster*,Edge*)>
+  <!ATTLIST Cluster
+    Label CDATA #IMPLIED
+    ViewType CDATA #IMPLIED>
   <!ELEMENT Force EMPTY>
   <!ATTLIST Force
     Type CDATA #REQUIRED
@@ -8,6 +11,7 @@
   <!ELEMENT Node (Colour?)>
   <!ATTLIST Node
     ID ID #REQUIRED
+    ViewType CDATA #IMPLIED
     Label CDATA #IMPLIED
     Data CDATA #IMPLIED>
   <!ELEMENT Colour EMPTY>
