@@ -20,6 +20,8 @@
 
 package org.wilmascope.view;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.Properties;
 
 import javax.media.j3d.Appearance;
@@ -28,6 +30,7 @@ import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.swing.ImageIcon;
 import javax.vecmath.AxisAngle4f;
+import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
@@ -45,8 +48,7 @@ import com.sun.j3d.utils.geometry.Cone;
  * @version 1.0
  */
 
-public abstract class NodeView extends GraphElementView
-implements org.wilmascope.graph.NodeView {
+public abstract class NodeView extends GraphElementView implements org.wilmascope.graph.NodeView, View2D {
 
   public NodeView() {
   }
@@ -169,4 +171,14 @@ implements org.wilmascope.graph.NodeView {
     return p;
   }
   private Node node;
+	/* (non-Javadoc)
+	 * @see org.wilmascope.view.View2D#draw2D(org.wilmascope.view.Renderer2D, java.awt.Graphics2D, float)
+	 */
+	public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
+    Color3f c = new Color3f();
+    getAppearance().getMaterial().getDiffuseColor(c);
+//    g.setColor(new Color(c.x,c.y,c.z,transparency));
+    g.setColor(new Color(0,0,0,transparency));
+    r.fillCircle(g,getNode().getPosition(),getNode().getRadius());
+	}
 }

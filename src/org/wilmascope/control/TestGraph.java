@@ -26,16 +26,21 @@ public class TestGraph {
     this.gc = gc;
     root = gc.getRootCluster();
   }
-  public void genRandomStratified(int colCount, int edgeCount) {
+  public void genStratified(int colCount, int edgeCount) {
     GraphControl.ClusterFacade r = gc.getRootCluster();
-    r = r.addCluster();
+/*    r = r.addCluster();
     r.setLayoutEngine(new org.wilmascope.dotlayout.DotLayout());
     r.hide();
-    ColumnCluster.setColumnStyle(ColumnCluster.DOTCOLUMNS);
-    ColumnCluster ca = new ColumnCluster("ABC", r, 1.0f, 1.0f, 0, "Tube");
-    ColumnCluster cb = new ColumnCluster("DEF", r, 1.5f, 1.5f, 0, "Tube");
-    ColumnCluster cc = new ColumnCluster("GHI", r, 1.0f, 1.0f, 0, "Tube");
-    ColumnCluster cd = new ColumnCluster("JKL", r, 1.0f, 1.0f, 0, "Tube");
+*/
+    ColumnCluster.setColumnStyle(ColumnCluster.WORMS);
+    //String edgeStyle = "SplineTube";
+    String nodeStyle = "Tube Node";
+    //String nodeStyle = "DefaultNodeView";
+    String edgeStyle = "Arrow";
+    ColumnCluster ca = new ColumnCluster("ABC", r, 1.0f, 1.0f, 0, nodeStyle);
+    ColumnCluster cb = new ColumnCluster("DEF", r, 1.5f, 1.5f, 0, nodeStyle);
+    ColumnCluster cc = new ColumnCluster("GHI", r, 1.0f, 1.0f, 0, nodeStyle);
+    ColumnCluster cd = new ColumnCluster("JKL", r, 1.0f, 1.0f, 0, nodeStyle);
 
     GraphControl.NodeFacade a1 = ca.addNode(1.5f);
     GraphControl.NodeFacade a2 = ca.addNode(1.0f);
@@ -53,11 +58,11 @@ public class TestGraph {
     GraphControl.NodeFacade d2 = cd.addNode(1.2f);
     GraphControl.NodeFacade d3 = cd.addNode(1.4f);
     GraphControl.NodeFacade d4 = cd.addNode(1.5f);
-    r.addEdge(a2, c2, "SplineTube", 0.008f).setColour(2f / 4f, 2f / 4f, 1f);
-    r.addEdge(b1, c1, "SplineTube", 0.01f).setColour(3f / 4f, 3f / 4f, 1f);
-    r.addEdge(b3, d3, "SplineTube", 0.01f).setColour(3f / 4f, 3f / 4f, 1f);
-    r.addEdge(a1, d1, "SplineTube", 0.015f).setColour(1f, 1f, 1f);
-    r.addEdge(a4, d4, "SplineTube", 0.015f).setColour(1f, 1f, 1f);
+    r.addEdge(a2, c2, edgeStyle, 0.008f).setColour(2f / 4f, 2f / 4f, 1f);
+    r.addEdge(b1, c1, edgeStyle, 0.01f).setColour(3f / 4f, 3f / 4f, 1f);
+    r.addEdge(b3, d3, edgeStyle, 0.01f).setColour(3f / 4f, 3f / 4f, 1f);
+    r.addEdge(a1, d1, edgeStyle, 0.015f).setColour(1f, 1f, 1f);
+    r.addEdge(a4, d4, edgeStyle, 0.015f).setColour(1f, 1f, 1f);
 
     gc.unfreeze();
   }
@@ -135,7 +140,7 @@ public class TestGraph {
   }
   ////////////////////
   TreeMap lookup = new TreeMap();
-  public void genRandom2(int isize, int jsize, boolean threeD) {
+  public void genGrid(int isize, int jsize, boolean threeD) {
 
     Cluster cluster = root.getCluster();
     //LayoutEngine layout = new FastLayout(cluster, threeD);
@@ -175,7 +180,7 @@ public class TestGraph {
     return n;
   }
 
-  public void genRandom3(int size, int number, boolean threeD) {
+  public void genClustered(int size, int number, boolean threeD) {
 
     Cluster cluster = root.getCluster();
     //LayoutEngine layout = new FastLayout(cluster, threeD);

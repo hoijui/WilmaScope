@@ -35,6 +35,7 @@ import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.TestGraph;
+import org.wilmascope.file.FileHandler;
 import org.wilmascope.gmlparser.ColumnsImporter;
 
 /**
@@ -51,7 +52,8 @@ public class MenuBar extends JMenuBar {
 	JMenu helpMenu = new JMenu();
 	JMenu editMenu;
 	JMenuItem exitMenuItem = new JMenuItem();
-	JMenuItem queryMenuItem = new JMenuItem();
+  JMenuItem queryMenuItem = new JMenuItem();
+  JMenuItem screenCaptureMenuItem = new JMenuItem();
 	JMenuItem importMenuItem = new JMenuItem();
 	JMenuItem testMenuItem = new JMenuItem();
 	JMenu viewMenu;
@@ -73,11 +75,13 @@ public class MenuBar extends JMenuBar {
 	JFrame eyeSeparationControlFrame = null;
 	JFrame stretchControlFrame = null;
 	JFrame animationGranularityControlFrame = null;
-
+  JFrame frame;
 	public MenuBar(
+    JFrame frame,
 		Actions actions,
 		GraphControl graphControl,
 		ControlPanel controlPanel) {
+    this.frame = frame;
 		this.graphControl = graphControl;
 		this.controlPanel = controlPanel;
 		editMenu = actions.getEditMenu();
@@ -96,13 +100,19 @@ public class MenuBar extends JMenuBar {
 				importMenuItem_actionPerformed(e);
 			}
 		});
-		queryMenuItem.setText("Query");
-		queryMenuItem.setMnemonic('Q');
-		queryMenuItem.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				queryMenuItem_actionPerformed(e);
-			}
-		});
+    queryMenuItem.setText("Query");
+    queryMenuItem.setMnemonic('Q');
+    queryMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        queryMenuItem_actionPerformed(e);
+      }
+    });
+    screenCaptureMenuItem.setText("Screen Capture");
+    screenCaptureMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        screenCaptureMenuItem_actionPerformed(e);
+      }
+    });
 		testMenuItem.setText("Create test graph...");
 		testMenuItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -223,7 +233,8 @@ public class MenuBar extends JMenuBar {
 		this.add(helpMenu);
 		fileMenu.add(importMenuItem);
 		fileMenu.add(queryMenuItem);
-		fileMenu.add(testMenuItem);
+    fileMenu.add(testMenuItem);
+    fileMenu.add(screenCaptureMenuItem);
 		fileMenu.add(exitMenuItem);
 		viewMenu.add(fullScreenCheckBoxMenuItem);
 		viewMenu.add(showMouseHelpCheckBoxMenuItem);
@@ -340,10 +351,22 @@ public class MenuBar extends JMenuBar {
 				chooser.getSelectedFile().getAbsolutePath());
 		}
 	}
-	void queryMenuItem_actionPerformed(ActionEvent e) {
-		QueryFrame q = new QueryFrame(graphControl);
-		q.show();
-	}
+  void queryMenuItem_actionPerformed(ActionEvent e) {
+    QueryFrame q = new QueryFrame(graphControl);
+    q.show();
+  }
+  void screenCaptureMenuItem_actionPerformed(ActionEvent e) {
+    JFileChooser fc = new JFileChooser();
+    fc.setFileFilter(FileHandler.getJPEGFileFilter());
+    int r = fc.showSaveDialog(this);
+    // should probably allow user to pick the following in a dialog
+    float scale = org.wilmascope.global.Constants.getInstance().getFloatValue(
+      "ScreenCaptureScale");
+    if(r==JFileChooser.APPROVE_OPTION) {
+      String path = fc.getSelectedFile().getAbsolutePath();
+      graphControl.getGraphCanvas().writeJPEG(path, scale);
+    }
+  }
 	void testMenuItem_actionPerformed(ActionEvent e) {
 		GenerateTestGraphFrame setup =
 			new GenerateTestGraphFrame(

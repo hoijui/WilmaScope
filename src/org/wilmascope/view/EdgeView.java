@@ -20,10 +20,14 @@
 
 package org.wilmascope.view;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.vecmath.AxisAngle4f;
+import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
@@ -39,7 +43,7 @@ import org.wilmascope.graph.Edge;
  * @version 1.0
  */
 public abstract class EdgeView extends GraphElementView
-implements org.wilmascope.graph.EdgeView {
+implements org.wilmascope.graph.EdgeView, View2D  {
   /**
    * draw the edge correctly between the start and end nodes
    */
@@ -135,7 +139,20 @@ implements org.wilmascope.graph.EdgeView {
     p.setProperty("Radius",""+this.radius);
     return p;
   }
-
+  public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
+    float thickness = r.scaleX(getRadius());
+    g.setStroke(new BasicStroke(thickness));
+    
+    g.setColor(Color.BLACK);
+    Point3f start = getEdge().getStart().getPosition();
+    Point3f end = getEdge().getEnd().getPosition();
+    Vector3f v = new Vector3f();
+    v.sub(end,start);
+    v.scale(0.9f);
+    Point3f lineEnd = new Point3f(start);
+    lineEnd.add(v);
+    r.linePath(g,start,lineEnd);
+  }
   private Edge edge;
   // A vector giving the default orientation of the edgeCylinder
   private static Vector3f initVector = Constants.vY;
