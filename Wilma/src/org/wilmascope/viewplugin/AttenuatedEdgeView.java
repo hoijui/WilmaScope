@@ -24,6 +24,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import javax.media.j3d.ColoringAttributes;
 import javax.media.j3d.Geometry;
 import javax.media.j3d.GeometryArray;
 import javax.media.j3d.GeometryStripArray;
@@ -155,6 +156,7 @@ public class AttenuatedEdgeView extends EdgeView implements
     tubeGeometryArray = new TriangleStripArray(taperedTubePoints.length,
         GeometryArray.COORDINATES | GeometryArray.COLOR_3 | GeometryArray.BY_REFERENCE
             | GeometryArray.NORMALS, tubeStripCounts);
+    // for some reason the following capability bit has to be set separately
     tubeGeometryArray.setCapability(GeometryArray.ALLOW_REF_DATA_WRITE);
     tubeGeometryArray.setCoordRef3f(gi.getCoordinates());
     tubeGeometryArray.setNormalRef3f(gi.getNormals());
