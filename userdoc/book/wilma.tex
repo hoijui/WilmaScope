@@ -103,6 +103,49 @@
 %
 \section{Design}\label{sec:design}
 \subsection{Architecture}
+Conceived as a research project with open ended goals, Wilma was
+designed to be as flexible and extensible as possible.  The intention
+was to allow different components, such as new visual representations
+for graph elements, interfaces (either graphical user interfaces or
+remote programming interfaces) and different 
+layout algorithm implementations to be added or removed easily.
+Therefore the design needed to decouple these components as much as
+possible so that altering one component would have minimal impact on
+the other components.
+
+To achieve this we began by exploring the well known Model-View-Controller
+architecture (MVC) \cite{gangoffour}.  In an MVC architecture the Model is the core
+of the application, the data and algorithms that automatically modify
+the data.  The View is a user interface which displays information
+about the model to the user.  The Controller is a separate user
+interface that provides methods for the user to manipulate the
+application, ie to control the Model.  Each components reference to
+the other components is via a carefully defined interface which should
+not require change one of the components is modified in some way.  The
+standard data flow diagram for the MVC architecture is shown in Figure
+\ref{fig:mvc}.
+
+In our system the Model is further broken down into two components:
+the Graph data structure itself, capable of representing the structure
+and state of the graph including its arrangement in space, and
+the Layout Engine, which is an abstraction of the basic methods required for
+an implementation of any layout algorithm that will change the graphs
+arrangement in space.
+
+A further requirement for our system is that the graph data model and
+the layout engine should able to be controlled either interactively by
+the user, by loading data from a file or even by remote
+procedure call from a program running in another process or possibly on
+another machine.  Therefore the Controller component was also broken
+down into several components.  A "bridge" layer provides a common
+programmatic interface to the Model.  The methods provided by this
+bridge layer can then be called by either the GUI interface component,
+a component providing a CORBA interface for RPC or a component which
+can load and save files to an XML format.
+
+Figure \ref{fig:arch} shows a collaboration diagram for this overall
+architecture. 
+
 \subsection{Layout Algorithms}
 \subsubsection{Force Directed}
 \subsubsection{Multiscale Force Directed}
