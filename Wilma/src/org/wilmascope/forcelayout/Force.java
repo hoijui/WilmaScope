@@ -37,12 +37,11 @@ public abstract class Force extends org.wilmascope.patterns.Prototype {
   /** The strength of the force
    */
   protected float strengthConstant;
-  protected Cluster root;
 
   /** Calculate the position deltas due to this force
    * @param v The graph elements to which this force applies
    */
-  public abstract void calculate(NodeList nodes, EdgeList edges);
+  public abstract void calculate();
 
   /** Set the strength constant for this force
    * @param strengthConstant new strength constant value
@@ -57,9 +56,6 @@ public abstract class Force extends org.wilmascope.patterns.Prototype {
   public float getStrengthConstant() {
     return strengthConstant;
   }
-  public void setRoot(Cluster root) {
-    this.root = root;
-  }
 
   /** Return value of strengthConstant as a string
    * @return String strengthConstant
@@ -67,6 +63,8 @@ public abstract class Force extends org.wilmascope.patterns.Prototype {
   public String toString() {
     return "strengthConstant = " + strengthConstant;
   }
+
+  public abstract void setCluster(Cluster root);
 
   protected Force(float strengthConstant, String name) {
     setStrengthConstant(strengthConstant);

@@ -19,9 +19,9 @@
  */
 package org.wilmascope.forcelayout;
 
-import org.wilmascope.graph.NodeList;
 import org.wilmascope.graph.EdgeList;
 import org.wilmascope.graph.Edge;
+import org.wilmascope.graph.Cluster;
 
 import javax.vecmath.Vector3f;
 
@@ -49,6 +49,9 @@ public class RepulsionlessSpring extends Force {
   public RepulsionlessSpring(float strengthConstant) {
     super(strengthConstant, "Spring");
   }
+  public void setCluster(Cluster root) {
+    edges = root.getInternalEdges();
+  }
 
   /**
    * set the repulsion force object to use if we are to ignore the effects
@@ -64,9 +67,8 @@ public class RepulsionlessSpring extends Force {
 
   /** Calculate node deltas due to spring forces
    *  between all nodes connected by an edge
-   * @param edges All the edges to which this Spring Force will be applied
    */
-  public void calculate(NodeList nodes, EdgeList edges) {
+  public void calculate() {
     for(int i=0; i < edges.size(); i++) {
       Edge edge = edges.get(i);
       EdgeForceLayout edgeLayout = (EdgeForceLayout)edge.getLayout();
@@ -100,4 +102,6 @@ public class RepulsionlessSpring extends Force {
   private float edgeLength;
 
   private RepulsionSpring repulsion;
+
+  private EdgeList edges;
 }
