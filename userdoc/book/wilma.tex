@@ -120,28 +120,29 @@ difficult to read and their structure is sometimes obscured.}.
 Although 3D graphics
 technology is improving very quickly it may be that 3D visualisation
 will have to await the advent of cheap, ubiquitous holographic,
-augmented or virtual reality environments before it gains widespread
+augmented or virtual reality environments before it gains universal
 acceptance.  However, clever research into this embryonic area will
 hopefully produce examples which demonstrate some benefits of 3D
 visualisation even using current hardware.  In any case, it will
-at least aid in the rapid adoption of the paradigm once today's
+at least aid in the rapid adoption of the paradigm should today's
 science fiction becomes tomorrow's reality.
 It was with the hope of supporting such research that Wilma was conceived
 and offered as open
-source to researchers and experimenters under the GNU Public License.
+source to researchers and experimenters under the Lesser GNU Public
+License (LGPL).
 
 Within the graph drawing community itself a system may also aspire to 
 streamline, elucidate and beautify the work of algorithm design, comparison
 and optimisation.  Achieving these benefits requires software that is
 flexible, interactive and easily extensible.
 
-In order to provide these benefits as widely as possible, and to guarantee
+In order to provide these benefits as widely as possible and to guarantee
 an enthusiastic culture of user participation, a serious graph visualisation
 system should also be {\em Free Software}\cite{stallman92why}.
 
-In this chapter, we describe WilmaScope (or ``Wilma'', for short), a
+In this chapter we describe WilmaScope (or ``Wilma'' for short), a
 sophisticated graph visualisation infrastructure, which attempts to meet
-these goals.  In Section~\ref{sec:design}, we describe the Wilma
+these goals.  In Section~\ref{sec:design} we describe the Wilma
 architecture, modular subsystems, and facilities for control by human users
 and other software.  Section~\ref{sec:results} demonstrates Wilma in action
 with examples of graphical results and domain specific applications.
@@ -233,7 +234,7 @@ This description of a graph is modelled in a class hierarchy by
 defining an abstract class {\em GraphElement} which is implemented by
 both the {\em Node} and {\em Edge} classes.  A {Cluster} will inherit
 all the properties of the {\em Node} class\footnote{Whilst it is not strictly
-necessary that clusters should inheret all of the properties of nodes, in some
+necessary that clusters should inherit all of the properties of nodes, in some
 domains it is rather useful to allow edges to be attached to clusters as a
 whole.} and also contains an
 aggregation of {\em Nodes} and {\em Edges}.  A {Cluster} also contains
@@ -291,24 +292,26 @@ size proportional to the sum of the mass of its child nodes
 and makes the (normally transparent) cluster glyph opaque.
 
 For expanded spherical clusters calculating the radius such that all the
-cluster's children are enclosed is a simple matter.
-We define the geometric distance of a node $v$ from the centroid
-$c$ of its parent cluster $C$ as: $d_{cv}$.  The farthest child $n$ from
-$c$ is the one for which the condition $d_{cn} >= d_{ci}$ holds for
-all $i \in C$.  We usually set the radius of an expanded cluster to
-${R_e}(C) = d_{cn} + R(n)$.  Thus the radius of expanded clusters
+cluster's children are enclosed is a simple matter.  We set the radius
+of an expanded cluster $C$ large enough to include the farthest child node
+$v$ from the cluster centroid $c$, ie.
+\[
+R_e(C) = \max_{v \in C} \| \avec{p_v} - \avec{p_c} \| + R(v)
+\]
+Thus the radius of expanded clusters
 depends on the layout algorithm used within the cluster and can be
 quite large.
 
 We have found that a convenient way to determine the radius of a collapsed cluster
 $R_c(C)$ is to assume a volume for the cluster proportional to its
-total mass and density $\rho$, where for us density is simply a convenient scale
-factor.  The following is obtained from the formula for volume of a
+total mass and density $\rho$.  We choose $\rho$ to be a scale factor
+such that the size of a collapsed cluster of unit mass is slightly
+smaller than the expanded size.  The following is obtained from the formula for volume of a
 sphere:
 
-\begin{equation}
-R_c(C) = \sqrt[3]{\frac{3}{(4d\pi)}\sum_{v \in C}m_v}
-\end{equation}
+\[
+R_c(C) = \sqrt[3]{\frac{3}{(4\rho\pi)}\sum_{v \in C}m_v}
+\]
 
 This method produces a collapsed cluster whose size gives the user a
 feeling for the number of children it contains.  Yet, it is still
@@ -394,7 +397,14 @@ element.  Figure \ref{fig-popupmenus} shows the various  menus.
 \end{figure}
 
 \subsection{3D Graph Elements}
-Wilma provides a number of different 3D ``widgets'' or ``glyphs''
+Wilma provides a number of different 3D
+``widgets'' or ``glyphs''\footnote{``Glyph'' refers to a graphical
+symbol, from the Greek word meaning carving. 
+The term ``Widget'' usually implies a degree of interactivity, for
+example a button in a GUI.  Our 3D graph elements are indeed
+interactive, so the latter might be more appropriate.  
+In fact a Wilma graph could probably be used as a novel front
+end to an interactive application}
 representing nodes, edges and clusters.
 The MVC architecture allows other custom graph elements to be added
 with ease.  The graph element classes defined in the {\em graph}
@@ -530,18 +540,13 @@ As noted previously a cluster's mass is the sum of the masses of all
 its children.
 The repulsive force used varies with the mass of nodes so
 that nodes with large mass, such as clusters with many descendents,
-will exert a strong repulsive force on their neighbours, ie,
+will exert a strong repulsive force on their neighbours, ie.
 
-\begin{equation}
+\[
 \mathit{repulsiveforce}(p_u,p_v) \equiv \frac{m_u m_v}{\|\avec{p_u}-\avec{p_v}\|}
 \centerdot \avec{p_u p_v}
-\end{equation}
+\]
 
-The repulsive force used considers the mass of nodes such
-that nodes with large mass, for example clusters with many descendents,
-will exert a strong repulsive force on their neighbours, ie.\ 
-\[ \mathit{repulsiveforce}(p_u,p_v) \equiv \frac{m_u m_v}{\|p_u-p_v\|}
-\centerdot \avec{p_u p_v} \]
 This ensures
 that clusters have plenty of space and avoids overlaps.  It also helps
 to give the user a feeling for the size of collapsed clusters.  That is, even
@@ -575,13 +580,13 @@ As stated in Section~\ref{motivation}, a major design goal for Wilma
 was to provide a platform upon which algorithmic experimentation could be
 conducted elegantly and efficiently.
 
-As we have argued, force-directed layout algorithms are the method of choice
-for a wide range of graph visualisation problems.  One variation on these
-	algorithms, advocated by Fruchtermann \&
-	Rheingold~\cite{fruchtermann90force-directed} and Davidson {\em et
-	al.}~\cite{davidson01noise}, attempts to avoid calculation of repulsion
-	force vectors, which is $O(n)$ in the number of vertices for each node $i$,
-	and $O(n^2)$ for the whole graph:
+As we have argued, force-directed layout algorithms are the method of
+choice for a wide range of graph visualisation problems.  One
+variation on these algorithms, advocated by Fruchtermann \&
+Rheingold~\cite{fruchtermann90force-directed} and Davidson {\em et
+al.}~\cite{davidson01noise}, attempts to avoid calculation of
+repulsion force vectors, which is $O(n)$ in the number of vertices for
+each node $i$, and $O(n^2)$ for the whole graph:
 
 \begin{equation}
 \label{repulsion}
@@ -693,10 +698,7 @@ the spatial data structure are of a size greater than or equal to $d_\infty$
 then all such nodes may be addressed through the cell containing $i$ and
 those adjacent to it.  In this algorithm the cost of calculating the
 repulsion force is $O(|V| \centerdot \rho)$, where $\rho$ is the average 
-of the embedding density around each node.  Provided that the repulsion
-force is {\em strong} --- it does not fall off faster than the square
-of the distance between nodes --- then we can expect $\rho$ to be bounded
-independently of $|V|$ and repulsion force evaluation to therefore be linear.
+of the embedding density around each node.
 
 The multilevel force-directed layout engine provides WilmaScope with
 an efficient mechanism for handling large graphs.  Figure
