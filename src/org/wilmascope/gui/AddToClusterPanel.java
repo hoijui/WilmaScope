@@ -45,7 +45,6 @@ public class AddToClusterPanel extends MultiPickPanel {
     while(pl.getPickedListSize()>0) {
       GraphControl.GraphElementFacade element = pl.pop();
       cluster.add(element);
-      rootCluster.remove(element);
     }
     rootCluster.unfreeze();
     cleanup();
