@@ -155,11 +155,4 @@ public class ColumnLayout implements LayoutEngine {
     //		extraSpacing.add(new Float(18f/scale));
     //		extraSpacing.add(new Float(10f/scale));
   }
-
-  /* (non-Javadoc)
-   * @see org.wilmascope.graph.LayoutEngine#create()
-   */
-  public LayoutEngine create() {
-	return new ColumnLayout();
-  }
 }

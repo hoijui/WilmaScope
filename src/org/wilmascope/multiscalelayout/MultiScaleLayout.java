@@ -33,14 +33,6 @@ public class MultiScaleLayout implements LayoutEngine {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.wilmascope.layoutregistry.LayoutPrototype#create()
-	 */
-	public LayoutEngine create() {
-		return new MultiScaleLayout();
-	}
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see org.wilmascope.layoutregistry.LayoutPrototype#getTypeName()
 	 */
 	public String getTypeName() {

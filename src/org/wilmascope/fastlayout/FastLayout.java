@@ -534,10 +534,4 @@ public class FastLayout implements LayoutEngine {
   public void setThreeD(boolean threeD) {
     this.threeD = threeD;
   }
-  /* (non-Javadoc)
-   * @see org.wilmascope.graph.LayoutEngine#create()
-   */
-  public LayoutEngine create() {
-    return new FastLayout();
-  }
 }

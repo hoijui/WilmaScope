@@ -262,15 +262,6 @@ public class HighDimensionLayout implements LayoutEngine {
     createElementLayouts();
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.wilmascope.graph.LayoutEngine#create()
-   */
-  public LayoutEngine create() {
-    return new HighDimensionLayout();
-  }
-
   public void createElementLayouts() {
     NodeList nodes = root.getNodes();
     //Random rand = new Random(System.currentTimeMillis());

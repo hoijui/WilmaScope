@@ -402,10 +402,4 @@ public class DotLayout implements LayoutEngine {
   public void init(Cluster root) {
     this.root = root;
   }
-  /* (non-Javadoc)
-   * @see org.wilmascope.graph.LayoutEngine#create()
-   */
-  public LayoutEngine create() {
-    return new DotLayout();
-  }
 }
