@@ -1,10 +1,12 @@
 package org.wilmascope.viewplugin;
-import org.wilmascope.view.*;
-
-import javax.media.j3d.*;
-import javax.vecmath.*;
-import com.sun.j3d.utils.geometry.Cone;
 import javax.swing.ImageIcon;
+import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
+
+import org.wilmascope.view.ClusterView;
+import org.wilmascope.view.Colours;
+
+import com.sun.j3d.utils.geometry.Cone;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular Wilma graph drawing engine
@@ -45,6 +47,6 @@ public class ConeClusterView extends ClusterView {
     makePickable(cone.getShape(Cone.CAP));
   }
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/planarcluster.png"));
+    return new ImageIcon("images/planarcluster.png");
   }
 }

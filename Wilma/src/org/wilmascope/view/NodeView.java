@@ -62,7 +62,7 @@ implements org.wilmascope.graph.NodeView {
     this.node = node;
   }
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/node.png"));
+    return new ImageIcon("images/node.png");
   }
   protected void showLabel(String text) {
     double r = (double)node.getRadius();

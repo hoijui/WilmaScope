@@ -108,7 +108,7 @@ public class WilmaMain extends JFrame {
 			5000);
 		init();
 		ImageIcon icon =
-			new ImageIcon(WilmaMain.class.getResource("/images/WilmaW24.png"));
+			new ImageIcon("images/WilmaW24.png");
 		setIconImage(icon.getImage());
 		setTitle("Welcome to Wilma!");
 		setSize(600, 600);

@@ -74,6 +74,6 @@ public class ArrowEdgeView extends EdgeView {
     addTransformGroupChild(coneTransform);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/arrow.png"));
+    return new ImageIcon("images/arrow.png");
   }
 }

@@ -52,7 +52,7 @@ public class GenerateTestGraphFrame extends JFrame implements ActionListener {
   public GenerateTestGraphFrame(String title, TestGraph tg) {
     try {
       this.title = title;
-      ImageIcon icon = new ImageIcon(getClass().getResource("/images/forces.png"));
+      ImageIcon icon = new ImageIcon("images/forces.png");
       this.setIconImage(icon.getImage());
 
       this.test = tg;

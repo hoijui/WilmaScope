@@ -20,14 +20,24 @@
 
 package org.wilmascope.viewplugin;
 
-import org.wilmascope.view.*;
-import com.sun.j3d.utils.geometry.Text2D;
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
 
-import javax.media.j3d.*;
-import javax.vecmath.Point3d;
-import java.awt.Font;
+import javax.media.j3d.Appearance;
 import javax.swing.ImageIcon;
-import com.sun.j3d.utils.geometry.Sphere;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
+
+import org.wilmascope.columnlayout.NodeColumnLayout;
+import org.wilmascope.graph.Node;
+import org.wilmascope.view.Colours;
+import org.wilmascope.view.NodeView;
+import org.wilmascope.view.Renderer2D;
+import org.wilmascope.view.SizeAdjustableNodeView;
+import org.wilmascope.view.View2D;
+
+import com.sun.j3d.utils.geometry.Box;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular Wilma graph drawing engine
@@ -37,77 +47,85 @@ import com.sun.j3d.utils.geometry.Sphere;
  * @version 1.0
  */
 
-public class BoxNodeView extends NodeView {
-  public BoxNodeView() {
-    setTypeName("Box");
+public class BoxNodeView extends NodeView implements SizeAdjustableNodeView, View2D {
+	public BoxNodeView() {
+		setTypeName("Box Node");
+	}
+	protected void setupDefaultMaterial() {
+		setupDefaultAppearance(Colours.defaultMaterial);
+		getAppearance().setCapability(Appearance.ALLOW_TEXTURE_WRITE);
+		getAppearance().setCapability(Appearance.ALLOW_TEXTURE_ATTRIBUTES_WRITE);
+	}
+	protected void setupHighlightMaterial() {
+		setupHighlightAppearance(Colours.yellowMaterial);
+	}
+	protected void init() {
+		float radius = getNode().getRadius();
+		// make the main box that will carry the texture mapped label
+		box = new Box(1.0f, 1.0f, 1.0f, getAppearance());
+		makePickable(box.getShape(Box.TOP));
+		makePickable(box.getShape(Box.BOTTOM));
+		makePickable(box.getShape(Box.BACK));
+		makePickable(box.getShape(Box.FRONT));
+		makePickable(box.getShape(Box.LEFT));
+		makePickable(box.getShape(Box.RIGHT));
+		addTransformGroupChild(box);
+	}
+	public ImageIcon getIcon() {
+		return new ImageIcon("images/cube.png");
+	}
+	public void draw() {
+		try {
+      Node n = getNode();
+      float height = ((NodeColumnLayout)n.getLayout()).getHeight();
+      Vector3f v = new Vector3f(n.getPosition());
+      float nr = n.getRadius()/4.0f;
+      float cr = ((ColumnClusterView)n.getOwner().getView()).getMaxRadius()/4.0f;
+      v.x -= (cr - nr);
+      float depth = getDepth();
+      if(nr==0) {
+        depth = 0;
+      }
+			setResizeTranslateTransform(new Vector3d(nr, depth, height/2.0), v);
+		} catch (NullPointerException e) {
+			System.out.println("WARNING: Null pointer in ColumnClusterView.draw()");
+		}
+	}
+  public void draw2D(Renderer2D r, Graphics2D g) {
+    Node n = getNode();
+    float nr = n.getRadius()/4.0f;
+    float cr = ((ColumnClusterView)n.getOwner().getView()).getMaxRadius()/4.0f;
+    Point3f p = new Point3f(n.getPosition());
+    g.setStroke(new BasicStroke(1f));
+    r.drawRect(g,p,cr,getDepth());
+    p.x -= (cr - nr);
+    r.fillRect(g,p,nr,getDepth());
   }
-  protected void setupDefaultMaterial() {
-    setupDefaultAppearance(Colours.defaultMaterial);
-    getAppearance().setCapability(Appearance.ALLOW_TEXTURE_WRITE);
-    getAppearance().setCapability(Appearance.ALLOW_TEXTURE_ATTRIBUTES_WRITE);
-  }
-  protected void setupHighlightMaterial() {
-    setupHighlightAppearance(Colours.yellowMaterial);
-  }
-  protected void init() {
-    float radius = getNode().getRadius();
-    // make the main box that will carry the texture mapped label
-    box = new OrientedLabelCube(getAppearance(), 1.0f, 1.0f);
-    makePickable(box);
-    addTransformGroupChild(box);
-    // add a border without the label texture... just to make it look more
-    // 3D.
-    Appearance app = new Appearance();
-    app.setMaterial(getAppearance().getMaterial());
-    border = new OrientedNoLabelCube(app, 1.0f, 1.0f);
-    makePickable(border);
-    addTransformGroupChild(border);
-    // now create a fully transparent pickable sphere to encompass the box.
-    // This is because Oriented shapes don't seem to work at all well
-    // with geometry picking.  This expensive cludge simulates bounds picking.
-    Appearance transApp = new Appearance();
-    transApp.setTransparencyAttributes(
-      new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.99f));
-    pickableSphere = new Sphere(2*radius, Sphere.GENERATE_NORMALS, 5, transApp);
-    makePickable(pickableSphere.getShape(Sphere.BODY));
-    addTransformGroupChild(pickableSphere);
-  }
-  public void setLabel(String label) {
-    Appearance appearance = getAppearance();
-    Text2D textObject = new Text2D(label,
-    org.wilmascope.view.Colours.black,
-    "Arial",
-    55,
-    Font.PLAIN);
-    TextureAttributes texAttr = new TextureAttributes();
-    texAttr.setTextureMode(TextureAttributes.DECAL);
-    appearance.setTextureAttributes(texAttr);
+	Box box;
+	/**
+	 * @see org.wilmascope.view.SizeAdjustableNodeView#getBottomRadius()
+	 */
+	public float getBottomRadius() {
+		return getNode().getRadius();
+	}
 
-    appearance.setTexture(textObject.getAppearance().getTexture());
+	/**
+	 * @see org.wilmascope.view.SizeAdjustableNodeView#getTopRadius()
+	 */
+	public float getTopRadius() {
+		return getNode().getRadius();
+	}
 
-    // Create a label cube wide enough to comfortably fit the text */
-    Point3d coord = new Point3d();
-    QuadArray qa = (QuadArray)textObject.getGeometry();
-    // First coordinate in the GeometryArray of the textObject should
-    // be the top right corner so use its x value to determine the width
-    qa.getCoordinate(0,coord);
-    float widthScale;
-    // 3.0 is the maximum scaling factor, 1.0 is the minimum
-    if(coord.x>2.1d) {
-      widthScale = 3.0f;
-    } else if(coord.x<1.0d) {
-      widthScale = 1.0f;
-    } else {
-      widthScale = (float)coord.x;
-    }
-    //getNode().setRadius(width);
-    box.generateGeometry(1f, widthScale);
-    border.generateGeometry(1f, widthScale);
+	/**
+	 * @see org.wilmascope.view.SizeAdjustableNodeView#setEndRadii(float, float)
+	 */
+	public void setEndRadii(float bottomRadius, float topRadius) {
+		getNode().setRadius(topRadius/100f);
+	}
+  public int getShape() {
+    return BOX;
   }
-  public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/cube.png"));
+  public float getDepth() {
+    return 1f/4f;
   }
-  OrientedLabelCube box;
-  OrientedNoLabelCube border;
-  Sphere pickableSphere;
 }
