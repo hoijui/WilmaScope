@@ -19,8 +19,8 @@ import java.util.StringTokenizer;
  * @version 1.0
  */
 
-public class SplineEdgeView extends EdgeView implements org.wilmascope.dotlayout.Spline {
-  public SplineEdgeView() {
+public class SimpleSplineEdgeView extends EdgeView {
+  public SimpleSplineEdgeView() {
     setTypeName("Spline");
   }
 
@@ -63,9 +63,33 @@ public class SplineEdgeView extends EdgeView implements org.wilmascope.dotlayout
       this.curves.add(pnts);
     }
   }
+  /** This method and the next together implement The de-Casteljau Algorithm.
+   *  I've shamelessly stolen them from the example code at
+   * <a href="http://www.cs.huji.ac.il/~arik/java/ex2/">this site</a>
+   *
+   * @return the linear interpolation of two points
+   */
+  Point2D.Float interpolate(Point2D.Float p0, Point2D.Float p1,float t) {
+    return new Point2D.Float(t * p1.x + (1-t) * p0.x,
+                             t * p1.y + (1-t) * p0.y);
+  }
+  /**
+   * evaluates a bezier defined by the control polygon
+   * which points are given in the array at the value t
+   * returns the point on the curve (which is also returned in the first point in the
+   * input array, the line from that point to the second point in the array gives
+   * a tangent vector)
+   */
+  Point2D.Float evalBezier(Point2D.Float[] arr,float t) {
+    for (int iter = arr.length ; iter > 0 ; iter--) {
+      for (int i = 1 ; i < iter ; i++) {
+        arr[i-1] = interpolate(arr[i-1],arr[i],t);
+      }
+    }
+    return arr[0];
+  }
   Point3f[] calculate(Point2D.Float[] controlPoints) {
-    float a, b, c, d, e, f, g, h;
-    float x0, x1, x2, x3, y0, y1, y2, y3;
+    Point2D.Float[] tmpControlPnts = new Point2D.Float[4];
     float thisX, thisY;
     int steps = 10;
     int numCurves = controlPoints.length / 3;
@@ -74,25 +98,12 @@ public class SplineEdgeView extends EdgeView implements org.wilmascope.dotlayout
     zLevel = getEdge().getStart().getPosition().z;
     points[i++] = new Point3f(controlPoints[0].x,controlPoints[0].y,zLevel);
     for (int n = 0; n<numCurves; n++) {
-      x0 = controlPoints[n*3].x;   y0 = controlPoints[n*3].y;
-      x1 = controlPoints[n*3+1].x; y1 = controlPoints[n*3+1].y;
-      x2 = controlPoints[n*3+2].x; y2 = controlPoints[n*3+2].y;
-      x3 = controlPoints[n*3+3].x; y3 = controlPoints[n*3+3].y;
-      a = -x0 + 3*x1 - 3*x2 + x3;
-      b = 3*x0 - 6*x1 + 3*x2;
-      c = -3*x0 + 3*x1;
-      d = x0;
-      e = -y0 + 3*y1 - 3*y2 + y3;
-      f = 3*y0 - 6*y1 + 3*y2;
-      g = -3*y0 + 3*y1;
-      h = y0;
       float step1 = 1.0f / (float)steps;
-
       for (float u=step1; u <= 1.001; u += step1)
       {
-        thisX = ((a*u + b) * u + c) * u + d;
-        thisY = ((e*u + f) * u + g) * u + h;
-        points[i++] = new Point3f(thisX,thisY,zLevel);
+        System.arraycopy(controlPoints,n*3,tmpControlPnts,0,4);
+        evalBezier(tmpControlPnts,u);
+        points[i++] = new Point3f(tmpControlPnts[0].x,tmpControlPnts[0].y,zLevel);
       }
     }
     return points;

@@ -12,6 +12,7 @@ import org.wilmascope.columnlayout.ColumnLayout;
 import org.wilmascope.columnlayout.NodeColumnLayout;
 import org.wilmascope.fastlayout.FastLayout;
 import org.wilmascope.fastlayout.InitFrame;
+import org.wilmascope.fastlayout.ParamsPanel;
 import org.wilmascope.viewplugin.TubeNodeView;
 import org.wilmascope.forcelayout.BalancedEventClient;
 import org.wilmascope.graph.Cluster;
@@ -26,9 +27,13 @@ import javax.swing.border.*;
 
 public class TestGraph {
 
+    String nodeView;
+    String edgeView;
+
     public TestGraph(final GraphControl gc) {
       randomGraph(gc);
     }
+
     public void columnClusters(final GraphControl gc) {
         GraphControl.ClusterFacade r = gc.getRootCluster();
         r = r.addCluster();
@@ -68,238 +73,157 @@ public class TestGraph {
     GraphControl.ClusterFacade root;
     GraphControl gc;
 
-  //  public TestGraph(GraphControl gc) {
-  // James' fast layout test
+   // James' fast layout test
     public void randomGraph(GraphControl gc) {
         System.out.println("starting");
         this.gc = gc;
         this.root = root;
         root = gc.getRootCluster();
-//        root = root.addCluster();
-        Cluster cluster = root.getCluster();
-        LayoutEngine layout = new FastLayout(cluster);
-        root.setLayoutEngine(layout);
-//        ((FastLayout)root.getLayoutEngine()).ITERATIONS = 500;
-//        root.hide();
-//        System.out.println("adding nodes...");
 
-
-        InitFrame setup = new InitFrame(root,"Fast-Layout Setup", this);
+        InitFrame setup = new InitFrame("Fast-Layout Setup", this);
         setup.show();
-
-
-/*        Random rand = new Random();
-        Vector nodevec = new Vector();
-        GraphControl.NodeFacade temp;
-        for (int i = 0; i < 10; i++) {
-          temp = root.addNode();
-          temp.setColour(1f,0f,0f);
-          temp.setPosition(new Point3f((rand.nextFloat()-0.5f)*10, (rand.nextFloat()-0.5f)*10, 0f));
-          nodevec.add(temp);
-        }
-        for (int i = 1; i < nodevec.size(); i++) {
-          root.addEdge((GraphControl.NodeFacade)nodevec.get(1),(GraphControl.NodeFacade)nodevec.get(i),"Plain Edge");
-        }
-
-// code reuse would be nice but who cares
-        nodevec = new Vector();
-        for (int i = 0; i < 10; i++) {
-          temp = root.addNode();
-          temp.setColour(0f,0f,1f);
-          temp.setPosition(new Point3f((rand.nextFloat()-0.5f)*10, (rand.nextFloat()-0.5f)*10, 0f));
-          nodevec.add(temp);
-        }
-        for (int i = 1; i < nodevec.size(); i++) {
-          root.addEdge((GraphControl.NodeFacade)nodevec.get(1),(GraphControl.NodeFacade)nodevec.get(i),"Plain Edge");
-        }
-
-        nodevec = new Vector();
-        for (int i = 0; i < 10; i++) {
-          temp = root.addNode();
-          temp.setColour(0f,1f,0f);
-          temp.setPosition(new Point3f((rand.nextFloat()-0.5f)*10, (rand.nextFloat()-0.5f)*10, 0f));
-          nodevec.add(temp);
-        }
-        for (int i = 1; i < nodevec.size(); i++) {
-          root.addEdge((GraphControl.NodeFacade)nodevec.get(1),(GraphControl.NodeFacade)nodevec.get(i),"Plain Edge");
-        }
-*/
-
-
-/*
-        Random rand = new Random();
-        Vector nodevec = new Vector();
-        GraphControl.NodeFacade temp;
-        try {
-
-          BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-          System.out.println("how many nodes? ");
-          int nodes = Integer.parseInt(in.readLine());
-          System.out.println("how many edges? ");
-          int edges = Integer.parseInt(in.readLine());
-          in.close();
-
-          for (int i = 0; i < nodes; i++) {
-            temp = root.addNode();
-            temp.setColour(rand.nextFloat(),rand.nextFloat(),rand.nextFloat());
-            temp.setPosition(new Point3f((rand.nextFloat()-0.5f)*10, (rand.nextFloat()-0.5f)*10, 0f));
-            nodevec.add(temp);
-          }
-          for (int i = 1; i < edges; i++) {
-            root.addEdge((GraphControl.NodeFacade)nodevec.get(rand.nextInt(nodevec.size())),(GraphControl.NodeFacade)nodevec.get(rand.nextInt(nodevec.size())),"Plain Edge");
-          }
-
-        }
-        catch(Exception e) {
-          System.exit(1);
-        }
-*/
-/*
-        GraphControl.NodeFacade a = root.addNode();
-        GraphControl.NodeFacade b = root.addNode();
-        a.setColour(1f,0f,0f);
-        b.setColour(0f,1f,0f);
-        a.setPosition(new Point3f(1f,0f,0f));
-        b.setPosition(new Point3f(0f,0f,0f));
-        root.addEdge(a,b,"Plain Edge");
-*/
-/*
-        GraphControl.NodeFacade a = root.addNode();
-        GraphControl.NodeFacade b = root.addNode();
-        GraphControl.NodeFacade c = root.addNode();
-        GraphControl.NodeFacade d = root.addNode();
-        GraphControl.NodeFacade e = root.addNode();
-        GraphControl.NodeFacade f = root.addNode();
-        a.setColour(1f,0f,0f);
-        b.setColour(0f,1f,0f);
-        c.setColour(0f,0f,1f);
-        d.setColour(1f,0f,1f);
-        e.setColour(0f,1f,1f);
-        f.setColour(1f,1f,0f);
-        a.setPosition(new Point3f(1f,0f,0f));
-        b.setPosition(new Point3f(0f,1f,0f));
-        c.setPosition(new Point3f(0f,0f,0f));
-        d.setPosition(new Point3f(1f,1f,0f));
-        e.setPosition(new Point3f(0f,0f,0f));
-        f.setPosition(new Point3f(1f,0.5f,0f));
-        System.out.println("adding edges...");
-        root.addEdge(a,b,"Plain Edge");
-        root.addEdge(a,c,"Plain Edge");
-        root.addEdge(c,d,"Plain Edge");
-        root.addEdge(a,d,"Plain Edge");
-        root.addEdge(e,f,"Plain Edge");
-        System.out.println("initialisation fine");
-        System.out.println(a.getDegree());
-*/
-/*
-        GraphControl.NodeFacade a = root.addNode();
-        GraphControl.NodeFacade b = root.addNode();
-        GraphControl.NodeFacade c = root.addNode();
-        GraphControl.NodeFacade d = root.addNode();
-        GraphControl.NodeFacade e = root.addNode();
-        GraphControl.NodeFacade f = root.addNode();
-        GraphControl.NodeFacade g = root.addNode();
-        GraphControl.NodeFacade h = root.addNode();
-        GraphControl.NodeFacade i = root.addNode();
-        GraphControl.NodeFacade j = root.addNode();
-        a.setColour(1f,1f,0f);
-        b.setColour(1f,1f,0f);
-        c.setColour(1f,0f,0f);
-        d.setColour(1f,0f,0f);
-        e.setColour(1f,1f,0f);
-        f.setColour(0f,0f,1f);
-        g.setColour(0f,0f,1f);
-        h.setColour(0f,0f,1f);
-        i.setColour(0f,0f,1f);
-        j.setColour(0f,0f,1f);
-        a.setPosition(new Point3f(1f,0f,0f));
-        b.setPosition(new Point3f(0f,1f,0f));
-        c.setPosition(new Point3f(0f,0f,0f));
-        d.setPosition(new Point3f(1f,1f,0f));
-        e.setPosition(new Point3f(0f,0f,0f));
-        f.setPosition(new Point3f(1f,0.5f,0f));
-        g.setPosition(new Point3f(0.5f,0f,0f));
-        h.setPosition(new Point3f(0f,0.5f,0f));
-        i.setPosition(new Point3f(0f,0f,0f));
-        j.setPosition(new Point3f(0.5f,0.5f,0f));
-        root.addEdge(a,c,"Plain Edge");
-        root.addEdge(a,d,"Plain Edge");
-        root.addEdge(b,c,"Plain Edge");
-        root.addEdge(c,d,"Plain Edge");
-        root.addEdge(d,e,"Plain Edge");
-        root.addEdge(c,f,"Plain Edge");
-        root.addEdge(d,f,"Plain Edge");
-        root.addEdge(f,g,"Plain Edge");
-        root.addEdge(f,i,"Plain Edge");
-        root.addEdge(g,h,"Plain Edge");
-        root.addEdge(i,j,"Plain Edge");
-*/
-/*
-        GraphControl.NodeFacade a = root.addNode();
-        GraphControl.NodeFacade b = root.addNode();
-        GraphControl.NodeFacade c = root.addNode();
-        GraphControl.NodeFacade d = root.addNode();
-        GraphControl.NodeFacade e = root.addNode();
-        a.setPosition(new Point3f(1.5f,0.7f,0f));
-        b.setPosition(new Point3f(0f,0f,0f));
-        c.setPosition(new Point3f(1f,0f,0f));
-        d.setPosition(new Point3f(1f,1f,0f));
-        e.setPosition(new Point3f(0f,1f,0f));
-        root.addEdge(a,b,"Plain Edge");
-        root.addEdge(a,c,"Plain Edge");
-        root.addEdge(a,d,"Plain Edge");
-        root.addEdge(a,e,"Plain Edge");
-        a.setPosition(((FastLayout)layout).computeCentroid(a.getNode()));
-*/
-//        gc.unfreeze();
     }
 
-  public void genRandom(int nodes, int edges) {
+  public void setView(String nodeView, String edgeView) {
+    this.nodeView = nodeView;
+    this.edgeView = edgeView;
+  }
+
+  public boolean lineView() {
+    return (nodeView.equals("LineNode"));
+  }
+
+  public void genRandom(int nodes, int edges, boolean threeD) {
+
+    Cluster cluster = root.getCluster();
+    //LayoutEngine layout = new FastLayout(cluster, threeD);
+    //root.setLayoutEngine(layout);
+
+    root.deleteAll();
+
+// could make this loaded by fastlayout itself
+    //if(params == null) params = new ParamsFrame((FastLayout)layout, gc, this, "Fast-Layout Parameters");
+    //else params.setLayout((FastLayout)layout, this);
+    //params.show();
+
     Vector nodevec = new Vector();
     GraphControl.NodeFacade temp;
 
     for (int i = 0; i < nodes; i++) {
-      temp = root.addNode();
+      temp = root.addNode(nodeView);
       temp.setColour(rand.nextFloat(),rand.nextFloat(),rand.nextFloat());
-      temp.setPosition(new Point3f((rand.nextFloat()-0.5f)*10, (rand.nextFloat()-0.5f)*10, 0f));
-      temp.setRadius(0.01f);
+      temp.setPosition(new Point3f((rand.nextFloat()-0.5f)*5f, (rand.nextFloat()-0.5f)*5f, threeD ? (rand.nextFloat()-0.5f)*5f : 0f));
+      //temp.setRadius(0.01f);
       nodevec.add(temp);
     }
     for (int i = 1; i < edges; i++) {
       GraphControl.NodeFacade a = (GraphControl.NodeFacade)nodevec.get(rand.nextInt(nodevec.size()));
       GraphControl.NodeFacade b = (GraphControl.NodeFacade)nodevec.get(rand.nextInt(nodevec.size()));
-      root.addEdge(a,b);
+      if(a!=b) {
+        root.addEdge(a,b, edgeView);
+      } else {
+        i--;
+      }
     }
-    gc.unfreeze();
+    for (int i = 0; i < nodes; i++) {
+      temp = (GraphControl.NodeFacade)nodevec.get(i);
+      org.wilmascope.graph.Node n = temp.getNode();
+      if(n.getEdges().size()==0) {
+        GraphControl.NodeFacade a = temp;
+        do {
+          a = (GraphControl.NodeFacade)nodevec.get(rand.nextInt(nodevec.size()));
+        } while(a==temp);
+        root.addEdge(a,temp, edgeView);
+      }
+    }
+    for (int i = 0; i < nodevec.size(); i++) { // remove all disconnected nodes
+      temp = (GraphControl.NodeFacade)nodevec.get(i);
+      if(temp.getDegree() == 0) {
+        root.removeNode(temp);    // have to check which one
+        cluster.removeNode(temp.getNode()); //
+        nodevec.remove(temp);
+      }
+    }
   }
   ////////////////////
   TreeMap lookup = new TreeMap();
-  public void genRandom2(int isize, int jsize) {
+  public void genRandom2(int isize, int jsize, boolean threeD) {
+
+    Cluster cluster = root.getCluster();
+    //LayoutEngine layout = new FastLayout(cluster, threeD);
+    //root.setLayoutEngine(layout);
+
+    root.deleteAll();
+
     for(int i=0;i<isize;i++) {
       for(int j=0;j<jsize;j++) {
         String lx = Integer.toString(i-1);
         String ly = Integer.toString(j-1);
         String x = Integer.toString(i);
         String y = Integer.toString(j);
-        if(j>0) addEdge(x+","+ly,x+","+y);
-        if(i>0) addEdge(lx+","+y,x+","+y);
+        if(j>0) addEdge(x+","+ly,x+","+y, threeD);
+        if(i>0) addEdge(lx+","+y,x+","+y, threeD);
       }
     }
-    gc.unfreeze();
   }
-  private void addEdge(String start, String end) {
-    root.addEdge(lookupNode(start),lookupNode(end),"LineEdge");
+  private void addEdge(String start, String end, boolean threeD) {
+    root.addEdge(lookupNode(start, threeD),lookupNode(end, threeD),edgeView);
   }
-  private GraphControl.NodeFacade lookupNode(String id) {
+  private GraphControl.NodeFacade lookupNode(String id, boolean threeD) {
     GraphControl.NodeFacade n = (GraphControl.NodeFacade)lookup.get(id);
     if(n == null){
-      n = root.addNode("LineNode");
+      n = root.addNode(nodeView);
       n.setColour(rand.nextFloat(),rand.nextFloat(),rand.nextFloat());
-      n.setPosition(new Point3f((rand.nextFloat()-0.5f)*10, (rand.nextFloat()-0.5f)*10, 0f));
+      n.setPosition(new Point3f((rand.nextFloat()-0.5f)*5f, (rand.nextFloat()-0.5f)*5f, threeD ? (rand.nextFloat()-0.5f)*5f : 0f));
       lookup.put(id,n);
     }
     return n;
   }
+
+
+  public void genRandom3(int size, int number, boolean threeD) {
+
+    Cluster cluster = root.getCluster();
+    //LayoutEngine layout = new FastLayout(cluster, threeD);
+    //root.setLayoutEngine(layout);
+
+    root.deleteAll();
+
+    Vector allnodes = new Vector();
+
+    for (int j = 0; j < number; j++) { // create each cluster
+      Vector nodevec = new Vector();
+      GraphControl.NodeFacade temp;
+      for (int i = 0; i < size; i++) {
+        temp = root.addNode(nodeView);
+        temp.setColour(rand.nextFloat(),rand.nextFloat(),rand.nextFloat());
+        temp.setPosition(new Point3f((rand.nextFloat()-0.5f)*5f, (rand.nextFloat()-0.5f)*5f, threeD ? (rand.nextFloat()-0.5f)*5f : 0f));
+        //temp.setRadius(0.01f);
+        nodevec.add(temp);
+        allnodes.add(temp);
+      }
+      for (int i = 0; i < 2*size; i++) {
+        GraphControl.NodeFacade a = (GraphControl.NodeFacade)nodevec.get(rand.nextInt(nodevec.size()));
+        GraphControl.NodeFacade b = (GraphControl.NodeFacade)nodevec.get(rand.nextInt(nodevec.size()));
+        if(a!=b) {root.addEdge(a,b, edgeView); } else {i--; }
+      }
+      for (int i = 0; i < nodevec.size(); i++) { // remove all disconnected nodes
+        temp = (GraphControl.NodeFacade)nodevec.get(i);
+        if(temp.getDegree() == 0) {
+          root.removeNode(temp);    // have to check which one
+          cluster.removeNode(temp.getNode()); //
+          allnodes.remove(temp);
+        }
+      }
+    }
+    for (int i = 0; i < number*(size/20d); i++) {
+        GraphControl.NodeFacade a = (GraphControl.NodeFacade)allnodes.get(rand.nextInt(allnodes.size()));
+        GraphControl.NodeFacade b = (GraphControl.NodeFacade)allnodes.get(rand.nextInt(allnodes.size()));
+        root.addEdge(a,b, edgeView);
+    }
+
+  }
+
 
     Random rand = new Random();
 }

@@ -852,6 +852,7 @@ public class GraphControl {
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.LabelNodeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.TubeNodeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.SplineEdgeView());
+      viewManager.addPrototypeView(new org.wilmascope.viewplugin.SplineTubeEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.LineEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.LineNodeView());
       /*

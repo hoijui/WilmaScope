@@ -191,7 +191,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
   }
 
   void adjustForcesMenuItem_actionPerformed(ActionEvent e) {
-    ForceControlsFrame forceControls = new ForceControlsFrame(cluster,"Force Controls");
+    LayoutEngineFrame forceControls = new LayoutEngineFrame(cluster,"Layout Engine Controls");
     forceControls.show();
   }
 

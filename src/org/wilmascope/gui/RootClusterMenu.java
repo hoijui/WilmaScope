@@ -117,7 +117,7 @@ public class RootClusterMenu extends JPopupMenu implements PickingClient {
   }
 
   void adjustForcesMenuItem_actionPerformed(ActionEvent e) {
-    ForceControlsFrame forceControls = new ForceControlsFrame(rootCluster,"Force Controls");
+    LayoutEngineFrame forceControls = new LayoutEngineFrame(rootCluster,"Force Controls");
     forceControls.show();
   }
   ControlPanel controlPanel;

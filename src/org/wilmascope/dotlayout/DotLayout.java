@@ -23,7 +23,6 @@ package org.wilmascope.dotlayout;
 import org.wilmascope.graph.*;
 import org.wilmascope.dotparser.*;
 import org.wilmascope.global.Constants;
-import org.wilmascope.viewplugin.SplineEdgeView;
 import java.util.*;
 import java.io.*;
 import java.text.ParseException;
@@ -63,6 +62,7 @@ public class DotLayout implements LayoutEngine {
       in.write("fixedsize=true ".getBytes());
       in.write("layer=all ".getBytes());
       in.write("];\n".getBytes());
+      in.write("layers=\"l0:l1:l2:l3:l4\"\n".getBytes());
       for (nodes.resetIterator(); nodes.hasNext();) {
         Node n = nodes.nextNode();
         String id = "" + n.hashCode();
@@ -91,9 +91,10 @@ public class DotLayout implements LayoutEngine {
           end = end.getOwner();
         }
         String text = new String(start.hashCode() + "->" + end.hashCode());
-        edgeLookup.put(text + "(" + eLayout.getZLevel() + ")", e);
+        String layerText = new String("l"+eLayout.getZLevel());
+        edgeLookup.put(text + "(" + layerText + ")", e);
         in.write(
-          text.concat("[ layer=\"" + eLayout.getZLevel() + "\" ").getBytes());
+          text.concat("[ layer=\"" + layerText + "\" ").getBytes());
         Vector layerList =
           (Vector) layerLookup.get(new Integer(eLayout.getZLevel()));
         if (layerList == null) {
@@ -190,7 +191,7 @@ public class DotLayout implements LayoutEngine {
               curvelessEdges.add(e);
               return;
             }
-            SplineEdgeView spline = (SplineEdgeView) e.getView();
+            Spline spline = (Spline)e.getView();
             spline.setCurves(
               scale,
               bbXMin,
@@ -239,7 +240,7 @@ public class DotLayout implements LayoutEngine {
         key = new String(end.hashCode() + "->" + start.hashCode());
         curves = (Vector) curveLookup.get(key);
       }
-      SplineEdgeView spline = (SplineEdgeView) e.getView();
+      SplineTubeEdgeView spline = (SplineTubeEdgeView) e.getView();
       spline.setCurves(
         scale,
         bbXMin,
@@ -264,11 +265,11 @@ public class DotLayout implements LayoutEngine {
   public void reset() {
   }
 
-  public NodeLayout createNodeLayout() {
+  public NodeLayout createNodeLayout(org.wilmascope.graph.Node n) {
     return new DotNodeLayout();
   }
 
-  public EdgeLayout createEdgeLayout() {
+  public EdgeLayout createEdgeLayout(org.wilmascope.graph.Edge e) {
     return new DotEdgeLayout();
   }
   Cluster root;

@@ -101,9 +101,9 @@ public class Actions {
       new ImageIcon(getClass().getResource("/images/forces.png")))
     {
       public void actionPerformed(ActionEvent e) {
-        ForceControlsFrame forceControls
-          = new ForceControlsFrame(rootCluster,"Global Force Controls");
-        forceControls.show();
+        LayoutEngineFrame controls
+          = new LayoutEngineFrame(rootCluster,"Global Layout Engine Controls");
+        controls.show();
       }
     };
     graphOperationsAction = new AbstractAction("Graph Operations")

@@ -95,6 +95,12 @@ public class QueryFrame extends JFrame {
     sectorEdgeSlider.setMinorTickSpacing(10);
     sectorEdgeSlider.setPaintLabels(true);
     sectorEdgeSlider.setPaintTicks(true);
+    fatColumnsButton.setText("fatColumnsButton");
+    fatColumnsButton.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        fatColumnsButton_actionPerformed(e);
+      }
+    });
     this.getContentPane().add(jPanel1, BorderLayout.SOUTH);
     jPanel1.add(okButton, null);
     this.getContentPane().add(queryPane, BorderLayout.NORTH);
@@ -115,6 +121,7 @@ public class QueryFrame extends JFrame {
     fmMovement2Panel.add(sectorField, null);
     fmMovement2Panel.add(dotColumnsRadioButton, null);
     fmMovement2Panel.add(jPanel3, null);
+    jPanel3.add(fatColumnsButton, null);
     fmMovement2Panel.add(forceColumnRadioButton, null);
     fmMovement2Panel.add(jPanel2, null);
     fmMovement2Panel.add(wormRadioButton, null);
@@ -702,7 +709,7 @@ public class QueryFrame extends JFrame {
     GraphControl.NodeFacade end = to.getTopNode();
     GraphControl.EdgeFacade edge;
     if (ColumnCluster.getColumnStyle() == ColumnCluster.DOTCOLUMNS) {
-      edge = graphRoot.addEdge(start, end, "Spline", radius);
+      edge = graphRoot.addEdge(start, end, "SplineTube", radius);
     } else {
       edge = graphRoot.addEdge(start, end, "Arrow", radius);
     }
@@ -1002,4 +1009,18 @@ public class QueryFrame extends JFrame {
   JRadioButton dotColumnsRadioButton = new JRadioButton();
   JRadioButton forceColumnRadioButton = new JRadioButton();
   ButtonGroup styleButtonGroup = new ButtonGroup();
+  private JButton fatColumnsButton = new JButton();
+
+  void fatColumnsButton_actionPerformed(ActionEvent e) {
+    org.wilmascope.graph.NodeList nodes = graphRoot.getCluster().getAllNodes();
+    for(nodes.resetIterator(); nodes.hasNext();) {
+      org.wilmascope.view.NodeView nv = (org.wilmascope.view.NodeView)nodes.nextNode().getView();
+      if(nv instanceof org.wilmascope.viewplugin.TubeNodeView) {
+        org.wilmascope.viewplugin.TubeNodeView tnv = (org.wilmascope.viewplugin.TubeNodeView)nv;
+        float tr = tnv.getTopRadius();
+        float br = tnv.getBottomRadius();
+        tnv.setEndRadii(br*2,tr*2);
+      }
+    }
+  }
 }

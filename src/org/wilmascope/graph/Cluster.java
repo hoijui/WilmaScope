@@ -55,7 +55,7 @@ public class Cluster extends Node {
   public void addNode(Node node) {
     nodes.add(node);
     node.setOwner(this);
-    node.setLayout(layoutEngine.createNodeLayout());
+    node.setLayout(layoutEngine.createNodeLayout(node));
     // get this node's edges.  Edges between the node to be added and nodes
     // that are members of this cluster will be added to this cluster's
     // internal edge list -- addEdge is a bit brute force: it
@@ -186,7 +186,7 @@ public class Cluster extends Node {
       super.removeEdge(e);
       // create the appropriate layout details for the edge depending on the
       // layout engine used for this cluster
-      e.setLayout(getLayoutEngine().createEdgeLayout());
+      e.setLayout(getLayoutEngine().createEdgeLayout(e));
     }
     // for the each node of the edge, if the parent of that node is not
     // this cluster (ie the cluster that now owns the edge) then this edge

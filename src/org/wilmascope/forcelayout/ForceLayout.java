@@ -19,12 +19,7 @@
  */
 package org.wilmascope.forcelayout;
 
-import org.wilmascope.graph.LayoutEngine;
-import org.wilmascope.graph.NodeList;
-import org.wilmascope.graph.EdgeList;
-import org.wilmascope.graph.ClusterList;
-import org.wilmascope.graph.Node;
-import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.*;
 import java.util.Vector;
 import javax.vecmath.*;
 import javax.media.j3d.Transform3D;
@@ -129,10 +124,22 @@ public class ForceLayout implements LayoutEngine {
   public void setConstrained() {
     constrained = true;
   }
-  public org.wilmascope.graph.NodeLayout createNodeLayout() {
+  public void createElementLayouts() {
+    NodeList nodes = root.getNodes();
+    for(nodes.resetIterator();nodes.hasNext();) {
+      Node n = nodes.nextNode();
+      n.setLayout(createNodeLayout(n));
+    }
+    EdgeList edges = root.getInternalEdges();
+    for(edges.resetIterator();edges.hasNext();) {
+      Edge e = edges.nextEdge();
+      e.setLayout(createEdgeLayout(e));
+    }
+  }
+  public org.wilmascope.graph.NodeLayout createNodeLayout(org.wilmascope.graph.Node n) {
     return new NodeForceLayout();
   }
-  public org.wilmascope.graph.EdgeLayout createEdgeLayout() {
+  public org.wilmascope.graph.EdgeLayout createEdgeLayout(org.wilmascope.graph.Edge e) {
     return new EdgeForceLayout();
   }
   // an array of the forces to apply

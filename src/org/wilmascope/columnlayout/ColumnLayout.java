@@ -47,10 +47,10 @@ public class ColumnLayout implements LayoutEngine {
         /**@todo: Implement this org.wilmascope.graph.LayoutEngine method*/
         throw new java.lang.UnsupportedOperationException("Method setBalanced() not yet implemented.");
     }
-    public org.wilmascope.graph.NodeLayout createNodeLayout() {
+    public org.wilmascope.graph.NodeLayout createNodeLayout(Node n) {
         return new NodeColumnLayout(nextLevel++);
     }
-    public org.wilmascope.graph.EdgeLayout createEdgeLayout() {
+    public org.wilmascope.graph.EdgeLayout createEdgeLayout(org.wilmascope.graph.Edge e) {
         return new EdgeColumnLayout();
     }
     public void setBaseLevel(int level){

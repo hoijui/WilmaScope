@@ -43,10 +43,10 @@ public interface LayoutEngine {
    * Factory method to create a new NodeLayout implementation compatible with
    * the layout engine implementing this interface.
    */
-  public NodeLayout createNodeLayout();
+  public NodeLayout createNodeLayout(Node n);
   /**
    * Factory method to create a new EdgeLayout implementation compatible with
    * the layout engine implementing this interface.
    */
-  public EdgeLayout createEdgeLayout();
+  public EdgeLayout createEdgeLayout(Edge e);
 }
