@@ -44,19 +44,19 @@ public class DetailFrame extends JFrame {
   JButton editButton, closeButton;
   HtmlPane html;
   String text;
-  DefaultNodeView view;
-  public DetailFrame(DefaultNodeView view, String helpFileName) {
+  DefaultNodeData nodeData;
+  public DetailFrame(DefaultNodeData nodeData, String helpFileName) {
     super("Node Details");
     html = new HtmlPane(helpFileName);
     this.text = helpFileName;
-    this.view = view;
+    this.nodeData = nodeData;
     init();
   }
-  public DetailFrame(DefaultNodeView view, String type, String text) {
+  public DetailFrame(DefaultNodeData nodeData, String type, String text) {
     super("Node Details");
     html = new HtmlPane(type, text);
     this.text = text;
-    this.view = view;
+    this.nodeData = nodeData;
     init();
   }
 
@@ -99,7 +99,7 @@ public class DetailFrame extends JFrame {
         text = editPane.getText();
         editFrame.dispose();
         html.setText(text);
-        view.setData(text);
+        nodeData.setData(text);
       }
     });
     JButton cancelButton = new JButton("Cancel");

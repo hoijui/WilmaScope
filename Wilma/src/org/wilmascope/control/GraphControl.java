@@ -180,18 +180,11 @@ public class GraphControl {
     public void addPickingClient(PickingClient client) {
       graphElementView.addPickingClient(client);
     }
-    /**
-     * get the custom menu item to show for this graph element
-     * returns null if none is available.
-     */
-    public javax.swing.JMenuItem getUserOptionsMenuItem(java.awt.Component parent) {
-      return graphElementView.getUserOptionsMenuItem(parent);
+    public Object getUserData() {
+      return graphElementView.getUserData();
     }
-    public void setData(String data) {
-      graphElementView.setData(data);
-    }
-    public String getData() {
-      return graphElementView.getData();
+    public void setUserData(Object data) {
+      graphElementView.setUserData(data);
     }
     public String getViewType() {
       return graphElementView.getTypeName();

@@ -25,6 +25,7 @@ import java.awt.Cursor;
 import org.wilmascope.control.*;
 import org.wilmascope.view.PickingClient;
 import org.wilmascope.view.NodeView;
+import org.wilmascope.view.ElementData;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.event.*;
@@ -49,7 +50,9 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
   public void callback(java.awt.event.MouseEvent e, GraphControl.GraphElementFacade node) {
     this.node = (GraphControl.NodeFacade)node;
     JMenuItem detailsMenuItem;
-    if((detailsMenuItem = node.getUserOptionsMenuItem(parent)) != null) {
+    Object userData;
+    if((userData = node.getUserData()) != null && userData instanceof ElementData) {
+      detailsMenuItem = ((ElementData)userData).getMenuItem();
       remove(this.detailsMenuItem);
       add(detailsMenuItem);
       this.detailsMenuItem = detailsMenuItem;

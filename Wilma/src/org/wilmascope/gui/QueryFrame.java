@@ -17,10 +17,7 @@ import java.util.*;
  */
 
 public class QueryFrame extends JFrame {
-  GridBagLayout gridBagLayout1 = new GridBagLayout();
-  JLabel jLabel1 = new JLabel();
   JLabel jLabel2 = new JLabel();
-  JTextField startDateField = new JTextField();
   JTextField endDateField = new JTextField();
   JPanel jPanel1 = new JPanel();
   JButton okButton = new JButton();
@@ -36,37 +33,63 @@ public class QueryFrame extends JFrame {
     }
   }
   private void jbInit() throws Exception {
-    jLabel1.setText("Start Date:");
-    this.getContentPane().setLayout(gridBagLayout1);
     jLabel2.setText("End Date:");
     endDateField.setPreferredSize(new Dimension(100, 27));
     endDateField.setText("01-apr-01");
-    startDateField.setPreferredSize(new Dimension(100, 27));
-    startDateField.setText("01-jan-01");
     okButton.setText("OK");
     okButton.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
         okButton_actionPerformed(e);
       }
     });
-    this.getContentPane().add(jLabel1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0
-            ,GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-    this.getContentPane().add(jLabel2,  new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0
-            ,GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-    this.getContentPane().add(startDateField,  new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0
-            ,GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-    this.getContentPane().add(endDateField,  new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0
-            ,GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-    this.getContentPane().add(jPanel1,   new GridBagConstraints(0, 2, 2, 1, 0.0, 0.0
-            ,GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 147, 0));
+    jLabel1.setText("Start Date:");
+    fmMovementPanel.setLayout(gridLayout1);
+    startDateField.setPreferredSize(new Dimension(100, 27));
+    startDateField.setText("01-jan-01");
+    gridLayout1.setRows(2);
+    gridLayout1.setColumns(2);
+    cancelButton.setText("Cancel");
+    cancelButton.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        cancelButton_actionPerformed(e);
+      }
+    });
+    jLabel3.setText("First Fund Manager:");
+    fundmanField.setText("Sharelink");
+    this.getContentPane().add(jPanel1, BorderLayout.SOUTH);
     jPanel1.add(okButton, null);
+    this.getContentPane().add(queryPane,  BorderLayout.NORTH);
+    queryPane.add(fmMovementPanel,   "FM Movement");
+    fmMovementPanel.add(jLabel1, null);
+    fmMovementPanel.add(startDateField, null);
+    fmMovementPanel.add(jLabel2, null);
+    fmMovementPanel.add(endDateField, null);
+    queryPane.add(ownershipPanel,  "Ownership");
+    ownershipPanel.add(jLabel3, null);
+    ownershipPanel.add(fundmanField, null);
+    jPanel1.add(cancelButton, null);
     pack();
   }
 
   void okButton_actionPerformed(ActionEvent ev) {
+    Component selected = queryPane.getSelectedComponent();
+    if(selected == fmMovementPanel) {
+      fmMovementQuery(startDateField.getText(),endDateField.getText());
+    } else if (selected == ownershipPanel) {
+      ownershipQuery(fundmanField.getText());
+    }
+    this.dispose();
+  }
+  void ownershipQuery(String startFundman) {
     String url = new String("jdbc:postgresql:citywatch");
-    String startDate = startDateField.getText();
-    String endDate = endDateField.getText();
+    nodes.clear();
+    String fmcodeQueryString =
+      "select fmcode "+
+      "from market "+
+      "where fund_man like '%"+startFundman+"%' ";
+  }
+  void fmMovementQuery(String startDate, String endDate) {
+    String url = new String("jdbc:postgresql:citywatch");
     nodes.clear();
     String maxMinQueryString =
       "select max(val) as maxVal, min(val) as minVal "+
@@ -140,4 +163,17 @@ public class QueryFrame extends JFrame {
     System.out.println("edginess="+edginess+", radius="+radius+", hue="+hue);
   }
   Hashtable nodes = new Hashtable();
+  JTabbedPane queryPane = new JTabbedPane();
+  JPanel fmMovementPanel = new JPanel();
+  JLabel jLabel1 = new JLabel();
+  GridLayout gridLayout1 = new GridLayout();
+  JTextField startDateField = new JTextField();
+  JPanel ownershipPanel = new JPanel();
+  JButton cancelButton = new JButton();
+  JLabel jLabel3 = new JLabel();
+  JTextField fundmanField = new JTextField();
+
+  void cancelButton_actionPerformed(ActionEvent e) {
+    this.dispose();
+  }
 }
