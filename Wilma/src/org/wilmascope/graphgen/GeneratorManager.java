@@ -19,7 +19,6 @@
  */
 package org.wilmascope.graphgen;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -27,8 +26,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.wilmascope.control.WilmaMain;
-import org.wilmascope.view.GraphElementView;
-import org.wilmascope.view.ViewConstants;
+import org.wilmascope.global.GlobalConstants;
 
 /**
  * Provides a registry of graph generators. If you add new generators
@@ -48,13 +46,13 @@ public class GeneratorManager {
   private GeneratorManager() {
     graphGenerators = new Hashtable<String, GraphGenerator>();
     load();
-    defaultGenerator = graphGenerators.get("Random");
+    defaultGenerator = graphGenerators.get(GlobalConstants.getInstance().getProperty("DefaultGenerator"));
     // insert a call to addGenerator for your GraphGenerator here...
   }
 
   public void load() {
     try {
-      String plugins = ViewConstants.getInstance().getProperty(
+      String plugins = GlobalConstants.getInstance().getProperty(
           "GeneratorPlugins");
       List classNames = new ArrayList();
       StringTokenizer st = new StringTokenizer(plugins, ",");
