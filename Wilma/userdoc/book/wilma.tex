@@ -469,10 +469,16 @@ writing additional code.
 
 \subsection{Applications}
 \subsubsection{3D UML Visualisation} \label{sec:3duml}
-
-Dwyer~\cite{dwyer013D-UML} has managed to obtain a peer-reviewed paper by
-using Wilma to visualise UML structures for software engineering purposes.
-Therefore, Wilma rocks.
+The first application of Wilma was an investigation into a 3D
+extension of the Unified Modelling Language\cite{dwyer013D-UML}.
+UML diagram elements were translated into 3D glyphs and a simple class
+diagram editor was constructed on top of the Wilma framework.  A user study
+was then conducted to test the feasibility of such a paradigm for
+software design.  Interesting annecdotal evidence was collected
+indicating that such 3D UML models, when coupled with a force directed
+layout engine could help a software architect to understand structure
+within a reasonably complex system.  An example of such a diagram is
+shown in Figure \ref{fig-wilmaclasses3D}.
 
 \subsubsection{Fund Manager Flow Visualisation} \label{sec:fmflow}
 Most stock market visualisations involve a fairly straightforward
@@ -486,16 +492,35 @@ fund manager between a pair of stocks.  A movement from one stock to
 another occurs when a fund manager reduces his holding in the first
 and increases his holding in the second.
 
+The clients were particularly interested in seeing the changing
+behaviour of fund managers over time.  This turned out to be a problem
+of visualising a changing graph.  We showed these changes by
+arranging the graph for each time period on a plane and then stacking
+the time periods in the third dimension.  Nodes representing stocks
+are extruded into columns whose width may be varied to indicate a
+stock attribute such as unit price.  We call these 3D stacked graph
+visualisations {\em stratified graphs}, borrowing the geological term.
+
+Various styles of layout were tried in arranging these stratified
+graphs in space.  Force
+directed layout was useful for showing clustering and centrality of
+highly active stocks while sugiyama style layout is useful for showing
+flow from source stocks to sinks.  Figure \ref{fig-fm} shows an
+example using the DOT layout engine in Wilma to produce 3D sugiyama
+style layout.  A current research project is to tailor the hueristics
+used in these layout algorithms to suit such stratified graphs.
+
 \begin{figure}[h]
   \centering
   \subfigure[]{
-    \label{fig-mvc}
+    \label{fig-fmflow}
     \includegraphics[width=0.5\textwidth]{figures/dot_waterlevel2.eps}}
   \subfigure[Side view]{
-    \label{fig-wilmamvc}
+    \label{fig-fmflow}
     \includegraphics[width=0.4\textwidth]{figures/dot_waterlevel2_sideview.eps}}
   \caption{A visualisation of fund manager movement within the UK
   Computer Services sector for 5 time periods over 2 weeks in December.}
+  \label{fig-fm}
 \end{figure}
 
 \subsubsection{Web Structure Visualisation}
