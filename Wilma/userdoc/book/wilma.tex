@@ -575,20 +575,20 @@ As stated in Section~\ref{motivation}, a major design goal for Wilma
 was to provide a platform upon which algorithmic experimentation could be
 conducted elegantly and efficiently.
 
-Force-directed layout algorithms are of course the method of choice for a
-wide range of graph visualisation problems.  One variation on these
-algorithms, advocated by Fruchtermann \&
-Rheingold~\cite{fruchtermann90force-directed} and Davidson {\em et
-al.}~\cite{davidson01noise}, attempts to avoid calculation of repulsion force
-vectors, which is $O(n)$ in the number of vertices for each node $i$, and
-$O(n^2)$ for the whole graph:
+As we have argued, force-directed layout algorithms are the method of choice
+for a wide range of graph visualisation problems.  One variation on these
+	algorithms, advocated by Fruchtermann \&
+	Rheingold~\cite{fruchtermann90force-directed} and Davidson {\em et
+	al.}~\cite{davidson01noise}, attempts to avoid calculation of repulsion
+	force vectors, which is $O(n)$ in the number of vertices for each node $i$,
+	and $O(n^2)$ for the whole graph:
 
 \begin{equation}
 \label{repulsion}
-\avec{R_i} \equiv \sum_{j \in V \setminus \{i\}} \avec{r_{ij}}
+\avec{R_i} \equiv \sum_{j \in V \setminus \{i\}} \avec{p_{ij}}
 \end{equation}
 
-\noindent Where $\avec{r_{ij}} = \avec{r_i} - \avec{r_j}$ is the displacement
+\noindent Where $\avec{p_{ij}} = \avec{p_i} - \avec{p_j}$ is the displacement
 of node $i$ relative to $j$.
 
 To avoid this expense it is possible to approximate scalar energy potential
@@ -649,8 +649,8 @@ so that the two nodes at either end are combined, and the process is repeated.
 
 In order to perform these simplifications rapidly the stochastic matching
 approach of Hendrickson \& Leland~\cite{hendrickson95multilevel} is employed.
-This takes $O(|V| \centerdot {|E| \over |V|})$ time and is linear for
-sparse graphs.
+This takes $O(|E|) = O(|V| \centerdot {|E| \over |V|})$ time and is linear for
+sparse graphs (where ${|E| \over |V|}$ is bounded).
 
 After each level of force-directed layout has stabilised the aggregated
 nodes are replaced by their pairs of matched children and the thermal energy
@@ -681,9 +681,9 @@ distance $d_\infty$, that is:
 
 \begin{equation}
 \exists \, d_\infty : \, 
-||\avec{r_i} - \avec{r_j}|| > d_\infty
+||\avec{p_i} - \avec{p_j}|| > d_\infty
 \Rightarrow 
-repulsionforce (\avec{r_i},\avec{r_j}) = \avec{0}
+repulsionforce (\avec{p_i},\avec{p_j}) = \avec{0}
 \end{equation}
 %\forall d > d_\infty, f_g(d) = 0
 
@@ -812,7 +812,7 @@ shown in Figure \ref{fig-wilmaclasses3D}.
 Most stock market visualisations involve a fairly straightforward
 mapping of share attributes into two- or three-dimensional space.  The most
 obvious example is share price time series charts.  In an experiment
-into graph based visualisation techniques for stock market data
+into graph based visualisation techniques for stock market data,
 Dwyer~\cite{dwyer02fmflow} defined a graph model for Fund Manager
 movement within the stock market.  The graph consists of nodes,
 which represent stocks, and edges, which represent a {\em movement} of a
