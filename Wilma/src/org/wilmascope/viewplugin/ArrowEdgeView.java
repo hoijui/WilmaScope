@@ -41,7 +41,7 @@ import org.wilmascope.view.View2D;
 import com.sun.j3d.utils.geometry.Cone;
 
 /**
- * Graphical representation of the edge
+ * Arrow shaped Graphical representation of the edge
  *
  * @author Tim Dwyer
  * @version 1.0

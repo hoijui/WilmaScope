@@ -37,18 +37,10 @@ public class DegreeNodeControlPanel extends javax.swing.JPanel {
   TitledBorder titledBorder1;
   ButtonGroup group;
 
-  public DegreeNodeControlPanel(GraphControl.ClusterFacade cluster) {
+  public DegreeNodeControlPanel(final GraphControl.ClusterFacade cluster) {
     this.cluster = cluster;
     //this.forceName = forceName;
     this.fadeLayout = (DegreeLayout)cluster.getLayoutEngine();
-    try {
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-  private void jbInit() throws Exception {
     titledBorder1 = new TitledBorder(BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153),2), new String ("Node Force"));
     this.setBorder(titledBorder1);
     this.add(enabledCheckBox, null);

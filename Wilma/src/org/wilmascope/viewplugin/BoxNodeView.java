@@ -41,10 +41,7 @@ import org.wilmascope.view.View2D;
 import com.sun.j3d.utils.geometry.Box;
 
 /**
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular Wilma graph drawing engine
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaOrg
+ * A box shaped node.  Labels are texture mapped onto the face.
  * @author Tim Dwyer
  * @version 1.0
  */

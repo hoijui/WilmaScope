@@ -22,7 +22,8 @@ import com.sun.j3d.utils.geometry.Cylinder;
  */
 
 public class DirectedEdgeView extends EdgeView {
-  /** radius of the edgeCylinder
+  /** Shows a directed edge with a little cone next to the edge.
+   * Alternative to arrow.  Originally intended as a 3D analog for UML directed edges.
    */
   float radius = 0.02f;
   public DirectedEdgeView() {

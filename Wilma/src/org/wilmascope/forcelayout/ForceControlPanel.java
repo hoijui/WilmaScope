@@ -34,6 +34,8 @@ import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.control.WilmaMain;
+import org.wilmascope.forcelayout.ForceManager.UnknownForceTypeException;
 /**
  *
  * @author  administrator
@@ -51,14 +53,6 @@ public class ForceControlPanel extends javax.swing.JPanel {
     this.cluster = cluster;
     this.force = force;
     this.forceLayout = (ForceLayout)cluster.getLayoutEngine();
-    try {
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-  private void jbInit() throws Exception {
     titledBorder1 = new TitledBorder(BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153),2),force.getTypeName());
     this.setBorder(titledBorder1);
     this.add(enabledCheckBox, null);
@@ -68,8 +62,7 @@ public class ForceControlPanel extends javax.swing.JPanel {
     forceSlider.setValue ((int)((float)force.getStrengthConstant() * 10f));
     forceSlider.addChangeListener (new javax.swing.event.ChangeListener () {
       public void stateChanged (javax.swing.event.ChangeEvent evt) {
-        force.setStrengthConstant(forceSlider.getValue()/10f);
-        cluster.unfreeze();
+        forceSliderStateChanged();
       }
     }
     );
@@ -82,7 +75,11 @@ public class ForceControlPanel extends javax.swing.JPanel {
       enabledCheckBox.setSelected(true);
       force = existingForce;
     } else {
-      force = ForceManager.getInstance().createForce(force.getTypeName());
+      try {
+        force = ForceManager.getInstance().createForce(force.getTypeName());
+      } catch (UnknownForceTypeException e1) {
+        WilmaMain.showErrorDialog("Unknown Force Type!",e1);
+      }
       forceSlider.setEnabled(false);
     }
     enabledCheckBox.addActionListener(new java.awt.event.ActionListener() {
@@ -91,7 +88,10 @@ public class ForceControlPanel extends javax.swing.JPanel {
       }
     });
   }
-
+  void forceSliderStateChanged() {
+    force.setStrengthConstant(forceSlider.getValue()/10f);
+    cluster.unfreeze();
+  }
   void enabledCheckBox_actionPerformed(ActionEvent e) {
     if(forceSlider.isEnabled()) {
       forceSlider.setEnabled(false);

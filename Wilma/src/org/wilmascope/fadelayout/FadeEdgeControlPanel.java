@@ -37,18 +37,10 @@ public class FadeEdgeControlPanel extends javax.swing.JPanel {
   JCheckBox degreeCheckBox = new JCheckBox("In-Degree Only");
   JCheckBox weightCheckBox = new JCheckBox("Weights");
 
-  public FadeEdgeControlPanel(GraphControl.ClusterFacade cluster) {
+  public FadeEdgeControlPanel(final GraphControl.ClusterFacade cluster) {
     this.cluster = cluster;
     //this.forceName = forceName;
     this.fadeLayout = (FadeLayout)cluster.getLayoutEngine();
-    try {
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-  private void jbInit() throws Exception {
     titledBorder1 = new TitledBorder(BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153),2), new String ("Edge Force"));
     this.setBorder(titledBorder1);
     this.add(enabledCheckBox, null);

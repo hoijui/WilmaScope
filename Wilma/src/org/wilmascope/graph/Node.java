@@ -215,4 +215,10 @@ public class Node extends GraphElement {
   private float radius = 0.1f;
   private float mass = 1f;
   private boolean fixedPosition = false;
+  /**
+   * @return the number of edges connected to this node
+   */
+  public int degree() {
+    return edges.size();
+  }
 }

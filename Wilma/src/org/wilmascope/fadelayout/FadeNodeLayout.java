@@ -64,7 +64,7 @@ public class FadeNodeLayout extends NodeLayout {
 		
 		if (VariableForces.layering == VariableForces.degree)
 		{			
-			int degree = node.getEdges().size();
+			int degree = node.getDegree();
 	    	
 	    	if (VariableForces.inOnly)
 	    	{

@@ -26,11 +26,11 @@ import javax.swing.border.*;
 import java.util.Vector;
 import org.wilmascope.forcelayout.*;
 import org.wilmascope.control.GraphControl;
+
 /**
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular Wilma graph drawing engine
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaOrg
+ * Title: WilmaToo Description: Sequel to the ever popular Wilma graph drawing
+ * engine Copyright: Copyright (c) 2001 Company: WilmaOrg
+ * 
  * @author Tim Dwyer
  * @version 1.0
  */
@@ -39,33 +39,35 @@ public class ForceControlsPanel extends JPanel {
 
   public ForceControlsPanel() {
   }
+
   ForceLayout forceLayout;
+
   GraphControl.ClusterFacade cluster;
 
   // Variables declaration
   JSlider velocityAttenuationSlider = new JSlider();
+
   JSlider frictionSlider = new JSlider();
+
   JSlider iterationsPerFrameSlider = new JSlider();
+
   JScrollPane jScrollPane1 = new JScrollPane();
+
   JScrollPane jScrollPane2 = new JScrollPane();
 
   Box boxLayout;
+
   Box forceLayoutControlsBox;
+
   Box forceControlsBox;
+
   JPanel jPanel1 = new JPanel();
+
   JSlider balancedThresholdSlider = new JSlider();
 
   public ForceControlsPanel(GraphControl.ClusterFacade cluster) {
-    try {
-      this.cluster = cluster;
-      this.forceLayout = (ForceLayout)cluster.getLayoutEngine();
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-  private void jbInit() throws Exception {
+    this.cluster = cluster;
+    this.forceLayout = (ForceLayout) cluster.getLayoutEngine();
     boxLayout = Box.createVerticalBox();
     forceControlsBox = Box.createVerticalBox();
     forceLayoutControlsBox = Box.createVerticalBox();
@@ -75,46 +77,58 @@ public class ForceControlsPanel extends JPanel {
     forceControlsBox.add(jPanel1, null);
     boxLayout.add(jScrollPane2, null);
     jScrollPane2.getViewport().add(forceLayoutControlsBox, null);
-    velocityAttenuationSlider.setBorder (new javax.swing.border.TitledBorder("Velocity Scale"));
-    velocityAttenuationSlider.setMinorTickSpacing (10);
-    velocityAttenuationSlider.setPaintLabels (true);
-    velocityAttenuationSlider.setPaintTicks (true);
-    velocityAttenuationSlider.setMajorTickSpacing (50);
-    velocityAttenuationSlider.setValue ((int)((float)forceLayout.getVelocityAttenuation() * 1000f));
-    velocityAttenuationSlider.addChangeListener (new javax.swing.event.ChangeListener () {
-      public void stateChanged (javax.swing.event.ChangeEvent evt) {
-        forceLayout.setVelocityAttenuation((float)velocityAttenuationSlider.getValue()/1000f);
-      }
-    });
+    velocityAttenuationSlider.setBorder(new javax.swing.border.TitledBorder(
+        "Velocity Scale"));
+    velocityAttenuationSlider.setMinorTickSpacing(10);
+    velocityAttenuationSlider.setPaintLabels(true);
+    velocityAttenuationSlider.setPaintTicks(true);
+    velocityAttenuationSlider.setMajorTickSpacing(50);
+    velocityAttenuationSlider.setValue((int) ((float) forceLayout
+        .getVelocityAttenuation() * 1000f));
+    velocityAttenuationSlider
+        .addChangeListener(new javax.swing.event.ChangeListener() {
+          public void stateChanged(javax.swing.event.ChangeEvent evt) {
+            forceLayout
+                .setVelocityAttenuation((float) velocityAttenuationSlider
+                    .getValue() / 1000f);
+          }
+        });
     forceLayoutControlsBox.add(velocityAttenuationSlider);
-    frictionSlider.setBorder (new javax.swing.border.TitledBorder("Friction Coefficient"));
-    frictionSlider.setMinorTickSpacing (10);
-    frictionSlider.setPaintLabels (true);
-    frictionSlider.setPaintTicks (true);
-    frictionSlider.setMajorTickSpacing (50);
-    frictionSlider.setValue ((int)((float)Constants.frictionCoefficient));
-    frictionSlider.addChangeListener (new javax.swing.event.ChangeListener () {
-      public void stateChanged (javax.swing.event.ChangeEvent evt) {
-        Constants.frictionCoefficient = (float)frictionSlider.getValue();
+    frictionSlider.setBorder(new javax.swing.border.TitledBorder(
+        "Friction Coefficient"));
+    frictionSlider.setMinorTickSpacing(10);
+    frictionSlider.setPaintLabels(true);
+    frictionSlider.setPaintTicks(true);
+    frictionSlider.setMajorTickSpacing(50);
+    frictionSlider.setValue((int) ((float) Constants.frictionCoefficient));
+    frictionSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+      public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        Constants.frictionCoefficient = (float) frictionSlider.getValue();
       }
     });
     forceLayoutControlsBox.add(frictionSlider);
-    balancedThresholdSlider.setBorder (new javax.swing.border.TitledBorder("Balanced Threshold"));
-    balancedThresholdSlider.setMinorTickSpacing (10);
-    balancedThresholdSlider.setPaintLabels (true);
-    balancedThresholdSlider.setPaintTicks (true);
-    balancedThresholdSlider.setMajorTickSpacing (50);
-    balancedThresholdSlider.setValue ((int)((float)forceLayout.getBalancedThreshold() * 1000f));
-    balancedThresholdSlider.addChangeListener (new javax.swing.event.ChangeListener () {
-      public void stateChanged (javax.swing.event.ChangeEvent evt) {
-        forceLayout.setBalancedThreshold((float)balancedThresholdSlider.getValue()/1000f);
-      }
-    });
+    balancedThresholdSlider.setBorder(new javax.swing.border.TitledBorder(
+        "Balanced Threshold"));
+    balancedThresholdSlider.setMinorTickSpacing(10);
+    balancedThresholdSlider.setPaintLabels(true);
+    balancedThresholdSlider.setPaintTicks(true);
+    balancedThresholdSlider.setMajorTickSpacing(50);
+    balancedThresholdSlider.setValue((int) ((float) forceLayout
+        .getBalancedThreshold() * 1000f));
+    balancedThresholdSlider
+        .addChangeListener(new javax.swing.event.ChangeListener() {
+          public void stateChanged(javax.swing.event.ChangeEvent evt) {
+            forceLayout.setBalancedThreshold((float) balancedThresholdSlider
+                .getValue() / 1000f);
+          }
+        });
     forceLayoutControlsBox.add(balancedThresholdSlider);
 
-    java.util.Vector forces = new Vector(ForceManager.getInstance().getAvailableForces());
-    for(int i=0; i<forces.size(); i++) {
-      forceControlsBox.add(new ForceControlPanel(cluster,(Force)forces.elementAt(i)));
+    java.util.Vector forces = new Vector(ForceManager.getInstance()
+        .getAvailableForces());
+    for (int i = 0; i < forces.size(); i++) {
+      forceControlsBox.add(new ForceControlPanel(cluster, (Force) forces
+          .elementAt(i)));
     }
   }
 }

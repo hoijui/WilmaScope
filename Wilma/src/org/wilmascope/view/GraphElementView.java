@@ -431,7 +431,7 @@ public abstract class GraphElementView
 			setLabel(label);
 		}
 		String visible = p.getProperty("Visible");
-		if (visible != null && visible.equals("false")) {
+		if (visible != null && visible.toLowerCase().equals("false")) {
 			hide();
 		}
 		String colour = p.getProperty("Colour");

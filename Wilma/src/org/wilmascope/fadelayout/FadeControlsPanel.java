@@ -43,16 +43,8 @@ public class FadeControlsPanel extends JPanel {
   JSlider balancedThresholdSlider = new JSlider();
 
   public FadeControlsPanel(GraphControl.ClusterFacade cluster) {
-    try {
       this.cluster = cluster;
       this.fadeLayout = (FadeLayout)cluster.getLayoutEngine();
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-  private void jbInit() throws Exception {
     boxLayout = Box.createVerticalBox();
     fadeControlsBox = Box.createVerticalBox();
     //forceLayoutControlsBox = Box.createVerticalBox();

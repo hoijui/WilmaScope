@@ -49,7 +49,7 @@ import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.GeometryInfo;
 import com.sun.j3d.utils.geometry.NormalGenerator;
 /**
- * The TubeNodeView
+ * A tube with square cross section and specified bottom and top dimensions
  * @author Tim Dwyer
  * @version 1.0
  */

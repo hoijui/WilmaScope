@@ -1,19 +1,28 @@
 package org.wilmascope.gui;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.util.Vector;
-import org.wilmascope.control.*;
-import org.wilmascope.graph.NodeList;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+
+import org.wilmascope.control.GraphControl;
+import org.wilmascope.control.GraphTransformer;
+import org.wilmascope.forcelayout.ForceLayout;
 
 
 /**
- * Title:
- * Description:
- * Copyright:    Copyright (c) 2001
- * Company:
- * @author
+ * Controls for clustering.
+ * 
+ * @author dwyer
  * @version 1.0
  */
 
@@ -33,15 +42,6 @@ public class ClusteriseFrame extends JFrame {
   public ClusteriseFrame(GraphControl.ClusterFacade rootCluster, String windowTitle) {
     super(windowTitle);
     this.rootCluster = rootCluster;
-    try {
-      jbInit();
-      pack();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-  private void jbInit() throws Exception {
     kMeansBox = Box.createVerticalBox();
     okButton.setText("OK");
     okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -75,6 +75,7 @@ public class ClusteriseFrame extends JFrame {
     jPanel2.add(keepField, null);
     kMeansBox.add(jPanel4, null);
     jPanel4.add(expandedCheckBox, null);
+    pack();
   }
 
   void okButton_actionPerformed(ActionEvent e) {
@@ -84,16 +85,9 @@ public class ClusteriseFrame extends JFrame {
     Vector[] clusters = transformer.kMeansClustering(rootCluster, k, n);
     for(int i = 0; i < clusters.length; i++) {
       GraphControl.ClusterFacade newCluster = rootCluster.addCluster(clusters[i]);
-
-      try {
-        newCluster.addForce("Repulsion");
-        newCluster.addForce("Spring");
-        newCluster.addForce("Origin").setStrength(10f);
-        if(!expandedCheckBox.isSelected()) {
-          newCluster.collapse();
-        }
-      } catch(Exception fe) {
-        System.out.println("Couldn't add forces to graph root from WilmaMain, reason: "+fe.getMessage());
+      newCluster.setLayoutEngine(ForceLayout.createDefaultClusterForceLayout(newCluster.getCluster()));
+      if(!expandedCheckBox.isSelected()) {
+        newCluster.collapse();
       }
     }
   }

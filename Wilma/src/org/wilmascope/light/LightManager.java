@@ -407,7 +407,7 @@ for(int i = 0;; i++) {
     spotLightVector.add(w);
    }
   /**deletes the ambient light from the scene graph
-   * @param index: index in the ambient light vector(ambLightVector)
+   * @param index index in the ambient light vector(ambLightVector)
    */
    public void deleteAmbLight(int index)
    {
@@ -420,7 +420,7 @@ for(int i = 0;; i++) {
      w.getBranchGroup().detach();
    }
   /**deletes the directional light from the scene graph
-   * @param index: index in the directional light vector(dirLightVector)
+   * @param index index in the directional light vector(dirLightVector)
    */
    public void deleteDirLight(int index)
    {
@@ -429,7 +429,7 @@ for(int i = 0;; i++) {
      w.getBranchGroup().detach();
    }
   /**deletes the point light from the scene graph
-   * @param index: index in the point light vector(pointLightVector)
+   * @param index index in the point light vector(pointLightVector)
    */
    public void deletePointLight(int index)
    {
@@ -438,7 +438,7 @@ for(int i = 0;; i++) {
     w.getBranchGroup().detach();
    }
    /**deletes the spot light from the scene graph
-   * @param index: index in the spot light vector(spotLightVector)
+   * @param index index in the spot light vector(spotLightVector)
    */
    public void deleteSpotLight(int index)
    {

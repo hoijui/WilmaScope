@@ -32,18 +32,10 @@ public class FadeOriginControlPanel extends javax.swing.JPanel {
   JSlider forceSlider = new JSlider();
   TitledBorder titledBorder1;
 
-  public FadeOriginControlPanel(GraphControl.ClusterFacade cluster) {
+  public FadeOriginControlPanel(final GraphControl.ClusterFacade cluster) {
     this.cluster = cluster;
     //this.forceName = forceName;
     this.fadeLayout = (FadeLayout)cluster.getLayoutEngine();
-    try {
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-  private void jbInit() throws Exception {
     titledBorder1 = new TitledBorder(BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153),2), new String ("Origin Force"));
     this.setBorder(titledBorder1);
     this.add(enabledCheckBox, null);

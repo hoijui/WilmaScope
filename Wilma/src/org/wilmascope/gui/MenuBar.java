@@ -29,15 +29,15 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
-import org.wilmascope.control.TestGraph;
 import org.wilmascope.file.FileHandler;
 import org.wilmascope.gmlparser.ColumnsImporter;
-import javax.swing.JOptionPane;
+import org.wilmascope.graphgen.GeneratorManager;
 
 /**
  * Title:        WilmaToo
@@ -403,7 +403,7 @@ public class MenuBar extends JMenuBar {
 		GenerateTestGraphFrame setup =
 			new GenerateTestGraphFrame(
 				"Generate Test Graph",
-				new TestGraph(graphControl));
+				graphControl);
 		setup.show();
 	}
 	void helpMenuItem_actionPerformed(ActionEvent e) {

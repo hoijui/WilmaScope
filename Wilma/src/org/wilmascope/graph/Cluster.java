@@ -101,7 +101,7 @@ public class Cluster extends Node {
 
   /**
    * Remove a {@link Node} from the Cluster
-   * @param node which Node to remove
+   * @param n which Node to remove
    */
   public void removeNode(Node n) {
     nodes.remove(n);
@@ -424,7 +424,7 @@ public class Cluster extends Node {
     }
     super.delete();
   }
-  /**
+  /*
    * Moves this cluster to the new position, and repositions all of its
    * member nodes appropriately.
    * @param newPosition the position to which everything will be moved
@@ -434,7 +434,6 @@ public class Cluster extends Node {
     reposition(delta);
   }
    */
-
   public AxisAngle4f getRotationAngle() {
     return rotationAngle;
   }

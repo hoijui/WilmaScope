@@ -15,6 +15,11 @@ import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.GraphElementView;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.Renderer2D;
+/**
+ * Uses OpenGL (or DirectX) line segment primitive for super-fast rendering.  Lines colouring is smoothly graded from start node colour to end node colour if used with LineNode.
+ * @author dwyer
+ *
+ */
 public class LineEdgeView extends EdgeView {
   public LineEdgeView() {
     setTypeName("LineEdge");
