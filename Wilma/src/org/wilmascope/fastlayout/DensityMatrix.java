@@ -4,40 +4,46 @@ import javax.vecmath.Point3f;
 import org.wilmascope.graph.*;
 
 /**
- * <p>Description: Class abstracting the storing of the node densities for FastLayout</p>
- * <p>@author James Cwling</p>
- * <p>@version 0.5</p>
- *
+ * Description: Class abstracting the storing of the node densities for FastLayout.
+ * @author      James Cwling
+ * @version     1.2
  */
-
- //
- //
- // move all references to footprint, resolution etc out of fast-layout into here
- //
- //
 
 public class DensityMatrix {
 
-  double[][] matrix;
+  // pity java doesn't have pointers...
+  // this redundancy here still outweighs the disadvantage of having the overhead of a vector of vectors (of vectors)
+  double[][] matrix2D;
+  double[][][] matrix3D;
 
-  double[][] footprint;
+  // matrices storing the node footprint template for 2 & 3D respectively
+  double[][] footprint2D;
+  double[][][] footprint3D;
 
-  int resolution;
+  // the indexes in the 'universe' matrix are integral yet the node positions are floats
+  // this resolution defines how much to scale the floating point position
+  // by before rounding to an int
+  int resolution = Defaults.FIELD_RES;
 
-  int footRadius;
+  // the radius of the node footprint
+  int footRadius = resolution*Defaults.NODE_FOOTPRINT;
 
-  double cutoff;
+  // if the matrix is 3D, as opposed to 2D
+  boolean threeD;
+
+  // the min level the density should attenuate to at the edge of the node footprint
+  double cutoff = Defaults.MIN_DENSITY;
 
   // radii before expansion has occurred
-  int initWidth, initHeight = 0;
+  int initWidth, initHeight, initDepth = 0;
 
-  public DensityMatrix(int width, int height, int resolution, int footprint, double cutoff) {
-    this.resolution = resolution;
+  public DensityMatrix(int width, boolean threeD) {
+    this.threeD = threeD;
     initWidth = width;
-    initHeight = height;
-    this.footRadius = resolution*footprint;
-    matrix = new double[width][height];
-    this.cutoff = cutoff;
+    initHeight = width;
+    initDepth = width;
+    if(threeD) matrix3D = new double[initWidth][initHeight][initDepth];
+    else matrix2D = new double[initWidth][initHeight];
     calcFootprint();
   }
 
@@ -53,29 +59,43 @@ public class DensityMatrix {
   }
 
   public void setRadius(int val) {
-    initWidth = initHeight = val;
+    initWidth = initHeight = initDepth = val;
     reset();
-    System.err.println("Density matrix being reset on radius change!");
   }
 
   private void calcFootprint() {
-    footprint = new double[2*footRadius+1][2*footRadius+1];
 
     double attenuateScale = cutoff*footRadius*footRadius;
 
-    for(int i = 0; i < footprint.length; i++) {
-//      System.err.print("\n[");
-      for(int j = 0; j < footprint[i].length; j++) {
-        int radSquared = distSquared(footRadius, footRadius, i, j);
-  // look into why i need to have the +1 here to use up all the matrix:
-        if(radSquared <= footRadius*footRadius+1) { // could get rid of this - just restricts density to within circular footprint
-          if(radSquared == 0) radSquared = 1;
-          footprint[i][j] = attenuateScale/radSquared;
+    if(threeD) {
+      footprint3D = new double[2*footRadius+1][2*footRadius+1][2*footRadius+1];
+
+      for(int i = 0; i < footprint3D.length; i++) {
+        for(int j = 0; j < footprint3D[i].length; j++) {
+          for(int k = 0; k < footprint3D[i][j].length; k++) {
+            int radSquared = distSquared(footRadius, footRadius, footRadius, i, j, k);
+            if(radSquared <= footRadius*footRadius*footRadius+1) { // could get rid of this - just restricts density to within circular footprint
+              if(radSquared == 0) radSquared = 1;
+              footprint3D[i][j][k] = attenuateScale/radSquared;
+            }
+            else footprint3D[i][j][k] = 0;
+          }
         }
-        else footprint[i][j] = 0;
-//        System.err.print(" " + footprint[i][j]);
       }
-//      System.err.print(" ]");
+    }
+    else {
+      footprint2D = new double[2*footRadius+1][2*footRadius+1];
+
+      for(int i = 0; i < footprint2D.length; i++) {
+        for(int j = 0; j < footprint2D[i].length; j++) {
+          int radSquared = distSquared(footRadius, footRadius, i, j);
+          if(radSquared <= footRadius*footRadius+1) { // could get rid of this - just restricts density to within circular footprint
+            if(radSquared == 0) radSquared = 1;
+            footprint2D[i][j] = attenuateScale/radSquared;
+          }
+          else footprint2D[i][j] = 0;
+        }
+      }
     }
   }
 
@@ -83,55 +103,96 @@ public class DensityMatrix {
     return ((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));
   }
 
+  private static int distSquared(int x1, int y1, int z1, int x2, int y2, int z2) {
+    return ((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1));
+  }
+
   public void setZero() {
-    for(int i = 0; i < matrix.length; i++) {
-      for(int j = 0; j < matrix[i].length; j++) {
-        matrix[i][j] = 0;
-      }
+    if(threeD)
+      for(int i = 0; i < matrix3D.length; i++)
+        for(int j = 0; j < matrix3D[i].length; j++)
+          for(int k = 0; k < matrix3D[i][j].length; k++)
+            matrix3D[i][j][k] = 0;
+    else
+      for(int i = 0; i < matrix2D.length; i++)
+        for(int j = 0; j < matrix2D[i].length; j++)
+          matrix2D[i][j] = 0;
+  }
+
+
+  public double get(Point3f pos) {
+    if(threeD) {
+      int x = Math.round(pos.x * resolution) + matrix3D.length/2;
+      int y = Math.round(pos.y * resolution) + matrix3D[0].length/2;
+      int z = Math.round(pos.z * resolution) + matrix3D[0][0].length/2;
+
+      if(outOfBounds(x,y,z)) return 0;
+      else return matrix3D[x][y][z];
+    }
+    else {
+      int x = Math.round(pos.x * resolution) + matrix2D.length/2;
+      int y = Math.round(pos.y * resolution) + matrix2D[0].length/2;
+      if(outOfBounds(x,y)) return 0;
+      else return matrix2D[x][y];
     }
   }
 
-  // maybe take a position, not a node, maybe located in a density class with the
-  // array
-  // should return the density around the node
-  // will need to have some proportionality constant, i'll need to experiment to get that
-  // the constant can be implemented when placing the densities instead
-  //
-  // if a position outside the universe is requested, the universe should be expanded to double dimensions
-  public double get(Point3f pos) {
-    int x = Math.round(pos.x * resolution) + matrix.length/2;
-    int y = Math.round(pos.y * resolution) + matrix[0].length/2;
 
-    if (outOfBounds(x,y)) return 0;
-    else return matrix[x][y];
+  // returns the 'standard' density in the middle of a single node
+  public double getStandard() {
+    return cutoff*footRadius*footRadius;
   }
 
-
-  // a little difficulties here with the arrary having only positive indexes
-  // check the x+universe.length/2 stuff when resizing happens
 
   public void set(Point3f pos, float mass) {
 
-    int x = Math.round(pos.x * resolution) + matrix.length/2;
-    int y = Math.round(pos.y * resolution) + matrix[0].length/2;
+  // quicker just to have one check and a bit of code duplication:
+    if(threeD) {
+      int x = Math.round(pos.x * resolution) + matrix3D.length/2;
+      int y = Math.round(pos.y * resolution) + matrix3D[0].length/2;
+      int z = Math.round(pos.z * resolution) + matrix3D[0][0].length/2;
 
-    // check if either of two opposite corners are out of bounds
-    while(outOfBounds(x-footRadius, y-footRadius) || outOfBounds(x+footprint.length-1-footRadius, y+footprint[0].length-1-footRadius)) {
-      System.err.println("out of bounds attempt at: (" + x + ", " + y + ") with radius " + footRadius);
-      expand();
-      x = Math.round(pos.x * resolution) + matrix.length/2;
-      y = Math.round(pos.y * resolution) + matrix[0].length/2;
-    }
-
-    for(int i = 0; i < footprint.length; i++) {
-      for(int j = 0; j < footprint[i].length; j++) {
-        place(x+i-footRadius, y+j-footRadius, mass*footprint[i][j]);
+      // check if either of two opposite corners are out of bounds
+      while(outOfBounds(x-footRadius-1, y-footRadius-1, z-footRadius-1) || outOfBounds(x+footRadius+1, y+footRadius+1, z+footRadius+1)) {
+        System.err.println("Out of bounds attempt at: (" + x + ", " + y + ", " + z + ") with radius " + footRadius);
+        System.err.println("Field dimensions: (" + matrix3D.length + ", " + matrix3D[0].length + ", " + matrix3D[0][0].length + ")");
+        expand();
+        x = Math.round(pos.x * resolution) + matrix3D.length/2;
+        y = Math.round(pos.y * resolution) + matrix3D[0].length/2;
+        z = Math.round(pos.z * resolution) + matrix3D[0][0].length/2;
       }
+
+      for(int i = 0; i < footprint3D.length; i++)
+        for(int j = 0; j < footprint3D[i].length; j++)
+          for(int k = 0; k < footprint3D[i][j].length; k++)
+            place(x+i-footRadius, y+j-footRadius, z+k-footRadius, mass*footprint3D[i][j][k]);
+
+    }
+    else {
+      int x = Math.round(pos.x * resolution) + matrix2D.length/2;
+      int y = Math.round(pos.y * resolution) + matrix2D[0].length/2;
+
+      // check if either of two opposite corners are out of bounds
+      while(outOfBounds(x-footRadius-1, y-footRadius-1) || outOfBounds(x+footRadius+1, y+footRadius+1)) {
+        System.err.println("Out of bounds attempt at: (" + x + ", " + y + ") with radius " + footRadius);
+        System.err.println("Field dimensions: (" + matrix2D.length + ", " + matrix2D[0].length + ")");
+        expand();
+        x = Math.round(pos.x * resolution) + matrix2D.length/2;
+        y = Math.round(pos.y * resolution) + matrix2D[0].length/2;
+      }
+
+      for(int i = 0; i < footprint2D.length; i++)
+        for(int j = 0; j < footprint2D[i].length; j++)
+          place(x+i-footRadius, y+j-footRadius, mass*footprint2D[i][j]);
     }
   }
 
   private void place(int x, int y, double amount) {
-    matrix[x][y] += amount;
+    matrix2D[x][y] += amount;
+  }
+
+  private void place(int x, int y, int z, double amount) {
+    matrix3D[x][y][z] += amount;
   }
 
   public void set(NodeList nodes) {
@@ -149,38 +210,50 @@ public class DensityMatrix {
     set(newPos, node.getMass());
   }
 
-
   private boolean outOfBounds(int x, int y) {
-    return (x < 0 || y < 0 || x >= matrix.length || y >= matrix[0].length);
+    return (x < 0 || y < 0 || x >= matrix2D.length || y >= matrix2D[0].length);
+  }
+
+  private boolean outOfBounds(int x, int y, int z) {
+    return (x < 0 || y < 0 || z < 0 || x >= matrix3D.length || y >= matrix3D[0].length || z >= matrix3D[0][0].length);
   }
 
   private boolean outOfBounds(float x, float y) {
     return outOfBounds(Math.round(x), Math.round(y));
   }
 
-
-  public void expand() {
-    // expand the matrix in some (hopefully) intelligent way
-    // the 'dumb' method of simply doubling the dimensions might turn out to be fastest
-    // this will ruin time constraints if it happens too frequently
-    //
-    // check this isn't misaligning densities
-    //
-    // ideally like to accept a parameter specifying which direction to expand into
-    System.err.println("expanding universe...");
-    double[][] newMatrix = new double[2*matrix.length][2*matrix.length];
-    for(int i = 0; i < matrix.length; i++) {
-      for(int j = 0; j < matrix[i].length; j++) {
-        newMatrix[i+matrix.length/2][j+matrix.length/2] = matrix[i][j];
-      }
-    }
-    matrix = newMatrix;
+  private boolean outOfBounds(float x, float y, float z) {
+    return outOfBounds(Math.round(x), Math.round(y), Math.round(z));
   }
 
-  // not sure whether to set all of the current matrix to zero or create a new
-  // matrix of the default dimensions
+
+  public void expand() {
+    // this will ruin time constraints if it happens too frequently
+    //
+    // could be made to expand only in the required direction
+    //
+    System.err.println("Expanding universe...");
+    if(threeD) {
+      double[][][] newMatrix = new double[2*matrix3D.length][2*matrix3D.length][2*matrix3D.length];
+      for(int i = 0; i < matrix3D.length; i++)
+        for(int j = 0; j < matrix3D[i].length; j++)
+          for(int k = 0; k < matrix3D[i][j].length; k++)
+            newMatrix[i+matrix3D.length/2][j+matrix3D.length/2][k+matrix3D.length/2] = matrix3D[i][j][k];
+      matrix3D = newMatrix;
+    }
+    else {
+      double[][] newMatrix = new double[2*matrix2D.length][2*matrix2D.length];
+      for(int i = 0; i < matrix2D.length; i++)
+        for(int j = 0; j < matrix2D[i].length; j++)
+          newMatrix[i+matrix2D.length/2][j+matrix2D.length/2] = matrix2D[i][j];
+      matrix2D = newMatrix;
+    }
+  }
+
+
   public void reset() {
-    matrix = new double[initWidth][initHeight];
+    if(threeD) matrix3D = new double[initWidth][initHeight][initDepth];
+    else matrix2D = new double[initWidth][initHeight];
   }
 
 }
