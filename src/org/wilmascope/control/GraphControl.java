@@ -2,29 +2,29 @@
  * The following source code is part of the WilmaScope 3D Graph Drawing Engine
  * which is distributed under the terms of the GNU Lesser General Public License
  * (LGPL - http://www.gnu.org/copyleft/lesser.html).
- *
+ * 
  * As usual we distribute it with no warranties and anything you chose to do
  * with it you do at your own risk.
- *
- * Copyright for this work is retained by Tim Dwyer and the WilmaScope organisation
- * (www.wilmascope.org) however it may be used or modified to work as part of
- * other software subject to the terms of the LGPL.  I only ask that you cite
- * WilmaScope as an influence and inform us (tgdwyer@yahoo.com)
- * if you do anything really cool with it.
- *
+ * 
+ * Copyright for this work is retained by Tim Dwyer and the WilmaScope
+ * organisation (www.wilmascope.org) however it may be used or modified to work
+ * as part of other software subject to the terms of the LGPL. I only ask that
+ * you cite WilmaScope as an influence and inform us (tgdwyer@yahoo.com) if you
+ * do anything really cool with it.
+ * 
  * The WilmaScope software source repository is hosted by Source Forge:
  * www.sourceforge.net/projects/wilma
- *
- * -- Tim Dwyer, 2001
+ *  -- Tim Dwyer, 2001
  */
-
 package org.wilmascope.control;
-
 import java.util.Iterator;
 import java.util.Vector;
-
 import javax.media.j3d.TransparencyAttributes;
 
+import org.wilmascope.degreelayout.DegreeLayout;
+import org.wilmascope.fadelayout.FadeLayout;
+import org.wilmascope.fadelayout.FadeNodeLayout;
+import org.wilmascope.highdimensionlayout.HighDimensionLayout;
 import org.wilmascope.fastlayout.FastLayout;
 import org.wilmascope.forcelayout.BalancedEventClient;
 import org.wilmascope.forcelayout.DirectedField;
@@ -55,7 +55,6 @@ import org.wilmascope.view.GraphElementView;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.PickingClient;
 import org.wilmascope.view.ViewManager;
-
 /*
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular Wilma graph drawing engine
