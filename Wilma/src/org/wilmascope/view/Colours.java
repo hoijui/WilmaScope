@@ -34,6 +34,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 
 public class Colours {
+  private static org.wilmascope.global.Constants constants = org.wilmascope.global.Constants.getInstance();
   public static class Material extends javax.media.j3d.Material {
     String name;
     Color awtColor;
@@ -45,7 +46,7 @@ public class Colours {
       setCapability(ALLOW_COMPONENT_READ);
       setDiffuseColor(diffuseColor);
       setAmbientColor(ambientColor);
-      setShininess(50.0f);
+      setShininess(constants.getFloatValue("DefaultShininess"));
       Image image = new BufferedImage(20,20,BufferedImage.TYPE_INT_RGB);
       Graphics graphics = image.getGraphics();
       graphics.setColor(awtColor);
