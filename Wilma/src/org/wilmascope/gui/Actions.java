@@ -39,6 +39,7 @@ public class Actions {
   Action pickableClusterAction;
   Action showHiddenAction;
   Action adjustForcesAction;
+  Action graphOperationsAction;
   Action fileOpenAction;
   Action fileSaveAction;
   Action fileSaveAsAction;
@@ -101,8 +102,16 @@ public class Actions {
     {
       public void actionPerformed(ActionEvent e) {
         ForceControlsFrame forceControls
-          = new ForceControlsFrame(rootCluster,"Force Controls");
+          = new ForceControlsFrame(rootCluster,"Global Force Controls");
         forceControls.show();
+      }
+    };
+    graphOperationsAction = new AbstractAction("Graph Operations")
+    {
+      public void actionPerformed(ActionEvent e) {
+        ClusteriseFrame graphOps
+          = new ClusteriseFrame(rootCluster,"Graph Operations");
+        graphOps.show();
       }
     };
     fileOpenAction = new AbstractAction("Open",
@@ -131,11 +140,11 @@ public class Actions {
       new ImageIcon(getClass().getResource("/images/SaveAs24.gif")))
     {
       public void actionPerformed(ActionEvent e) {
-        JFileChooser chooser = new JFileChooser(".");
+        JFileChooser chooser = new JFileChooser(org.wilmascope.global.Constants.getInstance().getProperty("DefaultDataPath"));
         chooser.setFileFilter(fileHandler.getFileFilter());
         int returnVal = chooser.showSaveDialog(parent);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
-          fileHandler.save(chooser.getSelectedFile().getName());
+          fileHandler.save(chooser.getSelectedFile().getAbsolutePath());
         }
       }
     };
@@ -205,6 +214,7 @@ public class Actions {
     editMenu.add(pickableClusterAction);
     editMenu.add(showHiddenAction);
     editMenu.add(adjustForcesAction);
+    editMenu.add(graphOperationsAction);
     return editMenu;
   }
   public JMenu getFileMenu() {

@@ -62,6 +62,15 @@ public class Repulsion extends Force {
         node2 = nodes.get(j);
         v.sub(node1.getPosition(),node2.getPosition());
         separation = v.length();
+        /* - node1.getRadius() - node2.getRadius();
+        // clipping calculated force at a certain separation threshold
+        // allows for negative separation (when nodes are overlapping) and
+        // also prevents the force becoming chaotically violent when the
+        // separation is too low.
+        if(separation < separationThreshold) {
+          separation = separationThreshold;
+        }
+        */
         // if two nodes are directly on top of one another (have zero
         // separation) we get a nasty divide by zero error
         if(separation != 0) {
@@ -72,9 +81,10 @@ public class Repulsion extends Force {
                     / ( separation * separation));
             repulsion.add(v);
           }
-        } else {
-          // make sure there's some distance between these two nodes next time
-          v.set(org.wilmascope.global.RandomVector3f.getVector3f());
+        } else /* if(separation <= separationThreshold) */{
+          // make sure there's some distance (in a random direction to avoid
+          // nodes settling into lines or planes) between these two nodes next time
+          v.set(org.wilmascope.global.RandomGenerator.getVector3f());
           repulsion.add(v);
         }
       }
@@ -85,7 +95,7 @@ public class Repulsion extends Force {
   // some workhorse temporary objects
   private Vector3f repulsion = new Vector3f(), v = new Vector3f();
   private float separation;
-
+  private static float separationThreshold = 0.001f;
   // keeping this saves us squaring limitRadius every time
   private float limitRadiusSquared;
 

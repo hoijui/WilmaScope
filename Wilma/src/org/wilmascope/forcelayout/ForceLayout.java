@@ -26,6 +26,7 @@ import org.wilmascope.graph.Node;
 import org.wilmascope.graph.Cluster;
 import java.util.Vector;
 import javax.vecmath.*;
+import javax.media.j3d.Transform3D;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular WilmaScope software
@@ -41,9 +42,9 @@ public class ForceLayout implements LayoutEngine {
     this.root = root;
     root.setLayoutEngine(this);
   }
-  public float layout() {
+  public void calculateLayout() {
     balanced = false;
-    float maxVelocity = 0;
+
     for(int i = 0; i < iterations; i++) {
       if(balanced) {
         // If graph is already balanced then we don't need to calculate
@@ -57,13 +58,40 @@ public class ForceLayout implements LayoutEngine {
         f.calculate();
       }
     }
-    return maxVelocity;
   }
-  public float applyForces(NodeList nodes, EdgeList edges) {
+  /** find closest point on the plane to the point argument
+   * plane is determined by normal vector and centroid of root cluster
+   */
+  public void constrainPointToPlane(Point3f point, Vector3f displacement) {
+      // plane is given by normal vector and centroid of root cluster
+      Vector3f normal = root.getNormal();
+      Point3f c = root.getPosition();
+
+      // calculate vector from centroid to point
+      displacement.sub(point, c);
+
+      // find the projection of this vector on the normal
+      float d = displacement.dot(normal);
+
+      // thus the displacement is a scaling of the normal
+      displacement.set(normal);
+      displacement.scale(d);
+
+      // move the point to the plane
+      point.sub(displacement);
+  }
+  public float applyLayout() {
     NodeForceLayout nodeLayout;
     // reposition nodes, calculating maxNetForce as you go
     float maxNetForce=0;
     float currentNetForce=0;
+    netTorque = new Vector3f();
+    NodeList nodes = root.getNodes();
+    EdgeList edges = root.getEdges();
+    projectedBarycenter = nodes.getBarycenter();
+    Vector3f displacement = new Vector3f();
+    constrainPointToPlane(projectedBarycenter, displacement);
+    //((NodeForceLayout)root.getLayout()).addForce(displacement);
     for(nodes.resetIterator(); nodes.hasNext();) {
       nodeLayout = (NodeForceLayout)(nodes.nextNode().getLayout());
       currentNetForce = nodeLayout.getNetForce().length();
@@ -71,11 +99,29 @@ public class ForceLayout implements LayoutEngine {
         maxNetForce = currentNetForce;
       }
       nodeLayout.applyForce(velocityAttenuation);
+      if(constrained) {
+        nodeLayout.applyConstraint();
+      }
     }
     for(int i=0; i < edges.size(); i++) {
       edges.get(i).recalculate();
     }
+    if(netTorque.length()>0) {
+      rotate();
+    }
     return maxNetForce;
+  }
+  private void rotate() {
+    float angleDelta = netTorque.length()/(angularInertia);
+    netTorque.normalize();
+    if(angleDelta > 0.00000001) {
+      root.rotate(new AxisAngle4f(netTorque, angleDelta));
+    }
+    Transform3D t = new Transform3D();
+    t.setRotation(root.getOrientation());
+    Vector3f normal = root.getNormal();
+    normal.set(vY);
+    t.transform(normal);
   }
   /**
    * Set the number of iterations of the algorithm per call to
@@ -135,6 +181,21 @@ public class ForceLayout implements LayoutEngine {
   public void setVelocityAttenuation(float va) {
     velocityAttenuation = va;
   }
+  public void setAngularInertia(float ai) {
+    angularInertia = ai;
+  }
+  public float getAngularInertia() {
+    return angularInertia;
+  }
+  public void addNetTorque(Vector3f torque) {
+    netTorque.add(torque);
+  }
+  public Point3f getProjectedBarycenter() {
+    return projectedBarycenter;
+  }
+  public void setConstrained() {
+    constrained = true;
+  }
   private BalancedEventClient balancedEventClient;
   // the number of iterations of the algorithm per call to layout
   private int iterations;
@@ -145,4 +206,9 @@ public class ForceLayout implements LayoutEngine {
   private float balancedThreshold = Constants.balancedThreshold;
   private float velocityAttenuation = Constants.velocityAttenuation;
   private Cluster root;
+  private Vector3f netTorque = new Vector3f();
+  private Vector3f vY = new Vector3f(0,1f,0);
+  private Point3f projectedBarycenter;
+  private float angularInertia = Constants.angularInertia;
+  private boolean constrained = false;
 }

@@ -37,9 +37,6 @@ import com.sun.j3d.utils.picking.PickTool;
  */
 
 public class InheritanceEdgeView extends EdgeView {
-  /** radius of the edgeCylinder
-   */
-  float radius = 0.02f;
   public InheritanceEdgeView() {
     setTypeName("Inheritance");
   }
@@ -59,7 +56,7 @@ public class InheritanceEdgeView extends EdgeView {
 
     cylinder.makePickable(this);
     Transform3D transform = new Transform3D();
-    transform.setTranslation(new Vector3f(0f,-0.15f,0f));
+    transform.setTranslation(new Vector3f(0f,0.15f,0f));
     TransformGroup tg = new TransformGroup(transform);
     cylinder.addToTransformGroup(tg);
     addTransformGroupChild(tg);
@@ -71,11 +68,15 @@ public class InheritanceEdgeView extends EdgeView {
     Cone cone=new Cone(0.07f, 0.3f, Cone.GENERATE_NORMALS, appearance);
     makePickable(cone.getShape(Cone.BODY));
     makePickable(cone.getShape(Cone.CAP));
+    Transform3D rotation = new Transform3D();
     Transform3D transform = new Transform3D();
     transform.setTranslation(new Vector3f(0f,
-      0.3f, 0f));
+      -0.3f, 0f));
+    rotation.rotX(Math.PI);
     TransformGroup coneTransform = new TransformGroup(transform);
-    coneTransform.addChild(cone);
+    TransformGroup coneRotate = new TransformGroup(rotation);
+    coneRotate.addChild(cone);
+    coneTransform.addChild(coneRotate);
     addTransformGroupChild(coneTransform);
   }
   public ImageIcon getIcon() {

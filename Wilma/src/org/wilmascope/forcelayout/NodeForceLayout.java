@@ -23,6 +23,7 @@ import org.wilmascope.graph.NodeLayout;
 import org.wilmascope.graph.Node;
 
 import javax.vecmath.Vector3f;
+import javax.vecmath.Point3f;
 
 /*
  * Title:        WilmaToo
@@ -100,9 +101,32 @@ public class NodeForceLayout implements NodeLayout {
     // Clip velocity at terminal velocity
     clip(velocity,Constants.terminalVelocity);
 
+
     // Move the node
     node.reposition(velocity);
   }
+  /** Move the nodes to satisfy constraints
+   */
+  public void applyConstraint() {
+      org.wilmascope.graph.Cluster owner = node.getOwner();
+      ForceLayout ownerForceEngine = (ForceLayout)owner.getLayoutEngine();
+      Point3f bc = ownerForceEngine.getProjectedBarycenter();
+      Point3f position = node.getPosition();
+      Vector3f t = new Vector3f();
+      ownerForceEngine.constrainPointToPlane(position, t);
+
+      // calculate a torque on the plane due to the force around the
+      // projected barycenter
+      //   torque = r X F
+      Vector3f r = new Vector3f();
+      r.sub(position,bc);
+      Vector3f torque = new Vector3f();
+      torque.cross(r,t);
+      ((ForceLayout)owner.getLayoutEngine()).addNetTorque(torque);
+      t.scale(10f);
+      ((NodeForceLayout)owner.getLayout()).addForce(t);
+  }
+
   /* If a {@link vec} is longer than {@link maxLength} then normalise it.
    * @param vec input vector
    * @param maxLength length beyond which {@link vec} is clipped

@@ -46,8 +46,16 @@ public class ForceManager {
   }
   private ForceManager() {
   }
-  public Force createForce(String forceType) {
+  public class UnknownForceTypeException extends Exception {
+    public UnknownForceTypeException(String forceType) {
+      super("No known force type: "+forceType);
+    }
+  }
+  public Force createForce(String forceType) throws UnknownForceTypeException {
     Force prototype = (Force)forces.get(forceType);
+    if(prototype==null) {
+      throw(new UnknownForceTypeException(forceType));
+    }
     return (Force)prototype.clone();
   }
   public void addPrototypeForce(Force prototype) {

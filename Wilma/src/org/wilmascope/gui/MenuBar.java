@@ -1,4 +1,4 @@
-/*
+  /*
  * The following source code is part of the WilmaScope 3D Graph Drawing Engine
  * which is distributed under the terms of the GNU Lesser General Public License
  * (LGPL - http://www.gnu.org/copyleft/lesser.html).
@@ -24,8 +24,8 @@ import javax.swing.*;
 import java.awt.MenuItem;
 
 import org.wilmascope.control.GraphControl;
-import java.awt.event.*;
-import java.util.Vector;
+    import java.awt.event.*;
+  import java.util.Vector;
 
 /**
  * Title:        WilmaToo
@@ -42,15 +42,19 @@ public class MenuBar extends JMenuBar {
   JMenu helpMenu = new JMenu();
   JMenu editMenu;
   JMenuItem exitMenuItem = new JMenuItem();
+  JMenuItem queryMenuItem = new JMenuItem();
   JMenu viewMenu = new JMenu();
   JCheckBoxMenuItem antialiasingCheckBoxMenuItem = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem showMouseHelpCheckBoxMenuItem = new JCheckBoxMenuItem();
   JMenuItem backgroundColourMenuItem = new JMenuItem();
   JMenuItem helpMenuItem = new JMenuItem();
   JMenuItem licenseMenuItem = new JMenuItem();
   JMenuItem aboutMenuItem = new JMenuItem();
+  ControlPanel controlPanel;
 
   public MenuBar(Actions actions, GraphControl graphControl, ControlPanel controlPanel) {
     this.graphControl = graphControl;
+    this.controlPanel = controlPanel;
     editMenu = actions.getEditMenu();
     fileMenu = actions.getFileMenu();
     fileMenu.setText("File");
@@ -59,6 +63,13 @@ public class MenuBar extends JMenuBar {
     editMenu.setMnemonic('E');
     helpMenu.setText("Help");
     helpMenu.setMnemonic('H');
+    queryMenuItem.setText("Query");
+    queryMenuItem.setMnemonic('Q');
+    queryMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        queryMenuItem_actionPerformed(e);
+      }
+    });
     exitMenuItem.setText("Exit");
     exitMenuItem.setMnemonic('x');
     exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -68,6 +79,14 @@ public class MenuBar extends JMenuBar {
     });
     viewMenu.setText("View");
     viewMenu.setMnemonic('V');
+    showMouseHelpCheckBoxMenuItem.setText("Show Mouse Help Panel");
+    showMouseHelpCheckBoxMenuItem.setMnemonic('M');
+    showMouseHelpCheckBoxMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        showMouseHelpCheckBoxMenuItem_actionPerformed(e);
+      }
+    });
+    showMouseHelpCheckBoxMenuItem.setState(true);
     antialiasingCheckBoxMenuItem.setText("Antialiasing");
     antialiasingCheckBoxMenuItem.setMnemonic('A');
     antialiasingCheckBoxMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -107,7 +126,9 @@ public class MenuBar extends JMenuBar {
     this.add(editMenu);
     this.add(viewMenu);
     this.add(helpMenu);
+    fileMenu.add(queryMenuItem);
     fileMenu.add(exitMenuItem);
+    viewMenu.add(showMouseHelpCheckBoxMenuItem);
     viewMenu.add(antialiasingCheckBoxMenuItem);
     viewMenu.add(backgroundColourMenuItem);
     helpMenu.add(helpMenuItem);
@@ -126,8 +147,20 @@ public class MenuBar extends JMenuBar {
       graphControl.getGraphCanvas().setAntialiasingEnabled(false);
     }
   }
+  void showMouseHelpCheckBoxMenuItem_actionPerformed(ActionEvent e) {
+    if(showMouseHelpCheckBoxMenuItem.isSelected()) {
+      controlPanel.showMouseHelp();
+    } else {
+      controlPanel.hideMouseHelp();
+    }
+  }
+
   GraphControl graphControl;
 
+  void queryMenuItem_actionPerformed(ActionEvent e) {
+    QueryFrame q = new QueryFrame(graphControl);
+    q.show();
+  }
   void helpMenuItem_actionPerformed(ActionEvent e) {
     HelpFrame h = new HelpFrame("../userdoc/index.html");
     h.show();

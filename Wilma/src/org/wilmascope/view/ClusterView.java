@@ -57,9 +57,11 @@ public abstract class ClusterView extends NodeView {
   public ImageIcon getIcon() {
     return new ImageIcon(getClass().getResource("/images/cluster.png"));
   }
+  /*
   protected void showLabel(String text) {
     addLabel(text, 0.1d, new Point3f(0.0f,30.0f*getCluster().getRadius(),0.0f), Constants.vZero, getAppearance());
   }
+  */
   private TransparencyAttributes transparencyAttributes
    = new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.6f);
   private static final float density = 25f;

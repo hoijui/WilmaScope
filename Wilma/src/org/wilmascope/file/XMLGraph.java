@@ -128,7 +128,7 @@ public class XMLGraph
       element.appendChild(child.getElement());
     }
     protected Colour getColour() {
-      NodeList children = element.getChildNodes();
+      NodeList children = getElement().getChildNodes();
       // I'd rather use something like getElementsByTagName but that seems to
       // do a pre-order traversal of the entire element tree rather than just
       // searching the immediate children.  Obviously with nested clusters
@@ -170,6 +170,12 @@ public class XMLGraph
     }
     protected Cluster(Element clusterElement) {
       super(clusterElement);
+    }
+    public float getRadius() {
+      return getFloatAttribute("Radius");
+    }
+    public void setRadius(float radius) {
+      setAttribute("Radius",radius);
     }
     public void getChildren(
       Vector nodes,
@@ -256,6 +262,23 @@ public class XMLGraph
     public float getRadius() {
       return Float.parseFloat(getAttribute("Radius"));
     }
+    protected Position getPosition() {
+      NodeList children = getElement().getChildNodes();
+      // I'd rather use something like getElementsByTagName but that seems to
+      // do a pre-order traversal of the entire element tree rather than just
+      // searching the immediate children.  Obviously with nested clusters
+      // this would cause trouble
+      for(int i=0;i<children.getLength();i++) {
+        Element e = (Element)children.item(i);
+        if(e.getNodeName().equals("Position")) {
+          return new Position(e);
+        }
+      }
+      return null;
+    }
+    protected void setPosition(float x, float y, float z) {
+      appendChild(new Position(x,y,z));
+    }
   }
   public class Edge extends XMLGraphElement {
     protected Edge(Element edgeElement) {
@@ -310,6 +333,26 @@ public class XMLGraph
     }
     public float getBlue() {
       return getFloatAttribute("Blue");
+    }
+  }
+  public class Position extends XMLGraphElement {
+    protected Position(Element positionElement) {
+      super(positionElement);
+    }
+    protected Position(float x, float y, float z) {
+      super("Position");
+      setAttribute("X",x);
+      setAttribute("Y",y);
+      setAttribute("Z",z);
+    }
+    public float getX() {
+      return getFloatAttribute("X");
+    }
+    public float getY() {
+      return getFloatAttribute("Y");
+    }
+    public float getZ() {
+      return getFloatAttribute("Z");
     }
   }
   public Cluster getRootCluster() {

@@ -25,6 +25,7 @@ public interface LayoutEngine {
    * move graph elements in cluster around to achieve a pretty layout
    * @return cost function of the new layout
    */
-  public float layout();
+  public void calculateLayout();
+  public float applyLayout();
   public void setBalanced(boolean balanced);
 }

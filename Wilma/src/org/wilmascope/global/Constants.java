@@ -74,6 +74,7 @@ public class Constants extends AbstractConstants {
   // A scalar for the force opposite and proportional to the nodes direction
   // of motion
     d.setProperty("FrictionCoefficient", "200");
+    d.setProperty("AngularInertia", "10");
     d.setProperty("BalancedThreshold", "0.03");
     d.setProperty("VelocityAttenuation", "0.02");
 

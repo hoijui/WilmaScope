@@ -83,7 +83,7 @@ public class RepulsionSpring extends Force {
       }
     } else {
       // make sure there's some distance between these two nodes next time
-      v.set(org.wilmascope.global.RandomVector3f.getVector3f());
+      v.set(org.wilmascope.global.RandomGenerator.getVector3f());
     }
     return v;
   }

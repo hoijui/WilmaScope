@@ -32,36 +32,33 @@ import javax.media.j3d.*;
 import javax.vecmath.*;
 import org.wilmascope.view.Colours;
 
-public class LabelCube extends OrientedShape3D {
+public class LabelCube extends Shape3D {
 
   private static final float[] verts = {
     //Front Face
     1.1f, -1.0f,  1.0f,     1.1f,  1.0f,  1.0f,
     -1.1f,  1.0f,  1.0f,    -1.1f, -1.0f,  1.0f,
-    /*
     // Back Face
-    -1.2f, -1.1f, 0.9f,    -1.2f,  1.1f, 0.9f,
-    1.2f,  1.1f, 0.9f,     1.2f, -1.1f, 0.9f,
+    -1.1f, -1.0f, -1.0f,    -1.1f,  1.0f, -1.0f,
+    1.1f,  1.0f, -1.0f,     1.1f, -1.0f, -1.0f,
     // Right Face
-    1.2f, -1.1f, 0.9f,     1.2f,  1.1f, 0.9f,
+    1.1f, -1.0f, -1.0f,     1.1f,  1.0f, -1.0f,
     1.1f,  1.0f,  1.0f,     1.1f, -1.0f,  1.0f,
     // Left Face
     -1.1f, -1.0f,  1.0f,    -1.1f,  1.0f,  1.0f,
-    -1.2f,  1.1f, 0.9f,    -1.2f, -1.1f, 0.9f,
+    -1.1f,  1.0f, -1.0f,    -1.1f, -1.0f, -1.0f,
     // Top Face
-    1.1f,  1.0f,  1.0f,     1.2f,  1.1f, 0.9f,
-    -1.2f,  1.1f, 0.9f,    -1.1f,  1.0f,  1.0f,
+    1.1f,  1.0f,  1.0f,     1.1f,  1.0f, -1.0f,
+    -1.1f,  1.0f, -1.0f,    -1.1f,  1.0f,  1.0f,
     // Bottom Face
-    -1.1f, -1.0f,  1.0f,    -1.2f, -1.1f, 0.9f,
-    1.2f, -1.1f, 0.9f,     1.1f, -1.0f,  1.0f,
-    */
+    -1.1f, -1.0f,  1.0f,    -1.1f, -1.0f, -1.0f,
+    1.1f, -1.0f, -1.0f,     1.1f, -1.0f,  1.0f,
   };
 
   private static final float[] normals = {
     // Front Face
     0.0f,  0.0f,  1.0f,     0.0f,  0.0f,  1.0f,
     0.0f,  0.0f,  1.0f,     0.0f,  0.0f,  1.0f,
-    /*
     // Back Face
     0.0f,  0.0f, -1.0f,     0.0f,  0.0f, -1.0f,
     0.0f,  0.0f, -1.0f,     0.0f,  0.0f, -1.0f,
@@ -77,7 +74,6 @@ public class LabelCube extends OrientedShape3D {
     // Bottom Face
     0.0f, -1.0f,  0.0f,     0.0f, -1.0f,  0.0f,
     0.0f, -1.0f,  0.0f,     0.0f, -1.0f,  0.0f,
-    */
   };
   private static final Point2f[] textureCoords = {
     new Point2f(1.0f, 0.0f),
@@ -94,8 +90,6 @@ public class LabelCube extends OrientedShape3D {
     generateGeometry(size,widthScale);
     setGeometry(quadArray);
     setAppearance(appearance);
-    setAlignmentMode(OrientedShape3D.ROTATE_ABOUT_POINT);
-    setRotationPoint(new Point3f(0,0,0));
     setCapability(Shape3D.ALLOW_GEOMETRY_READ);
     setCapability(Shape3D.ALLOW_GEOMETRY_WRITE);
     setCapability(Shape3D.ALLOW_APPEARANCE_READ);
@@ -106,13 +100,13 @@ public class LabelCube extends OrientedShape3D {
     for (int i=0; i<verts.length; i++) {
       scaledVerts[i] = verts[i] * size * ((i%3==0)?widthScale:1);
     }
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 24; i++) {
       quadArray.setTextureCoordinate(0, i, new TexCoord2f(textureCoords[i%4]));
     }
     quadArray.setCoordinates(0, scaledVerts);
     quadArray.setNormals(0, normals);
   }
-  QuadArray quadArray = new QuadArray(4, QuadArray.COORDINATES |
+  QuadArray quadArray = new QuadArray(24, QuadArray.COORDINATES |
     QuadArray.NORMALS |
     QuadArray.TEXTURE_COORDINATE_2);
 }

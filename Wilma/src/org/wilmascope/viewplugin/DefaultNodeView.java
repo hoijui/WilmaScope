@@ -23,9 +23,8 @@ package org.wilmascope.viewplugin;
 import org.wilmascope.view.*;
 
 import javax.media.j3d.*;
-import javax.vecmath.Point3d;
+import javax.vecmath.*;
 import com.sun.j3d.utils.picking.behaviors.PickTranslateBehavior;
-import com.sun.j3d.utils.geometry.Box;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular Wilma graph drawing engine
