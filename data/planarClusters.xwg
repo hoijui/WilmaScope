@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
+<WilmaGraph>
+<Cluster>
+<LayoutEngineType Name="ForceLayout">
+<Property Key="Spring" Value="5.0"/>
+<Property Key="Repulsion" Value="1.2"/>
+<Property Key="VelocityAttenuation" Value="0.02"/>
+</LayoutEngineType>
+<Cluster>
+<ViewType Name="Spherical Cluster">
+<Property Key="Radius" Value="0.85719275"/>
+</ViewType>
+<Property Key="Position" Value="0.5142105 0.7714696 -0.36282653"/>
+<LayoutEngineType Name="ForceLayout">
+<Property Key="Spring" Value="5.0"/>
+<Property Key="Origin" Value="10.0"/>
+<Property Key="Repulsion" Value="1.2"/>
+<Property Key="VelocityAttenuation" Value="0.02"/>
+</LayoutEngineType>
+<Node ID="N13">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="0.39307642 0.5421854 -0.5789371"/>
+</Node>
+<Node ID="N14">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="0.49811038 0.15052208 -0.14819361"/>
+</Node>
+<Node ID="N15">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-0.07816605 0.5243088 -0.2217492"/>
+</Node>
+<Node ID="N16">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="0.42011973 0.72977346 0.16245186"/>
+</Node>
+<Edge EndID="N13" StartID="N14">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N14" StartID="N15">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N13" StartID="N15">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N16" StartID="N14">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N13" StartID="N16">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N15" StartID="N16">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+</Cluster>
+<Cluster>
+<ViewType Name="Planar Cluster">
+<Property Key="Radius" Value="1.2107601"/>
+</ViewType>
+<Property Key="Position" Value="-0.71569335 -0.99803597 0.2808989"/>
+<LayoutEngineType Name="ForceLayout">
+<Property Key="Spring" Value="5.8"/>
+<Property Key="Origin" Value="10.0"/>
+<Property Key="Repulsion" Value="10.0"/>
+<Property Key="VelocityAttenuation" Value="0.02"/>
+<Property Key="Planar" Value="9.1"/>
+</LayoutEngineType>
+<Node ID="N9">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-0.315194 -0.53932756 -0.52583706"/>
+</Node>
+<Node ID="N10">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-1.1116207 -0.27843183 0.13490611"/>
+</Node>
+<Node ID="N11">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="0.11497725 -1.0740323 0.2914678"/>
+</Node>
+<Node ID="N12">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-0.69724596 -0.8173372 1.0546235"/>
+</Node>
+<Edge EndID="N9" StartID="N10">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N9" StartID="N11">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N10" StartID="N11">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N12" StartID="N10">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N9" StartID="N12">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N12" StartID="N11">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+</Cluster>
+<Node ID="N8">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-0.06978147 0.2155368 1.3874377"/>
+</Node>
+<Edge EndID="N13" StartID="N9">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N15" StartID="N10">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N14" StartID="N11">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N8" StartID="N12">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge EndID="N8" StartID="N16">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+</Cluster>
+</WilmaGraph>
