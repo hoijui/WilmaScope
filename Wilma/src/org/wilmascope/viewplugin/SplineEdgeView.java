@@ -10,6 +10,7 @@ import javax.media.j3d.*;
 import com.sun.j3d.utils.geometry.Cone;
 import java.util.*;
 import java.util.StringTokenizer;
+import javax.swing.ImageIcon;
 /**
  * <p>Title: </p>
  * <p>Description: </p>
@@ -258,4 +259,7 @@ public class SplineEdgeView extends EdgeView implements org.wilmascope.dotlayout
   }
   */
   float zLevel;
+  public ImageIcon getIcon() {
+    return new ImageIcon(getClass().getResource("/images/splineEdge.png"));
+  }
 }

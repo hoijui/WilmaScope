@@ -23,6 +23,7 @@ import org.wilmascope.view.*;
  */
 import javax.media.j3d.*;
 import javax.vecmath.*;
+import javax.swing.ImageIcon;
 import org.wilmascope.view.Colours;
 public class LineEdgeView extends EdgeView {
   public LineEdgeView() {
@@ -61,5 +62,8 @@ public class LineEdgeView extends EdgeView {
   }
   public void setEndColour(Color3f c) {
     myLine.setColor(1,c);
+  }
+  public ImageIcon getIcon() {
+    return new ImageIcon(getClass().getResource("/images/lineEdge.png"));
   }
 }

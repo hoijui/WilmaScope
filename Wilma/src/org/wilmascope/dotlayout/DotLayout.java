@@ -28,6 +28,7 @@ import java.io.*;
 import java.text.ParseException;
 import java.awt.geom.Point2D;
 import javax.vecmath.Point3f;
+import org.wilmascope.viewplugin.TubeNodeView;
 
 /**
  * <p>A layout engine which uses the dot program to find node and edge positions.
@@ -62,16 +63,28 @@ public class DotLayout implements LayoutEngine {
       in.write("fixedsize=true ".getBytes());
       in.write("layer=all ".getBytes());
       in.write("];\n".getBytes());
-      in.write("layers=\"l0:l1:l2:l3:l4\"\n".getBytes());
+      in.write("layers=\"l1:l2:l3:l4:l5:l6:l7:l8:l9:l10:l11\"\n".getBytes());
       for (nodes.resetIterator(); nodes.hasNext();) {
+        float rad = 0;
         Node n = nodes.nextNode();
+        NodeList children = ((Cluster)n).getNodes();
+        for(children.resetIterator();children.hasNext();) {
+          org.wilmascope.graph.Node c= children.nextNode();
+          Point3f t = n.getPosition();
+          float r;
+          r = ((TubeNodeView)c.getView()).getTopRadius();
+          if(r>rad) {
+            rad = r;
+          }
+        }
+        System.out.println("radius="+rad);
         String id = "" + n.hashCode();
         nodeLookup.put(id, n);
         String text =
           id
             + " [label=\""
             + ((org.wilmascope.view.GraphElementView) n.getView()).getLabel()
-            + "\" shape=circle width=\"1\" height=\"1\"];\n";
+            + "\" shape=circle width=\""+rad/6f+"\" height=\""+rad/6f+"\"];\n";
         in.write(text.getBytes());
       }
       EdgeList edges = root.getInternalEdges();

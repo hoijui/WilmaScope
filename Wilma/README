@@ -66,6 +66,14 @@ In the same way that you set JAVA_HOME now set the WILMA_HOME environment variab
 
 STEP 6
 ------
+build: (If you have only downloaded the source)
+
+from the Wilma dir type: 
+
+./build
+
+STEP 7
+------
 run:
 
 Wilma/bin/wilma (linux/solaris/cygwin)

@@ -24,10 +24,10 @@ import org.wilmascope.view.NodeView;
 import org.wilmascope.view.Colours;
 import com.sun.j3d.utils.geometry.*;
 
+import javax.swing.ImageIcon;
 import javax.media.j3d.*;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
-import javax.swing.ImageIcon;
 import java.util.Properties;
 /**
  * The TubeNodeView
@@ -174,7 +174,7 @@ public class TubeNodeView extends NodeView {
   }
 
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/edge.png"));
+    return new ImageIcon(getClass().getResource("/images/column.png"));
   }
   /**
    * adjust the radius of the top and bottom of the tube

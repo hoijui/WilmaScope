@@ -24,6 +24,7 @@ import org.wilmascope.view.*;
 
 import javax.media.j3d.*;
 import javax.vecmath.*;
+import javax.swing.ImageIcon;
 import com.sun.j3d.utils.geometry.Sphere;
 /**
  * Title:        WilmaToo
@@ -57,5 +58,8 @@ public class LabelNodeView extends NodeView {
     Sphere pickableSphere = new Sphere(0.2f, Sphere.GENERATE_NORMALS, 5, transApp);
     makePickable(pickableSphere.getShape(Sphere.BODY));
     addTransformGroupChild(pickableSphere);
+  }
+  public ImageIcon getIcon() {
+    return new ImageIcon(getClass().getResource("/images/labelNode.png"));
   }
 }

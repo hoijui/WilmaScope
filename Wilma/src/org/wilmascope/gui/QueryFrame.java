@@ -8,7 +8,6 @@ import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.ColumnCluster;
 import org.wilmascope.forcelayout.BalancedEventClient;
 import org.wilmascope.view.ElementData;
-import org.wilmascope.view.EdgeView;
 import org.wilmascope.global.Constants;
 import java.util.*;
 
@@ -134,6 +133,25 @@ public class QueryFrame extends JFrame {
     fmMovement2Panel.add(wormRadioButton, null);
     queryPane.add(sectorPanel, "Sector Movement");
     jPanel1.add(cancelButton, null);
+    fmMovement3DotButton.setText("Dot Layout");
+    fmMovement3ForceButton.setText("Force Layout");
+    columnThresholdField.setText(columnThreshold+"");
+    edgeThresholdField.setText(edgeThreshold+"");
+    fmMovement3Panel.add(columnThresholdField);
+    fmMovement3Panel.add(edgeThresholdField);
+    fmMovement3Panel.add(fmMovement3DotButton);
+    fmMovement3Panel.add(fmMovement3ForceButton);
+    fmMovement3DotButton.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        portfolioColumns(ColumnCluster.DOTCOLUMNS);
+      }
+    });
+    fmMovement3ForceButton.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        portfolioColumns(ColumnCluster.FORCECOLUMNS);
+      }
+    });
+    queryPane.add(fmMovement3Panel, "Single FM Movement");
     pack();
     styleButtonGroup.add(wormRadioButton);
     styleButtonGroup.add(dotColumnsRadioButton);
@@ -606,6 +624,96 @@ public class QueryFrame extends JFrame {
       System.out.println(queryString);
     }
   }
+  void portfolioColumns(int style) {
+    graphRoot.deleteAll();
+    edgeThreshold = Float.parseFloat(edgeThresholdField.getText());
+    columnThreshold = Float.parseFloat(columnThresholdField.getText());
+    ColumnCluster.setColumnStyle(style);
+    if (ColumnCluster.getColumnStyle() == ColumnCluster.DOTCOLUMNS) {
+      graphRoot = graphRoot.addCluster();
+      graphRoot.hide();
+      org.wilmascope.dotlayout.DotLayout d =new org.wilmascope.dotlayout.DotLayout(graphRoot.getCluster());
+      d.scale = 10f;
+      graphRoot.setLayoutEngine(d);
+    } else if (ColumnCluster.getColumnStyle() == ColumnCluster.FORCECOLUMNS) {
+      ((org.wilmascope.forcelayout.ForceLayout) graphRoot
+          .getLayoutEngine()).setVelocityAttenuation(0.001f);
+    }
+
+    columns = new TreeMap();
+    Vector tables = new Vector();
+
+    level = 0;
+    maxLevel = 11;
+    int[][] count = new int[12][50];
+    float[][] value = new float[12][50];
+    try {
+      String rec;
+      java.io.BufferedReader in =
+        new java.io.BufferedReader(new java.io.FileReader("fm328.csv"));
+      for(int i=0;i<12;i++) {
+        rec = in.readLine();
+        StringTokenizer st = new StringTokenizer(rec, ", ");
+        for(int j=0;j<50;j++) {
+          count[i][j] = Integer.parseInt(st.nextToken());
+        }
+      }
+      for(int i=0;i<12;i++) {
+        rec = in.readLine();
+        StringTokenizer st = new StringTokenizer(rec, ", ");
+        for(int j=0;j<50;j++) {
+          value[i][j] = Float.parseFloat(st.nextToken());
+        }
+      }
+      in.close();      
+    } catch(java.io.IOException e) {
+      e.printStackTrace();
+    } 
+    for(int i=0;i<count.length;i++) {
+      decreased = new Vector(); increased = new Vector();
+      for(int j=0;j<count[i].length;j++) {
+        float v = value[i][j];
+        int c = count[i][j];
+        if(v>0.01f) {
+          addColumn("n"+(j+1),v,c);
+        }
+      }
+      for(Iterator it = decreased.iterator(); it.hasNext(); ) {
+        GraphControl.NodeFacade start = (GraphControl.NodeFacade)it.next();
+        ColumnData sd = (ColumnData)start.getUserData();
+        ColumnData sl = sd.last;
+          
+        for(Iterator jt = increased.iterator(); jt.hasNext(); ) {
+          GraphControl.NodeFacade end = (GraphControl.NodeFacade)jt.next();
+          ColumnData ed = (ColumnData)end.getUserData();
+          ColumnData el = ed.last;
+          float move = 
+            (ed.shareCount - el.shareCount) * el.shareValue
+            + (sl.shareCount - sd.shareCount) * sl.shareValue;
+          GraphControl.EdgeFacade edge;
+          if (ColumnCluster.getColumnStyle() == ColumnCluster.DOTCOLUMNS) {
+            edge = graphRoot.addEdge(start, end, "SplineTube", move/80000f);
+          } else {
+            edge = graphRoot.addEdge(start, end, "Arrow", move/80000f);
+          }
+        }
+      }
+      level++;
+      for (Iterator it = columns.keySet().iterator(); it.hasNext();) {
+        String id = (String) it.next();
+        ColumnCluster c = (ColumnCluster) columns.get(id);
+
+        if (c.getNextLevel() < level) {
+          System.out.println("id="+id);
+          float radius = c.getTopNode().getRadius();
+          GraphControl.NodeFacade n = c.addNode(radius);
+          
+          n.setColour(0f, 0f, 0f);
+        }
+      }
+    }
+    graphRoot.unfreeze();
+  }
   int maxLevel = 0;
   boolean drawLevels(Statement s, Vector tables) {
     if (tables.size() == 0)
@@ -654,8 +762,8 @@ public class QueryFrame extends JFrame {
         int count = r.getInt(6);
 
         System.out.println("c1=" + epic1 + ",c2=" + epic2 + ",count=" + count);
-        ColumnCluster a = addColumn(epic1, sharePrice1);
-        ColumnCluster b = addColumn(epic2, sharePrice2);
+        ColumnCluster a = addRelativeColumn(epic1, sharePrice1);
+        ColumnCluster b = addRelativeColumn(epic2, sharePrice2);
         float minValue = 1000f;
         float maxValue = 100000f;
         float weight = (value - minValue) / (maxValue - minValue);
@@ -694,7 +802,11 @@ public class QueryFrame extends JFrame {
   }
   TreeMap columns;
   public static int level = 0;
-  ColumnCluster addColumn(String id, float value) {
+  /** create a new column or if a column with that id already exists add a node to it.
+   * the radius of each level in the column will be relative to previous level and it
+   * will have a bottom radius of 1
+   */
+  ColumnCluster addRelativeColumn(String id, float value) {
     ColumnCluster c = (ColumnCluster) columns.get(id);
 
     if (c == null) {
@@ -705,6 +817,70 @@ public class QueryFrame extends JFrame {
       GraphControl.NodeFacade n = c.addNode(value);
       n.setColour(0.9f, 0.9f, 1f * (float) level / (float) maxLevel);
     }
+    return c;
+  }
+  Vector decreased, increased;
+  /** create a new column or if a column with that id already exists add a node to it.
+   */
+  class ColumnData {
+    float shareValue;
+    int shareCount;
+    ColumnData last;
+  }
+  float columnThreshold = 5000f;
+  float edgeThreshold = 0.05f;
+  ColumnCluster addColumn(String id, float shareValue, int count) {
+    ColumnData d = new ColumnData();
+    d.shareValue = shareValue;
+    d.shareCount = count;
+    float value = shareValue*count;
+    ColumnCluster c = (ColumnCluster) columns.get(id);
+    if (c == null) {
+      if(value<columnThreshold) {
+        return null;
+      }
+      c = new ColumnCluster(id, graphRoot, value/4000f, level);
+      columns.put(id, c);
+    }
+    //if(c.getNextLevel() < level + 1) {
+      ColumnData l=d;
+      GraphControl.NodeFacade ln = c.getTopNode();
+      if(ln!=null) {
+        l = (ColumnData)ln.getUserData();
+      }
+      if(l==null) {
+        l=d;
+      }
+      d.last = l;
+      GraphControl.NodeFacade n = c.addVariableNode(value/4000f);
+      // colour the node according to change in share value:
+      // white if no change
+      // shade toward green if value increases, red if it decreases
+      float diffShareValue = (d.shareValue - l.shareValue)/l.shareValue;
+      float defaultGrey = 0.8f;
+      if(diffShareValue > defaultGrey) {
+        diffShareValue = defaultGrey;
+      } if(diffShareValue < -defaultGrey) {
+        diffShareValue = -defaultGrey;
+      }
+      if(diffShareValue > 0.01f) {
+        n.setColour(defaultGrey-diffShareValue, defaultGrey, defaultGrey-diffShareValue);
+      } else if(diffShareValue < -0.01f) {
+        n.setColour(defaultGrey, defaultGrey+diffShareValue, defaultGrey+diffShareValue);
+      } else {
+        n.setColour(defaultGrey, defaultGrey, defaultGrey);
+      }
+      //n.setMass(value);
+      n.setUserData(d);
+      // if holding increases by more than 5% add to increased list
+      // if it decreases by more than 5% add to decreased list 
+      float diffCount = (float)(d.shareCount - l.shareCount)/(float)l.shareCount;
+      if(diffCount > edgeThreshold) {
+        increased.add(n);
+      } else if(diffCount < -edgeThreshold) {
+        decreased.add(n);
+      }
+    //}
     return c;
   }
 
@@ -1008,6 +1184,9 @@ public class QueryFrame extends JFrame {
   JLabel jLabel3 = new JLabel();
   JTextField fundmanField = new JTextField();
   JPanel fmMovement2Panel = new JPanel();
+  JPanel fmMovement3Panel = new JPanel();
+  JButton fmMovement3DotButton = new JButton();
+  JButton fmMovement3ForceButton = new JButton();
   GridLayout gridLayout2 = new GridLayout();
   JLabel jLabel4 = new JLabel();
   JLabel jLabel5 = new JLabel();
@@ -1015,6 +1194,8 @@ public class QueryFrame extends JFrame {
   JTextField endDate2Field = new JTextField();
   JLabel jLabel6 = new JLabel();
   JTextField sectorField = new JTextField();
+  JTextField edgeThresholdField = new JTextField();
+  JTextField columnThresholdField = new JTextField();
   JRadioButton wormRadioButton = new JRadioButton();
   JRadioButton dotColumnsRadioButton = new JRadioButton();
   JRadioButton forceColumnRadioButton = new JRadioButton();

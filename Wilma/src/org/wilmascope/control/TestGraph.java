@@ -173,7 +173,8 @@ public class TestGraph {
     GraphControl.NodeFacade n = (GraphControl.NodeFacade)lookup.get(id);
     if(n == null){
       n = root.addNode(nodeView);
-      n.setColour(rand.nextFloat(),rand.nextFloat(),rand.nextFloat());
+      //n.setColour(rand.nextFloat(),rand.nextFloat(),rand.nextFloat());
+      n.setColour(1f,1f,1f);
       n.setPosition(new Point3f((rand.nextFloat()-0.5f)*5f, (rand.nextFloat()-0.5f)*5f, threeD ? (rand.nextFloat()-0.5f)*5f : 0f));
       lookup.put(id,n);
     }

@@ -29,6 +29,7 @@ import javax.media.j3d.*;
 import com.sun.j3d.utils.geometry.*;
 import java.util.*;
 import java.util.StringTokenizer;
+import javax.swing.ImageIcon;
 /**
  * An edge view which extrudes a tube out along a spline
  */
@@ -283,4 +284,7 @@ public class SplineTubeEdgeView extends EdgeView implements org.wilmascope.dotla
   float zLevel;
   GeometryArray tubeGeometryArray;
   Point3f[] taperedTubePoints;
+  public ImageIcon getIcon() {
+    return new ImageIcon(getClass().getResource("/images/splineTubeEdge.png"));
+  }
 }

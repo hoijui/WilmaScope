@@ -38,6 +38,26 @@ public class ColumnCluster {
         }
         initTopRadius = lastTopRadius = bottomRadius;
     }
+    public ColumnCluster(String label, GraphControl.ClusterFacade root, float initValue, int initLevel) {
+        this.root = root;
+        this.label = label;
+        initTopRadius = lastTopRadius =lastValue = this.initValue = initValue;
+        try {
+            ViewManager.getInstance().getClusterViewRegistry().setDefaultView("Column Cluster");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        column = root.addNewCluster();
+        column.setLevelConstraint(0);
+        column.setLabel(label);
+        this.level = initLevel;
+        //layout = new ColLayout(level);
+        if(columnStyle == FORCECOLUMNS || columnStyle == DOTCOLUMNS) {
+          layout = new ColTubeLayout(level);
+        } else if (columnStyle == WORMS) {
+          layout = new FrcLayout();
+        }
+    }
     interface Layout {
         public GraphControl.NodeFacade addNode(float radius);
         int getNextLevel();
@@ -51,7 +71,6 @@ public class ColumnCluster {
         public GraphControl.NodeFacade addNode(float radius){
             GraphControl.NodeFacade n = column.addNode("Tube");
             ((TubeNodeView)n.getView()).setEndRadii(lastTopRadius,radius);
-            System.out.println("n.getRadius()="+n.getRadius());
             //n.setRadius(n.getRadius()*radius);
             //n.setColour(102f/255f, 255f/255f, 51f/255f);
             return n;
@@ -122,6 +141,18 @@ public class ColumnCluster {
         lastValue = value;
         //((ColumnClusterView)column.getCluster().getView()).setLabelLevel(getNextLevel());
         return topNode;
+    }
+    public GraphControl.NodeFacade addVariableNode(float value) {
+        float topRadius = value;
+        topNode = layout.addNode(topRadius);
+        lastTopRadius = topRadius;
+        lastTopNode = topNode;
+        lastValue = value;
+        //((ColumnClusterView)column.getCluster().getView()).setLabelLevel(getNextLevel());
+        return topNode;
+    }
+    public float getTopRadius() {
+      return lastTopRadius;
     }
     public GraphControl.NodeFacade addNode() {
       return addNode(lastValue);

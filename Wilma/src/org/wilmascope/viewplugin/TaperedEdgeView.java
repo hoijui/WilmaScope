@@ -25,6 +25,7 @@ import org.wilmascope.graph.Edge;
 
 import javax.media.j3d.*;
 import javax.vecmath.*;
+import javax.swing.ImageIcon;
 import com.sun.j3d.utils.geometry.*;
 
 import com.sun.j3d.utils.picking.PickTool;
@@ -154,5 +155,8 @@ public class TaperedEdgeView extends EdgeView {
     Vector3f v = new Vector3f(e.getVector());
     v.scaleAdd(0.5f, e.getStart().getPosition());
     setFullTransform(new Vector3d(getRadius(), l, getRadius()), v, getPositionAngle());
+  }
+  public ImageIcon getIcon() {
+    return new ImageIcon(getClass().getResource("/images/taperedEdge.png"));
   }
 }
