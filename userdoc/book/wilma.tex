@@ -1,0 +1,164 @@
+
+\documentclass[runningheads]{cl2emult}
+
+\usepackage{makeidx}  % allows index generation
+\usepackage{graphicx} % standard LaTeX graphics tool
+                      % for including eps-figure files
+\usepackage{subeqnar} % subnumbers individual equations
+                      % within an array
+\usepackage{multicol} % used for the two-column index
+\usepackage{cropmark} % cropmarks for pages without
+                      % pagenumbers
+\usepackage{math}     % placeholder for figures
+\usepackage{subfigure} % subfigures in one figure
+
+%\usepackage{algorithm2e}
+\usepackage[ruled,algonl]{algorithm2e}
+%\setlength{\algomargin}{2.1em}
+\dontprintsemicolon
+\SetInd{0.5em}{1em}
+\SetKwFor{Forall}{forall}{do}{od}
+\SetKwFor{WhileDo}{while}{do}{od}
+\SetKw{Let}{let}
+
+\makeindex            % used for the subject index
+                      % please use the style sprmidx.sty with
+                      % your makeindex program
+
+%upright Greek letters (example below: upright "mu")
+\newcommand{\euler}[1]{{\usefont{U}{eur}{m}{n}#1}}
+\newcommand{\eulerbold}[1]{{\usefont{U}{eur}{b}{n}#1}}
+\newcommand{\umu}{\mbox{\euler{\char22}}}
+\newcommand{\umub}{\mbox{\eulerbold{\char22}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%OPTIONAL%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\usepackage{amstex}   % useful for coding complex math
+%\mathindent\parindent % needed in case "Amstex" is used
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%AUTHOR_STYLES_AND_DEFINITIONS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%Please reduce your own definitions and macros to an absolute
+%minimum since otherwise the editor will find it rather
+%strenuous to compile all individual contributions to a
+%single book file
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%
+\title*{The WilmaScope 3D Graph Visualisation System}
+%
+%
+\toctitle{WilmaScope}
+% allows explicit linebreak for the table of content
+%
+%
+\titlerunning{WilmaScope}
+% allows abbreviation of title, if the full title is too long
+% to fit in the running head
+%
+\author{Tim Dwyer\inst{1}
+\and Peter Eckersley\inst{2}
+}
+%
+\authorrunning{Tim Dwyer and Peter Eckersley}
+% if there are more than two authors,
+% please abbreviate author list for running head
+%
+%
+\institute{School of Information Technologies,
+     Madsen Building F09,
+     University of Sydney,
+     NSW 2006,
+     Australia
+\and Department of Computer Science,
+     University of Melbourne,
+     Victoria 3010,
+     Australia}
+
+\maketitle              % typesets the title of the contribution
+
+%\begin{abstract}
+%The abstract\index{abstract} should summarize the contents of the paper
+%in at least 70 and at most 150 words; neither too long
+%nor too short but to the point!
+%\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+\em{survey previous stuff.}
+
+\em{motivation for wilma.}
+%
+\section{Design}\label{sec:design}
+\subsection{Architecture}
+\subsection{Layout Algorithms}
+\subsubsection{Force Directed}
+\subsubsection{Multiscale Force Directed}
+\subsubsection{Fast Simulated Annealing}
+\subsubsection{DOT: heirarchical layout}
+\subsection{User Interfaces}
+\subsection{Programming Interfaces}
+\em{API/CORBA interface/etc...}
+
+\section{The Importance of being Wilma -- Results}
+\begin{itemize}
+\item pretty pictures
+\item applications
+\item self-congratulatory monologues
+\end{itemize}
+
+\section{Conclusions}
+\begin{itemize}
+\item megalomaniacal rants
+\item further work
+\item witty closing line
+\end{itemize}
+
+\begin{thebibliography}{7}
+%
+\addcontentsline{toc}{section}{References}
+
+\bibitem{CHT93} Cai, J., Han, X., Tarjan, R.~E.\ (1993)
+An algorithm for the maximal planar subgraph
+problem.
+SIAM J.\ Comput.\ {\bf22}, 1142--1164
+
+\bibitem{DETT99} Di Battista, G., Eades, P., Tamassia, R., Tollis,
+  I.~G.\ (1999)
+Graph Drawing: Algorithms for the visualization of graphs.
+Prentice Hall, New Jersey
+
+\bibitem{Dji95} Djidjev, H.~N.\ (1995)
+A linear algorithm for the maximal planar subgraph problem.
+Proc.\ 4th Workshop Algorithms Data Struct., 
+Lecture Notes in Computer Science, Springer Verlag
+
+\bibitem{Eul1750} Euler, L.\ (1750)
+Demonstratio nonnullarum insignium proprietatum quibus solida hedris
+planis inclusa sunt praedita.
+Novi Comm.\ Acad.\ Sci.\ Imp.\ Petropol.\ {\bf4} (1752-3, published
+1758), 140--160, also: Opera Omnia (1) {\bf26}, 94--108
+
+\bibitem{KW01} Kaufmann, M., Wagner, D. (eds.) (2001)
+Drawing Graphs: Methods and Models.
+Lecture Notes in Computer Science 2025, Springer Verlag
+
+\bibitem{TDB88} Tamassia, R., Di Battista, G., Batini, C.\ (1988)
+Automatic graph drawing and readability of diagrams.
+IEEE Transactions on Systems, Man, and Cybernetics {\bf18}, 61--79
+
+\end{thebibliography}
+
+%INDEX%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\addcontentsline{toc}{section}{Index}
+\flushbottom
+\printindex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
