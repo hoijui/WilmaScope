@@ -42,7 +42,7 @@ public abstract class List<T extends GraphElement> implements Iterable<T> {
       elements.get(i).draw();
     }
   }
-  protected Vector<T> getElementsVector() {
+  public Vector<T> getElementsVector() {
     return elements;
   }
   public void removeAll(List<T> l) {
