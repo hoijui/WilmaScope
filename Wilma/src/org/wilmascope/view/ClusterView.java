@@ -52,7 +52,7 @@ public abstract class ClusterView extends NodeView {
     return (Cluster)getNode();
   }
   public ImageIcon getIcon() {
-    return new ImageIcon("images/cluster.png");
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("cluster.png"));
   }
   /*
   protected void showLabel(String text) {

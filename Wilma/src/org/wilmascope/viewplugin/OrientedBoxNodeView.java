@@ -105,7 +105,7 @@ public class OrientedBoxNodeView extends NodeView {
     border.generateGeometry(1f, widthScale);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon("images/cube.png");
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("cube.png"));
   }
   OrientedLabelCube box;
   OrientedNoLabelCube border;

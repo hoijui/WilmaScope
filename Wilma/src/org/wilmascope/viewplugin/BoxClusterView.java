@@ -47,6 +47,6 @@ public class BoxClusterView extends ClusterView {
     return (float)Math.pow(getCluster().getMass()/density,1.0d/3.0d);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon("images/boxcluster.png");
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("boxcluster.png"));
   }
 }

@@ -78,8 +78,8 @@ public class SpikeEdgeView extends EdgeView {
 		addTransformGroupChild(coneTransform);
 	}
 	public ImageIcon getIcon() {
-		return new ImageIcon("images/arrow.png");
-	}  
+		return new ImageIcon(org.wilmascope.images.Images.class.getResource("arrow.png"));
+	}
   /**
    * draw the edge correctly between the start and end nodes
    */

@@ -68,7 +68,7 @@ public class ColumnClusterView
 			v.x -= 0.15f * r;
 			v.y -= 0.04f * r;
 			setResizeTranslateTransform(new Vector3d(r, r, r), v);
-     
+
 		} catch (NullPointerException e) {
 			System.out.println("WARNING: Null pointer in ColumnClusterView.draw()");
 		}
@@ -122,7 +122,7 @@ public class ColumnClusterView
 		return labels[0];
 	}
 	public ImageIcon getIcon() {
-		return new ImageIcon("images/column.png");
+		return new ImageIcon(org.wilmascope.images.Images.class.getResource("column.png"));
 	}
 	/** returns the bottom radius of the lowest node
 	 * @see org.wilmascope.view.SizeAdjustableNodeView#getBottomRadius()

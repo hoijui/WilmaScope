@@ -23,6 +23,9 @@ package org.wilmascope.global;
 import java.util.Properties;
 
 import javax.vecmath.Vector3f;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
+import java.util.Enumeration;
 
 /*
  * Title:        WilmaToo
@@ -39,66 +42,65 @@ import javax.vecmath.Vector3f;
  * from a file
  */
 
-public class Constants extends AbstractConstants {
+public class GlobalConstants
+    extends AbstractConstants {
 
-  public final static String defaultFileName = "WILMA_CONSTANTS.properties";
+  private static final ResourceBundle WILMA_CONSTANTS_PROPERTIES = PropertyResourceBundle.getBundle("WILMA_CONSTANTS");
 
-  private static Constants instance = new Constants();
-  public static Constants getInstance() {
+  private static GlobalConstants instance = null;
+
+  public GlobalConstants(Properties defaultProps, ResourceBundle bundle) {
+    super(defaultProps, bundle);
+  }
+
+  public static GlobalConstants getInstance() {
+    if (instance == null) {
+      instance = new GlobalConstants(getDefaultProperties(), WILMA_CONSTANTS_PROPERTIES);
+    }
     return instance;
   }
-  public static Constants getInstance(String filename) {
-  	if(!filename.equals(defaultFileName)) {
-  	  instance = new Constants(filename);
-  	}
-  	return instance;
-  }
 
-  private Constants() {
-    super(defaultFileName);
-  }
-
-  private Constants(String fileName) {
-    super(fileName);
-  }
-
-  protected Properties getDefaultProperties() {
+  protected static Properties getDefaultProperties() {
     Properties d = new Properties();
 
-  // A very small vector, useful in calculations approximating zero.
+    // A very small vector, useful in calculations approximating zero.
     d.setProperty("MinVectorX", "0.01");
     d.setProperty("MinVectorY", "0.01");
     d.setProperty("MinVectorZ", "0.01");
 
-  // The default length for generated random vectors
+    // The default length for generated random vectors
     d.setProperty("DefaultRandomVectorLength", "0.25");
     d.setProperty("DefaultEdgeLength", "0.25");
-  // The Maximum acceleration for a node
+    // The Maximum acceleration for a node
     d.setProperty("MaximumAcceleration", "10");
-  // The Maximum velocity of a node
+    // The Maximum velocity of a node
     d.setProperty("TerminalVelocity", "0.25");
-  // A scalar for the force opposite and proportional to the nodes direction
-  // of motion
+    // A scalar for the force opposite and proportional to the nodes direction
+    // of motion
     d.setProperty("FrictionCoefficient", "200");
     d.setProperty("AngularInertia", "10");
     d.setProperty("BalancedThreshold", "0.03");
     d.setProperty("VelocityAttenuation", "0.01");
 
-  // default data path
+    // default data path
     d.setProperty("DefaultDataPath", "../data");
-  // default path to the DOT program
-    d.setProperty("DotPath","dot");
+    // default path to the DOT program
+    d.setProperty("DotPath", "dot");
     return d;
   }
+
   // the following are fairly definitive, I don't think we need to load them
   // from a file
   //
   // A zero value vector.  Useful in calculations and initializing new vectors
-  public static final Vector3f vZero = new Vector3f(0f,0f,0f);
+  public static final Vector3f vZero = new Vector3f(0f, 0f, 0f);
+
   // A vector along the x axis
-  public static final Vector3f vX = new Vector3f(1f,0f,0f);
+  public static final Vector3f vX = new Vector3f(1f, 0f, 0f);
+
   // A vector along the y axis
-  public static final Vector3f vY = new Vector3f(0f,1f,0f);
+  public static final Vector3f vY = new Vector3f(0f, 1f, 0f);
+
   // A vector along the z axis
-  public static final Vector3f vZ = new Vector3f(0f,0f,1f);
+  public static final Vector3f vZ = new Vector3f(0f, 0f, 1f);
 }

@@ -44,17 +44,16 @@ import com.sun.j3d.utils.picking.PickTool;
  * $Id$
  * </p>
  * <p>
- * 
+ *
  * @author</p>
  *         <p>
  * @version $Revision$
  *          </p>
  *          unascribed
- *  
+ *
  */
 class TreePanel extends JPanel {
-	ImageIcon tree = new ImageIcon(ClassLoader
-			.getSystemResource("images/treeviewbuttons.png"));
+	ImageIcon tree = new ImageIcon(org.wilmascope.images.Images.class.getResource("treeviewbuttons.png"));
 	public TreePanel() {
 		super();
 		setPreferredSize(new Dimension(400, 400));

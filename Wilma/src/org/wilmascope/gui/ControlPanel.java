@@ -57,11 +57,11 @@ public class ControlPanel extends JPanel {
     zoomLabel.setText("Zoom");
     zoomLabel.setPreferredSize(new Dimension(120, 60));
     zoomLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    zoomLabel.setIcon(new ImageIcon("images/middleDrag.png"));
+    zoomLabel.setIcon(new ImageIcon(org.wilmascope.images.Images.class.getResource("middleDrag.png")));
     translateLabel.setText("Translate");
-    translateLabel.setIcon(new ImageIcon("images/rightDrag.png"));
+    translateLabel.setIcon(new ImageIcon(org.wilmascope.images.Images.class.getResource("rightDrag.png")));
     rotateLabel.setText("Rotate");
-    rotateLabel.setIcon(new ImageIcon("images/leftDrag.png"));
+    rotateLabel.setIcon(new ImageIcon(org.wilmascope.images.Images.class.getResource("leftDrag.png")));
     mouseHelpPanel.setBorder(BorderFactory.createLoweredBevelBorder());
     mouseHelpPanel.setRequestFocusEnabled(false);
     dialogPanel.setLayout(borderLayout2);

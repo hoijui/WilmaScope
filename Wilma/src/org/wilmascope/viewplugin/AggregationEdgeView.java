@@ -92,6 +92,6 @@ public class AggregationEdgeView extends EdgeView {
     addTransformGroupChild(tg);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon("images/aggregation.png");
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("aggregation.png"));
   }
 }

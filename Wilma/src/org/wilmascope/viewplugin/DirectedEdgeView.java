@@ -55,6 +55,6 @@ public class DirectedEdgeView extends EdgeView {
     addTransformGroupChild(coneTransform);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon("images/directedEdge.png");
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("directedEdge.png"));
   }
 }

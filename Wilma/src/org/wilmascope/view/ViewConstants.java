@@ -22,6 +22,8 @@ package org.wilmascope.view;
 
 import java.util.Properties;
 import javax.vecmath.Vector3f;
+import java.util.ResourceBundle;
+import java.util.PropertyResourceBundle;
 
 /**
  * Title:        WilmaToo
@@ -32,23 +34,25 @@ import javax.vecmath.Vector3f;
  * @version 1.0
  */
 
-public class Constants extends org.wilmascope.global.AbstractConstants {
-  public final static String defaultFileName = new String("WILMA_CONSTANTS.properties");
+public class ViewConstants extends org.wilmascope.global.AbstractConstants {
+  private static final ResourceBundle WILMA_CONSTANTS_PROPERTIES = PropertyResourceBundle.getBundle("WILMA_CONSTANTS");
 
-  private static final Constants instance = new Constants();
-  public static Constants getInstance() {
+  private static ViewConstants instance = null;
+
+  public static ViewConstants getInstance() {
+    if( instance == null ) {
+      instance = new ViewConstants(getDefaultProperties(), WILMA_CONSTANTS_PROPERTIES);
+    }
     return instance;
   }
 
-  private Constants() {
-    super(defaultFileName);
+  private ViewConstants(Properties defaultProperties, ResourceBundle bundle) {
+    super(defaultProperties, bundle);
   }
 
-  private Constants(String fileName) {
-    super(fileName);
-  }
-  protected Properties getDefaultProperties() {
+  protected static Properties getDefaultProperties() {
     Properties d = new Properties();
+    d.setProperty("Plugins","org.wilmascope.viewplugin.DefaultNodeView,org.wilmascope.viewplugin.DefaultEdgeView,org.wilmascope.viewplugin.DefaultClusterView");
     d.setProperty("FogDensity","0.2");
     d.setProperty("FogColourR","0.5");
     d.setProperty("FogColourG","0.5");
@@ -83,7 +87,7 @@ public class Constants extends org.wilmascope.global.AbstractConstants {
     */
     return d;
   }
-  public static org.wilmascope.global.Constants gc = org.wilmascope.global.Constants.getInstance();
+  public static org.wilmascope.global.GlobalConstants gc = org.wilmascope.global.GlobalConstants.getInstance();
   public static final Vector3f vX = gc.vX;
   public static final Vector3f vY = gc.vY;
   public static final Vector3f vZ = gc.vZ;

@@ -41,7 +41,7 @@ public class LayoutEngineFrame extends JFrame {
 		}
 	});
     this.cluster = cluster;
-    ImageIcon icon = new ImageIcon("images/forces.png");
+    ImageIcon icon = new ImageIcon(org.wilmascope.images.Images.class.getResource("forces.png"));
     this.setIconImage(icon.getImage());
     box1 = Box.createVerticalBox();
     layoutEngineComboBox.setSelectedItem(layoutEngine.getName());

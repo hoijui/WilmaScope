@@ -22,7 +22,7 @@ import org.wilmascope.dotlayout.DotLayout;
 import org.wilmascope.graph.Edge;
 import org.wilmascope.graph.EdgeList;
 import org.wilmascope.view.GraphElementView;
-import org.wilmascope.global.Constants;
+import org.wilmascope.global.GlobalConstants;
 /**
  * @author dwyer
  *
@@ -47,7 +47,7 @@ class ColumnGraphClient implements GraphClient {
   Hashtable nodes = new Hashtable();
   int level, maxLevel;
   GraphControl.ClusterFacade r;
-  Constants constants = Constants.getInstance();
+  GlobalConstants constants = GlobalConstants.getInstance();
   public ColumnGraphClient(
     GraphControl.ClusterFacade root,
     Hashtable columns,

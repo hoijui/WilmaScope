@@ -37,6 +37,7 @@ import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.TestGraph;
 import org.wilmascope.file.FileHandler;
 import org.wilmascope.gmlparser.ColumnsImporter;
+import javax.swing.JOptionPane;
 
 /**
  * Title:        WilmaToo
@@ -54,6 +55,7 @@ public class MenuBar extends JMenuBar {
 	JMenuItem exitMenuItem = new JMenuItem();
   JMenuItem queryMenuItem = new JMenuItem();
   JMenuItem screenCaptureMenuItem = new JMenuItem();
+  JMenuItem animatedCaptureMenuItem = new JMenuItem();
 	JMenuItem importMenuItem = new JMenuItem();
 	JMenuItem testMenuItem = new JMenuItem();
 	JMenu viewMenu;
@@ -113,6 +115,13 @@ public class MenuBar extends JMenuBar {
         screenCaptureMenuItem_actionPerformed(e);
       }
     });
+    animatedCaptureMenuItem.setText("Screen Capture (animated)");
+    animatedCaptureMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        animatedCaptureMenuItem_actionPerformed(e);
+      }
+    });
+
 		testMenuItem.setText("Create test graph...");
 		testMenuItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -235,6 +244,7 @@ public class MenuBar extends JMenuBar {
 		fileMenu.add(queryMenuItem);
     fileMenu.add(testMenuItem);
     fileMenu.add(screenCaptureMenuItem);
+    fileMenu.add(animatedCaptureMenuItem);
 		fileMenu.add(exitMenuItem);
 		viewMenu.add(fullScreenCheckBoxMenuItem);
 		viewMenu.add(showMouseHelpCheckBoxMenuItem);
@@ -340,7 +350,7 @@ public class MenuBar extends JMenuBar {
 	void importMenuItem_actionPerformed(ActionEvent e) {
 		JFileChooser chooser =
 			new JFileChooser(
-				org.wilmascope.global.Constants.getInstance().getProperty(
+				org.wilmascope.global.GlobalConstants.getInstance().getProperty(
 					"DefaultDataPath"));
 		//chooser.setFileFilter(fileHandler.getFileFilter());
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -360,14 +370,36 @@ public class MenuBar extends JMenuBar {
     fc.setFileFilter(FileHandler.getJPEGFileFilter());
     int r = fc.showSaveDialog(this);
     // should probably allow user to pick the following in a dialog
-    float scale = org.wilmascope.global.Constants.getInstance().getFloatValue(
+    float scale = org.wilmascope.global.GlobalConstants.getInstance().getFloatValue(
       "ScreenCaptureScale");
     if(r==JFileChooser.APPROVE_OPTION) {
       String path = fc.getSelectedFile().getAbsolutePath();
       graphControl.getGraphCanvas().writeJPEG(path, scale);
     }
   }
-	void testMenuItem_actionPerformed(ActionEvent e) {
+  void animatedCaptureMenuItem_actionPerformed(ActionEvent e) {
+    JFileChooser fc = new JFileChooser();
+    fc.setFileFilter(FileHandler.getJPEGFileFilter());
+    int r = fc.showSaveDialog(this);
+    // should probably allow user to pick the following in a dialog
+    float scale = org.wilmascope.global.GlobalConstants.getInstance().getFloatValue(
+      "ScreenCaptureScale");
+    if(r==JFileChooser.APPROVE_OPTION) {
+      String path = fc.getSelectedFile().getAbsolutePath();
+      String str = JOptionPane.showInputDialog(this, "How many frames ?","FramesCount",JOptionPane.QUESTION_MESSAGE);
+      int c = Integer.parseInt(str);
+      for (int i = 0; i<c; i++) {
+        graphControl.getGraphCanvas().writeJPEG(path+"_"+i+".jpg", scale);
+        try {
+          Thread.sleep(10);
+        }
+        catch (InterruptedException ex) {
+        }
+      }
+    }
+  }
+
+  void testMenuItem_actionPerformed(ActionEvent e) {
 		GenerateTestGraphFrame setup =
 			new GenerateTestGraphFrame(
 				"Generate Test Graph",

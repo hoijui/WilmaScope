@@ -33,38 +33,28 @@ package org.wilmascope.global;
  * @author  $Author$
  * @version $Revision$
  */
+import java.util.*;
 import javax.vecmath.*;
-import java.io.*;
-import java.util.Properties;
 
-public abstract class AbstractConstants extends Properties {
+public abstract class AbstractConstants
+    extends Properties {
 
-  /** create the Constants object loading properties from the
-   * specified file.
-   * @param fileName valid properties file containing constants to
-   * override the defaults
-   */
-  public AbstractConstants(String fileName) {
-    defaults = getDefaultProperties();
-    try {
-      load(new FileInputStream(fileName));
-    } catch(Exception e) {
-      System.err.println("Error while reading properties file: " + e.getMessage());
-      System.err.println("Don't panic I'll use my defaults.");
+  public AbstractConstants(Properties defaultProperties) {
+    super(defaultProperties);
+  }
+
+  public AbstractConstants(Properties defaultProperties, ResourceBundle bundle) {
+    super(defaultProperties);
+    for (Enumeration enum = bundle.getKeys(); enum.hasMoreElements(); ) {
+      String key = (String) enum.nextElement();
+      String defaultValue = defaultProperties.getProperty(key);
+      String overrideValue = bundle.getString(key);
+      if (defaultValue == null || !defaultValue.equals(overrideValue)) {
+        System.out.println("value for " + key + " was " + defaultValue + " overriden by " + overrideValue);
+      }
+      super.setProperty(key, overrideValue);
     }
   }
-
-  /** create the Constants object using only the default properties.
-   */
-  public AbstractConstants() {
-    defaults = getDefaultProperties();
-  }
-
-  /** implement this method to load up a properties class with default
-   * values.
-   * @return the loaded default Properties
-   */
-  protected abstract Properties getDefaultProperties();
 
   /** Gets the int value for the specified constant.
    *  If the specified constant does not exist or is not in a
@@ -77,37 +67,42 @@ public abstract class AbstractConstants extends Properties {
     int value = 0;
     String property;
     property = getProperty(constantName);
-    if(property == null)
+    if (property == null) {
       throw new Error("Unknown Constant '" + constantName + "'!!");
+    }
     try {
       value = Integer.parseInt(property);
-    } catch(NumberFormatException e) {
+    }
+    catch (NumberFormatException e) {
       System.err.println("Number Format Error: " + e.getMessage());
       System.err.println("in '" + constantName + "':");
-      System.err.println("  '" + property +"' is not a valid integer");
+      System.err.println("  '" + property + "' is not a valid integer");
       System.err.println("  using default value instead");
       property = defaults.getProperty(constantName);
-      if(property == null)
+      if (property == null) {
         throw new Error("No Default Value for '" + constantName + "'!!");
+      }
       try {
         value = Integer.parseInt(property);
-      } catch(NumberFormatException f) {
+      }
+      catch (NumberFormatException f) {
         throw new Error("Number Format Error in default value for '" +
-          constantName + "': " + e.getMessage());
+                        constantName + "': " + e.getMessage());
       }
     }
     return value;
   }
-  
+
   /** Gets the boolean value for the specified constant. */
   public boolean getBooleanValue(String constantName) {
     String property;
     property = getProperty(constantName);
-    if(property == null)
+    if (property == null) {
       throw new Error("Unknown Constant '" + constantName + "'!!");
+    }
     return Boolean.valueOf(property).booleanValue();
   }
-  
+
   /** Gets the float value for the specified constant.
    *  If the specified constant does not exist or is not in a
    *  valid floating point number format in properties then it
@@ -119,23 +114,27 @@ public abstract class AbstractConstants extends Properties {
     float value = 0;
     String property;
     property = getProperty(constantName);
-    if(property == null)
+    if (property == null) {
       throw new Error("Unknown Constant '" + constantName + "'!!");
+    }
     try {
       value = Float.parseFloat(property);
-    } catch(NumberFormatException e) {
+    }
+    catch (NumberFormatException e) {
       System.err.println("Number Format Error: " + e.getMessage());
       System.err.println("in '" + constantName + "':");
-      System.err.println("  '" + property +"' is not a valid float");
+      System.err.println("  '" + property + "' is not a valid float");
       System.err.println("  using default value instead");
       property = defaults.getProperty(constantName);
-      if(property == null)
+      if (property == null) {
         throw new Error("No Default Value for '" + constantName + "'!!");
+      }
       try {
         value = Float.parseFloat(property);
-      } catch(NumberFormatException f) {
+      }
+      catch (NumberFormatException f) {
         throw new Error("Number Format Error in default value for '" +
-          constantName + "': " + e.getMessage());
+                        constantName + "': " + e.getMessage());
       }
     }
     return value;
@@ -146,9 +145,9 @@ public abstract class AbstractConstants extends Properties {
    */
   public Vector3f getVector3f(String constantName) {
     return new Vector3f(
-      getFloatValue(constantName + "X"),
-      getFloatValue(constantName + "Y"),
-      getFloatValue(constantName + "Z"));
+        getFloatValue(constantName + "X"),
+        getFloatValue(constantName + "Y"),
+        getFloatValue(constantName + "Z"));
   }
 
   /** @param constantName name of constant to return
@@ -156,8 +155,9 @@ public abstract class AbstractConstants extends Properties {
    */
   public Color3f getColor3f(String constantName) {
     return new Color3f(
-      getFloatValue(constantName + "R"),
-      getFloatValue(constantName + "G"),
-      getFloatValue(constantName + "B"));
+        getFloatValue(constantName + "R"),
+        getFloatValue(constantName + "G"),
+        getFloatValue(constantName + "B"));
   }
+
 }

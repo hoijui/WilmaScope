@@ -84,7 +84,7 @@ public class ArrowEdgeView extends EdgeView {
 		addTransformGroupChild(coneTransform);
 	}
 	public ImageIcon getIcon() {
-		return new ImageIcon("images/arrow.png");
+		return new ImageIcon(org.wilmascope.images.Images.class.getResource("arrow.png"));
 	}
 	public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
 		float thickness = r.scaleX(getRadius());
