@@ -57,7 +57,9 @@ public class FileHandler {
     }
     nodeLookup = new Hashtable();
     graphControl.getRootCluster().removeAllForces();
+    graphControl.stall();
     expandXMLCluster(xmlGraph.getRootCluster(),graphControl.getRootCluster());
+    graphControl.unstall();
   }
   public FileFilter getFileFilter() {
     return new GraphFileFilter();
@@ -98,7 +100,13 @@ public class FileHandler {
     xmlRoot.getChildren(nodes,edges,forces,clusters);
     for(int i=0;i<nodes.size();i++) {
       XMLGraph.Node xmlNode = (XMLGraph.Node)nodes.get(i);
-      GraphControl.NodeFacade n = graphRoot.addNode();
+      String viewType = xmlNode.getViewType();
+      GraphControl.NodeFacade n = null;
+      if(viewType != null && viewType.length()>0) {
+        n = graphRoot.addNode(viewType);
+      } else {
+        n = graphRoot.addNode();
+      }
       setGraphNodeData(xmlNode, n);
       nodeLookup.put(xmlNode.getID(),n);
     }
@@ -108,7 +116,13 @@ public class FileHandler {
     }
     for(int i=0;i<clusters.size(); i++) {
       XMLGraph.Cluster xc = (XMLGraph.Cluster)clusters.get(i);
-      GraphControl.ClusterFacade gc = graphRoot.addCluster();
+      String viewType = xc.getViewType();
+      GraphControl.ClusterFacade gc = null;
+      if(viewType != null && viewType.length()>0) {
+        gc = graphRoot.addCluster(viewType);
+      } else {
+        gc = graphRoot.addCluster();
+      }
       setGraphNodeData(xc, gc);
       expandXMLCluster(xc, gc);
     }
@@ -152,12 +166,15 @@ public class FileHandler {
     for(int i=0; i<nodes.length; i++) {
       GraphControl.NodeFacade graphNode = nodes[i];
       XMLGraph.Node xmlNode;
+      String viewType = graphNode.getViewType();
       if(graphNode instanceof GraphControl.ClusterFacade) {
         xmlNode = xmlCluster.addCluster();
         clusters.put(graphNode, xmlNode);
+        xmlNode.setViewType(viewType);
       } else {
         xmlNode = xmlCluster.addNode();
         idLookup.put(graphNode, xmlNode.getID());
+        xmlNode.setViewType(viewType);
       }
       setXMLNodeData(graphNode,xmlNode);
     }
@@ -172,9 +189,7 @@ public class FileHandler {
       XMLGraph.Edge xmlEdge = xmlCluster.addEdge(
           (String)idLookup.get(edges[i].getStartNode()),
           (String)idLookup.get(edges[i].getEndNode()));
-      if(!viewType.equals(ViewManager.getInstance().getDefaultEdgeViewType())) {
-        xmlEdge.setViewType(viewType);
-      }
+      xmlEdge.setViewType(viewType);
     }
   }
 }
