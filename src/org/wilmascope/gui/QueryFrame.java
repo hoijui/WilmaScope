@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.view.ElementData;
 import java.util.*;
 
 /**
@@ -17,6 +18,150 @@ import java.util.*;
  */
 
 public class QueryFrame extends JFrame {
+  Hashtable fmList = new Hashtable();
+  Hashtable companyList = new Hashtable();
+  public abstract class QueryNodeData extends ElementData {
+    boolean expanded;
+    Statement stmt;
+    Hashtable neighbours = new Hashtable();
+    GraphControl.NodeFacade node;
+    void setExpanded() {
+      setActionDescription("Hide Neighbours...");
+      setActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          collapseNeighbours();
+        }
+      });
+      expanded = true;
+    }
+    void setCollapsed() {
+      setActionDescription("Expand Neighbours...");
+      setActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          expandNeighbours();
+        }
+      });
+      expanded = false;
+    }
+    void addNeighbour(GraphControl.NodeFacade n, String key) {
+      neighbours.put(key, n);
+    }
+    abstract void collapseNeighbours();
+    abstract void expandNeighbours();
+  }
+  public class CompanyNodeData extends QueryNodeData {
+    String epic;
+    public CompanyNodeData(GraphControl.NodeFacade companyNode, Statement stmt, String epic) {
+      this.stmt = stmt;
+      this.epic = epic;
+      this.node = companyNode;
+      setCollapsed();
+    }
+    void collapseNeighbours() {
+      for(Enumeration e = neighbours.keys(); e.hasMoreElements();) {
+        String fmcode = (String)e.nextElement();
+        GraphControl.NodeFacade n = (GraphControl.NodeFacade)fmList.get(fmcode);
+        if(n.getDegree() == 1) {
+          fmList.remove(fmcode);
+          n.delete();
+          neighbours.remove(fmcode);
+        }
+      }
+      graphRoot.unfreeze();
+      setCollapsed();
+    }
+    void expandNeighbours() {
+      try {
+        ResultSet r = stmt.executeQuery(
+          "select fmcode, fund_man, shares*share_pric as val " +
+          "from holders " +
+          "where epic = '" + epic +"' " +
+          "order by val"
+        );
+        int i=0;
+        while(r.next() && i++ < 10) {
+          String fmcode = r.getString("fmcode");
+          String fundman = r.getString("fund_man");
+          GraphControl.NodeFacade n = (GraphControl.NodeFacade)fmList.get(fmcode);
+          if(n==null) {
+            n = graphRoot.addNode("DefaultNodeView");
+            n.setColour(0.0f,0.8f,0.0f);
+            n.setLabel(fundman);
+            n.setPosition(node.getPosition());
+            FMNodeData data = new FMNodeData(n, stmt, fmcode);
+            data.addNeighbour(node, epic);
+            n.setUserData(data);
+            fmList.put(fmcode,n);
+          }
+
+          if(neighbours.get(fmcode)==null) {
+            neighbours.put(fmcode,n);
+            GraphControl.EdgeFacade e = graphRoot.addEdge(n, node, "Plain Edge", 0.005f);
+          }
+        }
+        graphRoot.unfreeze();
+        setExpanded();
+      } catch(SQLException e) {
+        System.out.println(e.getMessage());
+      }
+    }
+  }
+  public class FMNodeData extends QueryNodeData {
+    String fmcode;
+    public FMNodeData(GraphControl.NodeFacade fmnode, Statement stmt, String fmcode) {
+      this.stmt = stmt;
+      this.fmcode = fmcode;
+      this.node = fmnode;
+      setCollapsed();
+    }
+    void collapseNeighbours() {
+      for(Enumeration e = neighbours.keys(); e.hasMoreElements();) {
+        String epic = (String)e.nextElement();
+        GraphControl.NodeFacade n = (GraphControl.NodeFacade)companyList.get(epic);
+        if(n.getDegree() == 1) {
+          companyList.remove(epic);
+          n.delete();
+          neighbours.remove(epic);
+        }
+      }
+      graphRoot.unfreeze();
+      setCollapsed();
+    }
+    void expandNeighbours() {
+      try {
+        ResultSet r = stmt.executeQuery(
+          "select epic, full_name, shares*share_pric as val " +
+          "from holders " +
+          "where fmcode = " + fmcode +" " +
+          "order by val"
+        );
+        int i=0;
+        while(r.next() && i++ < 10) {
+          String epic = r.getString("epic");
+          String fullName = r.getString("full_name");
+          GraphControl.NodeFacade n = (GraphControl.NodeFacade)companyList.get(epic);
+          if(n==null) {
+            n = graphRoot.addNode("DefaultNodeView");
+            n.setLabel(fullName);
+            n.setPosition(node.getPosition());
+            CompanyNodeData data = new CompanyNodeData(n, stmt, epic);
+            data.addNeighbour(node, fmcode);
+            n.setUserData(data);
+            companyList.put(epic, n);
+          }
+
+          if(neighbours.get(epic)==null) {
+            neighbours.put(epic,n);
+            GraphControl.EdgeFacade e = graphRoot.addEdge(node, n, "Plain Edge", 0.005f);
+          }
+        }
+        graphRoot.unfreeze();
+        setExpanded();
+      } catch(SQLException e) {
+        System.out.println(e.getMessage());
+      }
+    }
+  }
   JLabel jLabel2 = new JLabel();
   JTextField endDateField = new JTextField();
   JPanel jPanel1 = new JPanel();
@@ -82,11 +227,28 @@ public class QueryFrame extends JFrame {
   }
   void ownershipQuery(String startFundman) {
     String url = new String("jdbc:postgresql:citywatch");
-    nodes.clear();
-    String fmcodeQueryString =
-      "select fmcode "+
-      "from market "+
-      "where fund_man like '%"+startFundman+"%' ";
+    fmList.clear();
+    companyList.clear();
+    try {
+      Connection con = DriverManager.getConnection(url, "dwyer", "");
+      Statement stmt = con.createStatement();
+      ResultSet r = stmt.executeQuery(
+        "select fmcode, fund_man "+
+        "from market "+
+        "where fund_man like '%"+startFundman+"%' "
+      );
+      r.next();
+      String fmcode = r.getString("fmcode");
+      String fundman = r.getString("fund_man");
+      GraphControl.NodeFacade n = graphRoot.addNode("DefaultNodeView");
+      n.setColour(0f,0.8f,0f);
+      n.setLabel(fundman);
+      n.setUserData(new FMNodeData(n,stmt,fmcode));
+      fmList.put(fmcode, n);
+    } catch(SQLException e) {
+      System.out.println(e.getMessage());
+    }
+
   }
   void fmMovementQuery(String startDate, String endDate) {
     String url = new String("jdbc:postgresql:citywatch");
@@ -160,7 +322,6 @@ public class QueryFrame extends JFrame {
     GraphControl.NodeFacade end = (GraphControl.NodeFacade)nodes.get(toID);
     GraphControl.EdgeFacade edge = graphRoot.addEdge(start,end,"Arrow",radius);
     edge.setColour(c);
-    System.out.println("edginess="+edginess+", radius="+radius+", hue="+hue);
   }
   Hashtable nodes = new Hashtable();
   JTabbedPane queryPane = new JTabbedPane();

@@ -309,7 +309,7 @@ implements org.wilmascope.graph.Viewable {
     try {
       PickTool.setCapabilities(shape, PickTool.INTERSECT_FULL);
     } catch(javax.media.j3d.RestrictedAccessException e) {
-      System.out.println("Not setting bits on already setup shared geometry");
+      //System.out.println("Not setting bits on already setup shared geometry");
     }
   }
   public void hide() {

@@ -193,6 +193,9 @@ public class Node extends GraphElement {
   public void setFixedPosition(boolean fixed) {
     fixedPosition = fixed;
   }
+  public int getDegree() {
+    return edges.size();
+  }
   private EdgeList edges = new EdgeList();
   private Point3f position = new Point3f();
   // node's Spherical radius

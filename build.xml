@@ -30,12 +30,12 @@
 
   <target name="idl" depends="idlcheck" if="idl.required" 
      description="Generating CORBA stubs/skeletons...">
-    <exec dir="${src}" executable="${JAVA_HOME}/bin/idlj">
+    <exec dir="${src}" executable="idlj">
       <arg value="-fall"/>
       <arg value="-verbose"/>
       <arg file="${src}/idl/WilmaChat.idl"/>
     </exec>
-    <exec dir="${src}" executable="${JAVA_HOME}/bin/idlj">
+    <exec dir="${src}" executable="idlj">
       <arg value="-fallTIE"/>
       <arg value="-verbose"/>
       <arg file="${src}/idl/WilmaChat.idl"/>
@@ -154,7 +154,7 @@
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${dest}"/>
     <delete dir="${dist}"/>
-    <delete dir="${chat}"/>
+    <delete dir="${src}/org/wilmascope/chat"/>
     <delete dir="${doc}"/>
     <delete dir="${lib}/${plugin}"/>
     <delete file="${lib}/wilma.jar"/>

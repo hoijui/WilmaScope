@@ -335,6 +335,9 @@ public class GraphControl {
     public void moveToCanvasPos(int x, int y) {
       ((NodeView)node.getView()).moveToCanvasPos(graphCanvas,x,y);
     }
+    public int getDegree() {
+      return node.getDegree();
+    }
     /**
      * get the node underlying this facade
      */
