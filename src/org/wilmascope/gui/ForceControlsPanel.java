@@ -35,13 +35,12 @@ import org.wilmascope.control.GraphControl;
  * @version 1.0
  */
 
-public class ForceControlsFrame extends JFrame {
+public class ForceControlsPanel extends JPanel {
 
-  public ForceControlsFrame() {
+  public ForceControlsPanel() {
   }
   ForceLayout forceLayout;
   GraphControl.ClusterFacade cluster;
-  String title;
 
   // Variables declaration
   JSlider velocityAttenuationSlider = new JSlider();
@@ -56,26 +55,21 @@ public class ForceControlsFrame extends JFrame {
   JPanel jPanel1 = new JPanel();
   JSlider balancedThresholdSlider = new JSlider();
 
-  public ForceControlsFrame(GraphControl.ClusterFacade cluster,String title) {
+  public ForceControlsPanel(GraphControl.ClusterFacade cluster) {
     try {
-      this.title = title;
       this.cluster = cluster;
       this.forceLayout = (ForceLayout)cluster.getLayoutEngine();
-      ImageIcon icon = new ImageIcon(getClass().getResource("/images/forces.png"));
-      this.setIconImage(icon.getImage());
       jbInit();
-      pack();
     }
     catch(Exception e) {
       e.printStackTrace();
     }
   }
   private void jbInit() throws Exception {
-    setTitle (title);
     boxLayout = Box.createVerticalBox();
     forceControlsBox = Box.createVerticalBox();
     forceLayoutControlsBox = Box.createVerticalBox();
-    this.getContentPane().add(boxLayout, BorderLayout.CENTER);
+    this.add(boxLayout, BorderLayout.CENTER);
     boxLayout.add(jScrollPane1, null);
     jScrollPane1.getViewport().add(forceControlsBox, null);
     forceControlsBox.add(jPanel1, null);
