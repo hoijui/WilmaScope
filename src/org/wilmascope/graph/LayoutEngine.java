@@ -21,10 +21,13 @@
 package org.wilmascope.graph;
 
 /**
- * $Id$
  * An interface which a class which determines a layout for a cluster must
  * implement
+ * $Id$
  * $Log$
+ * Revision 1.6  2002/03/27 07:28:14  tgdwyer
+ * Documentation changes
+ *
  * Revision 1.5  2002/03/27 07:20:50  tgdwyer
  * Minor changes
  *
