@@ -31,8 +31,11 @@ Framework</a></li>
     <li><a href="#Example_%3F_Random_Graph_Generator">Example &#8211; Random
 Graph Generator</a> </li>
   </ul>
-  <li><a href="#Creating_Applications_Based_on">Creating Applications
-Based on GraphCanvas</a></li>
+  <li><a href="#Creating_Applications_Based_on">Plug-ins for Modifying
+Graphs or Clusters<br>
+    </a></li>
+  <li><a href="#Plug-ins_for_Performing_GraphCluster">Plug-ins for
+Performing Graph/Cluster Analysis</a></li>
   <li><a href="#File_Formats">File Formats</a> </li>
   <ul>
     <li><a href="#XML_Wilma_Graph_XWG_File_Format">XML Wilma Graph (XWG)</a>
@@ -161,7 +164,11 @@ procedure for
 constructing a graph by implementing the GraphGenerator framework (see <a
  href="ExtendingWilmaScope.html#Creating_Test_Graphs">Creating Test
 Graphs</a>).</li>
-  <li>&lt;&gt;New layout algorithms can also be added as plugins by
+  <li>Similarly, modifier and analysis plug-ins can be created,
+respectively for modifying the structure of a graph or for mapping
+graph analysis methods to visual properties.<br>
+  </li>
+  <li>New layout algorithms can also be added as plugins by
 extending
 the WilmaScope <a
  href="ExtendingWilmaScope.html#Creating_New_Layout_Engines">LayoutEngine
@@ -177,14 +184,13 @@ WilmaScope GraphCanvas and API in a custom GUI (see <a
  href="ExtendingWilmaScope.html#Creating_Applications_Based_on">Creating
 Applications Based on GraphCanvas</a> and
 also the <a href="index.html">WilmaScope Javadoc</a>).</li>
-&lt;&gt;<li>A user can interact with the WilmaScope GUI to add or edit
+  <li>A user can interact with the WilmaScope GUI to add or edit
 graph
 components (see the user help documentation).</li>
 </ul>
 <div style="text-align: center;"><img
  alt="Different ways of using Wilma"
- src="ExtendingWilmaScope_files/wilmausage.png"
- style="width: 698px; height: 496px;"><br>
+ src="ExtendingWilmaScope_files/wilmausage.png"><br>
 Figure 2b: Different ways to use Wilma for custom applications<br>
 </div>
 <br>
@@ -232,10 +238,10 @@ extending WilmaScope.&nbsp; Instead, the API methods for creating or
 updating a graph are provided by the <a
  href="org/wilmascope/control/GraphControl.html">GraphControl </a>class.&nbsp;
 GraphControl defines facades (or simplified classes) as inner classes:
-ie, <a href="org/wilmascope/control/GraphControl.NodeFacade.html">GraphControl.NodeFacade</a>,
-<a href="org/wilmascope/control/GraphControl.EdgeFacade.html">GraphControl.EdgeFacade</a>
+ie, <a href="org/wilmascope/control/GraphControl.Node.html">GraphControl.Node</a>,
+<a href="org/wilmascope/control/GraphControl.Edge.html">GraphControl.Edge</a>
 and
-<a href="org/wilmascope/control/GraphControl.ClusterFacade.html">GraphControl.ClusterFacade</a>.&nbsp;
+<a href="org/wilmascope/control/GraphControl.Cluster.html">GraphControl.Cluster</a>.&nbsp;
 When a GraphControl object is
 instantiated a root cluster is created upon which a graph may be
 built.&nbsp; As a basic example consider the following code fragment:<br>
@@ -399,8 +405,8 @@ selecting "Modify Cluster" from the resultant cluster options menu</li>
  style="width: 600px; height: 490px;"><br>
 <br>
 <div style="text-align: left;">As of writing this document WilmaScope
-includes the following graph modifier plug-ins:<br>
-<br>
+includes the following graph modifier plug-ins (found in
+org.wilmascope.graphmodifier.plugin):<br>
 <ul>
   <li>ChangeViews - replace the GraphElementViews of nodes and/or edges
 with the current default settings from the toolbar.</li>
@@ -415,8 +421,35 @@ together in the current layout</li>
 edges are monotonically directed (uses DirectedCycleRemoval).<br>
   </li>
 </ul>
+<h2><a name="Plug-ins_for_Performing_GraphCluster"></a>Plug-ins for
+Performing Graph/Cluster Analysis</h2>
+The GraphAnalysis plug-in framework works in a similar way to
+GraphModifier plugins, but GraphAnalysis plug-ins are not expected to
+modify the structure or attributes of a graph directly.&nbsp; Rather,
+they should set a property in nodes and edges corresponding to the name
+of the plugin (the string returned by the getName method) with a
+floating point value that can be mapped by other classes to visual
+attributes (for example, the VisualMapping classes defined in the
+org.wilmascope.graphanalysis package).<br>
 <br>
+A graph analysis plug-in must extend the
+org.wilmascope.graphanalysis.GraphAnalysis class, implementing the
+getName and analyse methods.&nbsp; As with GraphModifier getName simply
+returns a descriptive string.&nbsp; The analyse method takes no
+argument.&nbsp; Rather, you must use getCluster() to operate on the
+cluster in the analyse method.&nbsp; For example:<br>
+<pre>/**<br> * Calculate degree centrality for each node, ie for node v in V:<br> * degreecentrality(v) = degree(v)/max(degree(w)|w in V)<br> * <br> * @author dwyer<br> */<br>public class DegreeCentrality extends GraphAnalysis {<br><br>  public String getName() {<br>    return "Degree Centrality";<br>  }<br>  <br>  /*<br>   * @see org.wilmascope.graphanalysis.GraphAnalysis#analyse(org.wilmascope.control.GraphControl.Cluster)<br>   */<br>  public void analyse() {<br>    int maxDegree = 0;<br>    for (Node n : getCluster().getNodes()) {<br>      int degree = n.getDegree();<br>      if (degree &gt; maxDegree) {<br>        maxDegree = degree;<br>      }<br>    }<br>    if (maxDegree &gt; 0) {<br>      for (Node n : getCluster().getNodes()) {<br>        float degreeCentrality = (float) n.getDegree() / (float) maxDegree;<br>        n.getProperties().setProperty(getName(), "" + degreeCentrality);<br>      }<br>    }<br>  }<br>}<br></pre>
+There is no need for a getControls method in GraphAnalysis
+plug-ins.&nbsp; By default an instance of AnalysisPanel is created by
+the super class.&nbsp; AnalysisPanel allows a user to choose visual
+mappings for the results of the analysis, and appears in the Graph
+Analysis window, shown below with a number of mappings defined for
+various analysis plugins:<br>
 <br>
+<div style="text-align: center;"><img alt="analysis mappings example"
+ src="ExtendingWilmaScope_files/analysismappings.png"
+ style="width: 565px; height: 514px;"><br>
+</div>
 </div>
 </div>
 <h2><a name="File_Formats"></a>File Formats</h2>
@@ -812,38 +845,171 @@ File Format file format. Better support is planned.<br>
 Element Glyphs</h2>
 <h2><a name="Creating_New_Layout_Engines"></a>Creating New Layout
 Engines</h2>
-To create a new layout engine plugin, a developer must implement the
-LayoutEngine interface below, and also extend the NodeLayout and
+To create a new layout engine plugin, a developer must extend the
+LayoutEngine abstract class, and also extend the NodeLayout and
 EdgeLayout abstract classes which are used to store any layout specific
-properties for nodes and edges.<br>
-<pre><i><font color="#b22222">/**<br> * Classes which determine layout for a particular cluster must implement this<br> * interface.<br> *<br> * @author Tim Dwyer<br> * @version $Id$<br> *<br> */</font></i><br><b><font
- color="#a020f0">public</font></b> <b><font color="#a020f0">interface</font></b> LayoutEngine&lt;N <b><font
- color="#a020f0">extends</font></b> NodeLayout,E <b><font
- color="#a020f0">extends</font></b> EdgeLayout&gt; {<br>  <i><font
- color="#b22222">/**<br>   * calculate the changes required to move the graph to a nicer layout.  This method<br>   * does not actually update the position of the nodes, rather this should be done by the<br>   * {@link #applyLayout} method.  Potentially, this means that<br>   * the caller can calculate new positions (stored in the NodeLayouts), then opt not to<br>   * apply the changes if it does not lead to an improvement.  <br>   * In practice this has not yet been utilised and such<br>   * decisions are usually made internally to the layout engine.<br>   */</font></i><br>  <b><font
- color="#a020f0">public</font></b> <b><font color="#a020f0">void</font></b> calculateLayout();<br>  <i><font
- color="#b22222">/**<br>   * apply the changes calculated by<br>   * {@link #calculateLayout}<br>   * @return true when a stable state is reached<br>   */</font></i><br>  <b><font
- color="#a020f0">public</font></b> <b><font color="#a020f0">boolean</font></b> applyLayout();<br>  <i><font
- color="#b22222">/**<br>   * Return a string descriptor for the layout engine type.  Useful in GUI elements<br>   * such as comboboxes<br>   */</font></i><br>  <b><font
- color="#a020f0">public</font></b> String getName();<br>  <i><font
- color="#b22222">/**<br>   * Factory method to create a new NodeLayout implementation compatible with<br>   * the layout engine implementing this interface.<br>   */</font></i><br>  <b><font
- color="#a020f0">public</font></b> N createNodeLayout(Node n);<br>  <i><font
- color="#b22222">/**<br>   * Factory method to create a new EdgeLayout implementation compatible with<br>   * the layout engine implementing this interface.<br>   */</font></i><br>  <b><font
- color="#a020f0">public</font></b> E createEdgeLayout(Edge e);<br>  <b><font
- color="#a020f0">public</font></b> Properties getProperties();<br>  <b><font
- color="#a020f0">public</font></b> <b><font color="#a020f0">void</font></b> setProperties(Properties p);<br>  <b><font
- color="#a020f0">public</font></b> JPanel getControls();<br>  <i><font
- color="#b22222">/**<br>   * The LayoutEngine should have no constructor.  It should be initialised with this method.<br>   */</font></i><br>  <b><font
- color="#a020f0">public</font></b> <b><font color="#a020f0">void</font></b> init(Cluster root);<br>}<br><br></pre>
-Once these classes have been defined and compiled you should add the
+properties for nodes and edges.&nbsp; For example, here is the code for
+the RandomLayout class:<br>
+<span style="font-family: monospace;"><br>
+package org.wilmascope.randomlayout;<br>
+<br>
+import javax.swing.JPanel;<br>
+<br>
+import org.wilmascope.global.RandomGenerator;<br>
+import org.wilmascope.graph.Edge;<br>
+import org.wilmascope.graph.EdgeLayout;<br>
+import org.wilmascope.graph.LayoutEngine;<br>
+import org.wilmascope.graph.Node;<br>
+import org.wilmascope.graph.NodeLayout;<br>
+<br>
+<span style="color: rgb(0, 153, 0);">/**</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;* Assigns random positions
+to nodes. This is the simplest possible layout</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;* algorithm I can think of.
+Use this as a starting point for creating your own</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;* layout engines.</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;* </span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;* @author dwyer</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;*/</span><br>
+public class RandomLayout extends LayoutEngine&lt;RandomNode,
+RandomEdge&gt; {<br>
+<br>
+<span style="color: rgb(0, 153, 0);">&nbsp; /*</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * This method always
+returns true because this layout can be completed in one</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * step. An iterative
+algorithm could return false until complete.</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * </span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * @see
+org.wilmascope.graph.LayoutEngine#applyLayout()</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; */</span><br>
+&nbsp; public boolean applyLayout() {<br>
+&nbsp;&nbsp;&nbsp; for (Node n : getRoot().getNodes()) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+n.setPosition(RandomGenerator.getPoint3f());<br>
+&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; return true;<br>
+&nbsp; }<br>
+<br>
+<span style="color: rgb(0, 153, 0);">&nbsp; /*</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * Name to appear in
+the layout menu.</span><br style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * </span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * @see
+org.wilmascope.graph.LayoutEngine#getName()</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; */</span><br
+ style="color: rgb(0, 153, 0);">
+&nbsp; public String getName() {<br>
+&nbsp;&nbsp;&nbsp; return "Random";<br>
+&nbsp; }<br>
+<br>
+<span style="color: rgb(0, 153, 0);">&nbsp; /*</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * called by
+super.init when layout instantiated</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * </span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * @see
+org.wilmascope.graph.LayoutEngine#createNodeLayout(org.wilmascope.graph.Node)</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; */</span><br
+ style="color: rgb(0, 153, 0);">
+&nbsp; public RandomNode createNodeLayout(Node n) {<br>
+&nbsp;&nbsp;&nbsp; return new RandomNode();<br>
+&nbsp; }<br>
+<br>
+<span style="color: rgb(0, 153, 0);">&nbsp; /*</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * called by
+super.init when layout instantiated</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * </span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * @see
+org.wilmascope.graph.LayoutEngine#createEdgeLayout(org.wilmascope.graph.Edge)</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; */</span><br>
+&nbsp; public RandomEdge createEdgeLayout(Edge e) {<br>
+&nbsp;&nbsp;&nbsp; return new RandomEdge();<br>
+&nbsp; }<br>
+<br>
+<span style="color: rgb(0, 153, 0);">&nbsp; /*</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * Potentially we
+could create a control panel in the constructor to be</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * returned here. Such
+a control panel would allow the user to set various</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * layout properties.</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * </span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; * @see
+org.wilmascope.graph.LayoutEngine#getControls()</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; */</span><br
+ style="color: rgb(0, 153, 0);">
+&nbsp; public JPanel getControls() {<br>
+&nbsp;&nbsp;&nbsp; return new JPanel();<br>
+&nbsp; }<br>
+<br>
+}<br>
+<span style="color: rgb(0, 153, 0);">/**</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;* When the layout engine is
+instatiated, instances of this classes are assigned</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;* to all nodes in the root
+cluster. You can store node data specific to your</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;* layout in here.</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;*/</span><br>
+class RandomNode extends NodeLayout {<br>
+}<br>
+<br>
+<span style="color: rgb(0, 153, 0);">/**</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;* When the layout engine is
+instatiated, instances of the following class are</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;* assigned to all edges in
+the root cluster. You can store edge data specific</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;* to your layout here.</span><br
+ style="color: rgb(0, 153, 0);">
+<span style="color: rgb(0, 153, 0);">&nbsp;*/</span><br>
+class RandomEdge extends EdgeLayout {<br>
+}<br>
+<br>
+<br>
+</span>Once these classes have been defined and compiled you should add
+the
 fully qualified path for your LayoutEngine class to the
 WILMA_CONSTANTS.properties file, and optionally set it as the default
 layout, eg:<br>
-<pre>LayoutPlugins=org.wilmascope.forcelayout.ForceLayout,org.wilmascope.multiscalelayout.MultiScaleLayout,org.wilmascope.fastlayout.FastLayout,org.wilmascope.fadelayout.FadeLayout,org.wilmascope.highdimensionlayout.HighDimensionLayout,org.wilmascope.degreelayout.DegreeLayout</pre>
-<pre>DefaultLayout=Force Directed</pre>
-Then, run WilmaScope, ensuring the path to your new classes is added to
+<pre>LayoutPlugins=org.wilmascope.forcelayout.ForceLayout,....,org.wilmascope.randomlayout.RandomLayout</pre>
+<pre>DefaultLayout=Random</pre>
+Then, run WilmaScope, ensuring the path to your new classes and your
+copy of the WILMA_CONSTANTS.properties file are added to
 the classpath, eg:<br>
-<pre>java -cp %WILMA_HOME%/lib;%PATH_TO_YOUR_LAYOUT_CLASS% -jar %WILMA_HOME%/lib/wilma.jar</pre>
+<pre>java -cp %PATH_TO_YOUR_COPY_OF_WILMA_CONSTANTS_FILE%;%PATH_TO_YOUR_LAYOUT_CLASS% <br>     -jar %WILMA_HOME%/lib/wilma.jar</pre>
 <h2><a name="Getting_the_WilmaScope_Source_Code"></a>Getting the
 WilmaScope Source Code</h2>
 As
@@ -881,8 +1047,12 @@ settings: </li>
   <li>Navigate into
 :pserver:anonymous@cvs.sourceforge.net:/cvsroot/wilma
 &gt; HEAD and check out the "Wilma" module (Select "Wilma" and right
-click &gt; Check Out as Project).&nbsp; Note that "WilmaScope" and
-"WilmaToo" are both obsolete. </li>
+click &gt; Check Out as Project).</li>
+  <li>To compile: set the compiler compliance settings to 5.0, ensure
+that all jars in the %WILMA_HOME%/lib dir are included in the class path</li>
+  <li>To run: ensure that lib dir and all jars in lib dir are in class
+path.<br>
+  </li>
 </ul>
 <h2><a name="Code_Conventions"></a>Code Conventions</h2>
 </body>
