@@ -1,0 +1,152 @@
+<project name="WilmaScope" default="all" basedir=".">
+
+  <!-- set global properties for this build -->
+  <property name="src" value="src"/>
+  <property name="doc" value="doc"/>
+  <property name="lib" value="lib"/>
+  <property name="dest" value="classes"/>
+  <property name="plugin" value="plugin"/>
+  <property name="dist"  value="dist"/>
+  <property name="wilmahost"  value="localhost"/>
+  <property name="wilmaport"  value="58317"/>
+  <property name="optimization"  value="on"/>
+  <property name="cvsroot"  
+    value="tgdwyer@cvs.wilma.sourceforge.net:/cvsroot/wilma"/>
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${dest}"/>
+    <mkdir dir="${doc}"/>
+  </target>
+
+  <target name="idlcheck"
+     description="check if source generated from idl is up to date">
+    <uptodate property="idl.required" targetfile="${src}/idl/WilmaChat.idl">
+      <srcfiles dir="${src}/org/wilmascope/chat"/>
+    </uptodate>
+  </target>
+
+  <target name="idl" depends="idlcheck" if="idl.required" 
+     description="Generating CORBA stubs/skeletons...">
+    <exec dir="${src}" executable="${JAVA_HOME}/bin/idlj">
+      <arg value="-fall"/>
+      <arg value="-verbose"/>
+      <arg file="${src}/idl/WilmaChat.idl"/>
+    </exec>
+    <exec dir="${src}" executable="${JAVA_HOME}/bin/idlj">
+      <arg value="-fallTIE"/>
+      <arg value="-verbose"/>
+      <arg file="${src}/idl/WilmaChat.idl"/>
+    </exec>
+  </target>
+
+  <target name="chat" depends="idl,compile"
+    description="compile all the CORBA stuff including the generated code, the Wilma Server and the sample client">
+    <!-- Compile the java code from ${src} into ${classes} -->
+    <javac srcdir="${src}" destdir="${dest}" optimize="${optimization}"
+       includes="org/wilmascope/chat/**,org/wilmascope/control/TalkingGraph.java,org/wilmascope/TestChatClient.java" >
+    </javac>
+  </target>
+
+  <target name="compile" depends="init"
+    description="Compile just the core wilma code">
+    <!-- Compile the java code from ${src} into ${classes} -->
+    <javac srcdir="${src}" destdir="${dest}" optimize="${optimization}"
+       excludes="org/wilmascope/chat/**,org/wilmascope/TestChatClient.java,org/wilmascope/control/TalkingGraph.java,org/wilmascope/control/WilmaChatServCORBA.java">
+      <classpath>
+        <pathelement location="jaxp.jar"/>
+        <pathelement location="xalan.jar"/>
+        <pathelement location="crimson.jar"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="compileplugin" depends="compile">
+    <!-- Compile the java code from ${src} into ${plugin} -->
+    <javac srcdir="${src}/${plugin}" destdir="${lib}" 
+      optimize="${optimization}">
+      <classpath>
+        <pathelement location="${dest}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="dist" depends="compile,compileplugin">
+    <!-- Create the distribution directory -->
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <mkdir dir="${dest}/images"/>
+    <copy todir="${dest}/images" >
+      <fileset dir="${lib}/images"/>
+    </copy>
+    <jar manifest="META-INF/MANIFEST.MF" jarfile="${lib}/wilma.jar" basedir="${dest}"/>
+    <mkdir dir="${dist}/bin"/>
+    <copy file="README" todir="${dist}"/>
+    <copy file="COPYING" todir="${dist}"/>
+    <copy todir="${dist}/${lib}">
+      <fileset dir="${lib}"/>
+    </copy>
+    <copy todir="${dist}/bin" >
+      <fileset dir="bin"/>
+    </copy>
+    <mkdir dir="tmp"/>
+    <copy todir="tmp"><fileset dir="dist"/></copy>
+    <zip zipfile="Wilma_${DSTAMP}.zip">
+      <zipfileset dir="tmp" prefix="Wilma"/>
+    </zip>
+    <delete dir="tmp"/>
+  </target>
+
+  <target name="all" depends="clean, compile, chat, dist, doc">
+  </target>
+
+  <target name="build" depends="compile">
+  </target>
+
+  <target name="run" depends="compile, compileplugin" 
+    description="run interactive Wilma session">
+    <java classname="org.wilmascope.control.WilmaMain" dir="${lib}" fork="yes">
+      <classpath>
+        <pathelement location="${dest}"/>
+        <pathelement location="${lib}/plugin"/>
+        <pathelement location="${lib}/jaxp.jar"/>
+        <pathelement location="${lib}/xalan.jar"/>
+        <pathelement location="${lib}/crimson.jar"/>
+      </classpath>
+    </java>
+  </target>
+  <target name="rundist" depends="dist" 
+    description="run interactive Wilma session from jar">
+    <java classname="org.wilmascope.control.WilmaMain" fork="yes">
+      <classpath>
+        <pathelement location="wilma.jar"/>
+        <pathelement location="plugin"/>
+        <pathelement location="jaxp.jar"/>
+        <pathelement location="xalan.jar"/>
+        <pathelement location="crimson.jar"/>
+      </classpath>
+    </java>
+  </target>
+
+  <target name="doc" description="generate javadoc documentation">
+    <mkdir dir="${doc}"/>
+    <javadoc sourcepath="${src}" packagenames="org.wilmascope.graph,org.wilmascope.control,org.wilmascope.view,org.wilmascope.viewplugin,org.wilmascope.patterns,org.wilmascope.gui,org.wilmascope.global,org.wilmascope.forcelayout,org.wilmascope.file,org.wilmascope" destdir="${doc}"/>
+  </target>
+
+  <target name="clean">
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${dest}"/>
+    <delete dir="${dist}"/>
+    <delete dir="${chat}"/>
+    <delete dir="${doc}"/>
+    <delete dir="${lib}/${plugin}"/>
+    <delete file="${lib}/wilma.jar"/>
+    <delete dir="viewplugin"/>
+  </target>
+  <target name="update" depends="clean"
+    description="check source out of cvs">
+    <cvs command="update" 
+      cvsroot="${cvsroot}"/>
+  </target>
+</project>
+

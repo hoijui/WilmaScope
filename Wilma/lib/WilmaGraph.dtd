@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+  <!ELEMENT WilmaGraph (Cluster)>
+  <!ELEMENT Cluster (Force*,Node*,Cluster*,Edge*)>
+  <!ELEMENT Force EMPTY>
+  <!ATTLIST Force
+    Type CDATA #REQUIRED
+    Strength CDATA #REQUIRED>
+  <!ELEMENT Node (Colour?)>
+  <!ATTLIST Node
+    ID ID #REQUIRED
+    Label CDATA #IMPLIED
+    Data CDATA #IMPLIED>
+  <!ELEMENT Colour EMPTY>
+  <!ATTLIST Colour
+    Red CDATA #REQUIRED
+    Green CDATA #REQUIRED
+    Blue CDATA #REQUIRED>
+  <!ELEMENT Edge EMPTY>
+  <!ATTLIST Edge
+    StartID IDREF #REQUIRED
+    EndID IDREF #REQUIRED
+    ViewType CDATA #IMPLIED>
+  <!ELEMENT EdgeData EMPTY>
