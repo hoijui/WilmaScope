@@ -54,7 +54,7 @@ public class WilmaMain extends JApplet {
     setJMenuBar(menuBar);
     //graphControl.setRootPickingClient(rootMenu);
     GraphControl.ClusterFacade r = graphControl.getRootCluster();
-    graphControl.getPickListener().setNodeOptionsClient(new NodeOptionsMenu(graphCanvas, r, controlPanel));
+    graphControl.getPickListener().setNodeOptionsClient(new NodeOptionsMenu(graphCanvas, graphControl, r, controlPanel));
     graphControl.getPickListener().setClusterOptionsClient(new ClusterOptionsMenu(graphCanvas, r, controlPanel));
     graphControl.getPickListener().setEdgeOptionsClient(new EdgeOptionsMenu(graphCanvas, r));
     r.addForce("Repulsion").setStrength(1f);
