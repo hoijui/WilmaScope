@@ -141,7 +141,7 @@ import org.omg.CORBA.*;
   class ClusterServant extends NodeServant implements ClusterOperations {
     // if only there were a getImpl() method in the _Tie classes I wouldn't
     // need the following!
-    class NodeTie extends Node_Tie {
+    class NodeTie extends NodePOATie {
       NodeServant servant;
       NodeTie(NodeServant n) {
         super(n);
@@ -163,7 +163,7 @@ import org.omg.CORBA.*;
     }
     public Cluster addNewCluster() {
       ClusterServant servant = new ClusterServant(cluster.addNewCluster());
-      return (Cluster)new Cluster_Tie(servant);
+      return (Cluster)new ClusterPOATie(servant);
     }
     /**
      * create a new node and add it to the cluster
@@ -180,14 +180,14 @@ import org.omg.CORBA.*;
         cluster.addEdge(
           ((NodeTie)start).getServant().getNode(),
           ((NodeTie)end).getServant().getNode()));
-      return (Edge)new Edge_Tie(servant);
+      return (Edge)new EdgePOATie(servant);
     }
     /**
      * Create a new cluster and add it as a member of this cluster
      */
     public Cluster addCluster() {
       ClusterServant servant = new ClusterServant(cluster.addCluster());
-      return (Cluster)new Cluster_Tie(servant);
+      return (Cluster)new ClusterPOATie(servant);
     }
     /**
      * remove a node from the cluster
@@ -250,7 +250,7 @@ class GraphControlServant extends _GraphControlStub {
    */
   public Cluster getRootCluster() {
     ClusterServant servant = new ClusterServant(gc.getRootCluster());
-    return (Cluster)new Cluster_Tie(servant);
+    return (Cluster)new ClusterPOATie(servant);
   }
   public void setRootCluster(Cluster rootCluster) {
     gc.setRootCluster(((ClusterServant)rootCluster).getCluster());

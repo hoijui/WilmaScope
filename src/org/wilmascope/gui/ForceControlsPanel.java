@@ -44,7 +44,7 @@ public class ForceControlsPanel extends JPanel {
 
   // Variables declaration
   JSlider velocityAttenuationSlider = new JSlider();
-  JSlider angularInertiaSlider = new JSlider();
+  JSlider frictionSlider = new JSlider();
   JSlider iterationsPerFrameSlider = new JSlider();
   JScrollPane jScrollPane1 = new JScrollPane();
   JScrollPane jScrollPane2 = new JScrollPane();
@@ -87,20 +87,18 @@ public class ForceControlsPanel extends JPanel {
       }
     });
     forceLayoutControlsBox.add(velocityAttenuationSlider);
-    /*
-    angularInertiaSlider.setBorder (new javax.swing.border.TitledBorder("Angular Inertia"));
-    angularInertiaSlider.setMinorTickSpacing (10);
-    angularInertiaSlider.setPaintLabels (true);
-    angularInertiaSlider.setPaintTicks (true);
-    angularInertiaSlider.setMajorTickSpacing (50);
-    angularInertiaSlider.setValue ((int)((float)forceLayout.getAngularInertia())-1);
-    angularInertiaSlider.addChangeListener (new javax.swing.event.ChangeListener () {
+    frictionSlider.setBorder (new javax.swing.border.TitledBorder("Friction Coefficient"));
+    frictionSlider.setMinorTickSpacing (10);
+    frictionSlider.setPaintLabels (true);
+    frictionSlider.setPaintTicks (true);
+    frictionSlider.setMajorTickSpacing (50);
+    frictionSlider.setValue ((int)((float)Constants.frictionCoefficient));
+    frictionSlider.addChangeListener (new javax.swing.event.ChangeListener () {
       public void stateChanged (javax.swing.event.ChangeEvent evt) {
-        forceLayout.setAngularInertia((float)angularInertiaSlider.getValue()+1);
+        Constants.frictionCoefficient = (float)frictionSlider.getValue();
       }
     });
-    forceLayoutControlsBox.add(angularInertiaSlider);
-*/
+    forceLayoutControlsBox.add(frictionSlider);
     balancedThresholdSlider.setBorder (new javax.swing.border.TitledBorder("Balanced Threshold"));
     balancedThresholdSlider.setMinorTickSpacing (10);
     balancedThresholdSlider.setPaintLabels (true);

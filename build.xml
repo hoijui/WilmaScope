@@ -5,7 +5,6 @@
   <property name="doc" value="doc"/>
   <property name="lib" value="lib"/>
   <property name="dest" value="classes"/>
-  <property name="plugin" value="plugin"/>
   <property name="dist"  value="dist"/>
   <property name="wilmahost"  value="localhost"/>
   <property name="wilmaport"  value="58317"/>
@@ -63,17 +62,7 @@
     </javac>
   </target>
 
-  <target name="compileplugin" >
-    <!-- Compile the java code from ${src} into ${plugin} -->
-    <javac srcdir="${src}/${plugin}" destdir="${lib}" 
-      optimize="${optimization}">
-      <classpath>
-        <pathelement location="${dest}"/>
-      </classpath>
-    </javac>
-  </target>
-
-  <target name="dist" depends="compile,compileplugin">
+  <target name="dist" depends="compile">
     <!-- Create the distribution directory -->
     <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
     <mkdir dir="${dest}/images"/>
@@ -92,7 +81,7 @@
       <fileset dir="${lib}"/>
     </copy>
     <copy todir="${dist}/userdoc">
-      <fileset dir="userdoc"/>
+      <fileset dir="userdoc" excludes="book/**"/>
     </copy>
     <copy todir="${dist}/data">
       <fileset dir="data"/>
@@ -114,18 +103,17 @@
     <delete dir="Wilma"/>
   </target>
 
-  <target name="all" depends="clean, compile, chat, dist, doc, distpackage">
+  <target name="all" depends="clean, compile, dist, doc, distpackage">
   </target>
 
   <target name="build" depends="compile">
   </target>
 
-  <target name="run" depends="compile, compileplugin" 
+  <target name="run" depends="compile" 
     description="run interactive Wilma session">
     <java classname="org.wilmascope.control.WilmaMain" dir="${lib}" fork="yes">
       <classpath>
         <pathelement location="${dest}"/>
-        <pathelement location="${lib}/plugin"/>
         <pathelement location="${lib}/jaxp.jar"/>
         <pathelement location="${lib}/xalan.jar"/>
         <pathelement location="${lib}/crimson.jar"/>
@@ -137,7 +125,6 @@
     <java classname="org.wilmascope.control.WilmaMain" fork="yes">
       <classpath>
         <pathelement location="wilma.jar"/>
-        <pathelement location="plugin"/>
         <pathelement location="jaxp.jar"/>
         <pathelement location="xalan.jar"/>
         <pathelement location="crimson.jar"/>
@@ -147,7 +134,7 @@
 
   <target name="doc" description="generate javadoc documentation">
     <mkdir dir="${doc}"/>
-    <javadoc sourcepath="${src}" packagenames="org.wilmascope.graph,org.wilmascope.control,org.wilmascope.view,org.wilmascope.viewplugin,org.wilmascope.patterns,org.wilmascope.gui,org.wilmascope.global,org.wilmascope.forcelayout,org.wilmascope.file,org.wilmascope.dotlayout,org.wilmascope" destdir="${doc}"/>
+    <javadoc sourcepath="${src}" packagenames="org.wilmascope.graph,org.wilmascope.control,org.wilmascope.view,org.wilmascope.patterns,org.wilmascope.gui,org.wilmascope.global,org.wilmascope.forcelayout,org.wilmascope.file,org.wilmascope.dotlayout,org.wilmascope" destdir="${doc}"/>
   </target>
 
   <target name="clean">
@@ -156,9 +143,7 @@
     <delete dir="${dist}"/>
     <delete dir="${src}/org/wilmascope/chat"/>
     <delete dir="${doc}"/>
-    <delete dir="${lib}/${plugin}"/>
     <delete file="${lib}/wilma.jar"/>
-    <delete dir="viewplugin"/>
   </target>
   <target name="update" depends="clean"
     description="check source out of cvs">
