@@ -60,6 +60,7 @@ public class Repulsion extends Force {
       for(int j=0; j < nodes.size(); j++) {
         if(j==i) continue;
         node2 = nodes.get(j);
+        if(!sameLevel(node1,node2)) continue;
         v.sub(node1.getPosition(),node2.getPosition());
         separation = v.length();
         /* - node1.getRadius() - node2.getRadius();
@@ -92,7 +93,19 @@ public class Repulsion extends Force {
     }
   }
 
-  // some workhorse temporary objects
+  /**
+ * @param node1
+ * @param node2
+ * @return
+ */
+private boolean sameLevel(Node node1, Node node2) {
+	NodeForceLayout l1=(NodeForceLayout)node1.getLayout();
+	NodeForceLayout l2=(NodeForceLayout)node2.getLayout();
+	if(l1.levelConstraint==l2.levelConstraint) return true;
+	return false;
+}
+
+// some workhorse temporary objects
   private Vector3f repulsion = new Vector3f(), v = new Vector3f();
   private float separation;
   private static float separationThreshold = 0.001f;
