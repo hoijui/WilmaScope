@@ -22,6 +22,7 @@ package org.wilmascope.viewplugin;
 
 import org.wilmascope.view.*;
 import org.wilmascope.gui.QueryFrame;
+import org.wilmascope.graph.*;
 
 import javax.media.j3d.*;
 import javax.vecmath.*;
@@ -31,12 +32,19 @@ import java.util.*;
 public class ColumnClusterView extends ClusterView {
   public void draw() {
     try {
-    Point3f p = getNode().getPosition();
-    p.z = position.z;
-    Vector3f v = new Vector3f(p);
-    //v.z+=columnCluster.getTopNode().getRadius();
-    v.z+=0.11f;
-    setTranslation(v);
+      Point3f p = new Point3f();
+      NodeList nodes = ((Cluster)getNode()).getAllNodes();
+      for(nodes.resetIterator();nodes.hasNext();) {
+        Point3f t = nodes.nextNode().getPosition();
+        if(t.z>p.z) {
+          p.set(t);
+        }
+      }
+      //p.z = position.z;
+      Vector3f v = new Vector3f(p);
+      //v.z+=columnCluster.getTopNode().getRadius();
+      v.z+=0.11f;
+      setTranslation(v);
     } catch(NullPointerException e) {System.out.println("WARNING: Null pointer in ColumnClusterView.draw()");}
   }
   Point3f position;
