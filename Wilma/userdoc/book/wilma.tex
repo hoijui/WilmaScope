@@ -98,12 +98,13 @@
 \subsection{Witty Survey Subsection}
 {\em survey previous stuff.}
 
-\subsection{Debonair aims for the sultry Wilma}
+\subsection{The Motivation for WilmaScope}
 \label{motivation}
 
-Despite, or perhaps because of, the extensive research literature on 
-graph drawing techniques, there is a lack of general-purpose visualisation
-systems, particularly for application to 3-dimensional embeddings.
+Despite, or perhaps because of, the extensive research literature on graph
+drawing techniques, there is a lack of state-of-the-art, general-purpose
+visualisation systems, particularly for application to 3-dimensional
+embeddings.
 
 \paragraph{}
 
@@ -117,6 +118,17 @@ software across these application domains.
 Within the graph drawing community itself, a system may also aspire to 
 streamline, elucidate and beautify the work of algorithm design, comparison
 and optimisation.
+
+\paragraph{}
+
+In this chapter, we describe WilmaScope, a sophisticated graph visualisation
+infrastructure, which attempts to meet these goals.  In
+Section~\ref{sec:design}, we describe the Wilma architecture, modular
+subsystems, and facilities for control by human users and other software.
+Section~\ref{sec:results} we demonstrate Wilma in action, with examples of
+graphical results, domain specific applications and feedback from users.
+Finally, Section~\ref{sec:conclusions} reviews Wilma's contribution and
+identifies directions for future development.
 
 \section{Design}\label{sec:design}
 \subsection{Architecture}
@@ -212,26 +224,69 @@ Cowling~\cite{cowling02fast} has implemented a fast layout engine for
 WilmaScope which employs simulated annealing with potential energy caching
 to achieve linear-time graph embeddings.  Cowling was able to demonstrate
 that the algorithms of \cite{davidson01noise} do appear to achieve linear
-time results, but that when the grid side $v \centerdot d$ must be adjusted to
+time results, but that when the grid size $v \centerdot d$ must be adjusted to
 prevent folding in large graphs, space and time complexity are
 no longer linear.
 
 \paragraph{}
 
-Cowling's work serves to demonstrate the utility of Wilma as a platform; with
-the WilmaScope rendering and navigation system, and the availability of
-convenient data structures for input and dataset management, algorithmic
-experiments can be performed at optimal speeds.
-
-
-\paragraph{}
+Cowling's work serves to demonstrate the utility of Wilma as an empirical
+platform; with the WilmaScope rendering and navigation system, and the
+availability of convenient data structures for input and dataset management,
+algorithmic experiments can be performed at optimal speeds.
 
 \subsubsection{DOT: heirarchical layout}
 \subsection{User Interfaces}
 \subsection{Programming Interfaces}
-\em{API/CORBA interface/etc...}
+
+A key design goal for Wilma was the provision of graph visualisation
+facilities for other programs with very low barriers to development.  In order
+to achieve this, we have implemented two external access APIs which give
+programmers the ability to call up, extend and manipulate graph visualisations
+in real-time.  These are the WilmaChat graph definition language, and the
+Wilma CORBA interface.
+
+\subsubsection{WilmaChat: A Dialogue on Graph Structure}
+
+The simplest and lowest-energy programming interface to Wilma is the WilmaChat
+language.  WilmaChat operates by creating a server daemon which listens on a
+socket or pipe on the machine in question.
+
+\paragraph{}
+
+Clients can connect to WilmaChat and control graphs by passing commands
+in a simple language which allows them to instantiate arbitrary graph
+structures.
+
+\paragraph{}
+
+The advantage of WilmaChat is that it requires extremely little infrastructure
+from the developers's programming environment.  The ability to traverse
+internal graph structures and print a simple, formalised description of them
+is enough to produce navigable 3D output.
+
+\subsubsection{The Wilma CORBA Interface}
+
+While the WilmaChat language is extremely efficient for rapid application
+development, and can be driven by any programming environment on Wilma's
+supported platforms, there are a number of advanced features for which the
+socket dialogue is an inefficient mode of interaction.  For example, if
+developers want multiple clients to connect to a particular Wilma server, in
+the presence of access-control mediation; or if they wish to perform detailed
+interrogation of the graph embedding which Wilma has created --- then the use
+of a custom language requires more overhead.
+
+\paragraph{}
+
+In order to meet these more sophisticated requirements, we have implemented
+a Wilma control interface which sits atop CORBA (the Common Object Request
+Broker Archicture).  Since CORBA provides its own access control mechanisms,
+and good CORBA bindings handle all the marshalling and type requirements
+for a sophisticated API, programmers using languages which support CORBA
+can take advantage of these facilities without writing additional code.
 
 \section{The Importance of being Wilma -- Results}
+\label{sec:results}
 \begin{itemize}
 \item pretty pictures
 \item applications
@@ -239,6 +294,7 @@ experiments can be performed at optimal speeds.
 \end{itemize}
 
 \section{Conclusions}
+\label{sec:conclusions}
 \begin{itemize}
 \item megalomaniacal rants
 \item further work
