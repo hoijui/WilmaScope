@@ -199,7 +199,6 @@ public class FileHandler {
       GraphControl.Cluster graphRoot) {
     Vector<XMLGraph.Node> nodes = new Vector<XMLGraph.Node>();
     Vector<XMLGraph.Edge> edges = new Vector<XMLGraph.Edge>();
-    Vector forces = new Vector();
     Vector<XMLGraph.Cluster> clusters = new Vector<XMLGraph.Cluster>();
     xmlRoot.load(nodes, edges, clusters);
     XMLGraph.LayoutEngineType layoutEngine = xmlRoot.getLayoutEngineType();
