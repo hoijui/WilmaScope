@@ -1,0 +1,105 @@
+/*
+ * The following source code is part of the WilmaScope 3D Graph Drawing Engine
+ * which is distributed under the terms of the GNU Lesser General Public License
+ * (LGPL - http://www.gnu.org/copyleft/lesser.html).
+ *
+ * As usual we distribute it with no warranties and anything you chose to do
+ * with it you do at your own risk.
+ *
+ * Copyright for this work is retained by Tim Dwyer and the WilmaScope organisation
+ * (www.wilmascope.org) however it may be used or modified to work as part of
+ * other software subject to the terms of the LGPL.  I only ask that you cite
+ * WilmaScope as an influence and inform us (tgdwyer@yahoo.com)
+ * if you do anything really cool with it.
+ *
+ * The WilmaScope software source repository is hosted by Source Forge:
+ * www.sourceforge.net/projects/wilma
+ *
+ * -- Tim Dwyer, 2001
+ */
+
+package org.wilmascope.view;
+
+import org.wilmascope.graph.Edge;
+
+import javax.vecmath.*;
+import javax.media.j3d.*;
+import com.sun.j3d.utils.geometry.Cone;
+import javax.swing.*;
+
+/*
+ * Title:        WilmaToo
+ * Description:  Sequel to the ever popular WilmaScope software
+ * Copyright:    Copyright (c) 2001
+ * Company:      WilmaScope.org
+ * @author Tim Dwyer
+ * @version 1.0
+ */
+public abstract class EdgeView extends GraphElementView
+implements org.wilmascope.graph.EdgeView {
+  public void draw() {
+    edge.recalculate();
+    double l = edge.getLength();
+    if(l==0) {
+      edge.setVector(Constants.gc.getVector3f("MinVector"));
+      l=edge.getVector().length();
+    }
+    l-=edge.getStart().getRadius()+edge.getEnd().getRadius();
+    setFullTransform(
+      new Vector3d(1d,l,1d),
+      getPositionVector(),
+      getPositionAngle());
+  }
+  // Returns the angle between the initVector and the target vector
+  // used by redraw.
+  private AxisAngle4f getPositionAngle() {
+    Vector3f norm = new Vector3f();
+    Vector3f v = edge.getVector();
+    norm.cross(initVector,v);
+    return new AxisAngle4f(norm.x,norm.y,norm.z,initVector.angle(v));
+  }
+  // return the current position, mid-point, of the edge
+  private Vector3f getPositionVector() {
+    Vector3f v = new Vector3f(edge.getVector());
+    v.scaleAdd(0.5f,edge.getStart().getPosition());
+    if(edge.getEnd().getRadius()!=edge.getStart().getRadius()) {
+      Vector3f offset = new Vector3f(edge.getVector());
+      offset.normalize();
+      offset.scale((edge.getEnd().getRadius()-edge.getStart().getRadius())/2f);
+      v.sub(offset);
+    }
+    // Calculate the offset from other edges
+    //   as a vector normal to the z axis and the edge
+    if(multiEdgeOffset!=0f) {
+      Vector3f vMultiEdgeOffset = new Vector3f();
+      if(direction > 0) {
+        vMultiEdgeOffset.cross(edge.getVector(), Constants.vZ);
+      } else {
+        vMultiEdgeOffset.cross(Constants.vZ, edge.getVector());
+      }
+      vMultiEdgeOffset.normalize();
+      vMultiEdgeOffset.scale(multiEdgeOffset);
+      v.add(vMultiEdgeOffset);
+    }
+    return v;
+  }
+  public void setMultiEdgeOffset(int edgeIndex, int edgeCount, int direction) {
+    multiEdgeOffset = ((float)edgeIndex - ((float)edgeCount-1f)/2f) * 0.05f;
+    this.direction = direction;
+  }
+  private int direction=1;
+  public Edge getEdge() {
+    return edge;
+  }
+  public void setEdge(Edge edge) {
+    this.edge = edge;
+  }
+  public ImageIcon getIcon() {
+    return new ImageIcon(getClass().getResource("/images/edge.png"));
+  }
+  private Edge edge;
+  // A vector giving the default orientation of the edgeCylinder
+  private static Vector3f initVector = Constants.vY;
+  // offset to allow viewing of multiple edges between the same nodes
+  private float multiEdgeOffset=0f;
+}

@@ -1,0 +1,116 @@
+/*
+ * The following source code is part of the WilmaScope 3D Graph Drawing Engine
+ * which is distributed under the terms of the GNU Lesser General Public License
+ * (LGPL - http://www.gnu.org/copyleft/lesser.html).
+ *
+ * As usual we distribute it with no warranties and anything you chose to do
+ * with it you do at your own risk.
+ *
+ * Copyright for this work is retained by Tim Dwyer and the WilmaScope organisation
+ * (www.wilmascope.org) however it may be used or modified to work as part of
+ * other software subject to the terms of the LGPL.  I only ask that you cite
+ * WilmaScope as an influence and inform us (tgdwyer@yahoo.com)
+ * if you do anything really cool with it.
+ *
+ * The WilmaScope software source repository is hosted by Source Forge:
+ * www.sourceforge.net/projects/wilma
+ *
+ * -- Tim Dwyer, 2001
+ */
+
+module org {
+module wilmascope {
+  module chat {
+    struct Colour {
+      float red;
+      float green;
+      float blue;
+    };
+
+    struct Vec {
+      float x;
+      float y;
+      float z;
+    };
+
+    interface Force {
+      void setStrength(in float strength);
+    };
+
+    // An interface which provides a callback method which may be implemented
+    // on the client side, passed through to wilma through a
+    // GraphElement.setPickingClient method and will them be
+    // when the element gets clicked on by the mouse
+    interface PickingClient {
+      // button: is the mouse button which was pressed
+      // xpos, ypos: the screen coordinate where the button press took place
+      //             useful for popping up a menu dialog at the appropriate
+      //             place
+      void callback(in long x, in long y, in short button);
+    };
+
+    // Callback interface providing a method which will be called when a
+    // cluster settles
+    interface BalancedEventClient {
+      void callback();
+    };
+
+    // All displayed elements inherit the following methods from GraphElement
+    interface GraphElement {
+      // set the colour of a graph element
+      void setColour(in Colour c);
+
+      // mcorba compatible getColour - does not use struct
+      // void getColour(out float red, out float green, out float blue);
+
+      // hide the graph element's 3D view... it will still affect the force
+      // model but it will be invisible
+      void hide();
+
+      //void unhide();
+
+      // add a label to a graph element
+      void setLabel(in string label);
+
+      // set the object whose callback method will be called when the
+      // graph element is selected by a mouse click
+      void setPickingClient(in PickingClient client);
+			void delete();
+    };
+
+    // A node represents a vertex in a connected graph
+    interface Node : GraphElement {
+      void setRadius(in float radius);
+    };
+
+    // An edge joins two nodes
+    interface Edge : GraphElement {
+      // adjust the length of the edge
+      void setRelaxedLength(in float length);
+    };
+
+    // A cluster groups nodes together
+    interface Cluster : Node {
+      //void setLayoutEngine(in ForceLayout forceLayout);
+      //ForceLayout getLayoutEngine();
+      void addNode(in Node n);
+      Node addNewNode();
+      void addEdge(in Edge e);
+      Edge addNewEdge(in Node start, in Node end);
+      Cluster addNewCluster();
+      void removeNode(in Node n);
+      void setBalancedEventClient(in BalancedEventClient callback);
+			void freeze();
+			void unfreeze();
+      Force addForce(in string name);
+      void setBalancedThreshold(in float threshold);
+      void setIterations(in long iterations);
+    };
+
+    interface GraphControl {
+      Cluster getRootCluster();
+      void setRootCluster(in Cluster c);
+    };
+  };
+};
+};

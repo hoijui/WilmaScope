@@ -1,0 +1,13 @@
+#!/bin/sh
+if [ x$WILMAHOST = x ]
+then
+  WILMAHOST=localhost
+fi
+if [ x$WILMAPORT = x ]
+then
+  WILMAPORT=58317
+fi
+echo starting name service with:
+echo "  InitialHost = $WILMAHOST"
+echo "  InitialPort = $WILMAPORT"
+tnameserv -ORBInitialHost $WILMAHOST -ORBInitialPort $WILMAPORT &
