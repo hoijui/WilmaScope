@@ -144,9 +144,9 @@ of the application, the data and algorithms that automatically modify
 the data.  The View is a user interface which displays information
 about the model to the user.  The Controller is a separate user
 interface that provides methods for the user to manipulate the
-application, ie to control the Model.  Each components reference to
+application, ie to control the Model.  Each component's reference to
 the other components is via a carefully defined interface which should
-not require change one of the components is modified in some way.  The
+not require change when one of the components is modified in some way.  The
 standard data flow diagram for the MVC architecture is shown in Figure
 \ref{fig-mvc}.
 
@@ -173,7 +173,7 @@ the layout engine should able to be controlled either interactively by
 the user, by loading data from a file or even by remote
 procedure call from a program running in another process or possibly on
 another machine.  Therefore the Controller component was also broken
-down into several components.  A "bridge" layer provides a common
+down into several components.  A ``bridge" layer provides a common
 programmatic interface to the Model.  The methods provided by this
 bridge layer can then be called by either the GUI interface component,
 a component providing a CORBA interface for RPC or a component which
@@ -216,7 +216,7 @@ of the system described further in \ref{sec:3duml}.
     \label{fig-wilmaclasses}
     \includegraphics[width=0.35\textwidth]{figures/wilmaclasses.eps}}
   \subfigure[A 3D interpretation of the class hierarchy.]{
-    \label{fig-wilmaclasses3D}
+    \label{fig-wilmaclasses3d}
     \includegraphics[width=0.55\textwidth]{figures/wilmaclasses3d.eps}}
   \caption{A class hierarchy for the graph model and the classes used
   in the Force Directed Layout Engine implementation.}
