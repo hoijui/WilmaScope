@@ -66,6 +66,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     }
     fixedCheckBoxMenuItem.setSelected(this.node.isFixedPosition());
     show(parent, e.getX(), e.getY());
+    updateUI();
   }
   JMenuItem addEdgeMenuItem = new JMenuItem();
   JMenuItem centerNodeMenuItem = new JMenuItem();
@@ -200,11 +201,13 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
 
   void setLabelMenuItem_actionPerformed(ActionEvent e) {
     controlPanel.setMessage("Opening dialog...");
-    String label = JOptionPane.showInputDialog(parent,
+    String label = (String)JOptionPane.showInputDialog(parent,
       "What would you like to call this node?",
-      "Node Label", JOptionPane.QUESTION_MESSAGE);
+      (String)"Node Label", JOptionPane.QUESTION_MESSAGE,null,null,node.getLabel());
     controlPanel.setMessage();
-    node.setLabel(label);
+    if(label!=null) {
+      node.setLabel(label);
+    }
   }
 
   void expandMenuItem_actionPerformed(ActionEvent e) {

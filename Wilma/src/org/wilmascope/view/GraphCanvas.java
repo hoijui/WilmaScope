@@ -119,11 +119,13 @@ public class GraphCanvas extends Canvas3D {
       universe.getViewer().getView().setSceneAntialiasingEnable(enabled);
     }
   }
-  public void addPerFrameBehavior(BehaviorClient client) {
+  public Behavior addPerFrameBehavior(BehaviorClient client) {
     GraphBehavior gb = new GraphBehavior(client);
     gb.setSchedulingBounds(bounds);
     bg.addChild(gb);
+    return gb;
   }
+
  private void addLights(Bounds bounds) {
    // Set up ambient light source
    AmbientLight ambientLight = new AmbientLight();
@@ -174,8 +176,11 @@ public class GraphCanvas extends Canvas3D {
    return mouseTranslate;
  }
  public void addGraphElementView(GraphElementView view) {
-   view.getBranchGroup().compile();
-   rotationTransformGroup.addChild(view.getBranchGroup());
+   BranchGroup b = view.getBranchGroup();
+   if(!b.isLive()) {
+     b.compile();
+     rotationTransformGroup.addChild(b);
+   }
  }
  public TransformGroup getTransformGroup() {
    return rotationTransformGroup;

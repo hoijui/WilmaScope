@@ -33,9 +33,8 @@ import org.wilmascope.control.*;
 
 public class AddToClusterPanel extends MultiPickPanel {
 
-  public AddToClusterPanel(ControlPanel controlPanel, GraphControl.ClusterFacade cluster, GraphControl.ClusterFacade rootCluster) {
+  public AddToClusterPanel(ControlPanel controlPanel, GraphControl.ClusterFacade cluster) {
     super(controlPanel, cluster);
-    this.rootCluster = rootCluster;
   }
   String getLabel() {
     return "Select nodes to add to cluster...";
@@ -46,8 +45,7 @@ public class AddToClusterPanel extends MultiPickPanel {
       GraphControl.GraphElementFacade element = pl.pop();
       cluster.add(element);
     }
-    rootCluster.unfreeze();
+    cluster.unfreeze();
     cleanup();
   }
-  GraphControl.ClusterFacade rootCluster;
 }

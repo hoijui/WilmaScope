@@ -50,6 +50,7 @@ public class MenuBar extends JMenuBar {
   JMenuItem helpMenuItem = new JMenuItem();
   JMenuItem licenseMenuItem = new JMenuItem();
   JMenuItem aboutMenuItem = new JMenuItem();
+  JMenuItem edgeViewMenuItem = new JMenuItem();
   ControlPanel controlPanel;
 
   public MenuBar(Actions actions, GraphControl graphControl, ControlPanel controlPanel) {
@@ -122,6 +123,13 @@ public class MenuBar extends JMenuBar {
         aboutMenuItem_actionPerformed(e);
       }
     });
+    edgeViewMenuItem.setText("Edge View Control...");
+    edgeViewMenuItem.setMnemonic('E');
+    edgeViewMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        edgeViewMenuItem_actionPerformed(e);
+      }
+    });
     this.add(fileMenu);
     this.add(editMenu);
     this.add(viewMenu);
@@ -131,6 +139,7 @@ public class MenuBar extends JMenuBar {
     viewMenu.add(showMouseHelpCheckBoxMenuItem);
     viewMenu.add(antialiasingCheckBoxMenuItem);
     viewMenu.add(backgroundColourMenuItem);
+    viewMenu.add(edgeViewMenuItem);
     helpMenu.add(helpMenuItem);
     helpMenu.add(licenseMenuItem);
     helpMenu.add(aboutMenuItem);
@@ -171,6 +180,9 @@ public class MenuBar extends JMenuBar {
   }
   void aboutMenuItem_actionPerformed(ActionEvent e) {
     new About(null,"images" +java.io.File.separator + "WilmaSplash.png").show();
+  }
+  void edgeViewMenuItem_actionPerformed(ActionEvent e) {
+    new EdgeViewFrame(graphControl, graphControl.getRootCluster()).show();
   }
 
   void backgroundColourMenuItem_actionPerformed(ActionEvent e) {

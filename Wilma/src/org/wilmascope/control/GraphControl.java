@@ -23,6 +23,7 @@ package org.wilmascope.control;
 import org.wilmascope.view.ViewManager;
 import org.wilmascope.view.GraphCanvas;
 import org.wilmascope.view.BehaviorClient;
+import org.wilmascope.view.GraphBehavior;
 import org.wilmascope.forcelayout.ForceManager;
 import org.wilmascope.forcelayout.ForceLayout;
 import org.wilmascope.forcelayout.NodeForceLayout;
@@ -45,6 +46,7 @@ import org.wilmascope.view.NodeView;
 import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.PickingClient;
 import java.util.Vector;
+import javax.media.j3d.TransparencyAttributes ;
 
 /*
  * Title:        WilmaToo
@@ -262,6 +264,12 @@ public class GraphControl {
       start = end;
       end = n;
     }
+    public void setWeight(float weight) {
+      edge.setWeight(weight);
+    }
+    public float getWeight() {
+      return edge.getWeight();
+    }
     public NodeFacade getStartNode() {
       return start;
     }
@@ -312,6 +320,10 @@ public class GraphControl {
       initView(view);
       show();
     }
+    public void setMass( float m )
+    {
+      node.setMass( m ) ;
+    }
     public float getMass() {
       return node.getMass();
     }
@@ -338,6 +350,18 @@ public class GraphControl {
     public int getDegree() {
       return node.getDegree();
     }
+    public void setTransparency( float inverse_alpha )
+    {
+      ((org.wilmascope.view.NodeView)this.getNode().getView())
+        .getAppearance().setTransparencyAttributes(
+          new TransparencyAttributes(
+            TransparencyAttributes.FASTEST ,
+            inverse_alpha
+        )
+      );
+    } // setTransparency
+
+
     /**
      * get the node underlying this facade
      */
@@ -727,22 +751,6 @@ public class GraphControl {
     public Cluster getCluster() {
       return cluster;
     }
-    /**
-     * set all clusters to balanced and cause subsequent clusters to be preset to balanced.
-     * Net effect is to freeze the layout animation
-     */
-    public void freeze() {
-      balanced = true;
-    }
-    /**
-     * set all clusters to unbalanced and cause subsequent clusters to be preset to balanced.
-     * Net effect is to unfreeze the layout animation
-     */
-    public void unfreeze() {
-      startTime=System.currentTimeMillis();
-      layoutIterationsCounter = 0;
-      balanced = false;
-    }
     public void showHiddenChildren() {
       for(int i = 0; i < allNodes.size(); i++) {
         allNodes.get(i).show(graphCanvas);
@@ -776,6 +784,12 @@ public class GraphControl {
     }
     public void setIterations(int iterations) {
       ((ForceLayout)cluster.getLayoutEngine()).setIterations(iterations);
+    }
+    public void freeze() {
+      gc.freeze();
+    }
+    public void unfreeze() {
+      gc.unfreeze();
     }
     private Cluster cluster;
   }
@@ -852,7 +866,7 @@ public class GraphControl {
     }
     balancedThreshold = rootCluster.getBalancedThreshold();
 
-    graphCanvas.addPerFrameBehavior(new BehaviorClient() {
+    graphBehavior = (GraphBehavior)graphCanvas.addPerFrameBehavior(new BehaviorClient() {
       public void callback() {
         iterate();
       }
@@ -860,37 +874,37 @@ public class GraphControl {
     graphCanvas.createUniverse();
   }
   protected synchronized void iterate() {
-        if(!balanced&&!stalled) {
-          for(int i=0;i<1;i++) {
-            rootCluster.getCluster().calculateLayout();
-            float energy = rootCluster.getCluster().applyLayout();
-            layoutIterationsCounter++;
-            if(energy < balancedThreshold) {
-              balanced = true;
-              System.out.println("Balanced after: "+(float)(System.currentTimeMillis()-startTime)/1000f);
-              System.out.println("iterations: "+layoutIterationsCounter);
-              break;
-            }
-          }
-        }
-        rootCluster.getCluster().draw();
-  }
-
-  /**
-   * brute force method to turn off layout
-   */
-  public void stall() {
-    stalled = true;
-  }
-  public void unstall() {
-    stalled = false;
+    for(int i=0;i<1;i++) {
+      rootCluster.getCluster().calculateLayout();
+      float energy = rootCluster.getCluster().applyLayout();
+      layoutIterationsCounter++;
+      if(energy < balancedThreshold) {
+        graphBehavior.setEnable(false);
+        System.out.println("Balanced after: "+(float)(System.currentTimeMillis()-startTime)/1000f);
+        System.out.println("iterations: "+layoutIterationsCounter);
+        break;
+      }
+    }
+    rootCluster.getCluster().draw();
   }
 
   public GraphCanvas getGraphCanvas() {
     return graphCanvas;
   }
-  private boolean stalled = false;
-  private boolean balanced = true;
+  /**
+   * Net effect is to freeze the layout animation
+   */
+  public void freeze() {
+    graphBehavior.setEnable(false);
+  }
+  /**
+   * Net effect is to unfreeze the layout animation
+   */
+  public void unfreeze() {
+    startTime=System.currentTimeMillis();
+    layoutIterationsCounter = 0;
+    graphBehavior.setEnable(true);
+  }
   private float balancedThreshold = 0.002f;
   private ClusterFacade rootCluster;
   private GraphCanvas graphCanvas;
@@ -906,4 +920,5 @@ public class GraphControl {
     return pickListener;
   }
   static PickListener pickListener = new PickListener();
+  private GraphBehavior graphBehavior;
 }
