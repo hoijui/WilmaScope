@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install4j version="3.0.3">
+  <directoryPresets config="../lib/org/wilmascope/images" />
+  <application name="WilmaScope 3D Graph Visualisation System" distributionSourceDir="" mediaDir="." mediaFilePattern="%SHORT_NAME%_%PLATFORM%_%VERSION%" compression="6" shortName="Wilma" publisher="WilmaScope.org" publisherWeb="www.wilmascope.org" version="3.0.1" allPathsRelative="true" backupOnSave="false" autoSave="false" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="true">
+    <searchSequence>
+      <registry />
+      <envVar name="JAVA_HOME" />
+      <envVar name="JDK_HOME" />
+    </searchSequence>
+    <variables />
+  </application>
+  <files>
+    <mountPoints>
+      <mountPoint name="" id="1" location="" mode="755" />
+    </mountPoints>
+    <entries>
+      <dirEntry mountPoint="1" file=".." overwrite="4" shared="false" mode="644" dontUninstall="false" excludeSuffixes="" dirMode="755">
+        <exclude>
+          <entry location="CVS" launcher="false" />
+          <entry location="distribution" launcher="false" />
+          <entry location="README~" launcher="false" />
+          <entry location="Wilma_20040903.tar.gz" launcher="false" />
+        </exclude>
+      </dirEntry>
+    </entries>
+    <components />
+  </files>
+  <launchers>
+    <launcher name="wilma" id="2" external="false" excludeFromMenu="false" menuName="" icnsFile="" pngIcon16File="../lib/org/wilmascope/images/WilmaW16.png" pngIcon32File="../lib/org/wilmascope/images/WilmaW32.png" macServiceDependencies="" allowUserChangeServiceStartType="true">
+      <executable name="wilma" type="1" iconSet="true" iconFile="" executableDir="bin" redirectStderr="true" stderrFile="error.log" redirectStdout="true" stdoutFile="output.log" failOnStderrOutput="false" executableMode="1" changeWorkingDirectory="true" workingDirectory="../lib" singleInstance="false" serviceStartType="2" serviceDependencies="" jreLocation="" jreUncompressedSize="0">
+        <versionInfo include="false" fileVersion="" companyName="" fileDescription="" legalCopyright="" productVersion="" internalName="" />
+      </executable>
+      <splashScreen show="true" autoOff="true" alwaysOnTop="true" width="656" height="496" bitmapFile="../lib/org/wilmascope/images/WilmaSplash.png">
+        <text>
+          <statusLine x="20" y="20" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+          <versionLine x="20" y="40" text="version %VERSION%" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+        </text>
+      </splashScreen>
+      <java mainClass="org.wilmascope.control.WilmaMain" vmParameters="-Xmx256m" arguments="" allowVMPassthroughParameters="true" minVersion="" maxVersion="" preferredVM="" allowBetaVM="false">
+        <searchSequence>
+          <registry />
+          <envVar name="JAVA_HOME" />
+          <envVar name="JDK_HOME" />
+        </searchSequence>
+        <classPath>
+          <directory location="classes" failOnError="false" />
+          <archive location="lib/Jama-1.0.1.jar" failOnError="false" />
+        </classPath>
+        <nativeLibraryDirectories />
+      </java>
+      <includedFiles />
+    </launcher>
+  </launchers>
+  <installerGui allowUnattendedInstall="false" useCustomHeaderImage="true" customHeaderImage="../lib/org/wilmascope/images/WilmaWcompact.png" customSize="false" customWidth="500" customHeight="390">
+    <customCode preAction="false" preActionClass="%WITH_JRE%" postAction="false" postActionClass="" preUninstallAction="false" preUninstallActionClass="" postUninstallAction="false" postUninstallActionClass="" initHandler="false" initHandlerClass="" directoryValidator="false" directoryValidatorClass="" installationHandler="false" installationHandlerClass="" />
+    <standardScreens>
+      <screen id="welcome" enabled="true" useCustomBanner="true" bannerImageFile="../lib/org/wilmascope/images/WilmaSplash.png" background="255,255,255" />
+      <screen id="license" enabled="true" file="../COPYING.txt" />
+      <screen id="location" enabled="true" showSpace="true" suggestAppDir="true" />
+      <screen id="components" enabled="true" allSelected="true" firstMandatory="true">
+        <selectedComponents />
+        <mandatoryComponents />
+      </screen>
+      <screen id="programGroup" enabled="true" />
+      <screen id="fileAssociations" enabled="true">
+        <associations />
+      </screen>
+      <screen id="services" enabled="true" allSelected="true">
+        <selectedServiceLaunchers />
+      </screen>
+      <screen id="additionalTasks" enabled="true" customTasksPlacement="1">
+        <customTasks />
+      </screen>
+      <screen id="preInfo" enabled="true" file="../distribution/WilmaInstallWarning.html" />
+      <screen id="install" enabled="true" />
+      <screen id="postInfo" enabled="false" file="" />
+      <screen id="finished" enabled="true" useCustomBanner="false" bannerImageFile="" background="255,255,255" />
+    </standardScreens>
+    <customScreens />
+  </installerGui>
+  <mediaSets>
+    <win32 name="Windows" id="4" mediaFileName="" installDir="Wilma" allLaunchers="true" bundleType="2" includedJRE="" jreURL="" jreFtpURL="" languageID="en" customScriptMode="1" customScriptFile="" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" jreShared="false" adminRequired="false" programGroup="WilmaScope 3D Graph Visualisation System" allowUserDisableStartMenuCreation="false" reboot="false" modeDesktopIcon="1" modeQuickLaunchIon="1" desktopLauncherId="">
+      <selectedLaunchers />
+      <messageSet language="English" />
+      <exclude>
+        <entry location="J3D.dll" launcher="false" />
+        <entry location="j3daudio.dll" launcher="false" />
+        <entry location="J3DUtils.dll" launcher="false" />
+        <entry location="j3daudio.jar" launcher="false" />
+        <entry location="j3dcore.jar" launcher="false" />
+        <entry location="j3dutils.jar" launcher="false" />
+        <entry location="vecmath.jar" launcher="false" />
+      </exclude>
+      <variables />
+      <customScriptLines />
+      <excludedScreenIds />
+      <additionalStartMenuEntries />
+    </win32>
+    <unixInstaller name="Unix Installer" id="11" mediaFileName="" installDir="Wilma" allLaunchers="true" bundleType="1" includedJRE="" jreURL="" jreFtpURL="" languageID="en" customScriptMode="1" customScriptFile="" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" jreShared="false" adminRequired="false">
+      <selectedLaunchers />
+      <messageSet language="English" />
+      <exclude />
+      <variables />
+      <customScriptLines />
+      <excludedScreenIds />
+    </unixInstaller>
+    <macos name="Mac OS X Single Bundle" id="13" mediaFileName="" installDir="Wilma" allLaunchers="false" bundleType="1" includedJRE="" jreURL="" jreFtpURL="" languageID="en" customScriptMode="1" customScriptFile="" customInstallBaseDir="" allowUserStartAfterFinish="true" launchExecutableId="2" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" jreShared="false" adminRequired="false">
+      <selectedLaunchers>
+        <launcher id="2" />
+      </selectedLaunchers>
+      <messageSet language="English" />
+      <exclude />
+      <variables />
+      <customScriptLines />
+      <excludedScreenIds />
+    </macos>
+  </mediaSets>
+  <buildIds buildAll="false">
+    <mediaSet refId="4" />
+  </buildIds>
+</install4j>
+

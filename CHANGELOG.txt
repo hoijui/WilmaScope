@@ -1,0 +1,24 @@
+Changes Since 3.0
+-----------------
+- Parser for LEDA (".lgr") files.
+- "ScaleFree" graphs now available in random graph generator
+- reworked test graph generation frame work...
+  = added package "graphgen" with registry and abstract blueprint class GraphGenerator
+  = cleaned up GUI
+  
+Changes Since 1.1
+-----------------
+- Lots (Not very well logged :-| )
+
+Changes Since 1.0
+-----------------
+This release will be the one exhibited at GD2001 in Vienna 23-26th September.
+The are many new features and bug fixes and probably some new bugs as well 
+(please report them!).
+
+ - UML node and edge objects added
+ - Planar force added
+ - Box and Planar Clusters added
+ - nodes can now be fixed in space and dragged around
+ - certain types of clusters such as planar clusters are able to spin and rotate
+ - Less visibly a lot of code has changed in Cluster class meaning that deeply nested graphs should be a bit more reliable.
