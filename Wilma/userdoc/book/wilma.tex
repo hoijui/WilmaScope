@@ -143,8 +143,11 @@ Therefore the design needed to decouple these components as much as
 possible so that altering one component would have minimal impact on
 the other components.
 
-To achieve this we began by exploring the well known {\em Model-View-Controller}
-architecture (MVC) \cite{gamma94design}.  Briefly, the 3 primary components of the MVC architecture are as follows:
+To achieve this we began by exploring the well known {\em
+Model-View-Controller} architecture (MVC) \cite{gamma94design}.
+Briefly, the 3 primary components of the MVC architecture are as
+follows: 
+
 \begin{description}
 \item[Model] the core
 of the application, the data and algorithms that automatically modify
@@ -205,7 +208,7 @@ In designing the Graph Model, ie, the data structures for storing the
 graph and the methods for manipulating them, some common
 elements were identified.  From the definitions given in Chapter 
 \ref{chap-intro}: a graph consists fundamentally
-of nodes and edges.  These are the basic Graph Elements.  A clustered
+of nodes and edges.  These are the basic graph elements.  A clustered
 graph has nodes which may themselves be graphs, or clusters.
 
 This description of a graph is modelled in a class hierarchy by
@@ -267,7 +270,7 @@ of the system described further in \ref{sec:3duml}.
     \label{fig-simannealcontrols}
 \scalebox{0.3}{
     \includegraphics{figures/wilma-simannealcontrols.eps}}}
-  \caption{The various control windows in Wilma.}
+  \caption{The various layout engine control windows in Wilma.}
 \end{figure}
 
 \subsection{Platform}
@@ -275,27 +278,27 @@ of the system described further in \ref{sec:3duml}.
 WilmaScope has been implemented in Java, using the Java3D graphics library.
 Java provides a good tradeoff between high level language constructs,
 portability and performance.  Java3D provides access to 3D graphics accelerator hardware through
-a high-level Java API and nice features such as a scene graph
+a high-level Java API and useful features such as a scene graph
 structure and methods for coupling animation into the render cycle.
 
 \subsection{Layout Algorithms}
 \subsubsection{Force Directed} \label{sec:forcedirectedlayout}
 The first layout algorithm implemented in Wilma was Force Directed
-layout the basic principles of which are described in Chapter
+layout whose basic principles are described in Chapter
 \ref{chap-intro}.  There were several factors that led us to
 implement this algorithm first, notably:
 \begin{itemize}
 \item it is relatively easy to obtain good results for most types of
 graphs by application of the basic attractive spring force and
 repulsive inter-node force.
+\item it is easy to animate the layout process in a dynamic
+graph visualization to preserve a user's ``mental map''\cite{Misue:VLC95}
+between changes in the graph structure.  We can animate simply by
+redrawing the graph between each iteration of the algorithm.
 \item since the algorithm is iterative and does not require any
 special pre or post-processing it is easy to use in a dynamic graph
 editor, where the graph structure may be changed by the user even
 before the layout has stabilised.
-\item similarly it is easy to animate the layout process in a dynamic
-graph visualisation to preserve a user's ``mental map''\cite{Misue:VLC95}
-between changes in the graph structure.  We can animate simply by
-redrawing the graph between each iteration of the algorithm.
 \item different layout
 aesthetics can be enhanced by adding extra forces, such as the Sugiyama and Misue\cite{Sugiyama:VLC95}
 directed field force for aligning directed edges to emphasise flow.
@@ -398,7 +401,24 @@ of Walshaw~\cite{walshaw00multilevel}.  The primary insight of this
 multi-scaled approach is that the effects of repulsion forces at different
 ranges are equivalently 
 
-\subsubsection{DOT: hierarchical layout}
+\subsubsection{DOT: heirarchical layout}
+DOT is a program included in the Graphviz
+(\url{http://www.graphviz.org}) open source graph visualisation
+toolkit from AT\&T.  It produces effective 2-dimensional layered graph
+layouts using a Sugiyama\cite{Sugiyama81methods} style algorithm.
+The Wilma DOT layout engine runs dot in a sub-process, pipes in the graph
+data converted into DOT file format and parses the DOT output to
+obtain the new layout.
+DOT also features aesthetically pleasing spline edges which Wilma
+is able to render as curved tubes.
+
+Since the DOT layouts are strictly 2-dimensional we are free to use the
+third dimension to capture additional information.  For example
+Section \ref{sec:fmflow} describes an application where the 3rd
+dimension (the {\em z}-axis) is used to capture changes in the graph over time.
+That is, the nodes are rendered as tubes and the edges may appear at different
+levels in the {\em z} dimension.
+
 \subsection{User Interfaces}
 \subsection{Programming Interfaces}
 \label{API}
@@ -448,12 +468,35 @@ writing additional code.
 \label{sec:results}
 
 \subsection{Applications}
-
 \subsubsection{3D UML Visualisation} \label{sec:3duml}
 
 Dwyer~\cite{dwyer013D-UML} has managed to obtain a peer-reviewed paper by
 using Wilma to visualise UML structures for software engineering purposes.
 Therefore, Wilma rocks.
+
+\subsubsection{Fund Manager Flow Visualisation} \label{sec:fmflow}
+Most stock market visualisations involve a fairly straightforward
+mapping of share attributes into 2 or 3 dimensional space.  The most
+obvious example is share price time series charts.  In an experiment
+into graph based visualisation techniques for stock market data
+Dwyer~\cite{dwyer02fmflow} defined a graph model for Fund Manager
+movement within the stock market.  The graph consists of nodes
+representing stocks and edges representing a {\em movement} of a
+fund manager between a pair of stocks.  A movement from one stock to
+another occurs when a fund manager reduces his holding in the first
+and increases his holding in the second.
+
+\begin{figure}[h]
+  \centering
+  \subfigure[]{
+    \label{fig-mvc}
+    \includegraphics[width=0.5\textwidth]{figures/dot_waterlevel2.eps}}
+  \subfigure[Side view]{
+    \label{fig-wilmamvc}
+    \includegraphics[width=0.4\textwidth]{figures/dot_waterlevel2_sideview.eps}}
+  \caption{A visualisation of fund manager movement within the UK
+  Computer Services sector for 5 time periods over 2 weeks in December.}
+\end{figure}
 
 \subsubsection{Web Structure Visualisation}
 
@@ -484,7 +527,7 @@ The clusters are defined over similarity between pages; also note the set of
 \label{sec:conclusions}
 
 We hope that the reader will by now be convinced that WilmaScope presents an
-invaluable addition to the graph connoisseur's[D[D[D[D[ toolbox.  
+invaluable addition to the graph connoisseur's toolbox.  
 
 Wilma provides its users with animated, interactive 3D rendering, which takes
 advantage of modern accelerated graphics hardware.  These facilities are, of
