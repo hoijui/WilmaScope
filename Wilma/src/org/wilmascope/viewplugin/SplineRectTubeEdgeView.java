@@ -20,6 +20,7 @@
 package org.wilmascope.viewplugin;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.GeneralPath;
@@ -37,6 +38,7 @@ import javax.media.j3d.TransformGroup;
 import javax.media.j3d.TransparencyAttributes;
 import javax.swing.ImageIcon;
 import javax.vecmath.AxisAngle4f;
+import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3d;
@@ -227,9 +229,12 @@ public class SplineRectTubeEdgeView extends EdgeView implements View2D,org.wilma
       b.addChild(tubeShape);
     }
   }
-  public void draw2D(Renderer2D r, Graphics2D g) {
+  public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
     float thickness = 2f*r.scaleX(getRadius());
     g.setStroke(new BasicStroke(thickness));
+    Color3f c = new Color3f();
+    getAppearance().getMaterial().getDiffuseColor(c);
+    g.setColor(new Color(c.x,c.y,c.z,transparency));
     GeneralPath p = new GeneralPath();
     for(Iterator i = curves.iterator();i.hasNext();) {
       r.curvePath(p,(Point2D.Float[])i.next());

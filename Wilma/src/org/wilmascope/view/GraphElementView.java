@@ -67,6 +67,9 @@ public abstract class GraphElementView
 		bg.addChild(tg);
 		//    bg.compile();
 	}
+  public void setTransparencyAttributes(TransparencyAttributes ta) {
+    getAppearance().setTransparencyAttributes(ta);
+  }
 	/**
 	 * Sets the default material for graph elements
 	 * You must over-ride this abstract method stub with:
@@ -169,6 +172,12 @@ public abstract class GraphElementView
 		appearance.setCapability(Appearance.ALLOW_MATERIAL_WRITE);
 		appearance.setCapability(Appearance.ALLOW_MATERIAL_READ);
 		appearance.setCapability(Appearance.ALLOW_TRANSPARENCY_ATTRIBUTES_WRITE);
+    appearance.setPolygonAttributes(new PolygonAttributes(PolygonAttributes.POLYGON_FILL,
+    PolygonAttributes.CULL_BACK, 0.01f, true));
+    RenderingAttributes ra = new RenderingAttributes();
+    ra.setDepthBufferEnable(true);
+    ra.setDepthBufferWriteEnable(true);
+    appearance.setRenderingAttributes(ra);
 		this.defaultMaterial = defaultMaterial;
 		appearance.setMaterial(defaultMaterial);
 		/*
@@ -347,11 +356,16 @@ public abstract class GraphElementView
 			//System.out.println("Not setting bits on already setup shared geometry");
 		}
 	}
+  GraphCanvas graphCanvas;
 	public void hide() {
 		visible = false;
 		bg.detach();
 	}
+  public GraphCanvas getGraphCanvas() {
+    return graphCanvas;
+  }
 	public void show(GraphCanvas graphCanvas) {
+    this.graphCanvas = graphCanvas;
 		graphCanvas.addGraphElementView(this);
 		visible = true;
 	}

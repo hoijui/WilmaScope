@@ -20,6 +20,7 @@
 
 package org.wilmascope.viewplugin;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Properties;
 
@@ -34,6 +35,7 @@ import javax.media.j3d.TriangleFanArray;
 import javax.media.j3d.TriangleStripArray;
 import javax.swing.ImageIcon;
 import javax.vecmath.AxisAngle4d;
+import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
@@ -104,7 +106,10 @@ public class SquareTubeNodeView extends NodeView implements SizeAdjustableNodeVi
     t.setRotation(new AxisAngle4d(0,0,1,Math.PI/4));
     setTransformGroupTransform(t);
 	}
-  public void draw2D(Renderer2D r, Graphics2D g) {
+  public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
+    Color3f c = new Color3f();
+    getAppearance().getMaterial().getDiffuseColor(c);
+    g.setColor(new Color(c.x,c.y,c.z,transparency));
     r.fillSquare(g,getNode().getPosition(),getNode().getRadius());
   }
 	public SquareTubeNodeView() {

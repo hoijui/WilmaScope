@@ -1,28 +1,35 @@
 package org.wilmascope.gui;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
 import java.util.Enumeration;
-import java.util.Stack;
+import java.util.Vector;
 
 import javax.media.j3d.Appearance;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Material;
+import javax.media.j3d.RenderingAttributes;
 import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.media.j3d.TransparencyAttributes;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
-import java.util.Vector;
 
 import org.wilmascope.columnlayout.ColumnLayout;
 import org.wilmascope.control.GraphClient;
@@ -42,6 +49,43 @@ import com.sun.j3d.utils.picking.PickTool;
  *
  */
 
+class TreePanel extends JPanel {
+  ImageIcon tree=new ImageIcon(ClassLoader.getSystemResource("images/treeviewbuttons.png"));
+  public TreePanel() {
+    super();
+    setPreferredSize(new Dimension(400,400));
+  }
+  public void paintComponent(Graphics g) {
+
+    Graphics2D g2 = (Graphics2D) g;
+
+    int w = getWidth();
+    int h = getHeight();
+/*
+    if (bi == null || bi.getWidth() != w || bi.getHeight() != h) {
+      bi = (BufferedImage) createImage(w, h);
+      Graphics2D big = bi.createGraphics();
+      big.setRenderingHint(
+        RenderingHints.KEY_ANTIALIASING,
+        RenderingHints.VALUE_ANTIALIAS_ON);
+      //render(w, h, big);
+    }
+*/
+    // Draws the buffered image to the screen.
+    g2.drawImage(tree.getImage(), 0, 0, this);
+  }
+  void render(int w, int h, Graphics2D g) {
+    for(int i = 0;i<buttons.length;i++) {
+      JComponent c = buttons[i];
+      int y = c.getLocation(null).y;
+      System.out.println("blah"+y);
+      g.drawRect(0,y,5,5);
+    }
+  }
+
+  BufferedImage bi;
+  JComponent buttons[];
+}
 public class SliceViewControlFrame extends JFrame {
   GraphControl gc;
   public SliceViewControlFrame(GraphControl gc) {
@@ -72,7 +116,7 @@ public class SliceViewControlFrame extends JFrame {
       }
     }
     bottomLeft = new Point3f();
-    Point3f topRight = new Point3f();
+    topRight = new Point3f();
     centroid = new Point3f();
     l.getBoundingBoxCorners(bottomLeft,topRight,centroid);
     float width = topRight.x - bottomLeft.x;
@@ -87,7 +131,10 @@ public class SliceViewControlFrame extends JFrame {
     axisPlaneTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
     Appearance ap = new Appearance();
     TransparencyAttributes transparencyAttributes
-     = new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.6f);
+     = new TransparencyAttributes(TransparencyAttributes.NICEST, 0.6f);
+    RenderingAttributes ra = new RenderingAttributes();
+    ra.setDepthBufferEnable(true);
+    ap.setRenderingAttributes(ra);
     Material m = org.wilmascope.view.Colours.greyBlueMaterial;
     ap.setMaterial(m);
     ap.setTransparencyAttributes(transparencyAttributes);
@@ -109,7 +156,7 @@ public class SliceViewControlFrame extends JFrame {
     trans.setTranslation(new Vector3f(centroid));
     axisPlaneTG.setTransform(trans);
     
-    Cluster r = root.getCluster();
+    r = root.getCluster();
     while(r.getNodes().size()==1) {
       r = (Cluster)r.getNodes().get(0);
     }
@@ -119,9 +166,22 @@ public class SliceViewControlFrame extends JFrame {
     showButton = new JButton();
     hideButton = new JButton();
     printButton = new JButton();
+    unionFrameButton = new JButton();
     setSelectedStratum(0);
     hBox = Box.createHorizontalBox();
+    Box buttonBox = Box.createHorizontalBox();
+    Box upDownBox = Box.createVerticalBox();
+    Box showHideBox = Box.createVerticalBox();
     vBox = Box.createVerticalBox();
+    upDownBox.add(upButton);
+    upDownBox.add(downButton);
+    showHideBox.add(showButton);
+    showHideBox.add(hideButton);
+    buttonBox.add(upDownBox);
+    buttonBox.add(showHideBox);
+    buttonBox.add(printButton);
+    buttonBox.add(unionFrameButton);
+    vBox.add(buttonBox);
     upButton.setText("Up");
     upButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -154,18 +214,21 @@ public class SliceViewControlFrame extends JFrame {
         printButton_actionPerformed(e);
       }
     });
+    unionFrameButton.setText("Show Union Graph");
+    unionFrameButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        unionFrameButton_actionPerformed(e);
+      }
+    });
     this.getContentPane().add(hBox, null);
-    vBox.add(upButton, null);
-    vBox.add(downButton, null);
-    vBox.add(showButton, null);
-    vBox.add(hideButton, null);
-    vBox.add(printButton, null);
-    radioButtons(vBox);
+    vBox.add(radioButtons());
     hBox.add(vBox);
     hBox.add(drawingPanel);
     showAxisPlane();
   }
-  void radioButtons(JComponent container) {
+  JComponent radioButtons() {
+    Box hBox = Box.createHorizontalBox();
+    Box vBox = Box.createVerticalBox();
     String[] strataNames = (String[])root.getUserData();
     
     ActionListener a = new ActionListener() {
@@ -175,19 +238,21 @@ public class SliceViewControlFrame extends JFrame {
     };
     // use a stack so we can add the buttons to the container in reverse order
     // ie, same as 3D stack
-    Stack buttonStack = new Stack();
+    JComponent[] buttonStack = new JComponent[strataNames.length];
     
     for(int i=0; i<strataNames.length; i++) {
       JRadioButton r = new JRadioButton(strataNames[i]);
       r.setActionCommand(""+i);
       r.addActionListener(a);
       radioButtonGroup.add(r);
-      buttonStack.push(r);
+      buttonStack[i]=r;
     }
-    while(buttonStack.size()>0) {
-      container.add((JRadioButton)buttonStack.pop());
+    for(int i=strataNames.length-1;i>=0;i--) {
+      vBox.add((JRadioButton)buttonStack[i]);
     }
     setSelectedRadioButton(0);
+    hBox.add(vBox);
+    return hBox;
   }
   ButtonGroup radioButtonGroup = new ButtonGroup();
   void setSelectedRadioButton(int selectedButton) {
@@ -235,6 +300,18 @@ public class SliceViewControlFrame extends JFrame {
       } catch (Exception ex) {
       }
     }
+  }  
+  void unionFrameButton_actionPerformed(ActionEvent e) {
+    JFrame unionFrame = new JFrame("Union View"); 
+    JPanel treePanel = new TreePanel();
+
+    hBox = Box.createHorizontalBox();
+    hBox.add(treePanel); 
+    DrawingPanel unionDrawingPanel= new DrawingPanel(r, bottomLeft, topRight, DrawingPanel.RENDER_UNION);
+    hBox.add(unionDrawingPanel);
+    unionFrame.getContentPane().add(hBox);
+    unionFrame.pack();
+    unionFrame.setVisible(true); 
   }
   
   void showAxisPlane() {
@@ -248,7 +325,8 @@ public class SliceViewControlFrame extends JFrame {
     show(false);
     axisPlaneBG.detach();
   }
-  Point3f centroid, bottomLeft;
+  Point3f centroid, bottomLeft, topRight;
+  Cluster r;
   float strataSeparation;
   int strataCount;
   int selectedStratum = 0;
@@ -263,5 +341,6 @@ public class SliceViewControlFrame extends JFrame {
   JButton showButton;
   JButton hideButton;
   JButton printButton;
+  JButton unionFrameButton;
   DrawingPanel drawingPanel;
 }

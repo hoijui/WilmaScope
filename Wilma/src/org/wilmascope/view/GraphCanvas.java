@@ -203,6 +203,9 @@ public class GraphCanvas extends Canvas3D {
 		// This will move the ViewPlatform back a bit so the
 		// objects in the scene can be viewed.
 		universe.getViewingPlatform().setNominalViewingTransform();
+    universe.getViewer().getView().setTransparencySortingPolicy(
+      View.TRANSPARENCY_SORT_NONE);
+    universe.getViewer().getView().setDepthBufferFreezeTransparent(false);
 		setStereoSeparation(0.006);
 		this.getView().setBackClipDistance(100);
 		this.getView().setFrontClipDistance(0.1);

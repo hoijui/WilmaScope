@@ -20,6 +20,7 @@
 
 package org.wilmascope.viewplugin;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Properties;
 
@@ -33,15 +34,16 @@ import javax.media.j3d.Transform3D;
 import javax.media.j3d.TriangleFanArray;
 import javax.media.j3d.TriangleStripArray;
 import javax.swing.ImageIcon;
+import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 import org.wilmascope.columnlayout.NodeColumnLayout;
-import org.wilmascope.view.*;
 import org.wilmascope.view.Colours;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.Renderer2D;
+import org.wilmascope.view.SizeAdjustableNodeView;
 import org.wilmascope.view.View2D;
 
 import com.sun.j3d.utils.geometry.Cylinder;
@@ -110,7 +112,11 @@ public class TubeNodeView extends NodeView implements SizeAdjustableNodeView, Vi
     }
     setResizeTranslateTransform(new Vector3d(1,1,height),new Vector3f(getNode().getPosition()));
 	}
-  public void draw2D(Renderer2D r, Graphics2D g) {
+  public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
+    Color3f c = new Color3f();
+    getAppearance().getMaterial().getDiffuseColor(c);
+//    g.setColor(new Color(c.x,c.y,c.z,transparency));
+    g.setColor(new Color(0,0,0,transparency));
     r.fillCircle(g,getNode().getPosition(),getNode().getRadius());
   }
 	public TubeNodeView() {

@@ -234,6 +234,12 @@ public class SplineTubeEdgeView
 
 			GeometryInfo gi = new GeometryInfo(GeometryInfo.TRIANGLE_STRIP_ARRAY);
 			gi.setCoordinates(taperedTubePoints);
+      // tube strip counts seem to be wrong in default geometry
+      // so we recalculate again as follows (one strip for each tube segment):
+      tubeStripCounts = new int[ySize];
+      for (int j = 0; j < ySize; j++) {
+        tubeStripCounts[j] = segmentSize;
+      }
 			gi.setStripCounts(tubeStripCounts);
 			normalGenerator.generateNormals(gi);
 			Shape3D tubeShape = new Shape3D(gi.getGeometryArray(), getAppearance());
@@ -246,9 +252,9 @@ public class SplineTubeEdgeView
    * draws a 2D representation of the edge on the specified Graphics2D
    * @see org.wilmascope.view.View2D#draw2D(org.wilmascope.view.Renderer2D, java.awt.Graphics2D)
    */
-	public void draw2D(Renderer2D r, Graphics2D g) {
+	public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
 		float thickness = 4f * r.scaleX(getRadius());
-		Color3f c = new Color3f();
+/*		Color3f c = new Color3f();
 		getAppearance().getMaterial().getDiffuseColor(c);
 		if(c.x>0.5f) {
 		  g.setStroke(new BasicStroke(thickness, 
@@ -261,8 +267,9 @@ public class SplineTubeEdgeView
 		  BasicStroke.JOIN_MITER, 
 		  10.0f, new float[]{5.0f}, 0.0f));
 		} else
-		g.setStroke(new BasicStroke(thickness));
-		g.setColor(c.get());
+		g.setColor(new Color(c.x,c.y,c.z,transparency));*/
+    g.setStroke(new BasicStroke(thickness));
+    g.setColor(new Color(0,0,0,transparency));
 		GeneralPath p = new GeneralPath();
 		for (Iterator i = curves.iterator(); i.hasNext();) {
 			r.curvePath(p, (Point2D.Float[]) i.next());
@@ -272,7 +279,7 @@ public class SplineTubeEdgeView
 			Point3f end = new Point3f();
 			Point3f start = new Point3f();
 			arrowPosition((EdgeClient.ArrowPosition) i.next(), start, end);
-			r.arrowPath(g, thickness / 4, start, end);
+			r.arrowPath(g, thickness / 8f, start, end);
 		}
 
 		g.setColor(Color.BLACK);

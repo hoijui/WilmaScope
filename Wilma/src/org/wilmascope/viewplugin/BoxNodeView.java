@@ -21,6 +21,7 @@
 package org.wilmascope.viewplugin;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import javax.media.j3d.Appearance;
@@ -91,12 +92,13 @@ public class BoxNodeView extends NodeView implements SizeAdjustableNodeView, Vie
 			System.out.println("WARNING: Null pointer in ColumnClusterView.draw()");
 		}
 	}
-  public void draw2D(Renderer2D r, Graphics2D g) {
+  public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
     Node n = getNode();
     float nr = n.getRadius()/4.0f;
     float cr = ((ColumnClusterView)n.getOwner().getView()).getMaxRadius()/4.0f;
     Point3f p = new Point3f(n.getPosition());
     g.setStroke(new BasicStroke(1f));
+    g.setColor(new Color(0,0,0,transparency));
     r.drawRect(g,p,cr,getDepth());
     p.x -= (cr - nr);
     r.fillRect(g,p,nr,getDepth());

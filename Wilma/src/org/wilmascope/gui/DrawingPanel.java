@@ -29,6 +29,7 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 
+import javax.media.j3d.TransparencyAttributes;
 import javax.swing.JPanel;
 import javax.vecmath.Point3f;
 
@@ -37,6 +38,8 @@ import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.EdgeList;
 import org.wilmascope.graph.Node;
 import org.wilmascope.graph.NodeList;
+import org.wilmascope.view.GraphCanvas;
+import org.wilmascope.view.GraphElementView;
 import org.wilmascope.view.Renderer2D;
 import org.wilmascope.view.View2D;
 
@@ -47,20 +50,27 @@ import org.wilmascope.view.View2D;
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class DrawingPanel extends JPanel implements Printable {
+  public static int RENDER_SLICE=0;
+  public static int RENDER_UNION=1;
+  int renderStyle=RENDER_SLICE;
 	public DrawingPanel(Cluster root, Point3f bottomLeft, Point3f topRight) {
-    this.root = root;
-    this.bottomLeft = bottomLeft;
-    this.topRight = topRight;
-    // want the aspect ratio to be preserved but the image scaled to fit either the
-    // maximal width (640) or the maximal height (480) depending on which aspect is
-    // larger
-    float w = topRight.x - bottomLeft.x;
-    float h = topRight.y - bottomLeft.y;
-    float scale = (w>h)?640f/w:480f/h;
-		setPreferredSize(new Dimension((int)(w*scale),(int)(h*scale)));
+		this.root = root;
+		this.bottomLeft = bottomLeft;
+		this.topRight = topRight;
+		// want the aspect ratio to be preserved but the image scaled to fit either the
+		// maximal width (640) or the maximal height (480) depending on which aspect is
+		// larger
+		float w = topRight.x - bottomLeft.x;
+		float h = topRight.y - bottomLeft.y;
+		float scale = (w > h) ? 640f / w : 480f / h;
+		setPreferredSize(new Dimension((int) (w * scale), (int) (h * scale)));
 		setBackground(Color.white);
 	}
 
+  public DrawingPanel(Cluster root, Point3f bottomLeft, Point3f topRight, int renderStyle) {
+    this(root,bottomLeft,topRight);
+    this.renderStyle = renderStyle;
+  }
 	public void paintComponent(Graphics g) {
 
 		Graphics2D g2 = (Graphics2D) g;
@@ -73,42 +83,96 @@ public class DrawingPanel extends JPanel implements Printable {
 			big.setRenderingHint(
 				RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
-      render(w, h, big);
+      render(w,h,big);
 		}
 
 		// Draws the buffered image to the screen.
 		g2.drawImage(bi, 0, 0, this);
 	}
 
-	void render(int w, int h, Graphics2D g) {
-		g.setColor(Color.black);
+  void render(int w, int h, Graphics2D g) {
+    if(renderStyle==RENDER_UNION) {
+      unionRender(w,h,g);
+    } else {
+      sliceRender(w,h,g);
+    }
+  }
+  void sliceRender(int w, int h, Graphics2D g) {
+    g.setColor(Color.black);
 
-		// Clears the rectangle that was previously drawn.
-		g.setBackground(Color.white);
-		g.clearRect(0, 0, w, h);
+    // Clears the rectangle that was previously drawn.
+    g.setBackground(new Color(0.8f,0.8f,1f));
+    g.clearRect(0, 0, w, h);
 
-		// Draws and fills the newly positioned rectangle to the buffer.
-		g.setPaint(Color.black);
+    // Draws and fills the newly positioned rectangle to the buffer.
+    g.setPaint(Color.black);
 
     NodeList columns = root.getNodes();
-    for(columns.resetIterator();columns.hasNext();) {
+    for (columns.resetIterator(); columns.hasNext();) {
       Cluster c = (Cluster)columns.nextNode();
-      NodeList nodes = c.getNodes();
+      NodeList nodes = new NodeList(c.getNodes());
       Node n = null;
-      for(nodes.resetIterator();nodes.hasNext();) {
+      for (nodes.resetIterator(); nodes.hasNext();) {
         n = nodes.nextNode();
-        if(((NodeColumnLayout)n.getLayout()).getStratum()==stratum) {
-          View2D v = (View2D)n.getView();
-          v.draw2D(new Renderer2D(bottomLeft,topRight,w,h),g);
-          EdgeList outEdges = n.getOutEdges();
-          for(outEdges.resetIterator();outEdges.hasNext();) {
-            v = (View2D)outEdges.nextEdge().getView();
-            v.draw2D(new Renderer2D(bottomLeft,topRight,w,h),g);
+        EdgeList outEdges = n.getOutEdges();
+        int distance =
+          Math.abs(((NodeColumnLayout) n.getLayout()).getStratum() - stratum);
+        if (distance == 0) {
+          View2D v = (View2D) n.getView();
+          v.draw2D(new Renderer2D(bottomLeft, topRight, w, h), g,1f);
+          for (outEdges.resetIterator(); outEdges.hasNext();) {
+            v = (View2D) outEdges.nextEdge().getView();
+            v.draw2D(new Renderer2D(bottomLeft, topRight, w, h), g,1f);
           }
-          break;
         }
+        //setViewTransparency((float)distance/5f, (GraphElementView) n.getView());
+        //for (outEdges.resetIterator(); outEdges.hasNext();) {
+         // setViewTransparency((float)distance/5f,(GraphElementView)outEdges.nextEdge().getView());
+        //}
       }
     }
+  }
+
+  void unionRender(int w, int h, Graphics2D g) {
+    g.setColor(Color.black);
+
+    // Clears the rectangle that was previously drawn.
+    g.setBackground(Color.white);
+    g.clearRect(0, 0, w, h);
+
+    // Draws and fills the newly positioned rectangle to the buffer.
+    g.setPaint(Color.black);
+
+    NodeList columns = root.getNodes();
+    for (columns.resetIterator(); columns.hasNext();) {
+      Cluster c = (Cluster)columns.nextNode();
+      NodeList nodes = new NodeList(c.getNodes());
+      Node n = null;
+      for (nodes.resetIterator(); nodes.hasNext();) {
+        n = nodes.nextNode();
+        EdgeList outEdges = n.getOutEdges();
+          View2D v = (View2D) n.getView();
+          v.draw2D(new Renderer2D(bottomLeft, topRight, w, h), g,0.2f);
+          for (outEdges.resetIterator(); outEdges.hasNext();) {
+            v = (View2D) outEdges.nextEdge().getView();
+            v.draw2D(new Renderer2D(bottomLeft, topRight, w, h), g,0.2f);
+          }
+        //setViewTransparency((float)distance/5f, (GraphElementView) n.getView());
+        //for (outEdges.resetIterator(); outEdges.hasNext();) {
+          //setViewTransparency((float)distance/5f,(GraphElementView)outEdges.nextEdge().getView());
+        //}
+      }
+    }
+  }
+	private void setViewTransparency(float transparency, GraphElementView v) {
+		GraphCanvas gc = v.getGraphCanvas();
+		if(transparency<1f) {
+		  v.show(gc);
+		  v.setTransparencyAttributes(
+			  new TransparencyAttributes(TransparencyAttributes.NICEST, transparency));
+		} else {
+		  v.hide();
+		}
 	}
 
 	public int print(Graphics g, PageFormat pf, int pi) throws PrinterException {
@@ -137,17 +201,17 @@ public class DrawingPanel extends JPanel implements Printable {
 		return Printable.PAGE_EXISTS;
 	}
 
-  BufferedImage bi;
-  Cluster root;
-  Point3f bottomLeft, topRight;
-  int stratum = 0;
+	BufferedImage bi;
+	Cluster root;
+	Point3f bottomLeft, topRight;
+	int stratum = 0;
 	/**
 	 * @param i
 	 */
 	public void setStratum(int i) {
 		stratum = i;
-    bi = null;
-    updateUI();
+		bi = null;
+		updateUI();
 	}
 
 }

@@ -21,12 +21,14 @@
 package org.wilmascope.viewplugin;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import javax.media.j3d.Material;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.swing.ImageIcon;
+import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
@@ -84,9 +86,12 @@ public class ArrowEdgeView extends EdgeView implements View2D {
 	public ImageIcon getIcon() {
 		return new ImageIcon("images/arrow.png");
 	}
-	public void draw2D(Renderer2D r, Graphics2D g) {
+	public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
 		float thickness = r.scaleX(getRadius());
     g.setStroke(new BasicStroke(thickness));
+    Color3f c = new Color3f();
+    getAppearance().getMaterial().getDiffuseColor(c);
+    g.setColor(new Color(c.x,c.y,c.z,transparency));
     Point3f start = getEdge().getStart().getPosition();
     Point3f end = getEdge().getEnd().getPosition();
     Vector3f v = new Vector3f();

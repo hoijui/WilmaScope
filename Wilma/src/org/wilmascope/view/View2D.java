@@ -28,5 +28,5 @@ import java.awt.Graphics2D;
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public interface View2D {
-  public void draw2D(Renderer2D r, Graphics2D g);
+  public void draw2D(Renderer2D r, Graphics2D g, float transparency);
 }
