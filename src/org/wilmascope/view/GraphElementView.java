@@ -243,6 +243,7 @@ implements org.wilmascope.graph.Viewable {
   protected void addLabel(String text, double scale, Point3f originPosition, Vector3f vTranslation, Appearance apText) {
     if(text != null && !text.equals("null") && text.length()>0) {
       /*
+      // using Text3D
       Point3f centredOriginPosition = new Point3f(originPosition);
       centredOriginPosition.x += -text.length()/2;
       Text3D txt = new Text3D(f3d, text, centredOriginPosition);
@@ -252,12 +253,14 @@ implements org.wilmascope.graph.Viewable {
       textShape.setGeometry(txt);
       textShape.setAppearance(apText);
       */
+      // Using text2D and a billboard
       Color3f c = new Color3f(1f,1f,1f);
       //defaultMaterial.getDiffuseColor(c);
       Text2D text2D = new Text2D(text, c, "Dummy", 20, Font.PLAIN);
       TransformGroup textTG = new TransformGroup();
       textTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
       textTG.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+      makePickable(text2D);
       textTG.addChild(text2D);
 
       BoundingSphere bounds = new BoundingSphere(new Point3d(0.0,0.0,0.0), 100.0);
@@ -265,6 +268,9 @@ implements org.wilmascope.graph.Viewable {
       billboard.setSchedulingBounds( bounds );
 
       TransformGroup l = new TransformGroup();
+      Transform3D scaleTransform = new Transform3D();
+      scaleTransform.setScale(scale);
+      l.setTransform(scaleTransform);
       l.addChild(billboard);
       l.addChild(textTG);
 
@@ -273,21 +279,19 @@ implements org.wilmascope.graph.Viewable {
       }
       labelSubBranch = new BranchGroup();
       labelSubBranch.setCapability(BranchGroup.ALLOW_DETACH);
-      if(!vTranslation.equals(constants.vZero)) {
-        Transform3D translation = new Transform3D();
-        translation.setTranslation(vTranslation);
-        TransformGroup translateTG = new TransformGroup(translation);
-        translateTG.addChild(l);
-        labelSubBranch.addChild(translateTG);
-      } else {
-        try {
-          labelSubBranch.addChild(l);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
+      Transform3D translation = new Transform3D();
+      translation.setTranslation(vTranslation);
+      TransformGroup translateTG = new TransformGroup(translation);
+      translateTG.addChild(l);
+      labelSubBranch.addChild(translateTG);
       labelBranch.addChild(labelSubBranch);
     }
+  }
+  protected void setLabel(TransformGroup label) {
+      labelSubBranch = new BranchGroup();
+      labelSubBranch.setCapability(BranchGroup.ALLOW_DETACH);
+    labelSubBranch.addChild(label);
+    labelBranch.addChild(labelSubBranch);
   }
   /**
    * Add a visible Shape3D to this Graph Element.
