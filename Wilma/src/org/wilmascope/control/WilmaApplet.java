@@ -32,16 +32,15 @@ import org.wilmascope.gui.*;
  * @author Tim Dwyer
  * @version 1.0
  */
-public class WilmaMain extends JFrame {
+public class WilmaApplet extends JApplet {
   {
     // JPopupMenu won't work over a (heavyweight) Java3D canvas unless
     // we do the following
     JPopupMenu.setDefaultLightWeightPopupEnabled(false);
   }
-
   public void init() {
     getContentPane().setLayout(new BorderLayout());
-    graphControl = new GraphControl(400,400);
+    graphControl = new GraphControl(600,600);
     java.awt.Component graphCanvas = graphControl.getGraphCanvas();
     getContentPane().add("Center",graphCanvas);
     ControlPanel controlPanel = new ControlPanel();
@@ -98,26 +97,21 @@ public class WilmaMain extends JFrame {
   public static void main(String argv[])
   {
     JPopupMenu.setDefaultLightWeightPopupEnabled(false);
-    WilmaMain main = new WilmaMain();
+    WilmaApplet main = new WilmaApplet();
     main.createJMainFrame();
   }
   public void createJMainFrame() {
-    //JMainFrame mf = new JMainFrame(this, 400, 400);
-    new SplashWindow("images" +java.io.File.separator + "WilmaSplash.png", this, 5000);
-    init();
-    ImageIcon icon = new ImageIcon(WilmaMain.class.getResource("/images/WilmaW24.png"));
-    setIconImage(icon.getImage());
-    setTitle("Welcome to Wilma!");
-    setSize(600,600);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    show();
+    JMainFrame mf = new JMainFrame(this, 600, 600);
+    ImageIcon icon = new ImageIcon(WilmaApplet.class.getResource("/images/WilmaW24.png"));
+    mf.setIconImage(icon.getImage());
+    mf.setTitle("Welcome to Wilma!");
   }
   GraphControl graphControl;
   public GraphControl getGraphControl() {
     return graphControl;
   }
   public void setSize(int width, int height) {
-    System.out.println("resizing: width="+width+", height="+height);
+    //System.out.println("resizing: width="+width+", height="+height);
     super.setSize(width,height);
     getRootPane().updateUI();
     validate();

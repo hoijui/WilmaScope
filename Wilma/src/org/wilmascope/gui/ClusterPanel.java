@@ -51,7 +51,9 @@ public class ClusterPanel extends MultiPickPanel {
     newCluster.addForce("Repulsion");
     newCluster.addForce("Spring");
     newCluster.addForce("Origin").setStrength(10f);
-    newCluster.addForce("Planar");
+    if(newCluster.getViewType().equals("Planar Cluster")) {
+      newCluster.addForce("Planar");
+    }
     cluster.unfreeze();
     cleanup();
   }

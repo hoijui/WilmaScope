@@ -44,6 +44,9 @@ public class MenuBar extends JMenuBar {
   JMenuItem exitMenuItem = new JMenuItem();
   JMenu viewMenu = new JMenu();
   JCheckBoxMenuItem antialiasingCheckBoxMenuItem = new JCheckBoxMenuItem();
+  JMenuItem helpMenuItem = new JMenuItem();
+  JMenuItem licenseMenuItem = new JMenuItem();
+  JMenuItem aboutMenuItem = new JMenuItem();
 
   public MenuBar(Actions actions, GraphControl graphControl, ControlPanel controlPanel) {
     this.graphControl = graphControl;
@@ -70,12 +73,36 @@ public class MenuBar extends JMenuBar {
         antialiasingCheckBoxMenuItem_actionPerformed(e);
       }
     });
+    helpMenuItem.setText("Help Contents...");
+    helpMenuItem.setMnemonic('H');
+    helpMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        helpMenuItem_actionPerformed(e);
+      }
+    });
+    licenseMenuItem.setText("License details...");
+    licenseMenuItem.setMnemonic('L');
+    licenseMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        licenseMenuItem_actionPerformed(e);
+      }
+    });
+    aboutMenuItem.setText("About");
+    aboutMenuItem.setMnemonic('A');
+    aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        aboutMenuItem_actionPerformed(e);
+      }
+    });
     this.add(fileMenu);
     this.add(editMenu);
     this.add(viewMenu);
     this.add(helpMenu);
     fileMenu.add(exitMenuItem);
     viewMenu.add(antialiasingCheckBoxMenuItem);
+    helpMenu.add(helpMenuItem);
+    helpMenu.add(licenseMenuItem);
+    helpMenu.add(aboutMenuItem);
   }
 
   void exitMenuItem_actionPerformed(ActionEvent e) {
@@ -91,4 +118,15 @@ public class MenuBar extends JMenuBar {
   }
   GraphControl graphControl;
 
+  void helpMenuItem_actionPerformed(ActionEvent e) {
+    HelpFrame h = new HelpFrame("../userdoc/index.html");
+    h.show();
+  }
+  void licenseMenuItem_actionPerformed(ActionEvent e) {
+    HelpFrame h = new HelpFrame("../userdoc/license.html");
+    h.show();
+  }
+  void aboutMenuItem_actionPerformed(ActionEvent e) {
+    new About(null,"images" +java.io.File.separator + "WilmaSplash.png").show();
+  }
 }

@@ -43,8 +43,7 @@ public class XMLGraph
   private Element root;
   /** Create and load the Graph data structures from the data held
    * in the specified file
-   * @param fileName the name of the xml file containing the enrolment
-   * data (file must use the Enrolment.dtd template)
+   * @param fileName the name of the xml file containing the graph data
    */
   public XMLGraph(String fileName) {
     this.fileName = fileName;

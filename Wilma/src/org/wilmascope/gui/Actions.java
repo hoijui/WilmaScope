@@ -109,7 +109,7 @@ public class Actions {
       new ImageIcon(getClass().getResource("/images/Open24.gif")))
     {
       public void actionPerformed(ActionEvent e) {
-        JFileChooser chooser = new JFileChooser(".");
+        JFileChooser chooser = new JFileChooser(org.wilmascope.global.Constants.getInstance().getProperty("DefaultDataPath"));
         chooser.setFileFilter(fileHandler.getFileFilter());
         int returnVal = chooser.showOpenDialog(parent);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
