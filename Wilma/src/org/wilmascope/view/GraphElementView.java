@@ -304,8 +304,7 @@ public abstract class GraphElementView
 			// Using text2D and a billboard
 			Color3f c = null;
 			if (constants.getProperty("LabelUseViewColour").equals("true")) {
-				c = new Color3f();
-				appearance.getMaterial().getDiffuseColor(c);
+				c = this.getColor3f();
 			} else {
 				c = constants.getColor3f("LabelColour");
 			}

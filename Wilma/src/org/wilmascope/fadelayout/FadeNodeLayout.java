@@ -11,7 +11,9 @@ import javax.vecmath.Vector3f;
 
 import org.wilmascope.graph.Node;
 import org.wilmascope.graph.NodeLayout;
+import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.GraphElementView;
+import org.wilmascope.view.ViewManager;
 import org.wilmascope.viewplugin.LineNodeView;
 
 /**
@@ -93,7 +95,7 @@ public class FadeNodeLayout extends NodeLayout {
 	    	}
 		}
 		
-		if (VariableForces.layering == VariableForces.sphereYear && (node.getView() instanceof LineNodeView))
+		if (VariableForces.layering == VariableForces.sphereYear /*&& (node.getView() instanceof LineNodeView)*/)
 		{
 			float radius = 0f;
 			
@@ -198,12 +200,10 @@ public class FadeNodeLayout extends NodeLayout {
 			{
 				yearColour.set(0.7f, 0.1f, 0.6f);
 			}
-			
-			
-			((GraphElementView)node.getView()).setColour(yearColour);
+			setNodeColour(yearColour.x,yearColour.y, yearColour.z);
 		}
 		
-		if (VariableForces.colouring == VariableForces.degreeColouring)
+		if (VariableForces.colouring == VariableForces.degreeColouring && (node.getView() instanceof LineNodeView))
 		{
 			
 			int degree = node.getEdges().size();
@@ -214,28 +214,37 @@ public class FadeNodeLayout extends NodeLayout {
 	    	}
 			
 	    	if (degree >= degreeSplit1) {
-				((GraphElementView)node.getView()).setColour(1.0f, 0.0f, 0.0f);
+				setNodeColour(1.0f, 0.0f, 0.0f);
 			}
 	    	else
 	    	{
 	    		if (degree >= degreeSplit2) {
-					((GraphElementView)node.getView()).setColour(0.0f, 1.0f, 0.0f);
+					setNodeColour(0.0f, 1.0f, 0.0f);
 				}
 	    		else
 	    		{
-    				((GraphElementView)node.getView()).setColour(0.0f, 0.0f, 1.0f);
+    				setNodeColour(0.0f, 0.0f, 1.0f);
 	    		}
 	    	}
 	    	
-	    	if (!(node.getView() instanceof LineNodeView))
+	    	/*if (!(node.getView() instanceof LineNodeView))
 	    	{
 	    		((GraphElementView)node.getView()).setColour(1.0f, 1.0f, 0.0f);
-	    	}
+	    	}*/
+		}
+		
+		String label = ((GraphElementView)node.getView()).getLabel();
+		if (label != null && (label.equals(new String("George G. Robertson")) || (label.equals(new String("Stuart Card"))) || (label.equals(new String("Jean-Daniel Fekete"))) || (label.equals(new String("Georges Grinstein"))) || (label.equals(new String("Catherine Plaisant")))))
+		{
+			setNodeColour(1.0f, 1.0f, 0.0f);
 		}
 		
 		/*Point3f p = node.getPosition();
 		p.z = 0.0f;*/
 		force.set(0.0f, 0.0f, 0.0f);
+	}
+	private void setNodeColour(float r, float g, float b) {
+		((GraphElementView)getNode().getView()).setColour(r, g, b);
 	}
 	public void setLevelConstraint(int level) {
 		levelConstraint = level;

@@ -165,6 +165,7 @@ public class FileHandler {
 		}
 		Properties p = new Properties();
 		p.setProperty("Weight", "" + ge.getWeight());
+		xe.setProperties(p);
 	}
 	private void saveNodeProperties(GraphControl.NodeFacade gn, XMLGraph.Node xn) {
 		NodeView v = (NodeView) gn.getView();

@@ -36,6 +36,7 @@ import javax.vecmath.Vector3f;
 import org.wilmascope.graph.Edge;
 import org.wilmascope.view.Colours;
 import org.wilmascope.view.EdgeView;
+import org.wilmascope.view.NodeView;
 import org.wilmascope.view.Renderer2D;
 
 import com.sun.j3d.utils.geometry.Cone;
@@ -63,6 +64,7 @@ public class SpikeEdgeView extends EdgeView {
 	}
 	public void init() {
 		showDirectionIndicator();
+		setColour(((NodeView)getEdge().getEnd().getView()).getColour());
 	}
 	public void showDirectionIndicator() {
 		Cone cone = new Cone(2f, 0.1f, Cone.GENERATE_NORMALS, getAppearance());
@@ -70,7 +72,7 @@ public class SpikeEdgeView extends EdgeView {
 		makePickable(cone.getShape(Cone.CAP));
 		Transform3D transform = new Transform3D();
 		//transform.setTranslation(new Vector3f(0f, 0.45f, 0f));
-    transform.rotX(Math.PI);
+    //transform.rotX(Math.PI);
 		TransformGroup coneTransform = new TransformGroup(transform);
 		coneTransform.addChild(cone);
 		addTransformGroupChild(coneTransform);
@@ -86,11 +88,12 @@ public class SpikeEdgeView extends EdgeView {
     float radius = getRadius();
     getEdge().recalculate();
     double l = 5*edge.getWeight();
-    Vector3f positionVector = new Vector3f(edge.getEnd().getPosition());
+    System.out.println("Spike Edge Weight="+l);
+    Vector3f positionVector = new Vector3f(edge.getStart().getPosition());
     Vector3f v = new Vector3f(edge.getVector());
     v.normalize();
-    v.scale(edge.getEnd().getRadius());
-    positionVector.sub(v);
+    v.scale((float)(edge.getStart().getRadius()+0.05*l));
+    positionVector.add(v);
     setFullTransform(
       new Vector3d(radius,l,radius),
       positionVector,
