@@ -5,6 +5,8 @@ wilma.ps: wilma.dvi
 wilma.dvi: wilma.tex
 	latex wilma
 	latex wilma
+	bibtex wilma
+	latex wilma
 
 clean:
 	rm wilma.ps *.dvi *.log *.idx *.aux
