@@ -1,12 +1,12 @@
 #!/bin/sh
-if [ -e $JAVA_HOME/bin/javac ]
+if [ -e "$JAVA_HOME"/bin/javac ]
 then
   if [ $( uname | cut -c1-6 ) = CYGWIN ]
   then
     # for cygwin:
-    $JAVA_HOME/bin/java -DJAVA_HOME=$JAVA_HOME -cp $JAVA_HOME\\lib\\tools.jar\;lib\\ant.jar\;lib\\jaxp.jar\;lib\\crimson.jar\;lib\\xalan.jar org.apache.tools.ant.Main $1
+    "$JAVA_HOME"/bin/java -DJAVA_HOME="$JAVA_HOME" -cp "$JAVA_HOME"\\lib\\tools.jar\;lib\\ant.jar\;lib\\jaxp.jar\;lib\\crimson.jar\;lib\\xalan.jar org.apache.tools.ant.Main $1
   else
-    $JAVA_HOME/bin/java -DJAVA_HOME=$JAVA_HOME -cp $JAVA_HOME/lib/tools.jar:lib/ant.jar:lib/jaxp.jar:lib/crimson.jar:lib/xalan.jar org.apache.tools.ant.Main $1
+    "$JAVA_HOME"/bin/java -DJAVA_HOME="$JAVA_HOME" -cp "$JAVA_HOME"/lib/tools.jar:lib/ant.jar:lib/jaxp.jar:lib/crimson.jar:lib/xalan.jar org.apache.tools.ant.Main $1
   fi
 else
   echo "You must set the JAVA_HOME environment variable"

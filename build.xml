@@ -54,15 +54,17 @@
     <!-- Compile the java code from ${src} into ${classes} -->
     <javac srcdir="${src}" destdir="${dest}" optimize="${optimization}"
        excludes="org/wilmascope/chat/**,org/wilmascope/TestChatClient.java,org/wilmascope/control/TalkingGraph.java,org/wilmascope/control/WilmaChatServCORBA.java">
+       <classpath>
+        <pathelement location="${lib}/Jama-1.0.1.jar"/>
+       </classpath>
     </javac>
   </target>
 
   <target name="dist" depends="compile">
     <!-- Create the distribution directory -->
     <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-    <mkdir dir="${dest}/images"/>
-    <copy todir="${dest}/images" >
-      <fileset dir="${lib}/images"/>
+    <copy todir="${dest}" >
+      <fileset dir="${lib}"/>
     </copy>
     <jar manifest="META-INF/MANIFEST.MF" jarfile="${lib}/wilma.jar" basedir="${dest}"/>
     <!--
