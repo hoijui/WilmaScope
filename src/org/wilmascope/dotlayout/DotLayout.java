@@ -83,7 +83,7 @@ public class DotLayout implements LayoutEngine {
       in.write(
         "digraph d { graph [concentrate=false]; node [ "
           .getBytes());
-      //in.write("fixedsize=true ".getBytes());
+      in.write("fixedsize=true ".getBytes());
       in.write("layer=all ".getBytes());
       in.write("];\n".getBytes());
       int numLayers = ((Cluster) nodes.get(0)).getNodes().size();

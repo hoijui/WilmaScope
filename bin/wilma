@@ -3,7 +3,7 @@ if [ x$1 != x ]
 then
   if [ x$OS = xWindows_NT ]
   then
-    arg=$(cygpath -w $(pwd)/$1)
+    arg=$(cygpath -w "$(pwd)/$1")
   else
     arg=$(pwd)/$1
   fi
@@ -15,7 +15,7 @@ then
     cd ${WILMA_HOME}/lib
     if [ x$OS = xWindows_NT ]
     then
-      $JAVA_HOME/bin/java -Dj3d.stereo=PREFERRED -Xmx300m -cp ..\\classes\;postgresql.jar\;xalan.jar\;crimson.jar\;jaxp.jar\;wilma.jar -Djdbc.drivers=org.postgresql.Driver org.wilmascope.control.WilmaMain $arg
+      $JAVA_HOME/bin/java -Dj3d.stereo=PREFERRED -Xmx300m -cp ..\\classes\;postgresql.jar\;xalan.jar\;crimson.jar\;jaxp.jar\;wilma.jar -Djdbc.drivers=org.postgresql.Driver org.wilmascope.control.WilmaMain "$arg"
     else
       $JAVA_HOME/bin/java -Dj3d.stereo=PREFERRED -Xmx300m -cp ../classes:/usr/share/java/postgresql.jar:xalan.jar:crimson.jar:jaxp.jar:wilma.jar -Djdbc.drivers=org.postgresql.Driver org.wilmascope.control.WilmaMain $arg
     fi

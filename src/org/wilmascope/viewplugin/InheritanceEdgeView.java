@@ -65,7 +65,7 @@ public class InheritanceEdgeView extends EdgeView {
   public void showDirectionIndicator() {
     Appearance appearance = new Appearance();
     appearance.setMaterial(org.wilmascope.view.Colours.greenMaterial);
-    Cone cone=new Cone(0.07f, 0.3f, Cone.GENERATE_NORMALS, appearance);
+    Cone cone=new Cone(2f, 0.3f, Cone.GENERATE_NORMALS, appearance);
     makePickable(cone.getShape(Cone.BODY));
     makePickable(cone.getShape(Cone.CAP));
     Transform3D rotation = new Transform3D();

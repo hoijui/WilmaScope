@@ -76,7 +76,7 @@ public class FileHandler {
     long endTime = System.currentTimeMillis();
     long time = endTime - startTime;
     System.out.println("Loaded... in milliseconds: "+time);
-    graphControl.unfreeze();
+    graphControl.getRootCluster().getCluster().draw();
   }
   public FileFilter getFileFilter() {
     return new GraphFileFilter();

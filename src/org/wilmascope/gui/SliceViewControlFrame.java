@@ -155,7 +155,7 @@ public class SliceViewControlFrame extends JFrame {
     hBox.add(drawingPanel);
   }
   void radioButtons(JComponent container) {
-    File[] files = (File[])root.getUserData();
+    String[] strataNames = (String[])root.getUserData();
     
     ActionListener a = new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -166,8 +166,8 @@ public class SliceViewControlFrame extends JFrame {
     // ie, same as 3D stack
     Stack buttonStack = new Stack();
     
-    for(int i=0; i<files.length; i++) {
-      JRadioButton r = new JRadioButton(files[i].getName());
+    for(int i=0; i<strataNames.length; i++) {
+      JRadioButton r = new JRadioButton(strataNames[i]);
       r.setActionCommand(""+i);
       r.addActionListener(a);
       radioButtonGroup.add(r);

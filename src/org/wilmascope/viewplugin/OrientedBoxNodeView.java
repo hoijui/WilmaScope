@@ -72,7 +72,7 @@ public class OrientedBoxNodeView extends NodeView {
     makePickable(pickableSphere.getShape(Sphere.BODY));
     addTransformGroupChild(pickableSphere);
   }
-  public void setLabel(String label) {
+  public void showLabel(String label) {
     Appearance appearance = getAppearance();
     Text2D textObject = new Text2D(label,
     org.wilmascope.view.Colours.black,

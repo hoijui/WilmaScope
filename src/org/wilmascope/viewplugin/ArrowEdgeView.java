@@ -20,14 +20,23 @@
 
 package org.wilmascope.viewplugin;
 
-import org.wilmascope.view.*;
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
 
-import javax.media.j3d.*;
-import javax.vecmath.*;
-import javax.swing.*;
+import javax.media.j3d.Material;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.swing.ImageIcon;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
+
+import org.wilmascope.view.Colours;
+import org.wilmascope.view.EdgeView;
+import org.wilmascope.view.LODCylinder;
+import org.wilmascope.view.Renderer2D;
+import org.wilmascope.view.View2D;
+
 import com.sun.j3d.utils.geometry.Cone;
-
-import com.sun.j3d.utils.picking.PickTool;
 
 /**
  * Graphical representation of the edge
@@ -36,44 +45,56 @@ import com.sun.j3d.utils.picking.PickTool;
  * @version 1.0
  */
 
-public class ArrowEdgeView extends EdgeView {
-  public ArrowEdgeView() {
-    setTypeName("Arrow");
-  }
-  protected void setupDefaultMaterial() {
-    Material material = new Material();
-    material.setDiffuseColor(0.0f, 0.0f, 1.0f);
-    material.setAmbientColor(0f,0f,0.4f);
-    material.setShininess(50.0f);
-    setupDefaultAppearance(material);
-  }
-  protected void setupHighlightMaterial() {
-    setupHighlightAppearance(Colours.yellowMaterial);
-  }
-  public void init() {
-    LODCylinder cylinder = new LODCylinder(1.0f,0.9f,getAppearance());
-    //addShape(new Shape3D(edgeCylinder.getShape(Cylinder.BODY).getGeometry()));
+public class ArrowEdgeView extends EdgeView implements View2D {
+	public ArrowEdgeView() {
+		setTypeName("Arrow");
+	}
+	protected void setupDefaultMaterial() {
+		Material material = new Material();
+		material.setDiffuseColor(0.0f, 0.0f, 1.0f);
+		material.setAmbientColor(0f, 0f, 0.4f);
+		material.setShininess(50.0f);
+		setupDefaultAppearance(material);
+	}
+	protected void setupHighlightMaterial() {
+		setupHighlightAppearance(Colours.yellowMaterial);
+	}
+	public void init() {
+		LODCylinder cylinder = new LODCylinder(1.0f, 0.9f, getAppearance());
+		//addShape(new Shape3D(edgeCylinder.getShape(Cylinder.BODY).getGeometry()));
 
-    cylinder.makePickable(this);
-    Transform3D transform = new Transform3D();
-    transform.setTranslation(new Vector3f(0f,-0.05f,0f));
-    TransformGroup tg = new TransformGroup(transform);
-    cylinder.addToTransformGroup(tg);
-    addTransformGroupChild(tg);
-    showDirectionIndicator();
-  }
-  public void showDirectionIndicator() {
-    Cone cone=new Cone(2f, 0.1f, Cone.GENERATE_NORMALS, getAppearance());
-    makePickable(cone.getShape(Cone.BODY));
-    makePickable(cone.getShape(Cone.CAP));
-    Transform3D transform = new Transform3D();
-    transform.setTranslation(new Vector3f(0f,
-      0.45f, 0f));
-    TransformGroup coneTransform = new TransformGroup(transform);
-    coneTransform.addChild(cone);
-    addTransformGroupChild(coneTransform);
-  }
-  public ImageIcon getIcon() {
-    return new ImageIcon("images/arrow.png");
-  }
+		cylinder.makePickable(this);
+		Transform3D transform = new Transform3D();
+		transform.setTranslation(new Vector3f(0f, -0.05f, 0f));
+		TransformGroup tg = new TransformGroup(transform);
+		cylinder.addToTransformGroup(tg);
+		addTransformGroupChild(tg);
+		showDirectionIndicator();
+	}
+	public void showDirectionIndicator() {
+		Cone cone = new Cone(2f, 0.1f, Cone.GENERATE_NORMALS, getAppearance());
+		makePickable(cone.getShape(Cone.BODY));
+		makePickable(cone.getShape(Cone.CAP));
+		Transform3D transform = new Transform3D();
+		transform.setTranslation(new Vector3f(0f, 0.45f, 0f));
+		TransformGroup coneTransform = new TransformGroup(transform);
+		coneTransform.addChild(cone);
+		addTransformGroupChild(coneTransform);
+	}
+	public ImageIcon getIcon() {
+		return new ImageIcon("images/arrow.png");
+	}
+	public void draw2D(Renderer2D r, Graphics2D g) {
+		float thickness = r.scaleX(getRadius());
+    g.setStroke(new BasicStroke(thickness));
+    Point3f start = getEdge().getStart().getPosition();
+    Point3f end = getEdge().getEnd().getPosition();
+    Vector3f v = new Vector3f();
+    v.sub(end,start);
+    v.scale(0.9f);
+    Point3f lineEnd = new Point3f(start);
+    lineEnd.add(v);
+		r.linePath(g,start,lineEnd);
+		r.arrowPath(g, thickness / 10, lineEnd, end);
+	}
 }

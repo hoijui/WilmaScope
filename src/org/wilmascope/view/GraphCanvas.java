@@ -32,6 +32,7 @@ package org.wilmascope.view;
  * @version $Version:$
  */
 import javax.media.j3d.Alpha;
+import javax.media.j3d.Appearance;
 import javax.media.j3d.Background;
 import javax.media.j3d.Behavior;
 import javax.media.j3d.BoundingSphere;
@@ -48,13 +49,15 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
+import org.wilmascope.centernode.CenterNode;
 import org.wilmascope.light.LightManager;
 import org.wilmascope.rotation.RotationBehavior;
-import org.wilmascope.centernode.CenterNode;
 
 import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
 import com.sun.j3d.utils.behaviors.mouse.MouseTranslate;
 import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
+import com.sun.j3d.utils.geometry.Sphere;
+import com.sun.j3d.utils.image.TextureLoader;
 import com.sun.j3d.utils.picking.PickCanvas;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 public class GraphCanvas extends Canvas3D {
@@ -130,7 +133,7 @@ public class GraphCanvas extends Canvas3D {
 		background.setApplicationBounds(bounds);
 		background.setCapability(Background.ALLOW_COLOR_WRITE);
 		background.setCapability(Background.ALLOW_COLOR_READ);
-		bg.addChild(background);
+		transformGroup.addChild(background);
 
 		// Set up fog
 		fog = new ExponentialFog();
@@ -156,6 +159,25 @@ public class GraphCanvas extends Canvas3D {
 		centerNode.setSchedulingBounds(bounds);
 		centerNode.setEnable(false);
 		bg.addChild(centerNode);
+	}
+	public void setBackgroundTexture(String imagePath) {
+		// set up sky background
+		BranchGroup backGeoBranch = new BranchGroup();
+		Sphere sphereObj =
+			new Sphere(
+				1.0f,
+				Sphere.GENERATE_NORMALS
+					| Sphere.GENERATE_NORMALS_INWARD
+					| Sphere.GENERATE_TEXTURE_COORDS,
+				45);
+		Appearance backgroundApp = sphereObj.getAppearance();
+		backGeoBranch.addChild(sphereObj);
+		background.setGeometry(backGeoBranch);
+		TextureLoader tex = new TextureLoader(imagePath, new String("RGB"), this);
+		if (tex != null)
+			backgroundApp.setTexture(tex.getTexture());
+		else
+			System.err.println("Couldn't load background texture!");
 
 	}
 	public Bounds getBoundingSphere() {
@@ -181,14 +203,16 @@ public class GraphCanvas extends Canvas3D {
 		// This will move the ViewPlatform back a bit so the
 		// objects in the scene can be viewed.
 		universe.getViewingPlatform().setNominalViewingTransform();
-    setStereoSeparation(0.006);
+		setStereoSeparation(0.006);
+		this.getView().setBackClipDistance(100);
+		this.getView().setFrontClipDistance(0.1);
 		universe.addBranchGraph(bg);
 	}
-  public void setStereoSeparation(double separation) {
-    PhysicalBody b = this.getView().getPhysicalBody();
-    b.setLeftEyePosition(new Point3d(-separation/2.0, 0.0, 0.0));
-    b.setRightEyePosition(new Point3d(separation/2.0, 0.0, 0.0));
-  }
+	public void setStereoSeparation(double separation) {
+		PhysicalBody b = this.getView().getPhysicalBody();
+		b.setLeftEyePosition(new Point3d(-separation / 2.0, 0.0, 0.0));
+		b.setRightEyePosition(new Point3d(separation / 2.0, 0.0, 0.0));
+	}
 	public void setAntialiasingEnabled(boolean enabled) {
 		if (getSceneAntialiasingAvailable()) {
 			universe.getViewer().getView().setSceneAntialiasingEnable(enabled);

@@ -63,7 +63,7 @@ public class AggregationEdgeView extends EdgeView {
     showDirectionIndicator();
   }
   public void showDirectionIndicator() {
-    float width = 0.03f;
+    float width = 0.1f;
     Appearance appearance = new Appearance();
     appearance.setMaterial(org.wilmascope.view.Colours.redMaterial);
     Box diamond=new Box(width, width, width, appearance);
@@ -80,7 +80,7 @@ public class AggregationEdgeView extends EdgeView {
     Transform3D transform = new Transform3D();
     transform.setTranslation(new Vector3f(0f,
       -0.35f, 0f));
-    transform.setScale(new Vector3d(1d,3d,1d));
+    transform.setScale(new Vector3d(15d,0.7d,15d));
     TransformGroup tg = new TransformGroup(transform);
     tg.addChild(rotationTG);
     addTransformGroupChild(tg);
