@@ -393,18 +393,18 @@ of node $i$ relative to $j$.
 To avoid this expense, it is possible to approximate scalar energy potential
 values, caching this information at grid points throughout space.  Iterated
 updates to the potential well then cost only $O(|V|)$ time per iteration.  On
-the downside, the cache array itself takes $O(v \centerdot d)$ memory, where
-$v$ is the $n$-dimensional volume (or area) of the embedded graph and $d$ is
-the density of stored potential data points.
+the downside, the cache array itself takes $O(v \centerdot \rho)$ memory,
+where $v$ is the $n$-dimensional volume (or area) of the embedded graph and
+$\rho$ is the density of stored potential data points.
 
 Cowling~\cite{cowling02fast} has implemented a fast layout engine for
-WilmaScope which employs simulated annealing with potential energy caching
-to achieve linear-time graph embeddings.  Cowling was able to demonstrate
-that the algorithms of \cite{davidson01noise} do appear to achieve linear
-time results, but that when the grid size $v \centerdot d$ must be adjusted to
-prevent folding in large graphs, space and time complexity are
-no longer linear.  Figure \ref{fig-fastlayout} shows before and after
-screenshots of the algorithm's effects.
+WilmaScope which employs simulated annealing with potential energy caching to
+achieve linear-time graph embeddings.  Cowling was able to demonstrate that
+the algorithms of \cite{davidson01noise} do appear to achieve linear time
+results, but that when the grid size $v \centerdot \rho$ must be adjusted to
+prevent folding in large graphs, space and time complexity are no longer
+linear.  Figure \ref{fig-fastlayout} shows before and after screenshots of
+the algorithm's effects.
 
 Cowling's work serves to demonstrate the utility of Wilma as an empirical
 platform; with the WilmaScope rendering and navigation system, and the
@@ -434,8 +434,8 @@ are other algorithms in the literature which might be brought to bear.
 
 We have implemented one of these - the ``Multilevel Force-Directed'' approach
 of Walshaw~\cite{walshaw00multilevel}.  This multi-scaled approach
-incorporates two main innovations over the ordinary force-directed layout
-algorithm -- hierarchical layout, and short-range only repulsion forces.
+incorporates two main innovations over the common or garden force-directed
+algorithm -- hierarchical layout, and short-range-only repulsion forces.
 
 Instead of laying out the entire graph from singular or random initial
 conditions, the algorithm creates a series of simplified approximations of
@@ -455,23 +455,39 @@ nodes are replaced by their pairs of matched children, and the thermal energy
 of the system is re-initialised.  This process repeats until the entire graph
 has been embedded.
 
-The multilevel force-directed algorithm also addresses the $O(n^2)$ cost of
-the calculating the repulsion force (see Equation~\ref{repulsion}).  As with
-the fast simulated annealing strategy, this involves storing information about
-the repulsion in a spatial data structure, although the details are different.
+The multilevel process provides a number of benefits over single-pass force
+directed layout.  Notably, these include avoidance of local energy minima
+which may result from the arbitrary initial position of a large set of nodes;
+and the ability to tune layout parameters to correct for pathologies which
+become apparent to the user, as the level of detail increases.
+
+Walshaw's algorithm also addresses the $O(n^2)$ cost of the calculating the
+repulsion force (see Equation~\ref{repulsion}).  As with the fast simulated
+annealing strategy, this involves storing information about the replusion in
+a spatial data structure, although the details are different.
 
 Instead of trying to approximate the potential field of the force, the
-spatial structure simply allows nodes to be addressed by their locality.  A
-na\"{i}ve method of doing this is to keep a complete spatial array, while
-constant slowdowns can be traded off against space usage by using a hash
-table.
+spatial structure simply allows nodes to be addressed by their locality (or
+``cell'').  A na\"{i}ve method of doing this is to keep lists of nodes in a
+complete spatial array.  The size of an array may become large relative to
+the number of nodes (especially for spacious 3D embeddings), but if this is
+problematic, then space usage can be made linear in the number of nodes in
+exchange for a constant slowdown, through the use of a hash table.
 
-If the repulsion force is constructed so that it cuts of beyond a distance,
-that is:
+If the repulsion force is constructed so that it cuts off beyond a certain
+distance $d_\infty$, that is:
 
 \begin{equation}
-\exists x_\infty : \forall x > x_\infty, f_g(x) = 0
+\exists d_\infty : \forall d > d_\infty, f_g(d) = 0
 \end{equation}
+
+Then it is possible to calculate the repulsion force on a particular node $i$
+with reference solely to the positions of nearby nodes.  If the cells for
+the spatial data structure are of a size greater than or equal to $d_\infty$,
+then all such nodes may be addressed through the cell containing $i$, and
+those adjacent to it.  In this algorithm, the cost of calculating the
+replusion force is $O(n \centerdot \rho)$, where $\rho$ is the average spatial
+density of nodes.
 
 \subsubsection{DOT: heirarchical layout}
 DOT is a program included in the Graphviz
