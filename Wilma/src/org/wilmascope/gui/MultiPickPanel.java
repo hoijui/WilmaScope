@@ -41,10 +41,10 @@ public abstract class MultiPickPanel extends JPanel {
   JButton cancelButton = new JButton();
   JButton okButton = new JButton();
   Component boxGlue;
-  GraphControl.ClusterFacade cluster;
+  GraphControl.Cluster cluster;
   ControlPanel controlPanel;
   Actions actions;
-  public MultiPickPanel(ControlPanel controlPanel, GraphControl.ClusterFacade cluster) {
+  public MultiPickPanel(ControlPanel controlPanel, GraphControl.Cluster cluster) {
     this.cluster = cluster;
     this.controlPanel = controlPanel;
     this.actions = Actions.getInstance();

@@ -212,7 +212,7 @@ public class ForceLayout implements LayoutEngine {
    * @see org.wilmascope.graph.LayoutEngine#getControls()
    */
   public JPanel getControls() {
-    return new ForceControlsPanel((GraphControl.ClusterFacade) root
+    return new ForceControlsPanel((GraphControl.Cluster) root
         .getUserFacade());
   }
 

@@ -14,6 +14,7 @@ import java.util.TreeSet;
 import javax.media.j3d.Transform3D;
 import javax.swing.JOptionPane;
 import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
 
 import org.wilmascope.columnlayout.ColumnCluster;
 import org.wilmascope.columnlayout.NodeColumnLayout;
@@ -23,6 +24,7 @@ import org.wilmascope.dotlayout.DotLayout;
 import org.wilmascope.global.GlobalConstants;
 import org.wilmascope.graph.Edge;
 import org.wilmascope.graph.EdgeList;
+import org.wilmascope.graph.NodeList;
 import org.wilmascope.view.GraphElementView;
 
 /**
@@ -43,7 +45,7 @@ class ColumnGraphClient implements GraphClient {
   class TransientColumn {
     ColumnCluster c;
 
-    GraphControl.NodeFacade n;
+    GraphControl.Node n;
 
     int level;
   }
@@ -56,11 +58,11 @@ class ColumnGraphClient implements GraphClient {
 
   int level, maxLevel;
 
-  GraphControl.ClusterFacade r;
+  GraphControl.Cluster r;
 
   GlobalConstants constants = GlobalConstants.getInstance();
 
-  public ColumnGraphClient(GraphControl.ClusterFacade root, Hashtable columns,
+  public ColumnGraphClient(GraphControl.Cluster root, Hashtable columns,
       Hashtable edgeColumns, int level, int maxLevel) {
     this.columns = columns;
     this.edgeColumns = edgeColumns;
@@ -111,7 +113,7 @@ class ColumnGraphClient implements GraphClient {
       }
       while (c.level < level) {
         c.level++;
-        GraphControl.NodeFacade n = null;
+        GraphControl.Node n = null;
         if (c.level == level) {
           if (box) {
             n = c.c.addStraightNode(200f);
@@ -164,11 +166,11 @@ class ColumnGraphClient implements GraphClient {
         c.c.skipLevel();
       }
     }
-    GraphControl.NodeFacade start = (GraphControl.NodeFacade) nodes
+    GraphControl.Node start = (GraphControl.Node) nodes
         .get(startID);
-    GraphControl.NodeFacade end = (GraphControl.NodeFacade) nodes.get(endID);
-    GraphControl.EdgeFacade e1 = null;
-    GraphControl.EdgeFacade e2 = null;
+    GraphControl.Node end = (GraphControl.Node) nodes.get(endID);
+    GraphControl.Edge e1 = null;
+    GraphControl.Edge e2 = null;
     float radius = 0.04f;
     String edgeType = "SplineTube";
     if (arrowPosition.equals("both")) {
@@ -193,16 +195,16 @@ class ColumnGraphClient implements GraphClient {
   }
 
   public void addEdge(String startID, String endID, String arrowPosition) {
-    GraphControl.NodeFacade start = (GraphControl.NodeFacade) nodes
+    GraphControl.Node start = (GraphControl.Node) nodes
         .get(startID);
-    GraphControl.NodeFacade end = (GraphControl.NodeFacade) nodes.get(endID);
+    GraphControl.Node end = (GraphControl.Node) nodes.get(endID);
     if (start == null) {
       throw new Error("ERROR: couldn't find node: " + startID);
     }
     if (end == null) {
       throw new Error("ERROR: couldn't find node: " + endID);
     }
-    GraphControl.EdgeFacade e;
+    GraphControl.Edge e;
     if (arrowPosition.equals("both")) {
       e = r.addEdge(start, end, "SplineTube"); //,(float)Math.random()/10f);
       //r.addEdge(end, start,"Arrow");
@@ -237,7 +239,7 @@ public class ColumnsImporter {
         return;
       }
       int level = 0;
-      GraphControl.ClusterFacade r = g.getRootCluster();
+      GraphControl.Cluster r = g.getRootCluster();
       r.deleteAll();
       r.freeze();
       String[] strataNames = new String[files.length];
@@ -269,11 +271,7 @@ public class ColumnsImporter {
       }
       if (columns.size() > 0) {
         r.unfreeze();
-        // scale so it fits on screen and centre it a bit
-        Transform3D reorientation = new Transform3D();
-        reorientation.setScale(0.05);
-        reorientation.setTranslation(new Vector3d(0, -0.35, 0));
-        g.getGraphCanvas().reorient(reorientation);
+        g.centreGraph();
       }
       colourEdgeGroups(r, files.length);
     } catch (FileNotFoundException e) {
@@ -283,7 +281,7 @@ public class ColumnsImporter {
     }
   }
 
-  static void colourEdgeGroups(GraphControl.ClusterFacade r, int noStrata) {
+  static void colourEdgeGroups(GraphControl.Cluster r, int noStrata) {
     EdgeList edges = r.getCluster().getInternalEdges();
     Hashtable masterEdges = new Hashtable();
     for (edges.resetIterator(); edges.hasNext();) {

@@ -43,13 +43,13 @@ import org.wilmascope.forcelayout.ForceManager.UnknownForceTypeException;
  */
 public class ForceControlPanel extends javax.swing.JPanel {
   private Force force;
-  private GraphControl.ClusterFacade cluster;
+  private GraphControl.Cluster cluster;
   private ForceLayout forceLayout;
   JCheckBox enabledCheckBox = new JCheckBox();
   JSlider forceSlider = new JSlider();
   TitledBorder titledBorder1;
 
-  public ForceControlPanel(GraphControl.ClusterFacade cluster, Force force) {
+  public ForceControlPanel(GraphControl.Cluster cluster, Force force) {
     this.cluster = cluster;
     this.force = force;
     this.forceLayout = (ForceLayout)cluster.getLayoutEngine();

@@ -15,13 +15,13 @@ package org.wilmascope.fadelayout;
 public class VariableForces {
 	
 	public static final int none = 0;
-	public static final int year = 1;
+	public static final int levelConstraint = 1;
 	public static final int degree = 2;
-	public static final int sphereYear = 3;
+	public static final int spherelevelConstraint = 3;
 	public static final int sphereDegree = 4;
 	
 	public static final int defaultColouring = 0;
-	public static final int yearColouring = 1;
+	public static final int levelConstraintColouring = 1;
 	public static final int degreeColouring = 2;
 	
 	public static boolean edgeForce = false;

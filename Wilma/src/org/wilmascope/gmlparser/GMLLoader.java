@@ -26,7 +26,7 @@ import org.wilmascope.global.GlobalConstants;
  */
 class AugmentedGMLClient implements AugmentedGraphClient {
 	Hashtable nodes = new Hashtable();
-	GraphControl.ClusterFacade root;
+	GraphControl.Cluster root;
 	Vector seriesKeys;
 	boolean fixedColumnWidthMode = GlobalConstants.getInstance().getBooleanValue("FixedColumnWidthMode");
 	public void setSeriesKeys(Vector keys) {
@@ -35,7 +35,7 @@ class AugmentedGMLClient implements AugmentedGraphClient {
 		}
 		this.seriesKeys = keys;
 	}
-	public AugmentedGMLClient(GraphControl.ClusterFacade root) {
+	public AugmentedGMLClient(GraphControl.Cluster root) {
 		this.root = root;
 	}
 	public void addEdge(String startID, String endID, String label) {
@@ -44,9 +44,9 @@ class AugmentedGMLClient implements AugmentedGraphClient {
 	public void addEdge(String startID, String endID) {
 		ColumnCluster startCluster = (ColumnCluster) nodes.get(startID);
 		ColumnCluster endCluster = (ColumnCluster) nodes.get(endID);
-		GraphControl.NodeFacade startNodes[] =
+		GraphControl.Node startNodes[] =
 			startCluster.getClusterFacade().getNodes();
-		GraphControl.NodeFacade endNodes[] =
+		GraphControl.Node endNodes[] =
 			endCluster.getClusterFacade().getNodes();
 		for (int i = 0; i < startNodes.length; i++) {
 			float r =
@@ -55,7 +55,7 @@ class AugmentedGMLClient implements AugmentedGraphClient {
 					+ (float) Math.random();
 			//System.out.println("Radius = " + r);
 			if (r > 0.7f) {
-				GraphControl.EdgeFacade e =
+				GraphControl.Edge e =
 					root.addEdge(startNodes[i], endNodes[i], "SplineTube", r / 100f);
 				float red = r / 3f > 1.0f ? 1.0f : r / 3f;
 				float blue = r / 3f > 1.0f ? 0f : 1.0f - r / 3f;
@@ -70,7 +70,7 @@ class AugmentedGMLClient implements AugmentedGraphClient {
 		if (label == null)
 			label = " ";
 		c.setLabel(new String[] { label });
-		GraphControl.NodeFacade n = null;
+		GraphControl.Node n = null;
 		for (int i = 0; i < seriesKeys.size(); i++) {
 			n = c.addStraightNode(3f);
 			n.setColour(0.9f, 0.9f, 1f * (float) i / (float) seriesKeys.size());
@@ -91,7 +91,7 @@ class AugmentedGMLClient implements AugmentedGraphClient {
 		if (label == null)
 			label = " ";
 		c.setLabel(new String[] { label });
-		GraphControl.NodeFacade n = null;
+		GraphControl.Node n = null;
 		float max = 0;
 		if (fixedColumnWidthMode) {
 			for (Enumeration e = series.elements(); e.hasMoreElements();) {
@@ -124,7 +124,7 @@ public class GMLLoader {
 	AugmentedGMLParser parser = null;
 	public GMLLoader(GraphControl gc, String fileName) {
 		this.gc = gc;
-		GraphControl.ClusterFacade r = gc.getRootCluster();
+		GraphControl.Cluster r = gc.getRootCluster();
 		r.deleteAll();
 		r.freeze();
 		//r = r.addCluster();

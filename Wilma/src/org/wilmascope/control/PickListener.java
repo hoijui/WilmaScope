@@ -54,11 +54,11 @@ public class PickListener {
   public PickListener() {
   }
   public void register(final GraphControl.GraphElementFacade element) {
-    if (element instanceof GraphControl.EdgeFacade) {
+    if (element instanceof GraphControl.Edge) {
       element.addPickingClient(new GenericPickingClient(this, edgeOptionsClient, element));
-    } else if (element instanceof GraphControl.ClusterFacade) {
+    } else if (element instanceof GraphControl.Cluster) {
       element.addPickingClient(new GenericPickingClient(this, clusterOptionsClient, element));
-    } else if (element instanceof GraphControl.NodeFacade) {
+    } else if (element instanceof GraphControl.Node) {
       element.addPickingClient(new GenericPickingClient(this, nodeOptionsClient, element));
     }
   }

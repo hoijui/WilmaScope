@@ -51,7 +51,7 @@ public class DiscClusterView extends ClusterView {
       z=pos.z;
     }
     newRadius = (maxX-minX)/2f;
-    c.setRadius(newRadius);
+    setRadius(newRadius);
     c.setPosition(new Point3f(minX+newRadius,minY+newRadius,z));
     return newRadius;
   }

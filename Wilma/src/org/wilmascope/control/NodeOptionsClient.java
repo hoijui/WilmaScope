@@ -30,5 +30,5 @@ package org.wilmascope.control;
  */
 
 public interface NodeOptionsClient {
-  public void callback(java.awt.event.MouseEvent e, GraphControl.NodeFacade n);
+  public void callback(java.awt.event.MouseEvent e, GraphControl.Node n);
 }

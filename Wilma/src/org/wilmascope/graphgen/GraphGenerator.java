@@ -80,8 +80,8 @@ public abstract class GraphGenerator {
    * @param threeD use 3D positions
    * @return the new node
    */
-  protected GraphControl.NodeFacade addRandomNode(GraphControl.ClusterFacade root, boolean threeD) {
-    GraphControl.NodeFacade n = root.addNode(getNodeView());
+  protected GraphControl.Node addRandomNode(GraphControl.Cluster root, boolean threeD) {
+    GraphControl.Node n = root.addNode(getNodeView());
     n.setColour(GraphGenerator.randomColour());
     n.setPosition(GraphGenerator.randomPoint(threeD));
     return n;

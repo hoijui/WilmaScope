@@ -21,9 +21,13 @@ package org.wilmascope.viewplugin;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 
+import javax.media.j3d.Geometry;
+import javax.media.j3d.GeometryArray;
 import javax.media.j3d.GeometryStripArray;
+import javax.media.j3d.GeometryUpdater;
 import javax.media.j3d.Material;
 import javax.media.j3d.Shape3D;
+import javax.media.j3d.TriangleStripArray;
 import javax.swing.ImageIcon;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
@@ -32,6 +36,7 @@ import javax.vecmath.Vector3f;
 
 import org.wilmascope.graph.Edge;
 import org.wilmascope.view.Colours;
+import org.wilmascope.view.NodeGeometryObserver;
 import org.wilmascope.view.ViewConstants;
 import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.NodeView;
@@ -46,7 +51,7 @@ import com.sun.j3d.utils.geometry.NormalGenerator;
  * @author Tim Dwyer
  * @version 1.0
  */
-public class TaperedEdgeView extends EdgeView {
+public class TaperedEdgeView extends EdgeView implements NodeGeometryObserver {
 	//
 	// create the basic reference geometries from the shape sections of a
 	// cylinder
@@ -104,16 +109,45 @@ public class TaperedEdgeView extends EdgeView {
 	 */
 	private void setBottomRadius(float r) {
 		bottomRadius = r;
-	}
+	}  
+  /**
+   * adjust the radius of the top and bottom of the tube each argument is a
+   * xScale factor, ie the resulting radius will be the argument * node radius
+   * 
+   * @parameter bottomRadius bottom radius xScale factor
+   * @parameter topRadius top radius xScale factor
+   */
+  public void setEndRadii() {
+    final float bottomRadius = getEdge().getStart().getView().getRadius()*scale;
+    final float topRadius = getEdge().getEnd().getView().getRadius()*scale;
+    tubeGeometryArray.updateData(new GeometryUpdater() {
+      public void updateData(Geometry blah) {
+        for (int i = 0; i < tubePoints.length; i++) {
+          if (i % 2 == 0) {
+            taperedTubePoints[i] = new Point3f(tubePoints[i].x * topRadius,
+                tubePoints[i].y, tubePoints[i].z * topRadius);
+          } else {
+            taperedTubePoints[i] = new Point3f(tubePoints[i].x * bottomRadius,
+                tubePoints[i].y, tubePoints[i].z * bottomRadius);
+          }
+        }
+      }
+    });    this.topRadius = topRadius;
+    this.bottomRadius = bottomRadius;
+  }
+  Point3f[] taperedTubePoints;
+  float scale = 9.5f;
 	public void init() {
-		Point3f[] taperedTubePoints = new Point3f[tubePoints.length];
+		taperedTubePoints = new Point3f[tubePoints.length];
 		Color3f[] tubeColours = new Color3f[tubePoints.length];
-		Color3f startColour = new Color3f(((NodeView) getEdge().getStart()
-				.getView()).getColour());
-		Color3f endColour = new Color3f(((NodeView) getEdge().getEnd().getView())
-				.getColour());
-		setBottomRadius(getEdge().getStart().getRadius() * 9.5f);
-		setTopRadius(getEdge().getEnd().getRadius() * 9.5f);
+    NodeView startView = (NodeView)getEdge().getStart().getView();
+    NodeView endView = (NodeView)getEdge().getEnd().getView();
+		Color3f startColour = new Color3f(startView.getColour());
+		Color3f endColour = new Color3f(endView.getColour());
+		setBottomRadius(startView.getRadius() * scale);
+		setTopRadius(endView.getRadius() * scale);
+    startView.addGeometryObserver(this);
+    endView.addGeometryObserver(this);
 		setRadius(0.1f);
 		for (int i = 0; i < tubePoints.length; i++) {
 			if (i % 2 == 0) {
@@ -130,8 +164,15 @@ public class TaperedEdgeView extends EdgeView {
 		gi.setCoordinates(taperedTubePoints);
 		gi.setColors(tubeColours);
 		gi.setStripCounts(tubeStripCounts);
-		normalGenerator.generateNormals(gi);
-		Shape3D tubeShape = new Shape3D(gi.getGeometryArray(), getAppearance());
+    normalGenerator.generateNormals(gi);
+    tubeGeometryArray = new TriangleStripArray(taperedTubePoints.length,
+        GeometryArray.COORDINATES | GeometryArray.COLOR_3 | GeometryArray.BY_REFERENCE
+            | GeometryArray.NORMALS, tubeStripCounts);
+    tubeGeometryArray.setCapability(GeometryArray.ALLOW_REF_DATA_WRITE);
+    tubeGeometryArray.setCoordRef3f(gi.getCoordinates());
+    tubeGeometryArray.setNormalRef3f(gi.getNormals());
+    tubeGeometryArray.setColorRef3f((Color3f[])gi.getColors());
+		Shape3D tubeShape = new Shape3D(tubeGeometryArray, getAppearance());
 		makePickable(tubeShape);
 		addTransformGroupChild(tubeShape);
 	}
@@ -182,4 +223,8 @@ public class TaperedEdgeView extends EdgeView {
 	public ImageIcon getIcon() {
 		return new ImageIcon(org.wilmascope.images.Images.class.getResource("taperedEdge.png"));
 	}
+  GeometryArray tubeGeometryArray;
+  public void nodeGeometryChanged(NodeView nv) {
+    setEndRadii();
+  }
 }

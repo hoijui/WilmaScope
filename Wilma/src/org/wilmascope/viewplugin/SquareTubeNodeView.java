@@ -110,7 +110,7 @@ public class SquareTubeNodeView extends NodeView implements SizeAdjustableNodeVi
     Color3f c = new Color3f();
     getAppearance().getMaterial().getDiffuseColor(c);
     g.setColor(new Color(c.x,c.y,c.z,transparency));
-    r.fillSquare(g,getNode().getPosition(),getNode().getRadius());
+    r.fillSquare(g,getNode().getPosition(),getRadius());
   }
 	public SquareTubeNodeView() {
 		setTypeName("SquareTube");
@@ -124,7 +124,7 @@ public class SquareTubeNodeView extends NodeView implements SizeAdjustableNodeVi
 		setupHighlightAppearance(Colours.yellowMaterial);
 	}
 	protected void init() {
-		float radius = getNode().getRadius();
+		float radius = getRadius();
 		taperedTubePoints = new Point3f[tubePoints.length];
 		scaledTopPoints = new Point3f[topPoints.length];
 		for (int i = 0; i < topPoints.length; i++) {
@@ -257,8 +257,8 @@ public class SquareTubeNodeView extends NodeView implements SizeAdjustableNodeVi
 		});
 		this.topRadius = topRadius;
 		this.bottomRadius = bottomRadius;
-		getNode().setRadius(
-			getNode().getRadius() * (topRadius + bottomRadius) / 2f);
+		setRadius(
+			getRadius() * (topRadius + bottomRadius) / 2f);
 	}
 	public void setHeight(final float height) {
 		tubeGeometryArray.updateData(new GeometryUpdater() {

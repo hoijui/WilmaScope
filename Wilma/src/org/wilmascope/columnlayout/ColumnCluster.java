@@ -11,7 +11,7 @@ import org.wilmascope.view.GraphElementView;
 import org.wilmascope.view.SizeAdjustableNodeView;
 import org.wilmascope.viewplugin.TaperedEdgeView;
 public class ColumnCluster {
-	public ColumnCluster(GraphControl.ClusterFacade root, float initValue,
+	public ColumnCluster(GraphControl.Cluster root, float initValue,
 			float bottomRadius, int initLevel, String clusterViewType,
 			String nodeViewType) {
 		this.root = root;
@@ -27,7 +27,7 @@ public class ColumnCluster {
 		}
 		initTopRadius = lastTopRadius = bottomRadius;
 	}
-	public ColumnCluster(String label, GraphControl.ClusterFacade root,
+	public ColumnCluster(String label, GraphControl.Cluster root,
 			float initValue, float bottomRadius, int initLevel, String nodeViewType) {
 		this.root = root;
 		this.label = label;
@@ -53,7 +53,7 @@ public class ColumnCluster {
 		column.setLabel(labels);
 	}
 	interface Layout {
-		public GraphControl.NodeFacade addNode(float radius);
+		public GraphControl.Node addNode(float radius);
 		int getNextLevel();
 	}
 	class ColTubeLayout implements Layout {
@@ -64,8 +64,8 @@ public class ColumnCluster {
 			column.setLayoutEngine(l);
 			l.setBaseStratum(initLevel);
 		}
-		public GraphControl.NodeFacade addNode(float radius) {
-			GraphControl.NodeFacade n = column.addNode(viewType);
+		public GraphControl.Node addNode(float radius) {
+			GraphControl.Node n = column.addNode(viewType);
 			GraphElementView v = n.getView();
 			if (v instanceof SizeAdjustableNodeView) {
 				((SizeAdjustableNodeView) n.getView()).setEndRadii(lastTopRadius,
@@ -87,13 +87,13 @@ public class ColumnCluster {
 			l.setBaseStratum(initLevel);
 			lastTopNode = topNode = addNode(initTopRadius);
 		}
-		public GraphControl.NodeFacade addNode(float radius) {
-			GraphControl.NodeFacade n = column.addNode();
+		public GraphControl.Node addNode(float radius) {
+			GraphControl.Node n = column.addNode();
 			n.hide();
 			n.setRadius(n.getRadius() * radius);
 			n.setColour(211f / 255f, 199f / 255f, 182f / 255f);
 			if (lastTopNode != null) {
-				GraphControl.EdgeFacade e = column.addEdge(lastTopNode, n,
+				GraphControl.Edge e = column.addEdge(lastTopNode, n,
 						"Tapered Edge");
 				e.setColour(211f / 255f, 199f / 255f, 182f / 255f);
 			}
@@ -110,14 +110,14 @@ public class ColumnCluster {
 			((ForceLayout) column.getLayoutEngine()).addForce(new Spring(15f));
 			//lastTopNode = topNode = addNode(initTopRadius);
 		}
-		public GraphControl.NodeFacade addNode(float radius) {
-			GraphControl.NodeFacade n = column.addNode();
+		public GraphControl.Node addNode(float radius) {
+			GraphControl.Node n = column.addNode();
 			n.setLevelConstraint(level++);
 			n.setRadius(n.getRadius() * radius);
 			//n.setColour(211f/255f, 199f/255f, 182f/255f);
 			n.setColour(102f / 255f, 255f / 255f, 51f / 255f);
 			if (lastTopNode != null) {
-				GraphControl.EdgeFacade e = column.addEdge(lastTopNode, n,
+				GraphControl.Edge e = column.addEdge(lastTopNode, n,
 						"Tapered Edge");
 				e.setRelaxedLength(0.001f);
 				//e.setColour(211f/255f, 199f/255f, 182f/255f);
@@ -132,7 +132,7 @@ public class ColumnCluster {
 	public int getNextLevel() {
 		return layout.getNextLevel();
 	}
-	public GraphControl.NodeFacade addNode(float value) {
+	public GraphControl.Node addNode(float value) {
 		float topRadius = initTopRadius * value / initValue;
 		topNode = layout.addNode(topRadius);
 		lastTopRadius = topRadius;
@@ -140,7 +140,7 @@ public class ColumnCluster {
 		lastValue = value;
 		return topNode;
 	}
-	public GraphControl.NodeFacade addStraightNode(float value) {
+	public GraphControl.Node addStraightNode(float value) {
 		float topRadius = value;
 		lastTopRadius = topRadius;
 		topNode = layout.addNode(topRadius);
@@ -148,7 +148,7 @@ public class ColumnCluster {
 		lastValue = value;
 		return topNode;
 	}
-	public GraphControl.NodeFacade addVariableNode(float value) {
+	public GraphControl.Node addVariableNode(float value) {
 		float topRadius = value;
 		topNode = layout.addNode(topRadius);
 		lastTopRadius = topRadius;
@@ -156,16 +156,16 @@ public class ColumnCluster {
 		lastValue = value;
 		return topNode;
 	}
-	public GraphControl.NodeFacade addInvisibleNode() {
+	public GraphControl.Node addInvisibleNode() {
 		return topNode;
 	}
 	public float getTopRadius() {
 		return lastTopRadius;
 	}
-	public GraphControl.NodeFacade addNode() {
+	public GraphControl.Node addNode() {
 		return addNode(lastValue);
 	}
-	public GraphControl.NodeFacade getTopNode() {
+	public GraphControl.Node getTopNode() {
 		return topNode;
 	}
 	public static void setColumnStyle(int style) {
@@ -178,17 +178,17 @@ public class ColumnCluster {
 		level++;
 		((ColumnLayout) column.getLayoutEngine()).skipStratum();
 	}
-	public GraphControl.ClusterFacade getClusterFacade() {
+	public GraphControl.Cluster getClusterFacade() {
 		return column;
 	}
 	public static final int DOTCOLUMNS = 1;
 	public static final int FORCECOLUMNS = 2;
 	public static final int WORMS = 3;
 	static int columnStyle = DOTCOLUMNS;
-	GraphControl.ClusterFacade root;
-	GraphControl.ClusterFacade column;
+	GraphControl.Cluster root;
+	GraphControl.Cluster column;
 	float lastTopRadius, initTopRadius;
-	GraphControl.NodeFacade topNode, lastTopNode;
+	GraphControl.Node topNode, lastTopNode;
 	float initValue, lastValue;
 	String label;
 	int level = 0;

@@ -175,19 +175,7 @@ public class Node extends GraphElement {
     return position;
   }
 
-  /**
-   * sets the radius of the node's boundary sphere
-   * @param radius the radius of the node, (0.25 is a good size)
-   */
-  public void setRadius(float radius) {
-    this.radius = radius;
-  }
-  /**
-   * @return radius of the nodes boundary sphere
-   */
-  public float getRadius() {
-    return radius;
-  }
+
   /**
    * set the Mass of this node
    */
@@ -212,7 +200,6 @@ public class Node extends GraphElement {
   private EdgeList edges = new EdgeList();
   private Point3f position = new Point3f();
   // node's Spherical radius
-  private float radius = 0.1f;
   private float mass = 1f;
   private boolean fixedPosition = false;
   /**

@@ -78,13 +78,13 @@ public class Actions {
     final Component parent,
     final GraphControl graphControl,
     final ControlPanel controlPanel) {
-    final GraphControl.ClusterFacade rootCluster =
+    final GraphControl.Cluster rootCluster =
       graphControl.getRootCluster();
     fileHandler = new FileHandler(graphControl);
     addNodeAction =
       new AbstractAction("Add Node", new ImageIcon(org.wilmascope.images.Images.class.getResource("node.png"))) {
       public void actionPerformed(ActionEvent e) {
-        GraphControl.NodeFacade n = rootCluster.addNode();
+        GraphControl.Node n = rootCluster.addNode();
         rootCluster.unfreeze();
       }
     };
@@ -142,8 +142,7 @@ public class Actions {
     centreAction =
       new AbstractAction("Center Graph", new ImageIcon(org.wilmascope.images.Images.class.getResource("centre.png"))) {
       public void actionPerformed(ActionEvent e) {
-        NodeList nodes = graphControl.getRootCluster().getCluster().getAllNodes();
-        graphControl.getGraphCanvas().reorient(new Vector3f(nodes.getBarycenter()),nodes.getWidth());
+        graphControl.centreGraph();
       }
     };
     lightingAction =

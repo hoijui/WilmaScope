@@ -23,7 +23,13 @@ import javax.vecmath.Vector3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.AxisAngle4f;
+
+import org.wilmascope.view.NodeGeometryObserver;
+
+import java.lang.ref.WeakReference;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
 /**
  * a Cluster is a set of Nodes ({@link Node}) and Edges
  * ({@link Edge}) sharing the same ({@link LayoutEngine}).
@@ -376,9 +382,19 @@ public class Cluster extends Node {
    * @return true if all are balanced
    */
   public boolean applyLayout() {
-    boolean balanced = true;
-    balanced = layoutEngine.applyLayout() && balanced;
-    balanced = nodes.getClusters().applyLayout() && balanced;
+    if(balanced) {
+      // layout invoked on a balanced graph... 
+      // need to notify listeners of change of state
+      balanced=false;
+      notifyBalancedEventListeners();
+    }
+    boolean clusterBalanced = layoutEngine.applyLayout();
+    // this cluster only balanced if children are too
+    boolean childrenBalanced = nodes.getClusters().applyLayout();
+    balanced=clusterBalanced&&childrenBalanced;
+    if(balanced) {
+      notifyBalancedEventListeners();
+    }
     return balanced;
   }
 
@@ -389,14 +405,14 @@ public class Cluster extends Node {
     float tmpRadius;
     for (nodes.resetIterator(); nodes.hasNext();) {
       Node member = nodes.nextNode();
-      tmpRadius = getPosition().distance(member.getPosition()) + member.getRadius();
+      tmpRadius = getPosition().distance(member.getPosition()) + member.getView().getRadius();
       if(tmpRadius > newRadius) {
         newRadius = tmpRadius;
       }
     }
     // add a little bit extra to the radius to make sure it covers all nodes
     newRadius += 0.1;
-    setRadius(newRadius);
+    ((NodeView)view).setRadius(newRadius);
   }
 
 
@@ -488,6 +504,40 @@ public class Cluster extends Node {
       owner.addMass(delta);
     }
   }
+  public void addBalancedEventListener(BalancedEventListener l) {
+    WeakReference<BalancedEventListener> wr = new WeakReference<BalancedEventListener>(l);
+    if (balancedEventListeners == null) { // lazy instantiation might save a bit of memory 
+      balancedEventListeners = new Vector<WeakReference<BalancedEventListener>>();
+    }
+    balancedEventListeners.add(wr);
+  } 
+
+  /*
+   * Notify any clients waiting for layout to be finished for this cluster
+   */
+  private void notifyBalancedEventListeners() {
+    if (balancedEventListeners != null) {
+      for (Iterator<WeakReference<BalancedEventListener>> i = balancedEventListeners
+          .iterator(); i.hasNext();) {
+        WeakReference<BalancedEventListener> wr = i.next();
+        BalancedEventListener l = wr.get();
+        if (l != null) {
+          l.clusterBalanced(this,balanced);
+        } else {
+          i.remove();
+        }
+      }
+    }
+  }
+
+  /**
+   * @return Returns true if the cluster is balanced, meaning layout is not currently in progress.
+   */
+  public boolean isBalanced() {
+    return balanced;
+  }
+  private Vector<WeakReference<BalancedEventListener>> balancedEventListeners;
+  private boolean balanced = true;
   // a table mapping this cluster's external edges to their
   // connection points (portal nodes) in the cluster
   private Hashtable portalNodes = new Hashtable();

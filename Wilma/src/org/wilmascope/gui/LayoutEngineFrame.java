@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.WilmaMain;
+import org.wilmascope.graph.BalancedEventListener;
 import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.LayoutEngine;
 import org.wilmascope.layoutregistry.LayoutManager;
@@ -24,25 +25,27 @@ import org.wilmascope.layoutregistry.LayoutManager.UnknownLayoutTypeException;
  * A frame with a panel for selecting the layout engine, and a panel
  * for controls specific to that engine
  */
-public class LayoutEngineFrame extends JFrame {
+public class LayoutEngineFrame extends JFrame implements BalancedEventListener {
   private Box box1;
   private JPanel jPanel1 = new JPanel();
   private JComboBox layoutEngineComboBox;
-  private JButton startStopButton = new JButton("Start");
+  private JButton startStopButton = new JButton();
   private JPanel controlsPanel;
-  GraphControl.ClusterFacade cluster;
-  public LayoutEngineFrame(GraphControl.ClusterFacade cluster, String title) {
+  GraphControl.Cluster cluster;
+  public LayoutEngineFrame(GraphControl.Cluster cluster, String title) {
+    this.cluster = cluster;
     setTitle (title);
+    cluster.getCluster().addBalancedEventListener(this);
     LayoutEngine layoutEngine = cluster.getLayoutEngine();
     layoutEngineComboBox = new JComboBox(LayoutManager.getInstance()
         .getTypeList());
     controlsPanel=layoutEngine.getControls();
+    setStartStopButtonLabel();
     startStopButton.addActionListener(new java.awt.event.ActionListener() {
 		  public void actionPerformed(ActionEvent e) {
 			  startStopButton_actionPerformed(e);
 		  }
 	  });
-    this.cluster = cluster;
     ImageIcon icon = new ImageIcon(org.wilmascope.images.Images.class.getResource("forces.png"));
     this.setIconImage(icon.getImage());
     box1 = Box.createVerticalBox();
@@ -60,7 +63,18 @@ public class LayoutEngineFrame extends JFrame {
     pack();
   }
   void startStopButton_actionPerformed(ActionEvent e) {
-  	cluster.unfreeze();
+    if(startStopButton.getText().equals("Start")) {
+      cluster.unfreeze();
+    } else {
+      cluster.freeze();
+    }
+  }
+  void setStartStopButtonLabel() {
+    if(cluster.getCluster().isBalanced()) {
+      startStopButton.setText("Start");
+    } else {
+      startStopButton.setText("Stop");
+    }
   }
   void layoutEngineComboBox_actionPerformed(ActionEvent e) {
     String s = (String)layoutEngineComboBox.getSelectedItem();
@@ -78,5 +92,8 @@ public class LayoutEngineFrame extends JFrame {
     controlsPanel = layoutEngine.getControls();
     box1.add(controlsPanel);
     pack();
+  }
+  public void clusterBalanced(Cluster c, boolean balanced) {
+    setStartStopButtonLabel();
   }
 }

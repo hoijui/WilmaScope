@@ -41,7 +41,7 @@ class ColourPanel extends JPanel {
 public class EdgeViewFrame extends JFrame {
 
   /** Creates new form EdgeViewFrame */
-  public EdgeViewFrame(GraphControl gc, GraphControl.ClusterFacade root) {
+  public EdgeViewFrame(GraphControl gc, GraphControl.Cluster root) {
     this.rootCluster = root;
     this.graphControl = gc;
     initComponents();
@@ -167,7 +167,7 @@ public class EdgeViewFrame extends JFrame {
   }
 
   private void hueApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    GraphControl.EdgeFacade edges[] = rootCluster.getEdges();
+    GraphControl.Edge edges[] = rootCluster.getEdges();
     for(int i=0;i<edges.length;i++) {
       EdgeView v = (EdgeView)edges[i].getView();
       if(v!=null) {
@@ -177,7 +177,7 @@ public class EdgeViewFrame extends JFrame {
     }
   }
   private void hideApplyButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    GraphControl.EdgeFacade edges[] = rootCluster.getEdges();
+    GraphControl.Edge edges[] = rootCluster.getEdges();
     float threshold = (float)(hideThresholdSlider.getValue()) / 100f;
     System.out.println("Threshold = "+ threshold);
     for(int i=0;i<edges.length;i++) {
@@ -224,7 +224,7 @@ public class EdgeViewFrame extends JFrame {
   private JPanel minLabelPanel;
   private JPanel maxLabelPanel;
 
-  private GraphControl.ClusterFacade rootCluster;
+  private GraphControl.Cluster rootCluster;
   private GraphControl graphControl;
 }
 

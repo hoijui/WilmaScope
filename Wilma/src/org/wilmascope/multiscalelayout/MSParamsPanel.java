@@ -17,7 +17,7 @@ import javax.swing.event.*;
 
 public class MSParamsPanel extends JPanel {
   private BorderLayout borderLayout1 = new BorderLayout();
-  private org.wilmascope.control.GraphControl.ClusterFacade root;
+  private org.wilmascope.control.GraphControl.Cluster root;
   private Box box2;
   private JPanel jPanel1 = new JPanel();
   private TitledBorder titledBorder1;
@@ -44,7 +44,7 @@ public class MSParamsPanel extends JPanel {
   private JPanel jPanel8 = new JPanel();
   private JSlider scaleSlider = new JSlider();
   private TitledBorder titledBorder8;
-  public MSParamsPanel(org.wilmascope.control.GraphControl.ClusterFacade root) {
+  public MSParamsPanel(org.wilmascope.control.GraphControl.Cluster root) {
     this.root = root;
     try {
       jbInit();

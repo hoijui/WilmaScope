@@ -39,7 +39,7 @@ public class ClusteriseFrame extends JFrame {
   JLabel jLabel2 = new JLabel();
   JTextField keepField = new JTextField();
 
-  public ClusteriseFrame(GraphControl.ClusterFacade rootCluster, String windowTitle) {
+  public ClusteriseFrame(GraphControl.Cluster rootCluster, String windowTitle) {
     super(windowTitle);
     this.rootCluster = rootCluster;
     kMeansBox = Box.createVerticalBox();
@@ -84,14 +84,14 @@ public class ClusteriseFrame extends JFrame {
     int n = Integer.parseInt(keepField.getText());
     Vector[] clusters = transformer.kMeansClustering(rootCluster, k, n);
     for(int i = 0; i < clusters.length; i++) {
-      GraphControl.ClusterFacade newCluster = rootCluster.addCluster(clusters[i]);
+      GraphControl.Cluster newCluster = rootCluster.addCluster(clusters[i]);
       newCluster.setLayoutEngine(ForceLayout.createDefaultClusterForceLayout(newCluster.getCluster()));
       if(!expandedCheckBox.isSelected()) {
         newCluster.collapse();
       }
     }
   }
-  GraphControl.ClusterFacade rootCluster;
+  GraphControl.Cluster rootCluster;
   JPanel jPanel4 = new JPanel();
   JCheckBox expandedCheckBox = new JCheckBox();
 

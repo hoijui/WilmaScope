@@ -88,11 +88,10 @@ public class SpikeEdgeView extends EdgeView {
     float radius = getRadius();
     getEdge().recalculate();
     double l = 5*edge.getWeight();
-    System.out.println("Spike Edge Weight="+l);
     Vector3f positionVector = new Vector3f(edge.getStart().getPosition());
     Vector3f v = new Vector3f(edge.getVector());
     v.normalize();
-    v.scale((float)(edge.getStart().getRadius()+0.05*l));
+    v.scale((float)(edge.getStart().getView().getRadius()+0.05*l));
     positionVector.add(v);
     setFullTransform(
       new Vector3d(radius,l,radius),

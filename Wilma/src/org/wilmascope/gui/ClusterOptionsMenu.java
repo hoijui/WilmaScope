@@ -47,7 +47,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 	JMenuItem deleteMenuItem = new JMenuItem();
 	public ClusterOptionsMenu(
 		Component parent,
-		GraphControl.ClusterFacade rootCluster,
+		GraphControl.Cluster rootCluster,
 		ControlPanel controlPanel) {
 		this();
 		this.rootCluster = rootCluster;
@@ -57,7 +57,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 	public void callback(
 		java.awt.event.MouseEvent e,
 		GraphControl.GraphElementFacade cluster) {
-		this.cluster = (GraphControl.ClusterFacade) cluster;
+		this.cluster = (GraphControl.Cluster) cluster;
 		if (this.cluster.isExpanded()) {
 			remove(expandMenuItem);
 			add(collapseMenuItem);
@@ -162,7 +162,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 	}
 
 	private Component parent;
-	private GraphControl.ClusterFacade cluster;
+	private GraphControl.Cluster cluster;
 	JMenuItem hideMenuItem = new JMenuItem();
 	JMenu clusterTypeMenu = new JMenu();
 	JMenuItem contentsPickingMenuItem = new JMenuItem();
@@ -251,7 +251,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 		controlPanel.setMessage();
 		cluster.setLabel(label);
 	}
-	private GraphControl.ClusterFacade rootCluster;
+	private GraphControl.Cluster rootCluster;
 	JMenuItem hideNonNeighboursMenuItem = new JMenuItem();
 
 	private void traceNeighbours(NodeList neighbours, Cluster c, int depth) {

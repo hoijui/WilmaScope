@@ -56,9 +56,9 @@ public class LEDALoader {
       // read the number of nodes
       StringTokenizer st = new StringTokenizer(f.readLine());
       int nodeCount = Integer.parseInt(st.nextToken());
-      GraphControl.NodeFacade[] nodeArray = new GraphControl.NodeFacade[nodeCount];
+      GraphControl.Node[] nodeArray = new GraphControl.Node[nodeCount];
       // create the nodes, store references numbered from 1
-      GraphControl.ClusterFacade root = gc.getRootCluster();
+      GraphControl.Cluster root = gc.getRootCluster();
       for (int i = 0; i < nodeCount; i++) {
         f.readLine();
         nodeArray[i] = root.addNode();

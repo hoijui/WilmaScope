@@ -29,7 +29,7 @@ import javax.swing.*;
 
 public class FadeNodeControlPanel extends javax.swing.JPanel {
   //private String forceName;
-  private GraphControl.ClusterFacade cluster;
+  private GraphControl.Cluster cluster;
   private FadeLayout fadeLayout;
   JCheckBox enabledCheckBox = new JCheckBox();
   JSlider forceSlider = new JSlider();
@@ -37,7 +37,7 @@ public class FadeNodeControlPanel extends javax.swing.JPanel {
   TitledBorder titledBorder1;
   ButtonGroup group;
 
-  public FadeNodeControlPanel(final GraphControl.ClusterFacade cluster) {
+  public FadeNodeControlPanel(final GraphControl.Cluster cluster) {
     this.cluster = cluster;
     //this.forceName = forceName;
     this.fadeLayout = (FadeLayout)cluster.getLayoutEngine();

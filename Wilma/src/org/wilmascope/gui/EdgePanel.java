@@ -35,7 +35,7 @@ import org.wilmascope.control.PickListener;
  */
 
 public class EdgePanel extends MultiPickPanel {
-  public EdgePanel(ControlPanel controlPanel, GraphControl.ClusterFacade cluster) {
+  public EdgePanel(ControlPanel controlPanel, GraphControl.Cluster cluster) {
     super(controlPanel, cluster);
   }
   String getLabel() {
@@ -46,7 +46,7 @@ public class EdgePanel extends MultiPickPanel {
     if(pl.getPickedListSize()!=2) {
       return;
     }
-    cluster.addEdge((GraphControl.NodeFacade)pl.pop(),(GraphControl.NodeFacade)pl.pop());
+    cluster.addEdge((GraphControl.Node)pl.pop(),(GraphControl.Node)pl.pop());
     cluster.unfreeze();
     cleanup();
   }

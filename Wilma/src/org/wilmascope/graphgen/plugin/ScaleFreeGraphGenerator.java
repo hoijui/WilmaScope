@@ -49,7 +49,7 @@ public class ScaleFreeGraphGenerator extends GraphGenerator implements Runnable 
 
   int delay = 300;
 
-  GraphControl.ClusterFacade root;
+  GraphControl.Cluster root;
 
   JPanel controlPanel = new JPanel();
 
@@ -114,20 +114,20 @@ public class ScaleFreeGraphGenerator extends GraphGenerator implements Runnable 
 
     root.deleteAll();
     for (int i = 0; i < initSize; i++) {
-      GraphControl.NodeFacade v = root.addNode();
+      GraphControl.Node v = root.addNode();
       setColour(v);
     }
     new Thread(this).start();
   }
 
-  private void addEdge(GraphControl.ClusterFacade r, GraphControl.NodeFacade a,
-      GraphControl.NodeFacade b) {
+  private void addEdge(GraphControl.Cluster r, GraphControl.Node a,
+      GraphControl.Node b) {
     r.addEdge(a, b, getEdgeView());
     setColour(a);
     setColour(b);
   }
 
-  private void setColour(GraphControl.NodeFacade n) {
+  private void setColour(GraphControl.Node n) {
     float d = (float) n.getDegree();
     float h = 2 * d / 360f;
     float sb = 0.5f + d / 20f;
@@ -135,11 +135,11 @@ public class ScaleFreeGraphGenerator extends GraphGenerator implements Runnable 
   }
 
   class ProbableNode implements Comparable<ProbableNode> {
-    GraphControl.NodeFacade node;
+    GraphControl.Node node;
 
     float probability;
 
-    public ProbableNode(float p, GraphControl.NodeFacade n) {
+    public ProbableNode(float p, GraphControl.Node n) {
       this.probability = p;
       this.node = n;
     }
@@ -170,11 +170,11 @@ public class ScaleFreeGraphGenerator extends GraphGenerator implements Runnable 
       } catch (InterruptedException e) {
         // Thread interrupted
       }
-      GraphControl.NodeFacade[] l = root.getNodes();
-      GraphControl.NodeFacade u = root.addNode();
+      GraphControl.Node[] l = root.getNodes();
+      GraphControl.Node u = root.addNode();
       setColour(u);
       int totalDegree = 1;
-      for (GraphControl.NodeFacade n : l) {
+      for (GraphControl.Node n : l) {
         totalDegree += n.getDegree();
       }
       ProbableNode[] nodes = new ProbableNode[l.length];

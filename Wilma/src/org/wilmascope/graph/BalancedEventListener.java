@@ -17,7 +17,7 @@
  *
  * -- Tim Dwyer, 2001
  */
-package org.wilmascope.control;
+package org.wilmascope.graph;
 
 /**
  * @author dwyer
@@ -25,6 +25,6 @@ package org.wilmascope.control;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public interface GraphClient {
-  public void balanced();
+public interface BalancedEventListener {
+  public void clusterBalanced(Cluster c, boolean balanced);
 }

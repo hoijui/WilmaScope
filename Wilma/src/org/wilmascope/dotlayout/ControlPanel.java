@@ -37,7 +37,7 @@ import org.wilmascope.control.GraphControl;
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class ControlPanel extends JPanel {
-  public ControlPanel(final GraphControl.ClusterFacade c) {
+  public ControlPanel(final GraphControl.Cluster c) {
     final DotLayout dl = (DotLayout)c.getLayoutEngine();
     final JTextField xScaleField=new JTextField(""+dl.getXScale());
     final JTextField yScaleField=new JTextField(""+dl.getYScale());

@@ -24,9 +24,13 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import javax.media.j3d.Geometry;
+import javax.media.j3d.GeometryArray;
 import javax.media.j3d.GeometryStripArray;
+import javax.media.j3d.GeometryUpdater;
 import javax.media.j3d.Material;
 import javax.media.j3d.Shape3D;
+import javax.media.j3d.TriangleStripArray;
 import javax.swing.ImageIcon;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
@@ -35,6 +39,7 @@ import javax.vecmath.Vector3f;
 
 import org.wilmascope.graph.Edge;
 import org.wilmascope.view.Colours;
+import org.wilmascope.view.NodeGeometryObserver;
 import org.wilmascope.view.ViewConstants;
 import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.NodeView;
@@ -45,20 +50,24 @@ import com.sun.j3d.utils.geometry.GeometryInfo;
 import com.sun.j3d.utils.geometry.NormalGenerator;
 
 /**
- * An attenuated edge is tube that's fat at the ends and thin in the middle.  If my sloppy calculations are correct then the radius should match the radius of spherical nodes at either end.  Colour should also be graded from the start node colour to end node colour.
- *
+ * An attenuated edge is tube that's fat at the ends and thin in the middle. If
+ * my sloppy calculations are correct then the radius should match the radius of
+ * spherical nodes at either end. Colour should also be graded from the start
+ * node colour to end node colour.
+ * 
  * @author Tim Dwyer
  * @version 1.0
  */
 
-public class AttenuatedEdgeView
-    extends EdgeView {
+public class AttenuatedEdgeView extends EdgeView implements
+    NodeGeometryObserver {
   //
   // create the basic reference geometries from the shape sections of a cylinder
   //
-  static float topRadius = 1f, bottomRadius = 1f;
   static Point3f[] tubePoints;
+
   static int[] tubeStripCounts;
+
   static NormalGenerator normalGenerator = new NormalGenerator();
   {
     Cylinder c = new Cylinder(1f, 1f);
@@ -74,10 +83,8 @@ public class AttenuatedEdgeView
     return (GeometryStripArray) c.getShape(section).getGeometry();
   }
 
-  private static void loadGeometry(
-      GeometryStripArray geometry,
-      int[] stripCounts,
-      Point3f[] points) {
+  private static void loadGeometry(GeometryStripArray geometry,
+      int[] stripCounts, Point3f[] points) {
     for (int i = 0; i < points.length; i++) {
       points[i] = new Point3f();
     }
@@ -86,6 +93,7 @@ public class AttenuatedEdgeView
   }
 
   float length = 1.0f;
+
   public AttenuatedEdgeView() {
     setTypeName("Attenuated Edge");
   }
@@ -106,48 +114,35 @@ public class AttenuatedEdgeView
   protected void setupHighlightMaterial() {
     setupHighlightAppearance(Colours.yellowMaterial);
   }
-  /**
 
-  * adjust the radius of the top of the tube
-  * @parameter r xScale factor, ie the resulting top radius will be r * node radius
-  */
- static public void setTopRadius(float r) {
-   topRadius = r;
- }
+  float scale = 9.5f;
 
-  /**
-   * adjust the radius of the bottom of the tube
-   * @parameter r xScale factor, ie the resulting bottom radius will be r * node radius
-   */
-  static public void setBottomRadius(float r) {
-    bottomRadius = r;
-  }
+  Point3f[] taperedTubePoints;
+
+  Color3f[] tubeColours;
 
   public void init() {
+    NodeView startView = (NodeView)getEdge().getStart().getView();
+    NodeView endView = (NodeView)getEdge().getEnd().getView();
+    Color3f startColour = new Color3f(startView.getColour());
+    Color3f endColour = new Color3f(endView.getColour());
+    float startRadius = startView.getRadius() * scale;
+    float endRadius = endView.getRadius() * scale;
+
+    startView.addGeometryObserver(this);
+    endView.addGeometryObserver(this);
+    taperedTubePoints = new Point3f[tubePoints.length];
+    tubeColours = new Color3f[tubePoints.length];
+
     setRadius(0.1f);
-    Color3f startColour = new Color3f( ( (NodeView) getEdge().getStart().getView()).getColour());
-    Color3f endColour = new Color3f( ( (NodeView) getEdge().getEnd().getView()).getColour());
-    setTopRadius(getEdge().getStart().getRadius() * 9.5f);
-    setBottomRadius(getEdge().getEnd().getRadius() * 9.5f);
-
-    Point3f[] taperedTubePoints = new Point3f[tubePoints.length];
-    Color3f[] tubeColours = new Color3f[tubePoints.length];
-
     for (int i = 0; i < tubePoints.length; i++) {
       if (i % 2 == 0) {
-        taperedTubePoints[i] =
-            new Point3f(
-            tubePoints[i].x * topRadius,
-            tubePoints[i].y,
-            tubePoints[i].z * topRadius);
+        taperedTubePoints[i] = new Point3f(tubePoints[i].x * endRadius,
+            tubePoints[i].y, tubePoints[i].z * endRadius);
         tubeColours[i] = endColour;
-      }
-      else {
-        taperedTubePoints[i] =
-            new Point3f(
-            -tubePoints[i].x * bottomRadius,
-            tubePoints[i].y,
-            -tubePoints[i].z * bottomRadius);
+      } else {
+        taperedTubePoints[i] = new Point3f(-tubePoints[i].x * startRadius,
+            tubePoints[i].y, -tubePoints[i].z * startRadius);
         tubeColours[i] = startColour;
       }
     }
@@ -157,7 +152,14 @@ public class AttenuatedEdgeView
     gi.setStripCounts(tubeStripCounts);
     gi.recomputeIndices();
     normalGenerator.generateNormals(gi);
-    Shape3D tubeShape = new Shape3D(gi.getGeometryArray(), getAppearance());
+    tubeGeometryArray = new TriangleStripArray(taperedTubePoints.length,
+        GeometryArray.COORDINATES | GeometryArray.COLOR_3 | GeometryArray.BY_REFERENCE
+            | GeometryArray.NORMALS, tubeStripCounts);
+    tubeGeometryArray.setCapability(GeometryArray.ALLOW_REF_DATA_WRITE);
+    tubeGeometryArray.setCoordRef3f(gi.getCoordinates());
+    tubeGeometryArray.setNormalRef3f(gi.getNormals());
+    tubeGeometryArray.setColorRef3f((Color3f[])gi.getColors());
+    Shape3D tubeShape = new Shape3D(tubeGeometryArray, getAppearance());
     makePickable(tubeShape);
     addTransformGroupChild(tubeShape);
   }
@@ -177,13 +179,38 @@ public class AttenuatedEdgeView
     }
     Vector3f v = new Vector3f(e.getVector());
     v.scaleAdd(0.5f, e.getStart().getPosition());
-    setFullTransform(new Vector3d(getRadius(), l, getRadius()), v, getPositionAngle());
+    setFullTransform(new Vector3d(getRadius(), l, getRadius()), v,
+        getPositionAngle());
+  }
+
+  public void setEndRadii() {
+    final float startRadius = getEdge().getStart().getView().getRadius()
+        * scale;
+    final float endRadius = getEdge().getEnd().getView().getRadius() * scale;
+    final Color3f startColour = new Color3f(((NodeView) getEdge().getStart()
+        .getView()).getColour());
+    final Color3f endColour = new Color3f(((NodeView) getEdge().getEnd()
+        .getView()).getColour());
+    tubeGeometryArray.updateData(new GeometryUpdater() {
+      public void updateData(Geometry blah) {
+        for (int i = 0; i < tubePoints.length; i++) {
+          if (i % 2 == 0) {
+            taperedTubePoints[i] = new Point3f(tubePoints[i].x * endRadius,
+                tubePoints[i].y, tubePoints[i].z * endRadius);
+            tubeColours[i] = endColour;
+          } else {
+            taperedTubePoints[i] = new Point3f(-tubePoints[i].x * startRadius,
+                tubePoints[i].y, -tubePoints[i].z * startRadius);
+            tubeColours[i] = startColour;
+          }
+        }
+      }
+    });
   }
 
   /**
-   * 2D version of attenuated edge is just a two colour solid line.
-   *   First half line is coloured same as start node
-   *   Second half is coloured as for end node
+   * 2D version of attenuated edge is just a two colour solid line. First half
+   * line is coloured same as start node Second half is coloured as for end node
    */
   public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
     float thickness = r.scaleX(getRadius());
@@ -196,13 +223,25 @@ public class AttenuatedEdgeView
     v.scale(0.5f);
     Point3f mid = new Point3f(start);
     mid.add(v);
-    g.setColor( ( (NodeView) getEdge().getStart().getView()).getColour());
+    g.setColor(((NodeView) getEdge().getStart().getView()).getColour());
     r.linePath(g, start, mid);
-    g.setColor( ( (NodeView) getEdge().getEnd().getView()).getColour());
+    g.setColor(((NodeView) getEdge().getEnd().getView()).getColour());
     r.linePath(g, mid, end);
   }
 
   public ImageIcon getIcon() {
-    return new ImageIcon(org.wilmascope.images.Images.class.getResource("attenuatedEdge.png"));
+    return new ImageIcon(org.wilmascope.images.Images.class
+        .getResource("attenuatedEdge.png"));
   }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.wilmascope.view.NodeGeometryObserver#nodeGeometryChanged(org.wilmascope.view.NodeView)
+   */
+  public void nodeGeometryChanged(NodeView nv) {
+    setEndRadii();
+  }
+
+  GeometryArray tubeGeometryArray;
 }

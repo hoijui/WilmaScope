@@ -1,8 +1,13 @@
 Changes Since 3.0
 -----------------
-- Edges that need to watch for changes to a nodes geometry can
+- GraphControl.NodeFacade/EdgeFacade/ClusterFacade renamed to
+  GraphControl.Node/Edge/Cluster
+- graph.Cluster now allows BalancedEventListeners to register and
+  be notified when layout starts or stops.
+- Start button in layout engine frame is now a start/stop button
+- Edges that need to watch for changes to a node's geometry (radius or colour) can
   now implement the NodeGeometryObserver interface to be notified
-  of those changes
+  of those changes, eg, LineEdgeView, AttenuatedEdgeView, TaperedEdgeView
 - "Extending Wilmascope" html doc now used as javadoc overview page
 - Install4j windows dist now bundled with J2SE 1.5 and Java3D
 - "Mouse Rotate" toggle button now has an initial rotation

@@ -35,7 +35,7 @@ import org.wilmascope.control.PickListener;
 
 public class RemoveFromClusterPanel extends MultiPickPanel {
 
-  public RemoveFromClusterPanel(ControlPanel controlPanel, GraphControl.ClusterFacade cluster, GraphControl.ClusterFacade rootCluster) {
+  public RemoveFromClusterPanel(ControlPanel controlPanel, GraphControl.Cluster cluster, GraphControl.Cluster rootCluster) {
     super(controlPanel, cluster);
     this.rootCluster = rootCluster;
   }
@@ -52,5 +52,5 @@ public class RemoveFromClusterPanel extends MultiPickPanel {
     rootCluster.unfreeze();
     cleanup();
   }
-  GraphControl.ClusterFacade rootCluster;
+  GraphControl.Cluster rootCluster;
 }
