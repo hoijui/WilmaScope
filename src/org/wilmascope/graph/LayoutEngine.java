@@ -20,6 +20,10 @@
 
 package org.wilmascope.graph;
 
+import java.util.Properties;
+
+import javax.swing.JPanel;
+
 /**
  * Classes which determine layout for a particular cluster must implement this
  * interface.
@@ -49,4 +53,7 @@ public interface LayoutEngine {
    * the layout engine implementing this interface.
    */
   public EdgeLayout createEdgeLayout(Edge e);
+  public Properties getProperties();
+  public void setProperties(Properties p);
+  public JPanel getControls();
 }

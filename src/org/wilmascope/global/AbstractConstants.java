@@ -98,7 +98,16 @@ public abstract class AbstractConstants extends Properties {
     }
     return value;
   }
-
+  
+  /** Gets the boolean value for the specified constant. */
+  public boolean getBooleanValue(String constantName) {
+    String property;
+    property = getProperty(constantName);
+    if(property == null)
+      throw new Error("Unknown Constant '" + constantName + "'!!");
+    return Boolean.valueOf(property).booleanValue();
+  }
+  
   /** Gets the float value for the specified constant.
    *  If the specified constant does not exist or is not in a
    *  valid floating point number format in properties then it

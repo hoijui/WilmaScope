@@ -1,11 +1,22 @@
 package org.wilmascope.gui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import org.wilmascope.control.GraphControl;
-import org.wilmascope.graph.Cluster;
+import org.wilmascope.dotlayout.DotLayout;
+import org.wilmascope.fastlayout.FastLayout;
+import org.wilmascope.forcelayout.*;
 import org.wilmascope.forcelayout.ForceLayout;
-import java.awt.event.*;
+import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.LayoutEngine;
+import org.wilmascope.multiscalelayout.MultiScaleLayout;
 
 /**
  * @author dwyer
@@ -23,23 +34,8 @@ public class LayoutEngineFrame extends JFrame {
   public LayoutEngineFrame(GraphControl.ClusterFacade cluster, String title) {
     setTitle (title);
     org.wilmascope.graph.LayoutEngine layoutEngine = cluster.getLayoutEngine();
-    if(layoutEngine.getClass().getName().equals("org.wilmascope.forcelayout.ForceLayout")) {
-      controlsPanel = new ForceControlsPanel(cluster);
-    } else if(layoutEngine.getClass().getName().equals("org.wilmascope.fastlayout.FastLayout")) {
-      controlsPanel = new org.wilmascope.fastlayout.ParamsPanel(cluster);
-    } else if(layoutEngine.getClass().getName().equals("org.wilmascope.multiscalelayout.MultiScaleLayout")) {
-      controlsPanel = new org.wilmascope.multiscalelayout.MSParamsPanel(cluster);
-    }
+    controlsPanel=layoutEngine.getControls();
     this.cluster = cluster;
-    try {
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-    pack();
-  }
-  private void jbInit() throws Exception {
     ImageIcon icon = new ImageIcon("images/forces.png");
     this.setIconImage(icon.getImage());
     box1 = Box.createVerticalBox();
@@ -48,10 +44,20 @@ public class LayoutEngineFrame extends JFrame {
         layoutEngineComboBox_actionPerformed(e);
       }
     });
+    if(layoutEngine instanceof org.wilmascope.forcelayout.ForceLayout) {
+      layoutEngineComboBox.setSelectedIndex(0);
+    } else if(layoutEngine instanceof DotLayout) {
+      layoutEngineComboBox.setSelectedIndex(3);
+    } else if(layoutEngine instanceof MultiScaleLayout) {
+      layoutEngineComboBox.setSelectedIndex(2);
+    } else if(layoutEngine instanceof FastLayout) {
+      layoutEngineComboBox.setSelectedIndex(1);
+    }
     this.getContentPane().add(box1, BorderLayout.CENTER);
     box1.add(jPanel1, null);
     box1.add(controlsPanel);
     jPanel1.add(layoutEngineComboBox, null);
+    pack();
   }
 
   void layoutEngineComboBox_actionPerformed(ActionEvent e) {
@@ -62,20 +68,22 @@ public class LayoutEngineFrame extends JFrame {
     layoutEngineName = s;
     box1.remove(controlsPanel);
     Cluster c = cluster.getCluster();
+    LayoutEngine layoutEngine=null;
     if(layoutEngineName.equals("Force Directed")) {
-      org.wilmascope.forcelayout.ForceLayout forcelayout = new org.wilmascope.forcelayout.ForceLayout(c);
-      c.setLayoutEngine(forcelayout);
-      forcelayout.createElementLayouts();
-      controlsPanel = new ForceControlsPanel(cluster);
+      layoutEngine = new org.wilmascope.forcelayout.ForceLayout(c);
+      c.setLayoutEngine(layoutEngine);
+      ((ForceLayout)layoutEngine).createElementLayouts();
     } else if(layoutEngineName.equals("Simulated Annealing")) {
-      org.wilmascope.fastlayout.FastLayout fastlayout = new org.wilmascope.fastlayout.FastLayout(c, true);
-      c.setLayoutEngine(fastlayout);
-      controlsPanel = new org.wilmascope.fastlayout.ParamsPanel(cluster);
+      layoutEngine = new org.wilmascope.fastlayout.FastLayout(c, true);
+      c.setLayoutEngine(layoutEngine);
     } else if(layoutEngineName.equals("Multi-Scale")) {
-      org.wilmascope.multiscalelayout.MultiScaleLayout multiscalelayout = new org.wilmascope.multiscalelayout.MultiScaleLayout(c);
-      c.setLayoutEngine(multiscalelayout);
-      controlsPanel = new org.wilmascope.multiscalelayout.MSParamsPanel(cluster);
+      layoutEngine = new org.wilmascope.multiscalelayout.MultiScaleLayout(c);
+      c.setLayoutEngine(layoutEngine);
+    } else if(layoutEngineName.equals("Dot Layered")) {
+      layoutEngine = new DotLayout(c);
+      c.setLayoutEngine(layoutEngine);
     }
+    controlsPanel = layoutEngine.getControls();
     box1.add(controlsPanel);
     pack();
   }

@@ -19,10 +19,21 @@
  */
 package org.wilmascope.forcelayout;
 
-import org.wilmascope.graph.*;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Properties;
 import java.util.Vector;
-import javax.vecmath.*;
-import javax.media.j3d.Transform3D;
+
+import javax.swing.JPanel;
+import javax.vecmath.Vector3f;
+
+import org.wilmascope.control.GraphControl;
+import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.Edge;
+import org.wilmascope.graph.EdgeList;
+import org.wilmascope.graph.LayoutEngine;
+import org.wilmascope.graph.Node;
+import org.wilmascope.graph.NodeList;
 /**
  * Main class force for calculating forces on all nodes
  * and moving them incrementally.
@@ -153,4 +164,43 @@ public class ForceLayout implements LayoutEngine {
   boolean constrained = false;
   private float balancedThreshold = 0.01f;
   private BalancedEventClient balancedEventClient = null;
+	/* (non-Javadoc)
+	 * @see org.wilmascope.graph.LayoutEngine#getControls()
+	 */
+	public JPanel getControls() {
+		return new ForceControlsPanel((GraphControl.ClusterFacade)root.getUserFacade());
+	}
+	/* (non-Javadoc)
+	 * @see org.wilmascope.graph.LayoutEngine#getProperties()
+	 */
+	public Properties getProperties() {
+    Properties p = new Properties();
+    for(Iterator i = forces.iterator(); i.hasNext();) {
+      Force f=(Force)i.next();
+      p.setProperty(f.getTypeName(), "" + f.getStrengthConstant());
+    }
+    p.setProperty("VelocityAttenuation", "" + getVelocityAttenuation());
+		return p;
+	}
+	/* (non-Javadoc)
+	 * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
+	 */
+	public void setProperties(Properties p) {
+    ForceManager m = ForceManager.getInstance();
+    for (Enumeration k = p.keys(); k.hasMoreElements();) {
+      String forceName = (String) k.nextElement();
+      float strength = Float.parseFloat(p.getProperty(forceName));
+      if (forceName.equals("VelocityAttenuation")) {
+        setVelocityAttenuation(strength);
+      } else {
+        try {
+          Force f = m.createForce(forceName);
+          f.setStrengthConstant(strength);
+          addForce(f);
+        } catch (ForceManager.UnknownForceTypeException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+	}
 }

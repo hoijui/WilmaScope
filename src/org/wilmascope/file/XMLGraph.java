@@ -19,16 +19,26 @@
  */
 package org.wilmascope.file;
 
-import java.io.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
-import javax.xml.parsers.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.Vector;
 
-// For write operation
-import javax.xml.transform.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 /**
  *
  * @author Tim Dwyer
@@ -323,6 +333,9 @@ public class XMLGraph {
       transformer.setOutputProperty(
         OutputKeys.DOCTYPE_SYSTEM,
         "WilmaGraph.dtd");
+      transformer.setOutputProperty(
+        OutputKeys.INDENT,
+        "yes");
       DOMSource source = new DOMSource(doc);
       StreamResult result = new StreamResult(out);
       transformer.transform(source, result);

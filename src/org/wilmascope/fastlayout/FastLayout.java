@@ -1,13 +1,26 @@
 package org.wilmascope.fastlayout;
 
-import org.wilmascope.graph.*;
-import org.wilmascope.control.GraphControl.*;
+import java.awt.Color;
+import java.util.Properties;
+import java.util.Random;
+import java.util.Vector;
+
+import javax.swing.JPanel;
+import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Color3f;
-import java.util.Vector;
-import java.util.Random;
-import java.awt.Color;
+
+import org.wilmascope.control.GraphControl;
+import org.wilmascope.control.GraphControl.EdgeFacade;
+import org.wilmascope.control.GraphControl.NodeFacade;
+import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.Edge;
+import org.wilmascope.graph.EdgeLayout;
+import org.wilmascope.graph.EdgeList;
+import org.wilmascope.graph.LayoutEngine;
+import org.wilmascope.graph.Node;
+import org.wilmascope.graph.NodeLayout;
+import org.wilmascope.graph.NodeList;
 
 /**
  * Title:        FastLayout
@@ -499,5 +512,23 @@ public class FastLayout implements LayoutEngine{
   public EdgeLayout createEdgeLayout(org.wilmascope.graph.Edge e) {
     return null;
   }
+  public JPanel getControls() {
+    return new ParamsPanel((GraphControl.ClusterFacade)root.getUserFacade());
+  }
 
+	/* (non-Javadoc)
+	 * @see org.wilmascope.graph.LayoutEngine#getProperties()
+	 */
+	public Properties getProperties() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
+	 */
+	public void setProperties(Properties p) {
+		// TODO Auto-generated method stub
+		
+	}
 }

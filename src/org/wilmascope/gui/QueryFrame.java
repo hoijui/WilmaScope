@@ -50,6 +50,8 @@ import org.wilmascope.view.ElementData;
  * query of data from the CityWatch database.
  */
 public class QueryFrame extends JFrame {
+  static float DOT_COLUMN_SCALE=40f;
+  static float DOT_LAYOUT_SCALE=15f;
   GraphControl graphControl;
   public QueryFrame(GraphControl c) {
     QueryFrame.graphRoot = c.getRootCluster();
@@ -172,10 +174,10 @@ public class QueryFrame extends JFrame {
     fmMovement3ForceButton.setText("Force Layout");
     columnThresholdField.setText(columnThreshold + "");
     edgeThresholdField.setText(edgeThreshold + "");
-    dotScaleField.setText("20");
+    dotScaleField.setText(""+DOT_LAYOUT_SCALE);
     dotEdgeMinField.setText("0.01");
     dotEdgeMaxField.setText("0.1");
-    dotColumnScaleField.setText("6");
+    dotColumnScaleField.setText(""+DOT_COLUMN_SCALE);
     fmMovement3Panel.setLayout(new GridLayout(4,4));
     fmMovement3Panel.add(new JLabel("Column Threshold:"));
     fmMovement3Panel.add(columnThresholdField);
@@ -632,7 +634,8 @@ public class QueryFrame extends JFrame {
       graphRoot.hide();
       org.wilmascope.dotlayout.DotLayout d =
         new org.wilmascope.dotlayout.DotLayout(graphRoot.getCluster());
-      d.xScale = d.yScale = Float.parseFloat(scaleField.getText());
+      d.setXScale(Float.parseFloat(scaleField.getText()));
+      d.setYScale(Float.parseFloat(scaleField.getText()));
       graphRoot.setLayoutEngine(d);
     } else if (ColumnCluster.getColumnStyle() == ColumnCluster.FORCECOLUMNS) {
       (
@@ -690,7 +693,8 @@ public class QueryFrame extends JFrame {
       //graphRoot.hide();
       org.wilmascope.dotlayout.DotLayout d =
         new org.wilmascope.dotlayout.DotLayout(graphRoot.getCluster());
-      d.xScale = d.yScale = Float.parseFloat(dotScaleField.getText());
+      d.setXScale(Float.parseFloat(dotScaleField.getText()));
+      d.setYScale(Float.parseFloat(dotScaleField.getText()));
       graphRoot.setLayoutEngine(d);
     } else if (ColumnCluster.getColumnStyle() == ColumnCluster.FORCECOLUMNS) {
       org.wilmascope.forcelayout.ForceLayout f =
@@ -967,7 +971,7 @@ public class QueryFrame extends JFrame {
     ColumnData last;
   }
   float columnThreshold = 0.1f;
-  float edgeThreshold = 0.1f;
+  float edgeThreshold = 0.15f;
   float maxmc=0;
   GraphControl.ClusterFacade companyCluster;
   ColumnCluster addColumn(String id, float shareValue, long count) {
@@ -1008,7 +1012,7 @@ public class QueryFrame extends JFrame {
       }
       c = new ColumnCluster(parent, nodeScale*value/ maxmc, nodeScale*value/maxmc, level,"Column Cluster", "Tube Node");
       c.setLabel(idStrings);
-      ((ColumnLayout)c.getClusterFacade().getLayoutEngine()).setStrataSeparation(0.2f);
+      ((ColumnLayout)c.getClusterFacade().getLayoutEngine()).setStrataSeparation(0.5f);
       columns.put(id, c);
     }
     //if(c.getNextLevel() < level + 1) {
@@ -1022,7 +1026,6 @@ public class QueryFrame extends JFrame {
     }
     d.last = l;
     GraphControl.NodeFacade n = c.addVariableNode(nodeScale*value / maxmc);
-    ((NodeColumnLayout)n.getNode().getLayout()).setHeight(0.2f);
     // colour the node according to change in share value:
     // white if no change
     // shade toward green if value increases, red if it decreases

@@ -84,6 +84,9 @@
     <copy todir="${dist}/bin" >
       <fileset dir="bin"/>
     </copy>
+    <copy todir="${dist}/classes" >
+      <fileset dir="classes"/>
+    </copy>
     <mkdir dir="Wilma"/>
     <copy todir="Wilma"><fileset dir="dist"/></copy>
     <zip zipfile="Wilma_${DSTAMP}.zip">

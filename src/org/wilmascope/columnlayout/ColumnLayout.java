@@ -1,9 +1,13 @@
 package org.wilmascope.columnlayout;
 
+import java.util.Properties;
+
 import org.wilmascope.graph.LayoutEngine;
 import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.Node;
 import org.wilmascope.graph.NodeList;
+
+import javax.swing.JPanel;
 import javax.vecmath.Point3f;
 /**
  * <p>Title: </p>
@@ -95,4 +99,29 @@ public class ColumnLayout implements LayoutEngine {
 	private float strataSeparation;
 	int strataCount = 0;
 	int baseStratum = 0;
+	/* (non-Javadoc)
+	 * @see org.wilmascope.graph.LayoutEngine#getControls()
+	 */
+	public JPanel getControls() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.wilmascope.graph.LayoutEngine#getProperties()
+	 */
+	public Properties getProperties() {
+    Properties p = new Properties();
+    p.setProperty("BaseLevel", "" + getBaseStratum());
+    p.setProperty("LevelSeparation", ""+getStrataSeparation());
+		return p;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
+	 */
+	public void setProperties(Properties p) {
+    setBaseStratum(Integer.parseInt(p.getProperty("BaseLevel","0")));
+    setStrataSeparation(Float.parseFloat(p.getProperty("LevelSeparation","1.0")));
+	}
 }

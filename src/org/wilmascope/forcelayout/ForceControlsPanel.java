@@ -18,7 +18,7 @@
  * -- Tim Dwyer, 2001
  */
 
-package org.wilmascope.gui;
+package org.wilmascope.forcelayout;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,7 +1,9 @@
 package org.wilmascope.columnlayout;
 
-import org.wilmascope.forcelayout.NodeForceLayout;
 import javax.vecmath.Vector3f;
+
+import org.wilmascope.forcelayout.NodeForceLayout;
+import org.wilmascope.global.Constants;
 
 /**
  * <p>Title: </p>
@@ -15,6 +17,7 @@ import javax.vecmath.Vector3f;
 public class NodeColumnLayout extends NodeForceLayout {
     public NodeColumnLayout(int level) {
         setLevel(level);
+        setHeight(Constants.getInstance().getFloatValue("ImportedColumnNodeHeight"));
     }
     public void setLevel(int level) {
         this.level = level;

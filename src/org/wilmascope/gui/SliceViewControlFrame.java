@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
-import java.io.File;
 import java.util.Enumeration;
 import java.util.Stack;
 
@@ -25,6 +24,7 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
 import org.wilmascope.columnlayout.ColumnLayout;
+import org.wilmascope.control.GraphClient;
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.Node;
@@ -42,17 +42,21 @@ import com.sun.j3d.utils.picking.PickTool;
  */
 
 public class SliceViewControlFrame extends JFrame {
-
-  public SliceViewControlFrame() {
-    try {
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
+  GraphControl gc;
   public SliceViewControlFrame(GraphControl gc) {
+    this.gc = gc;
+    gc.addGraphClient(new GraphClient(){
+      public void balanced() {
+        System.out.println("Resetting axis plane!");
+        init();
+      }
+    });
+    init();
+  }
+  void init() {
     canvas = gc.getGraphCanvas();
     root = gc.getRootCluster();
+    getContentPane().removeAll();
     NodeList l = root.getCluster().getAllNodes();
     for(l.resetIterator();l.hasNext();) {
       Node n = l.nextNode();
@@ -72,6 +76,9 @@ public class SliceViewControlFrame extends JFrame {
     float width = topRight.x - bottomLeft.x;
     float height = topRight.y - bottomLeft.y;
     System.out.println("width="+width+",height="+height);
+    if(axisPlaneBG!=null) {
+      axisPlaneBG.detach();
+    }
     axisPlaneBG = new BranchGroup();
     axisPlaneBG.setCapability(BranchGroup.ALLOW_DETACH);
     axisPlaneTG = new TransformGroup();
@@ -95,7 +102,6 @@ public class SliceViewControlFrame extends JFrame {
     axisPlaneTG.addChild(plane);
     axisPlaneBG.addChild(axisPlaneTG);
     axisPlaneBG.compile();
-    showAxisPlane();
 
     Transform3D trans = new Transform3D();
     trans.setTranslation(new Vector3f(centroid));
@@ -106,10 +112,12 @@ public class SliceViewControlFrame extends JFrame {
       r = (Cluster)r.getNodes().get(0);
     }
     drawingPanel = new DrawingPanel(r, bottomLeft, topRight);
+    upButton = new JButton();
+    downButton = new JButton();
+    showButton = new JButton();
+    hideButton = new JButton();
+    printButton = new JButton();
     setSelectedStratum(0);
-    jbInit();
-  }
-  private void jbInit() {
     hBox = Box.createHorizontalBox();
     vBox = Box.createVerticalBox();
     upButton.setText("Up");
@@ -153,6 +161,7 @@ public class SliceViewControlFrame extends JFrame {
     radioButtons(vBox);
     hBox.add(vBox);
     hBox.add(drawingPanel);
+    showAxisPlane();
   }
   void radioButtons(JComponent container) {
     String[] strataNames = (String[])root.getUserData();
@@ -225,6 +234,7 @@ public class SliceViewControlFrame extends JFrame {
     canvas.getTransformGroup().addChild(axisPlaneBG);
     showButton.setEnabled(false);
     hideButton.setEnabled(true);
+    pack();
   }
 
   void kill() {
@@ -239,11 +249,11 @@ public class SliceViewControlFrame extends JFrame {
   GraphControl.ClusterFacade root;
   TransformGroup axisPlaneTG;
   BranchGroup axisPlaneBG;
-  JButton upButton = new JButton();
-  JButton downButton = new JButton();
+  JButton upButton;
+  JButton downButton;
   Box hBox, vBox;
-  JButton showButton = new JButton();
-  JButton hideButton = new JButton();
-  JButton printButton = new JButton();
+  JButton showButton;
+  JButton hideButton;
+  JButton printButton;
   DrawingPanel drawingPanel;
 }

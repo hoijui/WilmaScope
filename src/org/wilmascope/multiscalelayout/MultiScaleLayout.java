@@ -1,5 +1,16 @@
 package org.wilmascope.multiscalelayout;
-import org.wilmascope.graph.*;
+import java.util.Properties;
+
+import javax.swing.JPanel;
+
+import org.wilmascope.control.GraphControl;
+import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.Edge;
+import org.wilmascope.graph.EdgeLayout;
+import org.wilmascope.graph.EdgeList;
+import org.wilmascope.graph.Node;
+import org.wilmascope.graph.NodeLayout;
+import org.wilmascope.graph.NodeList;
 /**
  * <p>Description: </p>
  * <p>$Id$ </p>
@@ -66,5 +77,23 @@ public class MultiScaleLayout implements org.wilmascope.graph.LayoutEngine {
   public EdgeLayout createEdgeLayout(Edge e) {
     return qGraph.createMultiScaleEdgeLayout(e);
   }
+  public JPanel getControls() {
+    return new MSParamsPanel((GraphControl.ClusterFacade)root.getUserFacade());
+
+  }
   public static float scale = 1f/10f;
+	/* (non-Javadoc)
+	 * @see org.wilmascope.graph.LayoutEngine#getProperties()
+	 */
+	public Properties getProperties() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	/* (non-Javadoc)
+	 * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
+	 */
+	public void setProperties(Properties p) {
+		// TODO Auto-generated method stub
+		
+	}
 }
