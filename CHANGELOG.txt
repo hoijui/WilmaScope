@@ -1,3 +1,9 @@
+Changes Since 3.0.1
+-------------------
+- FADE Repulsive force added as force in ForceLayout
+- SpinnerSlider used in place of regular sliders in Generator and
+  force control panels
+
 Changes Since 3.0
 -----------------
 - "Planar force" now works by calculating the plane of best fit for clusters,

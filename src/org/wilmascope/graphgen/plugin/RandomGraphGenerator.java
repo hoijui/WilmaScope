@@ -19,16 +19,14 @@
  */
 package org.wilmascope.graphgen.plugin;
 
-import java.util.Vector;
-
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.graphgen.GraphGenerator;
+import org.wilmascope.gui.SpinnerSlider;
 
 /**
  * Generates a random (connected) graph with (up to) a specified number of nodes
@@ -113,9 +111,9 @@ public class RandomGraphGenerator extends GraphGenerator {
    * set up controlPanel with controls for setting parameters
    */
   public RandomGraphGenerator() {
-    final JSlider nodesSlider = createStandardSlider("Number of nodes", 10,
+    final SpinnerSlider nodesSlider = new SpinnerSlider("Number of nodes", 10,
         2000, nodeCount);
-    final JSlider edgesSlider = createStandardSlider("Number of edges", 10,
+    final SpinnerSlider edgesSlider = new SpinnerSlider("Number of edges", 10,
         2000, edgeCount);
     nodesSlider.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {

@@ -24,6 +24,10 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.vecmath.Point3f;
 
 import org.wilmascope.control.GraphControl;
@@ -76,18 +80,24 @@ public abstract class GraphGenerator {
 
   /**
    * Create a randomly coloured, randomly positioned node with the default style
-   * @param root cluster to add the node to
-   * @param threeD use 3D positions
+   * 
+   * @param root
+   *          cluster to add the node to
+   * @param threeD
+   *          use 3D positions
    * @return the new node
    */
-  protected GraphControl.Node addRandomNode(GraphControl.Cluster root, boolean threeD) {
+  protected GraphControl.Node addRandomNode(GraphControl.Cluster root,
+      boolean threeD) {
     GraphControl.Node n = root.addNode(getNodeView());
     n.setColour(GraphGenerator.randomColour());
     n.setPosition(GraphGenerator.randomPoint(threeD));
     return n;
   }
+
   /**
-   * Get the NodeView style 
+   * Get the NodeView style
+   * 
    * @return
    */
   protected String getNodeView() {
@@ -96,34 +106,6 @@ public abstract class GraphGenerator {
 
   protected String getEdgeView() {
     return edgeView;
-  }
-
-  /**
-   * Creates a labelled slider suitable for adding to the control panel of
-   * graphGenerators
-   * 
-   * @param label
-   *          displayed in border round slider
-   * @param min
-   *          minimum value of slider
-   * @param max
-   *          maximim value of slider
-   * @param value
-   *          default
-   * @return the new slider
-   */
-  protected static JSlider createStandardSlider(String label, int min, int max,
-      int value) {
-    JSlider slider = new JSlider(min, max, value);
-    int range = max - min;
-    slider.setBorder(new javax.swing.border.TitledBorder(label));
-    slider.setMinorTickSpacing(range / 4);
-    slider.setMajorTickSpacing(range / 8);
-    slider.setPaintLabels(true);
-    slider.setPaintTicks(true);
-    slider.setValue(value);
-    slider.setLabelTable(slider.createStandardLabels(range / 4));
-    return slider;
   }
 
   /**
@@ -154,5 +136,6 @@ public abstract class GraphGenerator {
   }
 
   private String nodeView, edgeView;
+
   private static Random rand = new Random();
 }

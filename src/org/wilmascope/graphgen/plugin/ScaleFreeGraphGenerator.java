@@ -23,13 +23,13 @@ import java.awt.Color;
 
 import javax.swing.Box;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.graph.Cluster;
 import org.wilmascope.graphgen.GraphGenerator;
+import org.wilmascope.gui.SpinnerSlider;
 
 /**
  * Generate a scale-free graph based on a stochastic model in which for each
@@ -58,13 +58,13 @@ public class ScaleFreeGraphGenerator extends GraphGenerator implements Runnable 
   }
 
   public ScaleFreeGraphGenerator() {
-    final JSlider initSizeSlider = createStandardSlider("Initial nodes", 5,
+    final SpinnerSlider initSizeSlider = new SpinnerSlider("Initial nodes", 5,
         200, initSize);
-    final JSlider targetSizeSlider = createStandardSlider("Target Nodes", 1,
+    final SpinnerSlider targetSizeSlider = new SpinnerSlider("Target Nodes", 1,
         1000, targetSize);
-    final JSlider probabilitySlider = createStandardSlider("Edge Probability",
+    final SpinnerSlider probabilitySlider = new SpinnerSlider("Edge Probability",
         0, 10, (int) probabilityModifier * 5);
-    final JSlider delaySlider = createStandardSlider("Delay (ms)", 0, 1000,
+    final SpinnerSlider delaySlider = new SpinnerSlider("Delay (ms)", 0, 1000,
         delay);
     initSizeSlider.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {

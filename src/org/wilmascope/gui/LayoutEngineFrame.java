@@ -2,14 +2,17 @@ package org.wilmascope.gui;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.WilmaMain;
@@ -27,8 +30,9 @@ import org.wilmascope.layoutregistry.LayoutManager.UnknownLayoutTypeException;
  */
 public class LayoutEngineFrame extends JFrame implements BalancedEventListener {
   private Box box1;
-  private JPanel jPanel1 = new JPanel();
+  private JPanel generalControls = new JPanel();
   private JComboBox layoutEngineComboBox;
+  private SpinnerSlider animationGranularitySlider = new SpinnerSlider("Iterations per Frame",0,100,1);
   private JButton startStopButton = new JButton();
   private JPanel controlsPanel;
   GraphControl.Cluster cluster;
@@ -56,10 +60,21 @@ public class LayoutEngineFrame extends JFrame implements BalancedEventListener {
       }
     });
     this.getContentPane().add(box1, BorderLayout.CENTER);
-    box1.add(jPanel1, null);
+    box1.add(generalControls, null);
     box1.add(controlsPanel);
-    jPanel1.add(layoutEngineComboBox, null);
-    jPanel1.add(startStopButton);
+    generalControls.setLayout(new BoxLayout(generalControls,BoxLayout.PAGE_AXIS));
+    generalControls.add(layoutEngineComboBox, null);
+    generalControls.add(startStopButton);
+    pack();
+  }
+  public LayoutEngineFrame(final GraphControl graphControl, String title) {
+    this(graphControl.getRootCluster(),title);
+    animationGranularitySlider.addChangeListener(new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        graphControl.setIterationsPerFrame(animationGranularitySlider.getValue());
+      }
+    });
+    generalControls.add(animationGranularitySlider);
     pack();
   }
   void startStopButton_actionPerformed(ActionEvent e) {

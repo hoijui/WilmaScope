@@ -36,6 +36,7 @@ import javax.swing.border.TitledBorder;
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.WilmaMain;
 import org.wilmascope.forcelayout.ForceManager.UnknownForceTypeException;
+import org.wilmascope.gui.SpinnerSlider;
 /**
  *
  * @author  administrator
@@ -46,20 +47,14 @@ public class ForceControlPanel extends javax.swing.JPanel {
   private GraphControl.Cluster cluster;
   private ForceLayout forceLayout;
   JCheckBox enabledCheckBox = new JCheckBox();
-  JSlider forceSlider = new JSlider();
-  TitledBorder titledBorder1;
+  SpinnerSlider forceSlider;
 
   public ForceControlPanel(GraphControl.Cluster cluster, Force force) {
     this.cluster = cluster;
     this.force = force;
     this.forceLayout = (ForceLayout)cluster.getLayoutEngine();
-    titledBorder1 = new TitledBorder(BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153),2),force.getTypeName());
-    this.setBorder(titledBorder1);
     this.add(enabledCheckBox, null);
-    forceSlider.setMinorTickSpacing (10);
-    forceSlider.setPaintTicks (true);
-    forceSlider.setMajorTickSpacing (50);
-    forceSlider.setValue ((int)((float)force.getStrengthConstant() * 10f));
+    forceSlider = new SpinnerSlider(force.getTypeName(),0,100,(int)((float)force.getStrengthConstant() * 10f));
     forceSlider.addChangeListener (new javax.swing.event.ChangeListener () {
       public void stateChanged (javax.swing.event.ChangeEvent evt) {
         forceSliderStateChanged();

@@ -23,13 +23,12 @@ import java.util.Vector;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
-import org.wilmascope.graph.Cluster;
 import org.wilmascope.graphgen.GraphGenerator;
+import org.wilmascope.gui.SpinnerSlider;
 
 /**
  * Generates a random clustered graph with a specified number of nodes and edges
@@ -54,9 +53,9 @@ public class ClusteredGraphGenerator extends GraphGenerator {
    * creates controls
    */
   public ClusteredGraphGenerator() {
-    final JSlider sizeSlider = createStandardSlider("Size of clusters", 5, 200,
+    final SpinnerSlider sizeSlider = new SpinnerSlider("Size of clusters", 5, 200,
         size);
-    final JSlider numberSlider = createStandardSlider("Number of clusters", 1,
+    final SpinnerSlider numberSlider = new SpinnerSlider("Number of clusters", 1,
         100, number);
     sizeSlider.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {

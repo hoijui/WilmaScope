@@ -44,6 +44,7 @@ public class ForceManager {
   }
   private ForceManager() {
     addPrototypeForce(new Repulsion(1.2f, 20f));
+    addPrototypeForce(new RepulsionFADE(1.2f));
     addPrototypeForce(new Spring(5f));
     addPrototypeForce(new Origin(8f));
     addPrototypeForce(new DirectedField(1f));

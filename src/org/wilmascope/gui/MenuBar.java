@@ -65,7 +65,6 @@ public class MenuBar extends JMenuBar {
 	JCheckBoxMenuItem showMouseHelpCheckBoxMenuItem = new JCheckBoxMenuItem();
 	JCheckBoxMenuItem fullScreenCheckBoxMenuItem = new JCheckBoxMenuItem();
 	JMenuItem stretchMenuItem = new JMenuItem();
-	JMenuItem animationGranularityMenuItem = new JMenuItem();
 	JMenuItem backgroundColourMenuItem = new JMenuItem();
 	JMenuItem axisPlaneMenuItem = new JMenuItem();
 	JMenuItem helpMenuItem = new JMenuItem();
@@ -76,7 +75,6 @@ public class MenuBar extends JMenuBar {
 	JFrame parallelScaleControlFrame = null;
 	JFrame eyeSeparationControlFrame = null;
 	JFrame stretchControlFrame = null;
-	JFrame animationGranularityControlFrame = null;
   JFrame frame;
 	public MenuBar(
     JFrame frame,
@@ -184,14 +182,7 @@ public class MenuBar extends JMenuBar {
 				stretchMenuItem_actionPerformed(e);
 			}
 		});
-		animationGranularityMenuItem.setText("Animation Granularity...");
-		animationGranularityMenuItem.setMnemonic('G');
-		animationGranularityMenuItem
-			.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				animationGranularityMenuItem_actionPerformed(e);
-			}
-		});
+
 		axisPlaneMenuItem.setText("Show axis plane...");
 		axisPlaneMenuItem.setMnemonic('x');
 		axisPlaneMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -252,7 +243,6 @@ public class MenuBar extends JMenuBar {
 		viewMenu.add(parallelCheckBoxMenuItem);
 		viewMenu.add(stereoMenuItem);
 		viewMenu.add(stretchMenuItem);
-		viewMenu.add(animationGranularityMenuItem);
 		viewMenu.add(axisPlaneMenuItem);
 		viewMenu.add(backgroundColourMenuItem);
 		viewMenu.add(edgeViewMenuItem);
@@ -323,20 +313,7 @@ public class MenuBar extends JMenuBar {
 		stretchControlFrame.pack();
 		stretchControlFrame.show();
 	}
-	void animationGranularityMenuItem_actionPerformed(ActionEvent e) {
-		animationGranularityControlFrame = new JFrame();
-		JSlider scaleSlider = new JSlider(JSlider.HORIZONTAL, 1, 100, 1);
-		scaleSlider.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				JSlider source = (JSlider) e.getSource();
-				graphControl.setIterationsPerFrame(source.getValue());
-			}
-		});
-		animationGranularityControlFrame.getContentPane().add(scaleSlider);
-		animationGranularityControlFrame.setTitle("Adjust iterations per frame...");
-		animationGranularityControlFrame.pack();
-		animationGranularityControlFrame.show();
-	}
+
 	void showMouseHelpCheckBoxMenuItem_actionPerformed(ActionEvent e) {
 		if (showMouseHelpCheckBoxMenuItem.isSelected()) {
 			controlPanel.showMouseHelp();

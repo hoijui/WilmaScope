@@ -266,7 +266,6 @@ public class FadeLayout implements LayoutEngine {
         }
       }
     }
-
   }
 
   /*

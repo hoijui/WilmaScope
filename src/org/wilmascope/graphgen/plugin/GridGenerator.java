@@ -23,13 +23,12 @@ import java.util.TreeMap;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
-import org.wilmascope.graph.Cluster;
 import org.wilmascope.graphgen.GraphGenerator;
+import org.wilmascope.gui.SpinnerSlider;
 
 /**
  * Generates a "grid graph", that is, a rectangular lattice of arbitrary width
@@ -46,8 +45,8 @@ public class GridGenerator extends GraphGenerator {
   JPanel controlPanel = new JPanel();
 
   public GridGenerator() {
-    final JSlider widthSlider = createStandardSlider("Width", 10, 2000, width);
-    final JSlider heightSlider = createStandardSlider("Height", 10, 2000,
+    final SpinnerSlider widthSlider = new SpinnerSlider("Width", 10, 2000, width);
+    final SpinnerSlider heightSlider = new SpinnerSlider("Height", 10, 2000,
         height);
     widthSlider.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {

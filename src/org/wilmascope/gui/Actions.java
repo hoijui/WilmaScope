@@ -126,7 +126,7 @@ public class Actions {
       new AbstractAction("Adjust Forces", new ImageIcon(org.wilmascope.images.Images.class.getResource("forces.png"))) {
       public void actionPerformed(ActionEvent e) {
         LayoutEngineFrame controls =
-          new LayoutEngineFrame(rootCluster, "Global Layout Engine Controls");
+          new LayoutEngineFrame(graphControl, "Global Layout Engine Controls");
         controls.show();
       }
     };
