@@ -40,7 +40,6 @@ public class ColumnClusterView extends ClusterView {
           p.set(t);
         }
       }
-      //p.z = position.z;
       Vector3f v = new Vector3f(p);
       //v.z+=columnCluster.getTopNode().getRadius();
       v.z+=0.11f;
