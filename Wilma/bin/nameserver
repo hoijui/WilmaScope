@@ -10,4 +10,4 @@ fi
 echo starting name service with:
 echo "  InitialHost = $WILMAHOST"
 echo "  InitialPort = $WILMAPORT"
-tnameserv -ORBInitialHost $WILMAHOST -ORBInitialPort $WILMAPORT &
+tnameserv -ORBInitialPort $WILMAPORT &

@@ -39,7 +39,7 @@ public class Constants {
     = gc.getFloatValue("MaximumAcceleration");
   public final static float terminalVelocity
     = gc.getFloatValue("TerminalVelocity");
-  public final static float frictionCoefficient
+  public static float frictionCoefficient
     = gc.getFloatValue("FrictionCoefficient");
   public final static float angularInertia
     = gc.getFloatValue("AngularInertia");

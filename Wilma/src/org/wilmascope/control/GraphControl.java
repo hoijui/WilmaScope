@@ -842,6 +842,7 @@ public class GraphControl {
     forceManager = ForceManager.getInstance();
       // load core views
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.ArrowEdgeView());
+      viewManager.addPrototypeView(new org.wilmascope.viewplugin.DirectedEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.InheritanceEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.AggregationEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.TaperedEdgeView());
