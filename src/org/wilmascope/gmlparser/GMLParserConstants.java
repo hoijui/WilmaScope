@@ -16,8 +16,7 @@ public interface GMLParserConstants {
   int TARGET = 23;
   int NUM = 24;
   int DEC = 25;
-  int GRAPHICSARG = 26;
-  int CTLSTRING = 27;
+  int CTLSTRING = 26;
 
   int DEFAULT = 0;
   int IN_IGNORABLE = 1;
@@ -49,12 +48,17 @@ public interface GMLParserConstants {
     "\"target\"",
     "<NUM>",
     "<DEC>",
-    "<GRAPHICSARG>",
     "<CTLSTRING>",
     "\"[\"",
     "\"]\"",
     "\"graphics\"",
+    "\"x\"",
+    "\"y\"",
+    "\"w\"",
+    "\"h\"",
+    "\"type\"",
     "\"arrow\"",
+    "\"capstyle\"",
   };
 
 }

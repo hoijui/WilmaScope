@@ -24,9 +24,6 @@ public class SpotLightMouseCtrl extends MouseBehavior{
 	private Color3f color=new Color3f();
 	float spreadAngle;	
 
-	//for the pick and mouse event
-	protected MouseEvent mevent;
-	private boolean buttonPressed;
 	
 	/**{@link SpotLightPanel}
 	 */
@@ -37,21 +34,13 @@ public class SpotLightMouseCtrl extends MouseBehavior{
     /**{@link SpotLight}
 	 */
     private  SpotLight spotLight;
-	public SpotLightMouseCtrl(SpotLightCone c,SpotLight l,SpotLightPanel spotPane)
+	public SpotLightMouseCtrl(SpotLightPanel spotPane)
 	{
 		
-	    super(c);
-	    cone=c;
-	    spotLight=l;   
+	    super(new TransformGroup());
+	      
 	    this.spotPane=spotPane; 
-	    spotLight.getDirection(direction);
-    	spotLight.getPosition(position);
-    	cone.setDirection(direction);
-        cone.setPosition(position);
-        spotLight.getColor(color);
-        cone.setColor(color);
-        spreadAngle=spotLight.getSpreadAngle();
-        cone.setSpreadAngle(spreadAngle);
+	    
 	}
 	/**  Initializes the wake up event
 	 */
@@ -88,7 +77,7 @@ public void processStimulus(Enumeration criteria){
              y = ((MouseEvent)event[i]).getY();
              shiftDown=((MouseEvent)event[i]).isShiftDown();
              altDown=((MouseEvent)event[i]).isAltDown();
-               if ((id==MouseEvent.MOUSE_PRESSED)||(id==MouseEvent.MOUSE_CLICKED)){
+            if ((id==MouseEvent.MOUSE_PRESSED)||(id==MouseEvent.MOUSE_CLICKED)){
                	    x_last=x;
                     y_last=y;
                     
@@ -106,9 +95,12 @@ public void processStimulus(Enumeration criteria){
                   temp1.rotY(angleY);
                   temp2.rotX(angleX);
                   temp2.mul(temp1);
+                 
+                  spotLight.getDirection(direction);
                   temp2.transform(direction);
                   spotLight.setDirection(direction);
                   cone.setDirection(direction);
+                                    
                   spotPane.xDir.setText(""+direction.x);
                   spotPane.yDir.setText(""+direction.y);
                   spotPane.zDir.setText(""+direction.z);
@@ -124,7 +116,7 @@ public void processStimulus(Enumeration criteria){
                 y_last=y; 
                 if((Math.abs(dx)>0.5)||(Math.abs(dy)>0.5))
                       continue; 
-                                 
+                                
                   cone.getTransform(oldMatrix);
                   oldMatrix.get(transMatrix);
                   transMatrix.m03+=dx;
@@ -132,9 +124,14 @@ public void processStimulus(Enumeration criteria){
                   oldMatrix.set(transMatrix);
                   cone.setTransform(oldMatrix);
                   
+                  spotLight.getPosition(position);  
                   position.x+=dx;
                   position.y+=dy;
                   spotLight.setPosition(position);
+                  
+                  spotPane.xPos.setText(""+position.x);
+                  spotPane.yPos.setText(""+position.y);
+                  spotPane.zPos.setText(""+position.z);
                  
                                                    
               } 
@@ -153,6 +150,7 @@ public void processStimulus(Enumeration criteria){
                   oldMatrix.set(transMatrix);
                   cone.setTransform(oldMatrix);
                   
+                  spotLight.getPosition(position);
                   position.z+=dz;
                   spotLight.setPosition(position);
                   
@@ -184,10 +182,14 @@ public void processStimulus(Enumeration criteria){
            wakeupOn(mouseCriterion);
        }     
    }
-   void refresh()
+   public void setCone(SpotLightCone cone)
+  {
+       this.cone=cone;
+       
+  }
+   public void setLight(SpotLight light)
    {
-   	x=y=0;
-   	x_last=y_last=0;
-   }
+      this.spotLight=light;
+    }        
   
 }

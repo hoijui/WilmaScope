@@ -87,11 +87,11 @@ public void saveToWilmaCons()
  }
 /** Saves lights configuration to file other than WILMA_CONSTANTS.properties 
  */ 
-public void saveToNewFile()
+public void saveToNewFile(String name)
 {
 	
 	try{
-	out = new FileWriter(lightManager.getPropertyFileName());
+	out = new FileWriter(name);
 	saveAmbientLight();
    	saveDirectionalLight();
    	savePointLight();
@@ -125,11 +125,13 @@ private void saveAmbientLight() throws IOException {
 /** Saves directional lights parameters
  */ 
 private void saveDirectionalLight() throws IOException{
+	Vector3f position=new Vector3f();
+	Transform3D trans=new Transform3D();
 	for(int i=0;i<lightManager.getDirLightVector().size();i++)
 	{
 		WilmaLight w=(WilmaLight)lightManager.getDirLightVector().get(i);
 	    DirectionalLight l=(DirectionalLight)w.getLight();
-	    
+	        
 	    //colour 
 	    l.getColor(colour);
 	    out.write("Light"+i+"DirectionalColourR="+colour.x+"\r\n"); 
@@ -145,6 +147,14 @@ private void saveDirectionalLight() throws IOException{
 	   if(l.getEnable()==true)
 	         out.write("Light"+i+"DirectionalEnable="+"true"+"\r\n"); 
 	    else  out.write("Light"+i+"DirectionalEnable="+"false"+"\r\n");   
+	  
+	   w.getArrow().getTransform(trans);
+	   trans.get(position);
+	   //remember the position of the arrows on the screen, the positions have no
+	   //effects to the directional lights
+	    out.write("Light"+i+"DirectionalPositionX="+position.x+"\r\n");
+        out.write("Light"+i+"DirectionalPositionY="+position.y+"\r\n");
+        out.write("Light"+i+"DirectionalPositionZ="+position.z+"\r\n");
 	} 
 }
 /** Saves point lights parameters

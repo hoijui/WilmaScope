@@ -49,6 +49,7 @@ TOKEN:
 | < NODE: "node" > : NODEPARAMETERS
 | < LABEL: "label" >
 | < POS: "pos" >
+| < RATIO: "ratio" >
 | < SHAPE: "shape" >
 | < BB: "bb" >
 | < WIDTH: "width" >
@@ -62,6 +63,7 @@ TOKEN:
 TOKEN :
 {
   < ID: ["a"-"z","A"-"Z","_"] ( ["a"-"z","A"-"Z","_","0"-"9"] )* >
+| < CTLSTRING: "\""(~["\""])*"\""> {matchedToken.image = matchedToken.image.substring(1, lengthOfMatch - 1); } 
 | < NUM: ( ["0"-"9"] )+ >
 | < DEC: "." <NUM> | <NUM> ( "." <NUM> )?  >
 } 
@@ -95,38 +97,27 @@ void stmt(GraphClient g) : { NodeClient n; EdgeClient e; }
 | n = node(g) ( e = edgeRHS(g,n) [ edgeAtts(e)] | [ nodeAtts(n)] )
 }
 
-void graphAtts(GraphClient g) : {}
+void graphAtts(GraphClient g) : {Token t1;}
 {
   "[" (
-    <CONCENTRATE> "=true"
-  | <LAYERS> "=" "\"" <ID> (":" <ID>)* "\"" 
-  | <BB> "=" "\"" bounds(g) "\""
+    <CONCENTRATE> "=" <ID>
+  | <LAYERS> "=" <CTLSTRING>
+  | <RATIO> "=" <NUM>
+  | <BB> "=" t1 = <CTLSTRING> { g.setBoundingBox(t1.image); }
   | ",")*
   "]"
-}
-
-void bounds(GraphClient g) : {Token t1,t2,t3,t4;}
-{
-  t1 = <NUM> "," t2 = <NUM> "," t3 = <NUM> "," t4 = <NUM> {
-    g.setBoundingBox(
-      Integer.parseInt(t1.image),
-      Integer.parseInt(t2.image),
-      Integer.parseInt(t3.image),
-      Integer.parseInt(t4.image)
-    );
-  }
 }
 
 void nodeAtts(NodeClient n) : {Token t1,t2;}
 {
   "[" (( 
-    <LABEL> "=" [ "\"" ] <ID> ["."][ "\"" ]
+    <LABEL> "=" (<CTLSTRING>|<ID>)
   | <SHAPE> "=" <ID>
-  | <POS> "=" "\"" t1 = <NUM> "," t2 = <NUM> "\"" {
-      n.setPosition(Integer.parseInt(t1.image),Integer.parseInt(t2.image));
+  | <POS> "=" t1 = <CTLSTRING> {
+      n.setPosition(t1.image);
     }
-  | <WIDTH> "=" "\"" <DEC> "\""
-  | <HEIGHT> "=" "\"" <DEC> "\"")[","])*
+  | <WIDTH> "=" <CTLSTRING>
+  | <HEIGHT> "=" <CTLSTRING>)[","])*
   "]"
 }
 
@@ -145,46 +136,11 @@ void edgeAtts(EdgeClient e) : {
 } {
   "[" ((
       <MINLEN> "=" <NUM>
-    | <LAYER> "=" ("\"")? t = <ID> ("\"")? { e.setLayer(t.image); System.out.println("EdgeLayer="+t.image); }
-    | <WEIGHT> "=" ("\"")? <NUM> ("\"")?
-    | <POS> "=" "\"" 
-      curve(e,curves) (";" curve(e,curves))*
-      "\"" )[","])*
+    | <LAYER> "=" [ <ID> | <CTLSTRING> ]
+    | <WEIGHT> "=" <NUM>
+    | <POS> "=" t = <CTLSTRING> { e.setCurves(t.image); }
+      ) [","] ) *
   "]"
-  {
-    e.setCurves(curves);
-  }
-}
-
-void curve(EdgeClient e, Vector curves) : {
-  Vector pnts = new Vector();
-  Token t1, t2;
-  boolean arrowAtStart = false;
-}
-{
-  ( ("e," {arrowAtStart = false; } |"s," { arrowAtStart = true; })
-    t1 = <NUM> "," t2 = <NUM>
-    {
-      e.addArrow(curves.size(),arrowAtStart,new Point(
-        Integer.parseInt(t1.image), Integer.parseInt(t2.image)));
-    }  
-  )* (bezierPnt(pnts))+
-  {
-    curves.add(pnts);
-  }
-}
-
-void bezierPnt(Vector pnts) : {
-  Token t; 
-  int a,b;
-}
-{
-  t = <NUM> {
-    a = Integer.parseInt(t.image);
-  } "," t = <NUM> {
-    b = Integer.parseInt(t.image);
-    pnts.add(new Point(a,b));
-  }
 }
 
 NodeClient node(GraphClient g) : {

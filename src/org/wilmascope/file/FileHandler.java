@@ -222,7 +222,7 @@ public class FileHandler {
       org.wilmascope.columnlayout.ColumnLayout cl = new org.wilmascope.columnlayout.ColumnLayout(c.getCluster());
       c.setLayoutEngine(cl);
       Properties p = l.getProperties();
-      cl.setBaseLevel(Integer.parseInt(p.getProperty("BaseLevel")));
+      cl.setBaseStratum(Integer.parseInt(p.getProperty("BaseLevel")));
     }
   }
   public void save(String fileName) {
@@ -288,7 +288,7 @@ public class FileHandler {
     } else if(gl instanceof org.wilmascope.columnlayout.ColumnLayout) {
       l = xmlCluster.setLayoutEngineType("ColumnLayout");
       org.wilmascope.columnlayout.ColumnLayout cl = (org.wilmascope.columnlayout.ColumnLayout)gl;
-      p.setProperty("BaseLevel",""+cl.getBaseLevel());
+      p.setProperty("BaseLevel",""+cl.getBaseStratum());
       l.setProperties(p);
     }
   }

@@ -12,19 +12,21 @@ public interface DotParserConstants {
   int NODE = 11;
   int LABEL = 12;
   int POS = 13;
-  int SHAPE = 14;
-  int BB = 15;
-  int WIDTH = 16;
-  int WEIGHT = 17;
-  int HEIGHT = 18;
-  int CONCENTRATE = 19;
-  int LAYER = 20;
-  int LAYERS = 21;
-  int MINLEN = 22;
-  int ID = 23;
-  int NUM = 24;
-  int DEC = 25;
-  int IGNOREPARAMETERS = 28;
+  int RATIO = 14;
+  int SHAPE = 15;
+  int BB = 16;
+  int WIDTH = 17;
+  int WEIGHT = 18;
+  int HEIGHT = 19;
+  int CONCENTRATE = 20;
+  int LAYER = 21;
+  int LAYERS = 22;
+  int MINLEN = 23;
+  int ID = 24;
+  int CTLSTRING = 25;
+  int NUM = 26;
+  int DEC = 27;
+  int IGNOREPARAMETERS = 30;
 
   int DEFAULT = 0;
   int NODEPARAMETERS = 1;
@@ -44,6 +46,7 @@ public interface DotParserConstants {
     "\"node\"",
     "\"label\"",
     "\"pos\"",
+    "\"ratio\"",
     "\"shape\"",
     "\"bb\"",
     "\"width\"",
@@ -54,6 +57,7 @@ public interface DotParserConstants {
     "\"layers\"",
     "\"minlen\"",
     "<ID>",
+    "<CTLSTRING>",
     "<NUM>",
     "<DEC>",
     "\" \"",
@@ -63,16 +67,10 @@ public interface DotParserConstants {
     "\"}\"",
     "\";\"",
     "\"[\"",
-    "\"=true\"",
     "\"=\"",
-    "\"\\\"\"",
-    "\":\"",
     "\",\"",
     "\"]\"",
-    "\".\"",
     "\"->\"",
-    "\"e,\"",
-    "\"s,\"",
   };
 
 }

@@ -3,6 +3,8 @@
  */
 package org.wilmascope.light;
 import javax.media.j3d.*;
+import javax.vecmath.*;
+import java.util.*;
 
 /**
  * The class serves as a memory for the light and it's parent branch group.
@@ -13,6 +15,18 @@ import javax.media.j3d.*;
 public class WilmaLight {
 	private Light light;
 	private BranchGroup lightBranchGroup;
+	//branchGroup for the 3D Shapes
+	private BranchGroup objGroup=new BranchGroup();
+	//3D Shapes
+	private Arrow arrow;
+	private SpotLightCone cone;
+	private PointLightSphere sphere;
+	public WilmaLight()
+	{ 
+	   objGroup.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
+	   objGroup.setCapability(BranchGroup.ALLOW_DETACH);	
+	   
+    }
 	public Light getLight()
 	{
 		return light;
@@ -23,16 +37,89 @@ public class WilmaLight {
 	{
 		return lightBranchGroup;
 	}
-	
+/** Registers the light and create a 3D Shape to represent the light
+ */	
 	public void setLight(Light l)
 	{
-	   light=l;	
+	   light=l;
+	   
+	   if(l instanceof DirectionalLight)
+	      {
+	      	Vector3f direction=new Vector3f();
+	         ((DirectionalLight)l).getDirection(direction);
+	          Color3f color=new Color3f();
+	          ((DirectionalLight)l).getColor(color);
+	          arrow=new Arrow();
+              arrow.setDirection(direction);
+              arrow.setColor(color);
+              objGroup.addChild(arrow);
+             
+	    }
+	   if((l instanceof PointLight)&&!(l instanceof SpotLight))
+	      {
+	      	Point3f position=new Point3f();
+	         ((PointLight)l).getPosition(position);
+	          Color3f color=new Color3f();
+	          ((PointLight)l).getColor(color);
+	          sphere=new PointLightSphere();
+              sphere.setPosition(position);
+              sphere.setColor(color);
+              objGroup.addChild(sphere);
+              
+             
+	    } 
+	     if(l instanceof SpotLight)
+	      {
+	      	Point3f position=new Point3f();
+	         ((SpotLight)l).getPosition(position);
+	          Color3f color=new Color3f();
+	         ((SpotLight)l).getColor(color);
+	         Vector3f direction=new Vector3f();
+             ((SpotLight)l).getDirection(direction); 
+             float spreadAngle=((SpotLight)l).getSpreadAngle();
+              cone=new SpotLightCone();
+              cone.setPosition(position);
+              cone.setColor(color);
+              cone.setDirection(direction); 
+              cone.setSpreadAngle(spreadAngle);
+              objGroup.addChild(cone);
+            
+             
+	    }  
+	   
 	}
-	/** @param Sets the light's parent BranchGroup
+	/** Registers the light's parent BranchGroup
 	 */
 	public void setBranchGroup(BranchGroup b)
 	{
 		lightBranchGroup=b;
 	}
-
+   /**@return The Sphere that represents the point light
+    */	
+	public PointLightSphere getSphere(){
+		return sphere;
+	}
+  /**@return The Cone that represents the spot light
+   */
+    public SpotLightCone getCone()
+	{
+		return cone;
+	}
+   /** Detaches the 3D shape
+    */
+    public void deleteObj(){
+    	objGroup.detach();
+    }
+    /** @return The branchgroup the 3D shape attached
+     */
+    public BranchGroup getObjGroup()
+    {
+     return objGroup; 	
+    }
+    /**@return the arrow that represent the directional light
+     */
+    public Arrow getArrow()
+    {
+    	return arrow;
+    }
 }

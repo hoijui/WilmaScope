@@ -142,6 +142,9 @@ public class ForceLayout implements LayoutEngine {
   public org.wilmascope.graph.EdgeLayout createEdgeLayout(org.wilmascope.graph.Edge e) {
     return new EdgeForceLayout();
   }
+  public void setFrictionCoefficient(float friction) {
+    Constants.frictionCoefficient = friction;
+  }
   // an array of the forces to apply
   Vector forces = new Vector();
   float velocityAttenuation = Constants.velocityAttenuation;

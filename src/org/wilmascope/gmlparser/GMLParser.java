@@ -7,15 +7,15 @@ public class GMLParser implements GMLParserConstants {
 // end lexical definitions, parser start
   static final public void graph(GraphClient g) throws ParseException {
     jj_consume_token(GRAPH);
-    jj_consume_token(28);
+    jj_consume_token(27);
     stmtList(g);
-    jj_consume_token(29);
+    jj_consume_token(28);
     jj_consume_token(0);
   }
 
   static final public void stmtList(GraphClient g) throws ParseException {
                                 String s;
-          System.out.println("Parsing the GML graph...");
+    System.out.println("Parsing the GML graph...");
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -34,7 +34,7 @@ public class GMLParser implements GMLParserConstants {
   }
 
   static final public void stmt(GraphClient g) throws ParseException {
-                             NodeClient n; Token t1, t2, t3, t4;
+                             NodeClient n; Token t1, t2, t3, t4, w, h;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case VERSION:
       jj_consume_token(VERSION);
@@ -46,33 +46,96 @@ public class GMLParser implements GMLParserConstants {
       break;
     case NODE:
       jj_consume_token(NODE);
-      jj_consume_token(28);
-      jj_consume_token(ID);
-      t1 = jj_consume_token(NUM);
-      jj_consume_token(LABEL);
-      t2 = jj_consume_token(CTLSTRING);
-      g.addNode(t1.image,t2.image);
-      jj_consume_token(30);
-      jj_consume_token(28);
+      jj_consume_token(27);
+               t1=t2=w=h=null;
       label_2:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case GRAPHICSARG:
+        case ID:
+          jj_consume_token(ID);
+          t1 = jj_consume_token(NUM);
+          break;
+        case LABEL:
+          jj_consume_token(LABEL);
+          t2 = jj_consume_token(CTLSTRING);
+          break;
+        case 29:
+          jj_consume_token(29);
+          jj_consume_token(27);
+          label_3:
+          while (true) {
+            switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+            case 30:
+            case 31:
+            case 32:
+            case 33:
+            case 34:
+              ;
+              break;
+            default:
+              jj_la1[1] = jj_gen;
+              break label_3;
+            }
+            switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+            case 30:
+              jj_consume_token(30);
+              t3 = jj_consume_token(DEC);
+              break;
+            case 31:
+              jj_consume_token(31);
+              t3 = jj_consume_token(DEC);
+              break;
+            case 32:
+              jj_consume_token(32);
+              w = jj_consume_token(DEC);
+              break;
+            case 33:
+              jj_consume_token(33);
+              h = jj_consume_token(DEC);
+              break;
+            case 34:
+              jj_consume_token(34);
+              t3 = jj_consume_token(CTLSTRING);
+              break;
+            default:
+              jj_la1[2] = jj_gen;
+              jj_consume_token(-1);
+              throw new ParseException();
+            }
+          }
+          jj_consume_token(28);
+          break;
+        default:
+          jj_la1[3] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case ID:
+        case LABEL:
+        case 29:
           ;
           break;
         default:
-          jj_la1[1] = jj_gen;
+          jj_la1[4] = jj_gen;
           break label_2;
         }
-        jj_consume_token(GRAPHICSARG);
       }
-      jj_consume_token(29);
-      jj_consume_token(29);
+      float width=0,height=0;
+      if(w!=null) width=Float.parseFloat(w.image);
+      if(h!=null) height=Float.parseFloat(h.image);
+      if(t2==null) {
+        System.err.println("WARNING: Node id="+t1.image+" has no label!");
+        g.addNode(t1.image,"",width,height);
+      } else {
+        g.addNode(t1.image,t2.image,width,height);
+      }
+      jj_consume_token(28);
       break;
     case EDGE:
       jj_consume_token(EDGE);
-      jj_consume_token(28);
-               t3 = null;
+      jj_consume_token(27);
+               t3 = null; t4 = null;
       jj_consume_token(SOURCE);
       t1 = jj_consume_token(NUM);
       jj_consume_token(TARGET);
@@ -83,23 +146,47 @@ public class GMLParser implements GMLParserConstants {
         t3 = jj_consume_token(CTLSTRING);
         break;
       default:
-        jj_la1[2] = jj_gen;
+        jj_la1[5] = jj_gen;
         ;
       }
-      jj_consume_token(30);
-      jj_consume_token(28);
-      jj_consume_token(31);
-      t4 = jj_consume_token(CTLSTRING);
       jj_consume_token(29);
+      jj_consume_token(27);
+      label_4:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case 35:
+        case 36:
+          ;
+          break;
+        default:
+          jj_la1[6] = jj_gen;
+          break label_4;
+        }
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case 35:
+          jj_consume_token(35);
+          t4 = jj_consume_token(CTLSTRING);
+          break;
+        case 36:
+          jj_consume_token(36);
+          jj_consume_token(CTLSTRING);
+          break;
+        default:
+          jj_la1[7] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+      }
+      jj_consume_token(28);
       if(t3==null) {
         g.addEdge(t1.image, t2.image, t4.image);
       } else {
         g.addEdge(t1.image,t2.image,t3.image,t4.image);
       }
-      jj_consume_token(29);
+      jj_consume_token(28);
       break;
     default:
-      jj_la1[3] = jj_gen;
+      jj_la1[8] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -111,8 +198,19 @@ public class GMLParser implements GMLParserConstants {
   static public Token token, jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[4];
-  static final private int[] jj_la1_0 = {0xd8000,0x4000000,0x200000,0xd8000,};
+  static final private int[] jj_la1 = new int[9];
+  static private int[] jj_la1_0;
+  static private int[] jj_la1_1;
+  static {
+      jj_la1_0();
+      jj_la1_1();
+   }
+   private static void jj_la1_0() {
+      jj_la1_0 = new int[] {0xd8000,0xc0000000,0xc0000000,0x20300000,0x20300000,0x200000,0x0,0x0,0xd8000,};
+   }
+   private static void jj_la1_1() {
+      jj_la1_1 = new int[] {0x0,0x7,0x7,0x0,0x0,0x0,0x18,0x18,0x0,};
+   }
 
   public GMLParser(java.io.InputStream stream) {
     if (jj_initialized_once) {
@@ -127,7 +225,7 @@ public class GMLParser implements GMLParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 4; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
   static public void ReInit(java.io.InputStream stream) {
@@ -136,7 +234,7 @@ public class GMLParser implements GMLParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 4; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
   public GMLParser(java.io.Reader stream) {
@@ -152,7 +250,7 @@ public class GMLParser implements GMLParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 4; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
   static public void ReInit(java.io.Reader stream) {
@@ -161,7 +259,7 @@ public class GMLParser implements GMLParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 4; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
   public GMLParser(GMLParserTokenManager tm) {
@@ -176,7 +274,7 @@ public class GMLParser implements GMLParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 4; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
   public void ReInit(GMLParserTokenManager tm) {
@@ -184,7 +282,7 @@ public class GMLParser implements GMLParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 4; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
   }
 
   static final private Token jj_consume_token(int kind) throws ParseException {
@@ -229,26 +327,29 @@ public class GMLParser implements GMLParserConstants {
   static private int[] jj_expentry;
   static private int jj_kind = -1;
 
-  static final public ParseException generateParseException() {
+  static public ParseException generateParseException() {
     jj_expentries.removeAllElements();
-    boolean[] la1tokens = new boolean[32];
-    for (int i = 0; i < 32; i++) {
+    boolean[] la1tokens = new boolean[37];
+    for (int i = 0; i < 37; i++) {
       la1tokens[i] = false;
     }
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 9; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
             la1tokens[j] = true;
           }
+          if ((jj_la1_1[i] & (1<<j)) != 0) {
+            la1tokens[32+j] = true;
+          }
         }
       }
     }
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < 37; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

@@ -170,6 +170,13 @@ public class GraphControl {
       this.label = label;
       graphElementView.setLabel(label);
     }
+    /**
+     * set a multiline label to show with the element
+     * @param labelLines an array of Strings that make up each of the lines of the label
+     */
+    public void setLabel(String[] labelLines) {
+      graphElementView.setLabel(labelLines);
+    }
     public String getLabel() {
       return label;
     }
@@ -379,7 +386,7 @@ public class GraphControl {
         }
       } else if (node.getLayout() instanceof org.wilmascope.columnlayout.NodeColumnLayout) {
         org.wilmascope.columnlayout.NodeColumnLayout n = (org.wilmascope.columnlayout.NodeColumnLayout)node.getLayout();
-        return n.getLevel();
+        return n.getStratum();
       }
       return Integer.MIN_VALUE;
     }
@@ -848,6 +855,7 @@ public class GraphControl {
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.TaperedEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.DefaultClusterView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.ConeClusterView());
+      viewManager.addPrototypeView(new org.wilmascope.viewplugin.TubeClusterView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.BoxClusterView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.ColumnClusterView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.DefaultEdgeView());
@@ -855,8 +863,9 @@ public class GraphControl {
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.BoxNodeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.LabelNodeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.TubeNodeView());
-      viewManager.addPrototypeView(new org.wilmascope.viewplugin.SplineEdgeView());
+      viewManager.addPrototypeView(new org.wilmascope.viewplugin.SquareTubeNodeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.SplineTubeEdgeView());
+      viewManager.addPrototypeView(new org.wilmascope.viewplugin.SplineRectTubeEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.LineEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.LineNodeView());
       /*

@@ -239,6 +239,13 @@ implements org.wilmascope.graph.Viewable {
     this.labelText = text;
     showLabel(text);
   }
+  /** sets a multiline label... this may be implemented in different ways by
+   * different subclass views... The default is just to show the first line
+   */
+  public void setLabel(String[] labelLines) {
+    this.labelText = labelLines[0];
+    showLabel(labelLines[0]);
+  }
   public String getLabel() {
     return labelText;
   }

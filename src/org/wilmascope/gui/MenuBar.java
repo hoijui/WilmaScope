@@ -1,4 +1,4 @@
- /*
+/*
 	* The following source code is part of the WilmaScope 3D Graph Drawing Engine
 	* which is distributed under the terms of the GNU Lesser General Public License
 	* (LGPL - http://www.gnu.org/copyleft/lesser.html).
@@ -21,23 +21,21 @@
 package org.wilmascope.gui;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSlider;
-import javax.swing.JFileChooser;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.wilmascope.gmlparser.FileImporter;
-import org.wilmascope.view.GraphCanvas;
-import org.wilmascope.light.LightFrame;
+
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.control.TestGraph;
+import org.wilmascope.gmlparser.ColumnsImporter;
 
 /**
  * Title:        WilmaToo
@@ -56,10 +54,12 @@ public class MenuBar extends JMenuBar {
 	JMenuItem queryMenuItem = new JMenuItem();
 	JMenuItem importMenuItem = new JMenuItem();
 	JMenuItem testMenuItem = new JMenuItem();
-	JMenu viewMenu = new JMenu();
+	JMenu viewMenu;
 	JCheckBoxMenuItem antialiasingCheckBoxMenuItem = new JCheckBoxMenuItem();
 	JCheckBoxMenuItem parallelCheckBoxMenuItem = new JCheckBoxMenuItem();
+	JMenuItem stereoMenuItem = new JMenuItem();
 	JCheckBoxMenuItem showMouseHelpCheckBoxMenuItem = new JCheckBoxMenuItem();
+	JCheckBoxMenuItem fullScreenCheckBoxMenuItem = new JCheckBoxMenuItem();
 	JMenuItem stretchMenuItem = new JMenuItem();
 	JMenuItem animationGranularityMenuItem = new JMenuItem();
 	JMenuItem backgroundColourMenuItem = new JMenuItem();
@@ -68,8 +68,11 @@ public class MenuBar extends JMenuBar {
 	JMenuItem licenseMenuItem = new JMenuItem();
 	JMenuItem aboutMenuItem = new JMenuItem();
 	JMenuItem edgeViewMenuItem = new JMenuItem();
-	JMenuItem editLightViewMenuItem = new JMenuItem();
 	ControlPanel controlPanel;
+	JFrame parallelScaleControlFrame = null;
+	JFrame eyeSeparationControlFrame = null;
+	JFrame stretchControlFrame = null;
+	JFrame animationGranularityControlFrame = null;
 
 	public MenuBar(
 		Actions actions,
@@ -79,6 +82,7 @@ public class MenuBar extends JMenuBar {
 		this.controlPanel = controlPanel;
 		editMenu = actions.getEditMenu();
 		fileMenu = actions.getFileMenu();
+		viewMenu = actions.getViewMenu();
 		fileMenu.setText("File");
 		fileMenu.setMnemonic('F');
 		editMenu.setText("Edit");
@@ -114,6 +118,14 @@ public class MenuBar extends JMenuBar {
 		});
 		viewMenu.setText("View");
 		viewMenu.setMnemonic('V');
+		fullScreenCheckBoxMenuItem.setText("Full Screen Mode");
+		fullScreenCheckBoxMenuItem.setMnemonic('F');
+		fullScreenCheckBoxMenuItem
+			.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fullScreen();
+			}
+		});
 		showMouseHelpCheckBoxMenuItem.setText("Show Mouse Help Panel");
 		showMouseHelpCheckBoxMenuItem.setMnemonic('M');
 		showMouseHelpCheckBoxMenuItem
@@ -137,6 +149,13 @@ public class MenuBar extends JMenuBar {
 			.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				parallelCheckBoxMenuItem_actionPerformed(e);
+			}
+		});
+		stereoMenuItem.setText("Stereo Separation...");
+		stereoMenuItem.setMnemonic('P');
+		stereoMenuItem.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				stereoMenuItem_actionPerformed(e);
 			}
 		});
 		stretchMenuItem.setText("Stretch Vertical Axis...");
@@ -198,14 +217,6 @@ public class MenuBar extends JMenuBar {
 			}
 		});
 
-		editLightViewMenuItem.setText("Lighting...");
-		editLightViewMenuItem.setMnemonic('i');
-		editLightViewMenuItem
-			.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				editLightViewMenuItem_actionPerformed(e);
-			}
-		});
 		this.add(fileMenu);
 		this.add(editMenu);
 		this.add(viewMenu);
@@ -214,15 +225,16 @@ public class MenuBar extends JMenuBar {
 		fileMenu.add(queryMenuItem);
 		fileMenu.add(testMenuItem);
 		fileMenu.add(exitMenuItem);
+		viewMenu.add(fullScreenCheckBoxMenuItem);
 		viewMenu.add(showMouseHelpCheckBoxMenuItem);
 		viewMenu.add(antialiasingCheckBoxMenuItem);
 		viewMenu.add(parallelCheckBoxMenuItem);
+		viewMenu.add(stereoMenuItem);
 		viewMenu.add(stretchMenuItem);
 		viewMenu.add(animationGranularityMenuItem);
 		viewMenu.add(axisPlaneMenuItem);
 		viewMenu.add(backgroundColourMenuItem);
 		viewMenu.add(edgeViewMenuItem);
-		viewMenu.add(editLightViewMenuItem);
 		helpMenu.add(helpMenuItem);
 		helpMenu.add(licenseMenuItem);
 		helpMenu.add(aboutMenuItem);
@@ -239,9 +251,6 @@ public class MenuBar extends JMenuBar {
 			graphControl.getGraphCanvas().setAntialiasingEnabled(false);
 		}
 	}
-	JFrame parallelScaleControlFrame = null;
-	JFrame stretchControlFrame = null;
-	JFrame animationGranularityControlFrame = null;
 	void parallelCheckBoxMenuItem_actionPerformed(ActionEvent e) {
 		if (parallelCheckBoxMenuItem.isSelected()) {
 			graphControl.getGraphCanvas().setParallelProjection(true);
@@ -261,6 +270,22 @@ public class MenuBar extends JMenuBar {
 			graphControl.getGraphCanvas().setParallelProjection(false);
 			parallelScaleControlFrame.dispose();
 		}
+	}
+	void stereoMenuItem_actionPerformed(ActionEvent e) {
+		graphControl.getGraphCanvas().setStereoEnable(true);
+		eyeSeparationControlFrame = new JFrame();
+		JSlider eyeSlider = new JSlider(JSlider.HORIZONTAL, 0, 99, 10);
+		eyeSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				JSlider source = (JSlider) e.getSource();
+				graphControl.getGraphCanvas().setStereoSeparation(
+					0.0006 * source.getValue());
+			}
+		});
+		eyeSeparationControlFrame.getContentPane().add(eyeSlider);
+		eyeSeparationControlFrame.setTitle("Adjust Eye Separation...");
+		eyeSeparationControlFrame.pack();
+		eyeSeparationControlFrame.show();
 	}
 	void stretchMenuItem_actionPerformed(ActionEvent e) {
 		stretchControlFrame = new JFrame();
@@ -307,11 +332,13 @@ public class MenuBar extends JMenuBar {
 				org.wilmascope.global.Constants.getInstance().getProperty(
 					"DefaultDataPath"));
 		//chooser.setFileFilter(fileHandler.getFileFilter());
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int returnVal = chooser.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			FileImporter.load(
+			ColumnsImporter.load(
 				graphControl,
 				chooser.getSelectedFile().getAbsolutePath());
+			removeAxisPlaneControlFrame();
 		}
 	}
 	void queryMenuItem_actionPerformed(ActionEvent e) {
@@ -319,7 +346,11 @@ public class MenuBar extends JMenuBar {
 		q.show();
 	}
 	void testMenuItem_actionPerformed(ActionEvent e) {
-		new org.wilmascope.control.TestGraph(graphControl);
+		GenerateTestGraphFrame setup =
+			new GenerateTestGraphFrame(
+				"Generate Test Graph",
+				new TestGraph(graphControl));
+		setup.show();
 	}
 	void helpMenuItem_actionPerformed(ActionEvent e) {
 		HelpFrame h = new HelpFrame("../userdoc/index.html");
@@ -347,34 +378,21 @@ public class MenuBar extends JMenuBar {
 			graphControl.getGraphCanvas().setBackgroundColor(colour);
 		}
 	}
-	void editLightViewMenuItem_actionPerformed(ActionEvent e) {
-		LightFrame lightFrame;
-		controlPanel.hideMouseHelp();
-		controlPanel.setMessage("Editing Lights...");
-		GraphCanvas graphCanvas = graphControl.getGraphCanvas();
-		graphControl.getGraphCanvas().setPickingEnabled(false);
-		graphControl.getGraphCanvas().getMouseRotate().setEnable(false);
-		graphControl.getGraphCanvas().getMouseTranslate().setEnable(false);
-		graphControl.getGraphCanvas().getMouseZoom().setEnable(false);
-		lightFrame = graphCanvas.getLightManager().getLightFrame();
-		lightFrame.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				graphControl.getGraphCanvas().setPickingEnabled(true);
-				graphControl.getGraphCanvas().getMouseRotate().setEnable(true);
-				graphControl.getGraphCanvas().getMouseTranslate().setEnable(true);
-				graphControl.getGraphCanvas().getMouseZoom().setEnable(true);
-				controlPanel.showMouseHelp();
-			}
-		});
-		lightFrame.setVisible(true);
-
-	}
 	void axisPlaneMenuItem_actionPerformed(ActionEvent e) {
 		if (axisPlaneControlFrame == null) {
 			axisPlaneControlFrame = new AxisPlaneControlFrame(graphControl);
 			axisPlaneControlFrame.pack();
 		}
 		axisPlaneControlFrame.show();
+	}
+	public void fullScreen() {
+		this.setVisible(false);
+	}
+	public void removeAxisPlaneControlFrame() {
+		if (axisPlaneControlFrame != null) {
+			axisPlaneControlFrame.kill();
+			axisPlaneControlFrame = null;
+		}
 	}
 	AxisPlaneControlFrame axisPlaneControlFrame;
 }

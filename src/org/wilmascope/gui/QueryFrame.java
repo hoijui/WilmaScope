@@ -1,24 +1,58 @@
 package org.wilmascope.gui;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.sql.*;
-import org.wilmascope.control.GraphControl;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.Vector;
+
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSlider;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+
+import org.wilmascope.columnlayout.ColumnLayout;
 import org.wilmascope.control.ColumnCluster;
+import org.wilmascope.control.GraphControl;
 import org.wilmascope.forcelayout.BalancedEventClient;
-import org.wilmascope.view.ElementData;
+import org.wilmascope.forcelayout.Origin;
+import org.wilmascope.forcelayout.Repulsion;
+import org.wilmascope.forcelayout.Spring;
 import org.wilmascope.global.Constants;
-import java.util.*;
+import org.wilmascope.view.EdgeView;
+import org.wilmascope.view.ElementData;
 
 /**
  * A demonstration of how to construct graph visualisations from an online
  * query of data from the CityWatch database.
  */
 public class QueryFrame extends JFrame {
-
+  GraphControl graphControl;
   public QueryFrame(GraphControl c) {
     this.graphRoot = c.getRootCluster();
+    this.graphControl = c;
     try {
       jbInit();
     } catch (Exception e) {
@@ -135,18 +169,37 @@ public class QueryFrame extends JFrame {
     jPanel1.add(cancelButton, null);
     fmMovement3DotButton.setText("Dot Layout");
     fmMovement3ForceButton.setText("Force Layout");
-    columnThresholdField.setText(columnThreshold+"");
-    edgeThresholdField.setText(edgeThreshold+"");
+    columnThresholdField.setText(columnThreshold + "");
+    edgeThresholdField.setText(edgeThreshold + "");
+    dotScaleField.setText("20");
+    dotEdgeMinField.setText("0.01");
+    dotEdgeMaxField.setText("0.1");
+    dotColumnScaleField.setText("6");
+    fmMovement3Panel.setLayout(new GridLayout(4,4));
+    fmMovement3Panel.add(new JLabel("Column Threshold:"));
     fmMovement3Panel.add(columnThresholdField);
+    fmMovement3Panel.add(new JLabel("Edge Threshold:"));
     fmMovement3Panel.add(edgeThresholdField);
+    fmMovement3Panel.add(new JLabel("Edge Radius Range:"));
+    fmMovement3Panel.add(dotEdgeMinField);
+    fmMovement3Panel.add(dotEdgeMaxField);
+    fmMovement3Panel.add(edgeDiffByCountCheckBox);
+    fmMovement3Panel.add(new JLabel("Column Scale:"));
+    fmMovement3Panel.add(dotColumnScaleField);
+    fmMovement3Panel.add(new JLabel());
+    fmMovement3Panel.add(new JLabel());
+    fmMovement3Panel.add(new JLabel("Dot Scale:"));
+    fmMovement3Panel.add(dotScaleField);
     fmMovement3Panel.add(fmMovement3DotButton);
     fmMovement3Panel.add(fmMovement3ForceButton);
-    fmMovement3DotButton.addActionListener(new java.awt.event.ActionListener() {
+    fmMovement3DotButton
+      .addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
         portfolioColumns(ColumnCluster.DOTCOLUMNS);
       }
     });
-    fmMovement3ForceButton.addActionListener(new java.awt.event.ActionListener() {
+    fmMovement3ForceButton
+      .addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
         portfolioColumns(ColumnCluster.FORCECOLUMNS);
       }
@@ -576,8 +629,9 @@ public class QueryFrame extends JFrame {
     if (ColumnCluster.getColumnStyle() == ColumnCluster.DOTCOLUMNS) {
       graphRoot = graphRoot.addCluster();
       graphRoot.hide();
-      org.wilmascope.dotlayout.DotLayout d =new org.wilmascope.dotlayout.DotLayout(graphRoot.getCluster());
-      d.scale = Float.parseFloat(scaleField.getText());
+      org.wilmascope.dotlayout.DotLayout d =
+        new org.wilmascope.dotlayout.DotLayout(graphRoot.getCluster());
+      d.xScale = d.yScale = Float.parseFloat(scaleField.getText());
       graphRoot.setLayoutEngine(d);
     } else if (ColumnCluster.getColumnStyle() == ColumnCluster.FORCECOLUMNS) {
       (
@@ -625,19 +679,29 @@ public class QueryFrame extends JFrame {
     }
   }
   void portfolioColumns(int style) {
+    companyCluster=null;
     graphRoot.deleteAll();
     edgeThreshold = Float.parseFloat(edgeThresholdField.getText());
     columnThreshold = Float.parseFloat(columnThresholdField.getText());
     ColumnCluster.setColumnStyle(style);
     if (ColumnCluster.getColumnStyle() == ColumnCluster.DOTCOLUMNS) {
-      graphRoot = graphRoot.addCluster();
-      graphRoot.hide();
-      org.wilmascope.dotlayout.DotLayout d =new org.wilmascope.dotlayout.DotLayout(graphRoot.getCluster());
-      d.scale = 10f;
+      //graphRoot = graphRoot.addCluster();
+      //graphRoot.hide();
+      org.wilmascope.dotlayout.DotLayout d =
+        new org.wilmascope.dotlayout.DotLayout(graphRoot.getCluster());
+      d.xScale = d.yScale = Float.parseFloat(dotScaleField.getText());
       graphRoot.setLayoutEngine(d);
     } else if (ColumnCluster.getColumnStyle() == ColumnCluster.FORCECOLUMNS) {
-      ((org.wilmascope.forcelayout.ForceLayout) graphRoot
-          .getLayoutEngine()).setVelocityAttenuation(0.001f);
+      org.wilmascope.forcelayout.ForceLayout f =
+        new org.wilmascope.forcelayout.ForceLayout(graphRoot.getCluster());
+      graphRoot.setLayoutEngine(f);
+      f.setVelocityAttenuation(0.001f);
+      f.setFrictionCoefficient(90f);
+      f.addForce(new Spring(0.1f));
+      f.addForce(new Repulsion(5f,100f));
+      f.addForce(new Origin(8f));
+
+      graphControl.setIterationsPerFrame(100);
     }
 
     columns = new TreeMap();
@@ -645,57 +709,108 @@ public class QueryFrame extends JFrame {
 
     level = 0;
     maxLevel = 11;
-    int[][] count = new int[12][50];
+    long[][] count = new long[12][50];
     float[][] value = new float[12][50];
+    HashMap secnamemap = new HashMap();
+    try {
+      int i = 0;
+      String rec;
+      BufferedReader in = new BufferedReader(new FileReader(org.wilmascope.global.Constants.getInstance().getProperty(
+          "DefaultDataPath")+File.separator+"secnames"));
+      while ((rec = in.readLine()) != null) {
+        StringTokenizer st = new StringTokenizer(rec, ",");
+        //System.out.println(rec);
+        String secode = new String(st.nextToken());
+        String secname = new String(st.nextToken());
+        secnamemap.put(new Integer(i++), secname);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     try {
       String rec;
-      java.io.BufferedReader in =
-        new java.io.BufferedReader(new java.io.FileReader("fm328.csv"));
-      for(int i=0;i<12;i++) {
+      BufferedReader in =
+        new BufferedReader(new java.io.FileReader(org.wilmascope.global.Constants.getInstance().getProperty(
+          "DefaultDataPath")+File.separator+"export.csv"));
+      rec = in.readLine();
+      StringTokenizer stl = new StringTokenizer(rec, ", ");
+      int numofsectors = Integer.parseInt(stl.nextToken());
+      int numofmonths = Integer.parseInt(stl.nextToken());
+
+      count = new long[numofmonths][numofsectors];
+      value = new float[numofmonths][numofsectors];
+      for (int i = 0; i < numofmonths; i++) {
         rec = in.readLine();
         StringTokenizer st = new StringTokenizer(rec, ", ");
-        for(int j=0;j<50;j++) {
-          count[i][j] = Integer.parseInt(st.nextToken());
+        for (int j = 0; j < numofsectors; j++) {
+          count[i][j] = Long.parseLong(st.nextToken());
         }
       }
-      for(int i=0;i<12;i++) {
+      for (int i = 0; i < numofmonths; i++) {
         rec = in.readLine();
         StringTokenizer st = new StringTokenizer(rec, ", ");
-        for(int j=0;j<50;j++) {
+        for (int j = 0; j < numofsectors; j++) {
           value[i][j] = Float.parseFloat(st.nextToken());
         }
       }
-      in.close();      
-    } catch(java.io.IOException e) {
-      e.printStackTrace();
-    } 
-    for(int i=0;i<count.length;i++) {
-      decreased = new Vector(); increased = new Vector();
-      for(int j=0;j<count[i].length;j++) {
-        float v = value[i][j];
-        int c = count[i][j];
-        if(v>0.01f) {
-          addColumn("n"+(j+1),v,c);
+      // find a suitable value for column scale
+      maxmc=0;
+      for (int i = 0; i < numofmonths; i++) {
+        for (int j = 0; j < numofsectors; j++) {
+          float c=count[i][j];
+          float v=value[i][j];
+          if(c*v>maxmc) {
+            maxmc=c*v;
+          }
         }
       }
-      for(Iterator it = decreased.iterator(); it.hasNext(); ) {
-        GraphControl.NodeFacade start = (GraphControl.NodeFacade)it.next();
-        ColumnData sd = (ColumnData)start.getUserData();
+      in.close();
+    } catch (java.io.IOException e) {
+      e.printStackTrace();
+    }
+    for (int i = 0; i < count.length; i++) {
+      decreased = new Vector();
+      increased = new Vector();
+      for (int j = 0; j < count[i].length; j++) {
+        long c = count[i][j];
+        float v = value[i][j]; // the value in the file is share value
+        //if (v > 0.01f) {
+          int sec = j;
+          System.out.println(
+            sec + " " + (String) secnamemap.get(new Integer(sec)));
+          addColumn((String) secnamemap.get(new Integer(sec)), v, c);
+          //addColumn("n"+(j+1),v,c);
+        //}
+      }
+      for (Iterator it = decreased.iterator(); it.hasNext();) {
+        GraphControl.NodeFacade start = (GraphControl.NodeFacade) it.next();
+        ColumnData sd = (ColumnData) start.getUserData();
         ColumnData sl = sd.last;
-          
-        for(Iterator jt = increased.iterator(); jt.hasNext(); ) {
-          GraphControl.NodeFacade end = (GraphControl.NodeFacade)jt.next();
-          ColumnData ed = (ColumnData)end.getUserData();
+
+        for (Iterator jt = increased.iterator(); jt.hasNext();) {
+          GraphControl.NodeFacade end = (GraphControl.NodeFacade) jt.next();
+          ColumnData ed = (ColumnData) end.getUserData();
           ColumnData el = ed.last;
-          float move = 
+          float move =
             (ed.shareCount - el.shareCount) * el.shareValue
-            + (sl.shareCount - sd.shareCount) * sl.shareValue;
+              + (sl.shareCount - sd.shareCount) * sl.shareValue;
           GraphControl.EdgeFacade edge;
           if (ColumnCluster.getColumnStyle() == ColumnCluster.DOTCOLUMNS) {
-            edge = graphRoot.addEdge(start, end, "SplineTube", move/80000f);
+            edge =
+              graphRoot.addEdge(
+                start,
+                end,
+                "SplineTube",
+                move / maxmc);
           } else {
-            edge = graphRoot.addEdge(start, end, "Arrow", move/80000f);
+            edge =
+              graphRoot.addEdge(
+                start,
+                end,
+                "Arrow",
+                move / maxmc);
           }
+        edge.setColour(0.8f * (float) level / (float) maxLevel, 0.8f * (float) level / (float) maxLevel,1f);
         }
       }
       level++;
@@ -704,13 +819,32 @@ public class QueryFrame extends JFrame {
         ColumnCluster c = (ColumnCluster) columns.get(id);
 
         if (c.getNextLevel() < level) {
-          System.out.println("id="+id);
+          System.out.println("id=" + id);
           float radius = c.getTopNode().getRadius();
           GraphControl.NodeFacade n = c.addNode(radius);
-          
+
           n.setColour(0f, 0f, 0f);
         }
       }
+    }
+    float edgeMinRadius = Float.parseFloat(dotEdgeMinField.getText());
+    float edgeMaxRadius = Float.parseFloat(dotEdgeMaxField.getText());
+    GraphControl.EdgeFacade[] edges = graphRoot.getEdges();
+    float minRadius = Float.MAX_VALUE, maxRadius = 0;
+    for(int i=0;i<edges.length;i++) {
+      float r = ((EdgeView)edges[i].getView()).getRadius();
+      if(r<minRadius) {
+        minRadius = r;
+      }
+      if(r>maxRadius) {
+        maxRadius = r;
+      }
+    }
+    float scale = (edgeMaxRadius - edgeMinRadius)/(maxRadius - minRadius);
+    for(int i=0; i<edges.length;i++) {
+      float r = ((EdgeView)edges[i].getView()).getRadius();
+      r=(r-minRadius)*scale + edgeMinRadius;
+      ((EdgeView)edges[i].getView()).setRadius(r);
     }
     graphRoot.unfreeze();
   }
@@ -792,7 +926,7 @@ public class QueryFrame extends JFrame {
             radius = r.getFloat("share_pric");
           }
           GraphControl.NodeFacade n = c.addNode(radius);
-          n.setColour(0.9f, 0.9f, 1f * (float)(level-1) / (float) maxLevel);
+          n.setColour(0.9f, 0.9f, 1f * (float) (level - 1) / (float) maxLevel);
         }
       }
     } catch (SQLException e) {
@@ -810,7 +944,7 @@ public class QueryFrame extends JFrame {
     ColumnCluster c = (ColumnCluster) columns.get(id);
 
     if (c == null) {
-      c = new ColumnCluster(id, graphRoot, value, 1f, level);
+      c = new ColumnCluster(id, graphRoot, value, 1f, level,"Tube");
       columns.put(id, c);
     }
     if (c.getNextLevel() < level + 1) {
@@ -824,63 +958,101 @@ public class QueryFrame extends JFrame {
    */
   class ColumnData {
     float shareValue;
-    int shareCount;
+    long shareCount;
     ColumnData last;
   }
-  float columnThreshold = 5000f;
-  float edgeThreshold = 0.05f;
-  ColumnCluster addColumn(String id, float shareValue, int count) {
+  float columnThreshold = 0.1f;
+  float edgeThreshold = 0.1f;
+  float maxmc=0;
+  GraphControl.ClusterFacade companyCluster;
+  ColumnCluster addColumn(String id, float shareValue, long count) {
     ColumnData d = new ColumnData();
+
+    float nodeScale = Float.parseFloat(dotColumnScaleField.getText());
     d.shareValue = shareValue;
+    System.out.println("Share value = "+shareValue+", count="+count);
     d.shareCount = count;
-    float value = shareValue*count;
+    float value = shareValue * count;
     ColumnCluster c = (ColumnCluster) columns.get(id);
     if (c == null) {
-      if(value<columnThreshold) {
+      if (value < columnThreshold*maxmc) {
+        System.out.println("threshold="+columnThreshold*maxmc+" so skipping");
         return null;
       }
-      c = new ColumnCluster(id, graphRoot, value/4000f, level);
+      StringTokenizer st = new StringTokenizer(id," ");
+      GraphControl.ClusterFacade parent=graphRoot;
+      int i=0;
+      String firstToken = st.nextToken();
+      String[] idStrings = new String[st.countTokens()];
+      if(firstToken.equals("subcluster")) {
+        if(companyCluster==null) {
+          companyCluster = graphRoot.addCluster("Tube Cluster");
+          companyCluster.setLevelConstraint(0);
+          org.wilmascope.forcelayout.ForceLayout f = (org.wilmascope.forcelayout.ForceLayout)companyCluster.getLayoutEngine();
+          f.addForce(new Origin(8f));
+          f.addForce(new Repulsion(1f,5f));
+          f.addForce(new Spring(5f));
+        }
+        parent=companyCluster;
+      } else {
+        idStrings = new String[st.countTokens()+1];
+        idStrings[i++]=firstToken;
+      }
+      while(st.hasMoreTokens()) {
+        idStrings[i++] = st.nextToken();
+      }
+      c = new ColumnCluster(parent, nodeScale*value/ maxmc, nodeScale*value/maxmc, level,"Tube");
+      c.setLabel(idStrings);
+      ((ColumnLayout)c.getClusterFacade().getLayoutEngine()).setStrataSeparation(0.2f);
       columns.put(id, c);
     }
     //if(c.getNextLevel() < level + 1) {
-      ColumnData l=d;
-      GraphControl.NodeFacade ln = c.getTopNode();
-      if(ln!=null) {
-        l = (ColumnData)ln.getUserData();
-      }
-      if(l==null) {
-        l=d;
-      }
-      d.last = l;
-      GraphControl.NodeFacade n = c.addVariableNode(value/4000f);
-      // colour the node according to change in share value:
-      // white if no change
-      // shade toward green if value increases, red if it decreases
-      float diffShareValue = (d.shareValue - l.shareValue)/l.shareValue;
-      float defaultGrey = 0.8f;
-      if(diffShareValue > defaultGrey) {
-        diffShareValue = defaultGrey;
-      } if(diffShareValue < -defaultGrey) {
-        diffShareValue = -defaultGrey;
-      }
-      if(diffShareValue > 0.01f) {
-        n.setColour(defaultGrey-diffShareValue, defaultGrey, defaultGrey-diffShareValue);
-      } else if(diffShareValue < -0.01f) {
-        n.setColour(defaultGrey, defaultGrey+diffShareValue, defaultGrey+diffShareValue);
-      } else {
-        n.setColour(defaultGrey, defaultGrey, defaultGrey);
-      }
-      //n.setMass(value);
-      n.setUserData(d);
-      // if holding increases by more than 5% add to increased list
-      // if it decreases by more than 5% add to decreased list 
-      float diffCount = (float)(d.shareCount - l.shareCount)/(float)l.shareCount;
-      if(diffCount > edgeThreshold) {
-        increased.add(n);
-      } else if(diffCount < -edgeThreshold) {
-        decreased.add(n);
-      }
-    //}
+    ColumnData l = d;
+    GraphControl.NodeFacade ln = c.getTopNode();
+    if (ln != null) {
+      l = (ColumnData) ln.getUserData();
+    }
+    if (l == null) {
+      l = d;
+    }
+    d.last = l;
+    GraphControl.NodeFacade n = c.addVariableNode(nodeScale*value / maxmc);
+    // colour the node according to change in share value:
+    // white if no change
+    // shade toward green if value increases, red if it decreases
+    float diffShareValue = (d.shareValue - l.shareValue) / l.shareValue;
+    float defaultGrey = 0.8f;
+    if (diffShareValue > defaultGrey) {
+      diffShareValue = defaultGrey;
+    }
+    if (diffShareValue < -defaultGrey) {
+      diffShareValue = -defaultGrey;
+    }
+    if (diffShareValue > 0.01f) {
+      n.setColour(
+        defaultGrey - diffShareValue,
+        defaultGrey,
+        defaultGrey - diffShareValue);
+    } else if (diffShareValue < -0.01f) {
+      n.setColour(
+        defaultGrey,
+        defaultGrey + diffShareValue,
+        defaultGrey + diffShareValue);
+    } else {
+      n.setColour(defaultGrey, defaultGrey, defaultGrey);
+    }
+    //n.setMass(value);
+    n.setUserData(d);
+    // if holding increases by more than 5% add to increased list
+    // if it decreases by more than 5% add to decreased list 
+    if(edgeDiffByCountCheckBox.isSelected()) {
+      diffShareValue = (float) (d.shareCount - l.shareCount) / (float) l.shareCount;
+    }
+    if (diffShareValue > edgeThreshold) {
+      increased.add(n);
+    } else if (diffShareValue < -edgeThreshold) {
+      decreased.add(n);
+    }
     return c;
   }
 
@@ -1146,7 +1318,7 @@ public class QueryFrame extends JFrame {
   //=========================================================================
   // global variables - DOH!
   /** the root cluster to which we will add all nodes and edges */
-  GraphControl.ClusterFacade graphRoot;
+  public static GraphControl.ClusterFacade graphRoot;
   // handy reference for use in anonymous inner classes
   QueryFrame thisframe = this;
   /** User name for connecting to SQL database */
@@ -1195,7 +1367,12 @@ public class QueryFrame extends JFrame {
   JLabel jLabel6 = new JLabel();
   JTextField sectorField = new JTextField();
   JTextField edgeThresholdField = new JTextField();
+  JTextField dotScaleField = new JTextField();
+  JTextField dotEdgeMinField = new JTextField();
+  JTextField dotEdgeMaxField = new JTextField();
+  JTextField dotColumnScaleField = new JTextField();
   JTextField columnThresholdField = new JTextField();
+  JCheckBox edgeDiffByCountCheckBox = new JCheckBox("Edge threshold by count");
   JRadioButton wormRadioButton = new JRadioButton();
   JRadioButton dotColumnsRadioButton = new JRadioButton();
   JRadioButton forceColumnRadioButton = new JRadioButton();

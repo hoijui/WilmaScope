@@ -20,11 +20,13 @@
 
 package org.wilmascope.view;
 
-/**
- * Sets up the Canvas on which all 3D stuff happens.  Lights, Behaviours, etc
- * etc are all created here.
+/*
+ * GraphCanvas.java
  *
  * Created on 16 April 2000, 17:06
+ */
+
+/**
  *
  * @author  $Author$
  * @version $Version:$
@@ -37,7 +39,7 @@ import javax.media.j3d.Bounds;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.ExponentialFog;
-import javax.media.j3d.RotationInterpolator;
+import javax.media.j3d.PhysicalBody;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.media.j3d.View;
@@ -47,6 +49,8 @@ import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 import org.wilmascope.light.LightManager;
+import org.wilmascope.rotation.RotationBehavior;
+import org.wilmascope.centernode.CenterNode;
 
 import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
 import com.sun.j3d.utils.behaviors.mouse.MouseTranslate;
@@ -58,7 +62,6 @@ public class GraphCanvas extends Canvas3D {
 	protected TransformGroup transformGroup;
 	protected TransformGroup stretchTransformGroup;
 	protected TransformGroup rotationTransformGroup;
-	RotationInterpolator rotator;
 	private BranchGroup bg;
 	private Background background;
 	private ExponentialFog fog;
@@ -70,6 +73,12 @@ public class GraphCanvas extends Canvas3D {
 	private MouseRotate MouseRotate;
 	private MouseTranslate MouseTranslate;
 	private MouseZoom MouseZoom;
+
+	private Alpha rotationAlpha;
+	private RotationBehavior rotationBehavior;
+
+	private boolean toggled;
+	private CenterNode centerNode;
 	/** Creates new GraphScene */
 	public GraphCanvas(
 		int xsize,
@@ -104,20 +113,15 @@ public class GraphCanvas extends Canvas3D {
 			TransformGroup.ALLOW_LOCAL_TO_VWORLD_READ);
 
 		Transform3D yAxis = new Transform3D();
-		rotationAlpha = new Alpha(-1, 10000);
 
-		rotator =
-			new RotationInterpolator(
-				rotationAlpha,
-				rotationTransformGroup,
-				yAxis,
-				0.0f,
-				(float) Math.PI * 2.0f);
-		rotator.setSchedulingBounds(bounds);
-		rotator.setEnable(false);
-		bg.addChild(rotator);
+		//rotator.setEnable(false);
+		rotationBehavior = new RotationBehavior(bg, transformGroup, bounds);
+		rotationBehavior.setSchedulingBounds(bounds);
+		rotationBehavior.setEnable(false);
+		toggled = false;
 
-		//stretchTransformGroup = new TransformGroup();
+		bg.addChild(rotationBehavior);
+
 		Transform3D stretch = new Transform3D();
 		stretch.setScale(new Vector3d(1, 1, 1));
 		transformGroup.setTransform(stretch);
@@ -141,37 +145,31 @@ public class GraphCanvas extends Canvas3D {
 		pb.setSchedulingBounds(bounds);
 		transformGroup.addChild(pb);
 
-		//when the lightManager is initialized, it will read in the light configuration in the
+		//when the lightManager was initialized, it will read in the light configuration in the
 		//specified property file.
 		lightManager = new LightManager(bg, bounds, "WILMA_CONSTANTS.properties");
 		addMouseRotators(bounds);
-		rotationTransformGroup.addChild(transformGroup);
-		bg.addChild(rotationTransformGroup);
+		bg.addChild(transformGroup);
+
+		//attach the centerNode behavior to the branch group
+		centerNode = new CenterNode(transformGroup);
+		centerNode.setSchedulingBounds(bounds);
+		centerNode.setEnable(false);
+		bg.addChild(centerNode);
 
 	}
 	public Bounds getBoundingSphere() {
 		return bounds;
 	}
-	Alpha rotationAlpha;
-	boolean rotatorOn = false;
+
 	public void toggleRotator() {
-		boolean enabled = rotator.getEnable();
-		if (rotatorOn) {
-			if (rotationAlpha.isPaused()) {
-				rotationAlpha.resume();
-			} else {
-				rotationAlpha.pause();
-			}
+		if (toggled == false) {
+			rotationBehavior.setEnable(true);
+			toggled = true;
 		} else {
-			Transform3D t = new Transform3D();
-			Vector3f m = new Vector3f();
-			transformGroup.getTransform(t);
-			t.get(m);
-			t.setIdentity();
-			t.setTranslation(m);
-			rotator.setTransformAxis(t);
-			rotator.setEnable(!rotator.getEnable());
-			rotatorOn = true;
+			rotationBehavior.setEnable(false);
+			rotationBehavior.getRotator().setEnable(false);
+			toggled = false;
 		}
 	}
 	public void createUniverse() {
@@ -183,9 +181,14 @@ public class GraphCanvas extends Canvas3D {
 		// This will move the ViewPlatform back a bit so the
 		// objects in the scene can be viewed.
 		universe.getViewingPlatform().setNominalViewingTransform();
-
+    setStereoSeparation(0.006);
 		universe.addBranchGraph(bg);
 	}
+  public void setStereoSeparation(double separation) {
+    PhysicalBody b = this.getView().getPhysicalBody();
+    b.setLeftEyePosition(new Point3d(-separation/2.0, 0.0, 0.0));
+    b.setRightEyePosition(new Point3d(separation/2.0, 0.0, 0.0));
+  }
 	public void setAntialiasingEnabled(boolean enabled) {
 		if (getSceneAntialiasingAvailable()) {
 			universe.getViewer().getView().setSceneAntialiasingEnable(enabled);
@@ -250,6 +253,9 @@ public class GraphCanvas extends Canvas3D {
 	public TransformGroup getTransformGroup() {
 		return transformGroup;
 	}
+	public TransformGroup getRotationGroup() {
+		return rotationTransformGroup;
+	}
 	public void behaviorWakeup() {
 	}
 
@@ -261,14 +267,12 @@ public class GraphCanvas extends Canvas3D {
 		transformGroup.setTransform(reorient);
 	}
 	public void reorient(Vector3f position) {
-		javax.media.j3d.Transform3D reorient = new javax.media.j3d.Transform3D();
-		Vector3f delta = new Vector3f();
-		delta.sub(position);
-		transformGroup.getTransform(reorient);
-		reorient.get(position);
-		delta.z = position.z;
-		reorient.setTranslation(delta);
-		transformGroup.setTransform(reorient);
+		centerNode.setOriginPosition(position);
+		centerNode.setEnable(true);
+
+	}
+	public void reorient(javax.media.j3d.Transform3D reorientTransform) {
+		transformGroup.setTransform(reorientTransform);
 	}
 	public void setBackgroundColor(Color3f c) {
 		background.setColor(c);
@@ -296,6 +300,9 @@ public class GraphCanvas extends Canvas3D {
 	// method related to light source 
 	public LightManager getLightManager() {
 		return lightManager;
+	}
+	public RotationBehavior getRotationBehavior() {
+		return rotationBehavior;
 	}
 
 }

@@ -175,27 +175,27 @@ gw,int gh,int wx,int wy){
 	 Linear.setText("");
 	 Quadratic.setText("");
 	 
-	 xPos.setEnabled(false);
-	 yPos.setEnabled(false);
-	 zPos.setEnabled(false);
+	 xPos.setEditable(false);
+	 yPos.setEditable(false);
+	 zPos.setEditable(false);
 	 
-	 Constant.setEnabled(false);
-	 Linear.setEnabled(false);
-	 Quadratic.setEnabled(false);
+	 Constant.setEditable(false);
+	 Linear.setEditable(false);
+	 Quadratic.setEditable(false);
 
 	}
 /** Makes the textfields editable
  */
 public void EnableEdit()
 {
-	 xPos.setEnabled(true);
-	 yPos.setEnabled(true);
-	 zPos.setEnabled(true);
+	 xPos.setEditable(true);
+	 yPos.setEditable(true);
+	 zPos.setEditable(true);
 	 
 	  
-	 Constant.setEnabled(true);
-	 Linear.setEnabled(true);
-	 Quadratic.setEnabled(true);
+	 Constant.setEditable(true);
+	 Linear.setEditable(true);
+	 Quadratic.setEditable(true);
 }	
 /** Reenables the OK button if any changes are made in the textfields
   */

@@ -1,15 +1,19 @@
+/**
+ * @author star
+ *
+ * To change this generated comment edit the template variable "typecomment":
+ * Window>Preferences>Java>Templates.
+ * To enable and disable the creation of type comments go to
+ * Window>Preferences>Java>Code Generation.
+ */
 package org.wilmascope.light;
-import java.util.Vector;
-
-import javax.media.j3d.AmbientLight;
-import javax.media.j3d.Bounds;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.DirectionalLight;
-import javax.media.j3d.PointLight;
-import javax.media.j3d.SpotLight;
-import javax.vecmath.Point3f;
-import javax.vecmath.Vector3f;
-
+import java.awt.*;
+import java.util.*;
+import javax.media.j3d.*;
+import java.io.*;
+import javax.vecmath.*;
+import javax.swing.*;
+import java.util.*;
 import org.wilmascope.global.Constants;
 /**
  * LightManager is the main class to control the light sources.
@@ -67,6 +71,7 @@ public class LightManager {
   private String propertyFileName;
   private LightPropertiesSaver  Saver;
  
+  
   public LightManager(BranchGroup bg,Bounds bounds,String propertyFileName)
   { 
   	
@@ -80,12 +85,14 @@ public class LightManager {
     Saver=new LightPropertiesSaver(this);
     
   }
+ //read the light configuration from .properties file and attach lights to the scene graph 
   private void addLights() {
    // Set up ambient light source
   
    for(int i =0;; i++) {
    if(constants.getProperty("Light"+i+"AmbientColourR") == null)
        break;
+    System.err.println("Adding Ambient Light " + i);    
    AmbientLight ambientLight = new AmbientLight();
    ambientLight.setCapability(AmbientLight.ALLOW_COLOR_READ);
    ambientLight.setCapability(AmbientLight.ALLOW_COLOR_WRITE);
@@ -97,6 +104,7 @@ public class LightManager {
         ambientLight.setEnable(false);
    BranchGroup lightGroup1=new BranchGroup();
    lightGroup1.setCapability(BranchGroup.ALLOW_DETACH);
+   
    lightGroup1.addChild(ambientLight);
    bg.addChild(lightGroup1);
    WilmaLight w1=new WilmaLight();
@@ -105,11 +113,13 @@ public class LightManager {
    ambLightVector.add(w1);
    }
      // Set up directional light
+     Transform3D trans=new Transform3D();
 for(int i = 0;; i++) {
     if(constants.getProperty("Light"+i+"DirectionalColourR") == null)
        {
           break;
        }
+    System.err.println("Adding Directional Light " + i);    
    DirectionalLight dirLight = new DirectionalLight();
    dirLight.setInfluencingBounds(bounds);
    dirLight.setCapability(DirectionalLight.ALLOW_DIRECTION_READ);
@@ -126,12 +136,17 @@ for(int i = 0;; i++) {
    BranchGroup lightGroup2=new BranchGroup();
    lightGroup2.setCapability(BranchGroup.ALLOW_DETACH);
    lightGroup2.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
-    lightGroup2.setCapability(BranchGroup.ALLOW_DETACH);
+   lightGroup2.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
+   lightGroup2.setCapability(BranchGroup.ALLOW_CHILDREN_READ);
    lightGroup2.addChild(dirLight);
    bg.addChild(lightGroup2);
    WilmaLight w2=new WilmaLight();
    w2.setLight(dirLight);
    w2.setBranchGroup(lightGroup2);
+   Vector3f position = constants.getVector3f("Light"+i+"DirectionalPosition");
+   w2.getArrow().getTransform(trans);
+   trans.set(position);
+    w2.getArrow().setTransform(trans);
    dirLightVector.add(w2);
    }
    // Add point light sources for all that have a colour defined in
@@ -162,7 +177,7 @@ for(int i = 0;; i++) {
      BranchGroup lightGroup3=new BranchGroup();
      lightGroup3.setCapability(BranchGroup.ALLOW_DETACH);
      lightGroup3.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
-      lightGroup3.setCapability(BranchGroup.ALLOW_DETACH);
+     lightGroup3.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
      lightGroup3.addChild(pl);
      bg.addChild(lightGroup3);
      WilmaLight w3=new WilmaLight();
@@ -209,14 +224,12 @@ for(int i = 0;; i++) {
      lightGroup4.setCapability(BranchGroup.ALLOW_DETACH);
      lightGroup4.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
      lightGroup4.setCapability(BranchGroup.ALLOW_CHILDREN_READ);
-      lightGroup4.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
-     
+     lightGroup4.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
      lightGroup4.addChild(sl);
      bg.addChild(lightGroup4);
      WilmaLight w4=new WilmaLight();
      w4.setLight(sl);
      w4.setBranchGroup(lightGroup4);
-     w4.setLight(sl);
      spotLightVector.add(w4);
    }
  }
@@ -306,6 +319,7 @@ for(int i = 0;; i++) {
   	BranchGroup lightGroup=new BranchGroup();
     lightGroup.setCapability(BranchGroup.ALLOW_DETACH);
     lightGroup.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
+     lightGroup.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
     WilmaLight w=new WilmaLight();        
     
     DirectionalLight newDirLight=new DirectionalLight();
@@ -321,7 +335,6 @@ for(int i = 0;; i++) {
     //add to the branch group
     lightGroup.addChild(newDirLight);
     bg.addChild(lightGroup);
-    	          
     w.setLight(newDirLight);
     w.setBranchGroup(lightGroup);
     dirLightVector.add(w);
@@ -436,6 +449,7 @@ for(int i = 0;; i++) {
    	WilmaLight w;
    	this.propertyFileName=propertyFileName;
    	constants = Constants.getInstance(propertyFileName);
+   	//detach all the lights
    	for(i=0;i<ambLightVector.size();i++){
    	       w=(WilmaLight)ambLightVector.get(i);
    	       w.getBranchGroup().detach();}
@@ -449,22 +463,21 @@ for(int i = 0;; i++) {
    	for(i=0;i<spotLightVector.size();i++){
    	       w=(WilmaLight)spotLightVector.get(i);
    	       w.getBranchGroup().detach();}      
+   	//clear the light vectors
    	ambLightVector.clear();
    	dirLightVector.clear();
    	pointLightVector.clear();
-   	spotLightVector.clear(); 
-   	addLights();       
+   	spotLightVector.clear();
+   	//read the light configuration from the specified file 
+   	addLights();   
+   	    
    }
-   /**Sets the current light configuration file name
-    */
-   public void setPropertyFileName(String propertyFileName)
-   {
-    this.propertyFileName=propertyFileName;
-   }    
+   
   /** Saves the light configuration to a new file
    */ 
-   public void saveToNewFile()
+   public void saveToNewFile(String name)
    {
-   	   Saver.saveToNewFile();
+   	   Saver.saveToNewFile(name);
+   	   this.propertyFileName=name;
    }
 }
