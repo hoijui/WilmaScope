@@ -675,7 +675,8 @@ public class QueryFrame extends JFrame {
           if (r.next()) {
             radius = r.getFloat("share_pric");
           }
-          c.addNode(radius);
+          GraphControl.NodeFacade n = c.addNode(radius);
+          n.setColour(0.9f, 0.9f, 1f * (float)(level-1) / (float) maxLevel);
         }
       }
     } catch (SQLException e) {
@@ -693,7 +694,8 @@ public class QueryFrame extends JFrame {
       columns.put(id, c);
     }
     if (c.getNextLevel() < level + 1) {
-      c.addNode(value);
+      GraphControl.NodeFacade n = c.addNode(value);
+      n.setColour(0.9f, 0.9f, 1f * (float) level / (float) maxLevel);
     }
     return c;
   }
@@ -715,7 +717,7 @@ public class QueryFrame extends JFrame {
     }
 
     edge.setWeight(weight);
-    edge.setColour(1f, 1f, 1f * (float) level / (float) maxLevel);
+    edge.setColour(0.9f, 0.9f, 1f * (float) level / (float) maxLevel);
     edge.setUserData(edgeOption);
   }
   class EdgeOption extends ElementData {
