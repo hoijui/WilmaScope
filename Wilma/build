@@ -12,7 +12,7 @@ else
   echo "You must set the JAVA_HOME environment variable"
   echo "  For example:  export JAVA_HOME=/usr/local/jdk1.3.1"
   echo "  Or on Debian:  export JAVA_HOME=/usr/lib/j2sdk1.3.1"
-  echo "  Or under Cygwin:  export JAVA_HOME=c:\\jdk1.3.1"
+  echo "  Or under Cygwin:  export JAVA_HOME=c:\\\\jdk1.3.1"
   exit 1
 fi
 

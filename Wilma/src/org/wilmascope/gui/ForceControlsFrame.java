@@ -97,6 +97,7 @@ public class ForceControlsFrame extends JFrame {
       }
     });
     forceLayoutControlsBox.add(velocityAttenuationSlider);
+    /*
     angularInertiaSlider.setBorder (new javax.swing.border.TitledBorder("Angular Inertia"));
     angularInertiaSlider.setMinorTickSpacing (10);
     angularInertiaSlider.setPaintLabels (true);
@@ -109,7 +110,7 @@ public class ForceControlsFrame extends JFrame {
       }
     });
     forceLayoutControlsBox.add(angularInertiaSlider);
-
+*/
     balancedThresholdSlider.setBorder (new javax.swing.border.TitledBorder("Balanced Threshold"));
     balancedThresholdSlider.setMinorTickSpacing (10);
     balancedThresholdSlider.setPaintLabels (true);

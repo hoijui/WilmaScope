@@ -360,7 +360,10 @@ public class GraphControl {
         )
       );
     } // setTransparency
-
+    public void setLevelConstraint(int level) {
+      ((NodeForceLayout)node.getLayout()).setConstraint(new org.wilmascope.forcelayout.LevelConstraint(level,0.5f));
+      ((ForceLayout)node.getOwner().getLayoutEngine()).setConstrained();
+    }
 
     /**
      * get the node underlying this facade
@@ -490,12 +493,12 @@ public class GraphControl {
     }
     public NodeFacade addNode(String nodeType) {
       synchronized(gc) {
-      try {
-        return addNode(ViewManager.getInstance().createNodeView(nodeType));
-      } catch (ViewManager.UnknownViewTypeException ex) {
-        ex.printStackTrace();
-        return null;
-      }
+        try {
+          return addNode(ViewManager.getInstance().createNodeView(nodeType));
+        } catch (ViewManager.UnknownViewTypeException ex) {
+          ex.printStackTrace();
+          return null;
+        }
       }
     }
     /**

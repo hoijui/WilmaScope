@@ -81,6 +81,7 @@ module wilmascope {
     // A node represents a vertex in a connected graph
     interface Node : GraphElement {
       void setRadius(in float radius);
+      void setLevelConstraint(in long level);
     };
 
     // An edge joins two nodes

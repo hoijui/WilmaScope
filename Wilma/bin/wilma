@@ -1,14 +1,19 @@
 #!/bin/sh
-if [ -e $WILMA_HOME/lib/wilma.jar ]
+if [ -e $JAVA_HOME/bin/java ]
 then
-  cd ${WILMA_HOME}/lib
-  if [ x$OS = xWindows_NT ]
+  if [ -e $WILMA_HOME/lib/wilma.jar ]
   then
-    java -cp xalan.jar\;crimson.jar\;jaxp.jar\;wilma.jar org.wilmascope.control.WilmaMain
+    cd ${WILMA_HOME}/lib
+    if [ x$OS = xWindows_NT ]
+    then
+      $JAVA_HOME/bin/java -cp xalan.jar\;crimson.jar\;jaxp.jar\;wilma.jar org.wilmascope.control.WilmaMain
+    else
+      $JAVA_HOME/bin/java -Xmx300m -cp /usr/share/java/postgresql.jar:xalan.jar:crimson.jar:jaxp.jar:wilma.jar -Djdbc.drivers=org.postgresql.Driver org.wilmascope.control.WilmaMain
+    fi
   else
-    java -Xmx300m -cp /usr/share/java/postgresql.jar:xalan.jar:crimson.jar:jaxp.jar:wilma.jar -Djdbc.drivers=org.postgresql.Driver org.wilmascope.control.WilmaMain
+    echo You must set the WILMA_HOME environment variable
   fi
 else
-  echo You must set the WILMA_HOME environment variable
+  echo You must set JAVA_HOME environment variable... could not find JAVA_HOME/bin/java
 fi
 #java -cp xalan.jar\;crimson.jar\;jaxp.jar\;.\;classes wilmatoo.control.Test

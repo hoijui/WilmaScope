@@ -124,6 +124,9 @@ import org.omg.CORBA.*;
     public void setRadius(float radius) {
       node.setRadius(radius);
     }
+    public void setLevelConstraint(int level) {
+      node.setLevelConstraint(level);
+    }
     GraphControl.NodeFacade getNode() {
       return node;
     }
