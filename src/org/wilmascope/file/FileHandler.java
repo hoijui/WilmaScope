@@ -69,7 +69,7 @@ class JPEGFileFilter extends FileFilter {
 public class FileHandler {
   GraphControl graphControl;
 
-  Hashtable<String,GraphControl.Node> nodeLookup;
+  Hashtable<String, GraphControl.Node> nodeLookup;
 
   Hashtable idLookup;
 
@@ -84,20 +84,20 @@ public class FileHandler {
       XMLGraph xmlGraph = new XMLGraph(fileName);
       try {
         xmlGraph.load();
+        nodeLookup = new Hashtable();
+        //graphControl.getRootCluster().removeAllForces();
+        graphControl.freeze();
+        long startTime = System.currentTimeMillis();
+        loadCluster(xmlGraph.getRootCluster(), graphControl.getRootCluster());
+        long endTime = System.currentTimeMillis();
+        long time = endTime - startTime;
+        System.out.println("Loaded... in milliseconds: " + time);
+        graphControl.getRootCluster().getCluster().draw();
+        if (needsLayout) {
+          graphControl.unfreeze();
+        }
       } catch (java.io.IOException ex) {
-        WilmaMain.showErrorDialog("IOException loading xml graph file.",ex);
-      }
-      nodeLookup = new Hashtable();
-      //graphControl.getRootCluster().removeAllForces();
-      graphControl.freeze();
-      long startTime = System.currentTimeMillis();
-      loadCluster(xmlGraph.getRootCluster(), graphControl.getRootCluster());
-      long endTime = System.currentTimeMillis();
-      long time = endTime - startTime;
-      System.out.println("Loaded... in milliseconds: " + time);
-      graphControl.getRootCluster().getCluster().draw();
-      if (needsLayout) {
-        graphControl.unfreeze();
+        WilmaMain.showErrorDialog("IOException loading xml graph file.", ex);
       }
     } else if (fileName.endsWith(".gml")) {
       GMLLoader gmlLoader = new GMLLoader(graphControl, fileName);
@@ -123,7 +123,7 @@ public class FileHandler {
         ge.setView(v);
         v.setProperties(viewType.getProperties());
       } catch (ViewManager.UnknownViewTypeException e) {
-        WilmaMain.showErrorDialog("Unknown View Type!",e);
+        WilmaMain.showErrorDialog("Unknown View Type!", e);
       }
     }
     Properties p = xe.getProperties();
@@ -150,7 +150,7 @@ public class FileHandler {
         gn.setView(v);
         v.setProperties(viewType.getProperties());
       } catch (ViewManager.UnknownViewTypeException e) {
-        WilmaMain.showErrorDialog("Unknown ViewType!",e);
+        WilmaMain.showErrorDialog("Unknown ViewType!", e);
       }
     }
     Properties p = xn.getProperties();
@@ -216,26 +216,26 @@ public class FileHandler {
     XMLGraph.LayoutEngineType layoutEngine = xmlRoot.getLayoutEngineType();
     loadLayoutEngine(layoutEngine, graphRoot);
     loadNodeProperties(xmlRoot, graphRoot);
-    for (XMLGraph.Node xmlNode:nodes) {
+    for (XMLGraph.Node xmlNode : nodes) {
       GraphControl.Node n = graphRoot.addNode();
       loadNodeProperties(xmlNode, n);
       nodeLookup.put(xmlNode.getID(), n);
     }
-    for (XMLGraph.Cluster xc:clusters) {
+    for (XMLGraph.Cluster xc : clusters) {
       GraphControl.Cluster gc = graphRoot.addCluster();
       loadCluster(xc, gc);
     }
-    for (XMLGraph.Edge xmlEdge:edges) {
-      GraphControl.Edge e = graphRoot.addEdge(
-          nodeLookup.get(xmlEdge.getStartID()),
-          nodeLookup.get(xmlEdge.getEndID()));
+    for (XMLGraph.Edge xmlEdge : edges) {
+      GraphControl.Edge e = graphRoot.addEdge(nodeLookup.get(xmlEdge
+          .getStartID()), nodeLookup.get(xmlEdge.getEndID()));
       loadEdgeProperties(xmlEdge, e);
     }
   }
 
   private void loadLayoutEngine(XMLGraph.LayoutEngineType l,
       GraphControl.Cluster c) {
-    if(l==null) return;
+    if (l == null)
+      return;
     String type = l.getName();
     LayoutEngine e = null;
     if (type.equals("ForceLayout")) {
