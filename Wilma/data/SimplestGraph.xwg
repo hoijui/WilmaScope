@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
+<WilmaGraph>
+<Cluster>
+	<Node ID="N0"/>
+	<Node ID="N1"/>
+	<Edge EndID="N1" StartID="N0"/>
+</Cluster>
+</WilmaGraph>
