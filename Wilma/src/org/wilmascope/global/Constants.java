@@ -20,9 +20,9 @@
 
 package org.wilmascope.global;
 
-import javax.vecmath.*;
-import java.io.*;
 import java.util.Properties;
+
+import javax.vecmath.Vector3f;
 
 /*
  * Title:        WilmaToo
@@ -43,9 +43,15 @@ public class Constants extends AbstractConstants {
 
   public final static String defaultFileName = "WILMA_CONSTANTS.properties";
 
-  private static final Constants instance = new Constants();
+  private static Constants instance = new Constants();
   public static Constants getInstance() {
     return instance;
+  }
+  public static Constants getInstance(String filename) {
+  	if(!filename.equals(defaultFileName)) {
+  	  instance = new Constants(filename);
+  	}
+  	return instance;
   }
 
   private Constants() {
