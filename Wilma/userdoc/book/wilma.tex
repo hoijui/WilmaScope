@@ -193,7 +193,7 @@ standard data flow diagram for the MVC architecture is shown in Figure
   \caption{The classic MVC framework and Wilma's utilisation of MVC.}
 \end{figure}
 
-In our system the Model component is further broken down into two sub-components:
+In our system the Model component comprises two sub-components:
 \begin{description}
 \item[Graph] a data structure capable of representing the structure
 and state of the graph including its arrangement in space.
@@ -232,7 +232,10 @@ graph has nodes which may themselves be graphs, or clusters.
 This description of a graph is modelled in a class hierarchy by
 defining an abstract class {\em GraphElement} which is implemented by
 both the {\em Node} and {\em Edge} classes.  A {Cluster} will inherit
-all the properties of the {\em Node} class and also contains an
+all the properties of the {\em Node} class\footnote{Whilst it is not strictly
+necessary that clusters should inheret all of the properties of nodes, in some
+domains it is rather useful to allow edges to be attached to clusters as a
+whole.} and also contains an
 aggregation of {\em Nodes} and {\em Edges}.  A {Cluster} also contains
 a reference to an abstract definition of a {\em LayoutEngine} which
 provides a common interface to an implementation of a layout algorithm
@@ -240,7 +243,7 @@ for arranging the graph in two or three dimensional space.  Since the
 details of the algorithm are kept separate it is easy to mix and match
 different layout styles to different graphs or even to clusters within
 the one graph.  A similar class hierarchy was developed independently
-by Marshall et al.~\cite{marshall00object} around the same time.
+by Marshall {\em et al.}~\cite{marshall00object} around the same time.
 Figure \ref{fig-wilmaclasses} shows a UML diagram depicting this
 graph class hierarchy, and also shows how this relates to a force
 directed {\em LayoutEngine} implementation, discussed further in
@@ -270,7 +273,7 @@ through the virtual space rendered on this canvas by dragging with the
 various mouse buttons.  The possible mouse navigation actions (rotate,
 zoom and translate) are
 shown in the reminder panel at the bottom of the window (which may be
-hidden to gain 3D canvas real-estate).
+hidden to gain screen real-estate for the 3D canvas).
 \begin{figure}[h]
   \centering
     \label{fig-controls}
@@ -302,7 +305,10 @@ $R_c(C)$ is to assume a volume for the cluster proportional to its
 total mass and density $\rho$, where for us density is simply a convenient scale
 factor.  The following is obtained from the formula for volume of a
 sphere:
-\[R_c(C) = \sqrt[3]{\frac{3}{(4d\pi)}\sum_{v \in C}m_v} \] 
+
+\begin{equation}
+R_c(C) = \sqrt[3]{\frac{3}{(4d\pi)}\sum_{v \in C}m_v}
+\end{equation}
 
 This method produces a collapsed cluster whose size gives the user a
 feeling for the number of children it contains.  Yet, it is still
@@ -343,8 +349,9 @@ Alternately they can make changes to
 the graph or change the appearance of particular graph elements by
 right
 clicking on the nodes, edges or clusters on the 3D Canvas directly.
-This brings up a menu of actions which may be performed on the graph
-element.  Figure \ref{fig-popupmenus} shows the various pop-up menus.
+This brings up a ``context menu'' of actions which may be performed on 
+the graph
+element.  Figure \ref{fig-popupmenus} shows the various  menus.
 
 \begin{figure}
   \label{fig-popupmenus}
@@ -360,7 +367,7 @@ element.  Figure \ref{fig-popupmenus} shows the various pop-up menus.
     \label{fig-clustermenu}
 \scalebox{0.3}{
     \includegraphics{figures/clustermenu.eps}}}
-  \caption{The pop-up menus that appear when right-clicking on graph
+  \caption{The ``context menus'' that appear when right-clicking on graph
   elements in Wilma}
 \end{figure}
 
@@ -471,7 +478,7 @@ structure and methods for coupling animation into the render cycle.
 \subsubsection{Force Directed} \label{sec:forcedirectedlayout}
 The first layout algorithm implemented in Wilma was force-directed
 layout the basic principles of which are described in Chapter
-1.  There were several factors that led us to
+1.  There were several factors that motivated us to
 implement this algorithm first, notably:
 \begin{itemize}
 \item it is relatively easy to obtain good results for most types of
@@ -493,22 +500,20 @@ clustered graphs\cite{Huang:GD98}.
 \item the approach works just as well in three dimensions as in two.
 \end{itemize}
 The Wilma implementation of the force-directed algorithm attempts to make the most
-of all of these advantages.  Firstly, it offers a user interface which
+of these assorted advantages.  Firstly it offers a user interface which
 allows the user to control all the parameters of the layout algorithm
 even while the layout is still in progress.  The user can control the
 number of iterations of the algorithm that are executed between frames
 of animation, choosing to run the algorithm to
 convergence as fast as possible or to watch the layout unfold, and if
-necessary tweak the controls to adjust the layout or to help it
+necessary tweak the controls to adjust the embedding or to help it
 converge.
 
-Different forces, such as the directed field force or
-a gravitational force which keeps the graph centred, may be added or removed
-at any time to achieve different aesthetic effects.  Our architecture
-achieves this interchangeability of forces by requiring every force to
-implement a common interface.  Figure
-\ref{fig-wilmaclasses} gives the UML class diagram for the
-force-directed layout engine in which this architecture can be seen.
+Different forces, such as the directed field force or a gravitational force
+which keeps the graph centred, may be added or removed at any time to achieve
+different aesthetic effects.  Since each of the different forces implements a
+common interface (as the UML Class Diagram in Figure~\ref{fig-wilmaclasses}
+illustrates), new forces can be added or removed at any time.
 
 The force-directed layout engine fits well into Wilma's object
 oriented clustered graph model.  As mentioned previously each cluster
@@ -523,6 +528,15 @@ calculated between nodes inside different clusters.
 
 As noted previously a cluster's mass is the sum of the masses of all
 its children.
+The repulsive force used varies with the mass of nodes so
+that nodes with large mass, such as clusters with many descendents,
+will exert a strong repulsive force on their neighbours, ie,
+
+\begin{equation}
+\mathit{repulsiveforce}(p_u,p_v) \equiv \frac{m_u m_v}{\|\avec{p_u}-\avec{p_v}\|}
+\centerdot \avec{p_u p_v}
+\end{equation}
+
 The repulsive force used considers the mass of nodes such
 that nodes with large mass, for example clusters with many descendents,
 will exert a strong repulsive force on their neighbours, ie.\ 
@@ -530,9 +544,8 @@ will exert a strong repulsive force on their neighbours, ie.\
 \centerdot \avec{p_u p_v} \]
 This ensures
 that clusters have plenty of space and avoids overlaps.  It also helps
-to give the user a feeling for the size of collapsed clusters.  That
-is, even
-though their contents is elided the space around them gives an
+to give the user a feeling for the size of collapsed clusters.  That is, even
+though their contents are elided, the space around them gives an
 indication as to their complexity.
 
 A novel extension that has been added to our force-directed layout
@@ -565,8 +578,8 @@ conducted elegantly and efficiently.
 Force-directed layout algorithms are of course the method of choice for a
 wide range of graph visualisation problems.  One variation on these
 algorithms, advocated by Fruchtermann \&
-Rheingold~\cite{fruchtermann90force-directed} and Davidson et
-al.~\cite{davidson01noise}, attempts to avoid calculation of repulsion force
+Rheingold~\cite{fruchtermann90force-directed} and Davidson {\em et
+al.}~\cite{davidson01noise}, attempts to avoid calculation of repulsion force
 vectors, which is $O(n)$ in the number of vertices for each node $i$, and
 $O(n^2)$ for the whole graph:
 
