@@ -1,0 +1,753 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Extending WilmaScope</title>
+</head>
+<body style="" lang="EN-AU" link="blue" vlink="purple">
+<h1>Extending WilmaScope</h1>
+<h2>A developer&#8217;s guide to extending the WilmaScope 3D graph
+visualisation system</h2>
+<h3>Tim Dwyer &#8211; 6th October 2004</h3>
+<h3>Accurate for WilmaScope Version 3.0.1</h3>
+<h2>Contents</h2>
+<ul>
+  <li><a href="#Introduction">Introduction </a></li>
+  <li><a href="#Nomenclature">Nomenclature</a></li>
+  <li><a href="#Getting_the_WilmaScope_Source_Code">Getting the
+WilmaScope Source Code</a><br>
+  </li>
+  <li><a href="#Architecture">Architecture</a></li>
+  <ul>
+    <li><a href="#Graph_Model">Graph Model</a> </li>
+    <li><a href="#GraphControl_Bridge">GraphControl Bridge</a></li>
+  </ul>
+  <li><a href="#Creating_Test_Graphs">Creating Test Graphs</a></li>
+  <ul>
+    <li><a href="#User_Interface">User Interface</a></li>
+    <li><a href="#The_Graph_Generator_Framework">The Graph Generator
+Framework</a></li>
+    <ul>
+      <li><a href="#GraphGenerator">GraphGenerator</a></li>
+      <li><a href="#GeneratorManager">GeneratorManager</a></li>
+    </ul>
+    <li><a href="#Example_%3F_Random_Graph_Generator">Example &#8211; Random
+Graph Generator</a> </li>
+  </ul>
+  <li><a href="#Creating_Applications_Based_on">Creating Applications
+Based on GraphCanvas</a></li>
+  <li><a href="#File_Formats">File Formats</a> </li>
+  <ul>
+    <li><a href="#XML_Wilma_Graph_XWG_File_Format">XML Wilma Graph (XWG)</a>
+    </li>
+    <li><a href="#GML_File_Format">GML File Format</a></li>
+    <li><a href="#Leda_Graph_File_Format">LEDA File Format</a></li>
+  </ul>
+  <li><a href="#Creating_New_Graph_Element_Glyphs">Creating New Graph
+Element Glyphs</a></li>
+  <li><a href="#Creating_New_Layout_Engines">Creating New Layout Engines</a></li>
+  <li><a href="#Code_Conventions">Code Conventions</a></li>
+</ul>
+<h2><a name="Introduction"></a>Introduction</h2>
+This document is intended as a rough guide for people who wish to use
+WilmaScope beyond simply interacting with the Graphical User Interface
+(GUI).&nbsp; There are a number of ways that Wilma can be used by the
+adventurous, for example:<br>
+<ul>
+  <li>by creating <a href="#XML_Wilma_Graph_XWG_File_Format">WilmaScope
+XML Graph (XWG) files</a> which can be loaded
+to
+visualise graphs. </li>
+  <li>by extending the WilmaScope <a
+ href="#The_Graph_Generator_Framework">GraphGenerator framework</a> to
+automatically
+generate graphs based on simple algorithms. </li>
+  <li>by implementing new layout algorithms based on the WilmaScope
+    <a href="#Creating_New_Layout_Engines">LayoutEngine framework</a>. </li>
+  <li>by adding new <a href="#Creating_New_Graph_Element_Glyphs">graphical
+representations for graph elements</a>
+(glyphs). </li>
+  <li>by creating stand-alone applications which use the <a
+ href="#Creating_Applications_Based_on">WilmaScope
+GraphCanvas</a> in a custom GUI. </li>
+</ul>
+<h2><a name="Nomenclature"></a>Nomenclature</h2>
+<table style="width: 100%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Term</span><br>
+      </td>
+      <td style="vertical-align: top;">&nbsp;<span
+ style="font-weight: bold;">Description</span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">WILMA_HOME</td>
+      <td style="vertical-align: top;">The directory in which
+WilmaScope has been installed, eg:
+"c:/Program Files/Wilma"</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">WILMA_CONSTANTS.properties</td>
+      <td style="vertical-align: top;">The global properties file that
+WilmaScope loads at
+runtime.&nbsp; Resides in WILMA_HOME/lib directory</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<h2><a name="Getting_the_WilmaScope_Source_Code"></a>Getting the
+WilmaScope Source Code</h2>
+As of Version 3.0 the WilmaScope binary distribution includes source
+code in the WILMA_HOME/src directory.&nbsp; However, it is recommended
+that you obtain the most recent source version by accessing the CVS
+repository.&nbsp; The easiest way to do this is with the <a
+ href="http://www.eclipse.org">Eclipse IDE</a> as
+follows:<br>
+<ul>
+  <li>Download and install version 3.1 or higher of Eclipse from
+www.eclipse.org </li>
+  <li>Switch to the&nbsp; CVS Repository Exploring perspective (You may
+have
+to first&nbsp; open this perspective). </li>
+  <li>Create a new repository location (Right click within the&nbsp;
+CVS
+Repositories View, New &gt;&nbsp; Repository Location) with these
+settings: </li>
+  <ul>
+    <li>Host: cvs.sourceforge.net </li>
+    <li>Repository Path: /cvsroot/wilma </li>
+    <li>User: anonymous </li>
+    <li>Connection type: pserver </li>
+  </ul>
+  <li>Navigate into
+:pserver:anonymous@cvs.sourceforge.net:/cvsroot/wilma
+&gt; HEAD and check out the "Wilma" module (Select "Wilma" and right
+click &gt; Check Out as Project).&nbsp; Note that "WilmaScope" and
+"WilmaToo" are both obsolete. </li>
+</ul>
+<h2><a name="Architecture"></a>Architecture</h2>
+Wilma is a typical example of a Model-View-Controller (MVC)
+architecture (see <a href="#WilmaScope_MVC_Architecture_Figure_1:_MV">Figure
+1</a>). &nbsp;<br>
+<br>
+<div style="text-align: center;"><a
+ name="WilmaScope_MVC_Architecture_Figure_1:_MV"></a><img
+ alt="WilmaScope MVC Architecture"
+ src="Extending%20WilmaScope_files/image002.jpg"
+ style="width: 383px; height: 322px;"><br>
+Figure 1: MVC Architecture<br>
+</div>
+<br>
+That is to say, an effort has been made to separate:<br>
+<ul>
+  <li>classes in which the underlying graph model (data structure) is
+maintained. </li>
+  <li>classes which provide a centralised bridge for modifying this
+model. </li>
+  <li>classes which define how the model is displayed graphically. </li>
+</ul>
+A more detailed idea of how WilmaScope uses the MVC architecture is
+conveyed by <a href="#WilmaScope_MVC_Architecture_Figure_2:_Wi">Figure
+2</a>.<br>
+<br>
+<div style="text-align: center;"><a
+ name="WilmaScope_MVC_Architecture_Figure_2:_Wi"></a><img
+ alt="WilmaScope MVC Architecture"
+ src="Extending%20WilmaScope_files/image003.jpg"
+ style="width: 658px; height: 454px;"><br>
+Figure 2: WilmaScope MVC Architecture<br>
+</div>
+<br>
+These three conceptual components are realised in the WilmaScope
+architecture as follows:<br>
+<ul>
+  <li>model&#8212;classes in the graph package. </li>
+  <li>view&#8212;classes extending one of the abstract classes found in the
+view
+package. </li>
+  <li>controller&#8212;the GraphController class provides a centralised
+bridge for
+updating the graph model </li>
+</ul>
+The entities indicated within the controller component indicate some of
+the ways a user might interact with WilmaScope, or that a programmer
+might write extensions to construct or maintain a graph.&nbsp; These
+are:<br>
+<ul>
+  <li>A user can load a WilmaScope .xwg file or import a supported
+external
+format file to create a graph (see File Formats). </li>
+  <li>A user can interact with the WilmaScope GUI to add or edit graph
+components (see the user help documentation). </li>
+  <li>A programmer might call methods provided by the WilmaScope API to
+construct a graph (see Creating Applications Based on GraphCanvas and
+also the WilmaScope Javadoc). </li>
+  <li>A user can use the Graph Generator menus to automatically create
+a
+generic graph, or a programmer can implement a new procedure for
+constructing a graph by implementing the GraphGenerator framework (see
+Creating Test Graphs). </li>
+  <li>A programmer can implement new layout algorithms by extending the
+LayoutEngine framework. </li>
+</ul>
+Conceptually, the graph model includes definitions of what we call
+Layout Engines.&nbsp; A layout engine is an implementation of a layout
+algorithm.&nbsp; That is, an automated system for finding positions for
+the elements of a graph in 3D space.&nbsp; In practice the details of
+layout engines are completely separated from the graph data structures
+so that new layout engines can easily be created.&nbsp; A more detailed
+view of WilmaScope&#8217;s internal architecture is shown in <a
+ href="#Wilma_UML_Class_Diagram_Figure_3:_graph_">Figure 3</a>.&nbsp; <br>
+<br>
+<a name="Wilma_UML_Class_Diagram_Figure_3:_graph_"></a>
+<div style="text-align: center;"><img alt="Wilma UML Class Diagram"
+ src="Extending%20WilmaScope_files/image006.jpg"
+ style="width: 576px; height: 463px;"><br>
+Figure 3: graph and view packages and example packages in which the
+various interfaces are implemented.<br>
+</div>
+<br>
+The classes in the forcelayout package are an example of an
+implementation of the LayoutEngine interface.&nbsp; Several other
+layout engines have been implemented already and efforts have been made
+to simplify the task of creating new layout engines.&nbsp; Classes
+implementing different graphical representations of graph elements
+(glyphs) must extend the relevant abstract class from the view
+package.&nbsp; When such classes are placed in the viewplugin directory
+and added to the &#8220;Plugins&#8221; list in the WILMA_CONSTANTS.properties file
+they will be loaded at run-time.<br>
+<h3><a name="Graph_Model"></a>Graph Model</h3>
+The basic elements of a WilmaScope graph are nodes and edges.&nbsp; The
+Node and Edge classes both implement the GraphElement interface which
+defines some general properties for how such elements are arranged or
+visualised.&nbsp; WilmaScope supports recursive definitions for graphs:
+that is, clustered graphs.&nbsp; This is realised in an object oriented
+design by making Cluster a subclass of node.&nbsp; This means that
+clusters can be added or removed from a graph model in the same way as
+nodes.&nbsp; The difference being that a cluster is itself a collection
+of nodes and edges.&nbsp; An important thing to note is that the
+top-level graph is a cluster.<br>
+<h3><a name="GraphControl_Bridge"></a>GraphControl Bridge</h3>
+Knowledge of the details of the classes in the graph package is not
+generally required for programmers to implement applications using or
+extending WilmaScope.&nbsp; Instead, the API methods for creating or
+updating a graph are provided by the GraphControl class.&nbsp;
+GraphControl defines facades (or simplified classes) as inner classes:
+ie, GraphControl.NodeFacade, GraphControl.EdgeFacade and
+GraphControl.ClusterFacade.&nbsp; When a GraphControl object is
+instantiated a root cluster is created upon which a graph may be
+built.&nbsp; As a basic example consider the following code fragment:<br>
+<br>
+<div style="margin-left: 40px;"><span style="font-style: italic;">//
+add elements to an existing instance of graphControl</span><br
+ style="font-style: italic;">
+<span style="font-style: italic;">GraphControl.ClusterFacade root =
+graphControl.getRootCluster();</span><br style="font-style: italic;">
+<span style="font-style: italic;">GraphControl.NodeFacade a =
+root.addNode();</span><br style="font-style: italic;">
+<span style="font-style: italic;">GraphControl.NodeFacade b =
+root.addNode();</span><br style="font-style: italic;">
+<span style="font-style: italic;">root.addEdge(a,b);</span><br>
+</div>
+<br>
+We give more detailed examples of use of the API provided by the
+GraphControl class later.<br>
+<h2><a name="Creating_Test_Graphs"></a>Creating Test Graphs</h2>
+Wilma comes with a number of graph generators which create random or
+regular graphs for testing purposes.&nbsp; Creating a new graph
+generator is probably the easiest way to begin experimenting with the
+WilmaScope API.&nbsp; In this section we describe how the WilmaScope
+graph generator framework is designed and outline how to use it to
+create your own graph generator. <br>
+<h3><a name="User_Interface"></a>User Interface</h3>
+The various graph generators are accessed by the user from the &#8220;Graph
+Generator Window&#8221; which is accessed by the user from the
+&#8220;File-&gt;Create Test Graph...&#8221; menu option as shown in Figure 4.<br>
+<br>
+<div style="text-align: center;"><img
+ alt="Opening Graph Generator Window"
+ src="Extending%20WilmaScope_files/image007.png"
+ style="width: 511px; height: 354px;"><br>
+Figure 4: Accessing the graph generator window.<br>
+</div>
+<br>
+The main features of the Graph Generator Window (as shown in Figure 5)
+are:<br>
+<ul>
+  <li>The drop down menu box at the top: this allows users to select
+from the
+available graph generators. </li>
+  <li>The &#8220;Graph Rendering Mode&#8221; radio buttons: the user can select the
+visual elements of the resulting graph.&nbsp; These can be either
+simple line primitives (for faster rendering), or fancy 3D primitives. </li>
+  <li>The &#8220;Generate Graph&#8221; button: this initiates graph generation </li>
+  <li>The control panel with sliders and so on at the bottom.&nbsp; The
+controls that appear here are dependant on the generator chosen from
+the menu. </li>
+</ul>
+&nbsp;<br>
+<div style="text-align: center;"><img alt="The graph generator window"
+ src="Extending%20WilmaScope_files/image009.png"
+ style="width: 524px; height: 238px;"><br>
+Figure 5: The Graph Generator window<br>
+</div>
+<br>
+<h3><a name="The_Graph_Generator_Framework"></a>The Graph Generator
+Framework</h3>
+Base classes associated with the graph generator framework are found in
+the org.wilmascope.graphgen package.<br>
+<h4><a name="GraphGenerator"></a>GraphGenerator</h4>
+The abstract GraphGenerator class is a boilerplate for building new
+graph generators.&nbsp; It provides miscellaneous methods for
+generating graphs but also provides a set of abstract methods which
+must be implemented so that your graph generator can be loaded by
+WilmaScope.&nbsp; The abstract methods which a new graph generator must
+implement are as follows:<br>
+<ul>
+  <li>getName - you should simply return a string constant that is a
+unique
+identifier.&nbsp; This string will appear in the Graph Generator Window
+list so give it a capital letter and spaces where necessary. </li>
+  <li>generate &#8211; this method will do the work of actually creating the
+graph. </li>
+  <li>getControls &#8211; the best way to use this is to create a JPanel with
+controls for setting parameters for your graph generator in your
+constructor and ensure that this method returns a reference to it. </li>
+</ul>
+<h4><a name="GeneratorManager"></a>GeneratorManager</h4>
+The GeneratorManager class maintains a list of available graph
+generators.&nbsp; If you create a new class based on GraphGenerator
+then add an entry for the fully qualified path name to the
+WILMA_HOME/lib/WILMA_CONSTANTS.properties file for the GeneratorPlugins
+property.&nbsp; Your new class will then be loaded (assuming the
+directory where it resides is in the classpath) when you run Wilma.<br>
+<h3><a name="Example_&#8211;_Random_Graph_Generator"></a>Example &#8211; Random
+Graph Generator</h3>
+As an example of an implementation of GraphGenerator look at the
+RandomGraphGenerator class.&nbsp; Key things to note are:<br>
+<br>
+<ul>
+  <li>The constructor creates a JPanel with controls for setting
+parameters
+for the random graph generator (see Figure 5) </li>
+  <li>getControls returns the JPanel set up in the constructor </li>
+  <li>getName returns the string constant: &#8220;Random&#8221; </li>
+  <li>The generate method does all the actual work, specifically: </li>
+  <ul>
+    <li>The root cluster is extracted from the GraphControl instance
+passed in
+using the getRootClusterMethod </li>
+    <li>The root cluster&#8217;s deleteAll method is called to remove any
+existing
+graph (you would not do this if you wanted to add to or modify an
+existing graph) </li>
+    <li>graph elements are added to the root cluster using the addNode
+and
+addEdge methods.&nbsp; By default nodes are created at the origin...
+here we assigned random positions using the
+GraphControl.NodeFacade.setPosition method </li>
+    <li>Finally we call the root cluster&#8217;s draw method to draw the
+nodes at the
+random positions assigned above.&nbsp;&nbsp; Alternately we could
+trigger automatic layout using the root cluster&#8217;s unfreeze method which
+would also handle the redraw. </li>
+  </ul>
+</ul>
+<h2><a name="Creating_Applications_Based_on"></a>Creating Applications
+Based on GraphCanvas</h2>
+<h2><a name="File_Formats"></a>File Formats</h2>
+The easiest way to visualise graphs from other data sources is to
+convert them into a file format that WilmaScope understands and then
+simply to load them up using the File-&gt;Load menu option.&nbsp; Here
+we describe supported file formats.<br>
+<h3><a name="XML_Wilma_Graph_XWG_File_Format"></a>XML Wilma Graph (XWG)
+File Format</h3>
+The most flexible way to load graphs into WilmaScope is to use Wilma's
+own internal file format, the XML Wilma Graph (XWG) file format.&nbsp;
+Based on XML, XWG files are easily parsed and generated by XML
+libraries and tools.&nbsp; As the Wilma internal format, it should
+support any of Wilma's functionality, including specifications for
+layout engines and view plugins.<br>
+<br>
+XWG is based on a fairly straightforward DTD which can be found in the
+Wilma/data/WilmaGraph.dtd file, shown in Figure 7.&nbsp; Note that this
+file should be present in any directory from which you wish to load XWG
+files into Wilma.<br>
+<br>
+<div style="text-align: center;"><img alt="WilmaGraph.dtd"
+ src="Extending%20WilmaScope_files/image013.png"
+ style="width: 389px; height: 520px;"><br>
+Figure 7: The WilmaGraph.dtd XWG definition<br>
+</div>
+<br>
+Note that the XWG format mirrors the structure of the Wilma graph model
+shown in Figure 3.&nbsp; That is, clustered graphs are recursively
+defined where a graph is itself a cluster which may contain nodes,
+edges or other clusters.&nbsp; Figure 8 shows an example of a very
+simple XWG file and Figure 9 shows how it looks loaded into Wilma.<br>
+<br>
+<div style="text-align: center;"><img alt="A simple XWG file"
+ src="Extending%20WilmaScope_files/simpleXWG.png"
+ style="width: 363px; height: 142px;"><br>
+Figure 8: A very simple XWG file.<br>
+</div>
+<br>
+<div style="text-align: center;"><img
+ alt="What the simple XWG graph looks like in Wilma"
+ src="Extending%20WilmaScope_files/simpleXWGvis.png"
+ style="width: 378px; height: 442px;"><br>
+Figure 9: The XWG file from Figure 8 loaded into Wilma.<br>
+<div style="text-align: left;"><br>
+The file shown in Figure 8 was created by hand.&nbsp; When we save it
+back out to a file from WilmaScope more detail is recorded (for
+example, detail about the layout engine used and the view parameters
+for nodes and edges):<br>
+</div>
+</div>
+<br>
+<div style="text-align: center;"><img alt="More detailed XWG file"
+ src="Extending%20WilmaScope_files/moredetailedXWG.png"
+ style="width: 459px; height: 514px;"><br>
+Figure 10: The same graph but with more details specified.<br>
+</div>
+<h3><a name="Node_Properties"></a>Node Properties</h3>
+<table style="width: 100%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">Property Key<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Values<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Position<br>
+      </td>
+      <td style="vertical-align: top;">Three floats separated by spaces<br>
+      </td>
+      <td style="vertical-align: top;">X Y Z position.&nbsp; Values
+between 0 and 1 are a good start.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">LevelConstraint<br>
+      </td>
+      <td style="vertical-align: top;">integer<br>
+      </td>
+      <td style="vertical-align: top;">constrains the z position to a
+plane specified by the integer when used with certain layout engines<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">FixedPosition<br>
+      </td>
+      <td style="vertical-align: top;">[True|null]<br>
+      </td>
+      <td style="vertical-align: top;">If this property is present with
+any string then the node's position will be fixed... ie, not affected
+by the layout<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="Edge_Properties"></a>Edge Properties</h3>
+<table style="width: 100%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">Property Key<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Values<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Weight<br>
+      </td>
+      <td style="vertical-align: top;">Float<br>
+      </td>
+      <td style="vertical-align: top;">Affects layout when used with
+certain layout engines.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="Available_ViewTypes"></a>Available ViewTypes</h3>
+A ViewType entry requires a name.&nbsp; This specifies the View plugin
+that will be loaded.&nbsp; Some ViewPlugins that have been implemented
+are as follows (when entering the value for name in an XWG file spaces
+must appear exactly as below):<br>
+<h4>Nodes:
+</h4>
+<table style="width: 100%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">ViewPlugin
+name<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">DefaultNodeView<br>
+      </td>
+      <td style="vertical-align: top;">Spherical node view.&nbsp;
+Labels appear as floating banners.&nbsp; For improved performance the
+number of faces shown are dependant on the distance from the camera.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Oriented Box Node<br>
+      </td>
+      <td style="vertical-align: top;">A box that always faces the
+viewer.&nbsp; Labels are texture mapped onto the face.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">LineNode<br>
+      </td>
+      <td style="vertical-align: top;">Use with LineEdge... the node
+itself is invisible but this node type ensures that the line edge
+colours are set according to the node colour<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">LabelOnly<br>
+      </td>
+      <td style="vertical-align: top;">Only the label is shown as a
+banner<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Box Node<br>
+      </td>
+      <td style="vertical-align: top;">A box shaped node.&nbsp; Labels
+are texture mapped onto the face.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">SquareTube<br>
+      </td>
+      <td style="vertical-align: top;">A tube with square cross section
+and specified bottom and top dimensions<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">A tubular node<br>
+      </td>
+      <td style="vertical-align: top;">A tube with round cross section
+and specified bottom and top dimensions<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h4>Edges:
+</h4>
+<table style="width: 100%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">ViewPlugin
+name<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Plain Edge<br>
+      </td>
+      <td style="vertical-align: top;">Cylindrical edge.&nbsp; For
+improved performance the number of faces shown are dependant on the
+distance from the camera. </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Arrow<br>
+      </td>
+      <td style="vertical-align: top;">Arrow made out of a cylinder and
+a cone<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">LineEdge<br>
+      </td>
+      <td style="vertical-align: top;">Uses
+OpenGL (or DirectX) line segment primitive for super-fast
+rendering.&nbsp;
+Lines colouring is smoothly graded from start node colour to end node
+colour if used with LineNode.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Directed Edge<br>
+      </td>
+      <td style="vertical-align: top;">Shows
+a directed edge with a little cone next to the edge.&nbsp; Alternative
+to
+arrow.&nbsp; Originally intended as a 3D analog for UML directed edges.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Attenuated Edge<br>
+      </td>
+      <td style="vertical-align: top;">An
+attenuated edge is tube that's fat at the ends and thin in the
+middle.&nbsp;
+If my sloppy calculations are correct then the radius should match the
+radius of spherical nodes at either end.&nbsp; Colour should also be
+graded
+from the start node colour to end node colour.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Inheritance<br>
+      </td>
+      <td style="vertical-align: top;">A 3D analogue for a UML
+inheritance edge.&nbsp; Basically an arrow with a blue cylinder and a
+green cone at the start node.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Aggregation<br>
+      </td>
+      <td style="vertical-align: top;">A 3D analogue of the UML
+aggregation edge style.&nbsp; Blue cylinder with red diamond on top.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h4>Clusters:
+</h4>
+<table style="width: 100%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">ViewPlugin
+name<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Spherical Cluster<br>
+      </td>
+      <td style="vertical-align: top;">A semitransparent spherical
+bubble around the constituent nodes.&nbsp; For improved performance the
+number of faces shown are dependant on the distance from the camera. </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Box Cluster<br>
+      </td>
+      <td style="vertical-align: top;">Semitransparent box around
+constituent nodes.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<h3><a name="Common_ViewType_properties"></a>Common ViewType properties</h3>
+<h4>Common to all graph elements (Nodes, Edges and Clusters)
+</h4>
+<table style="width: 100%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">Property Key<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Values<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Label<br>
+      </td>
+      <td style="vertical-align: top;">String<br>
+      </td>
+      <td style="vertical-align: top;">Text that will appear texture
+mapped onto or in a banner above the graph element<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Visible<br>
+      </td>
+      <td style="vertical-align: top;">[True|False]<br>
+      </td>
+      <td style="vertical-align: top;">The graph element will not be
+rendered... eg, hidden edges can be useful<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Colour<br>
+      </td>
+      <td style="vertical-align: top;">Three space separated floats
+between 0 and 1<br>
+      </td>
+      <td style="vertical-align: top;">Red, Green and Blue colour values<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h4>Common to all Nodes
+</h4>
+<table style="width: 100%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">Property Key<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Values<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Radius<br>
+      </td>
+      <td style="vertical-align: top;">Float<br>
+      </td>
+      <td style="vertical-align: top;">Radius... 0.1 is good for
+spherical nodes.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h4>Common to all Edges</h4>
+<table style="width: 100%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">Property Key<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Values<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Radius<br>
+      </td>
+      <td style="vertical-align: top;">Float<br>
+      </td>
+      <td style="vertical-align: top;">Radius of edge cylinders.&nbsp;
+0.02 works well with the DefaultEdgeView.</td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="GML_File_Format"></a>GML File Format</h3>
+WilmaScope currently supports a very limited subset of the GML file
+format.&nbsp; Better support is planned.<br>
+<h3><a name="Leda_Graph_File_Format"></a>
+Leda Graph File Format</h3>
+WilmaScope currently supports a very limited subset of the LEDA Graph
+File Format file format. Better support is planned.<br>
+<h2><a name="Creating_New_Graph_Element_Glyphs"></a>Creating New Graph
+Element Glyphs</h2>
+<h2><a name="Creating_New_Layout_Engines"></a>Creating New Layout
+Engines</h2>
+<h2><a name="Code_Conventions"></a>Code Conventions</h2>
+</body>
+</html>
