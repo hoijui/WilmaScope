@@ -20,22 +20,39 @@
 
 package org.wilmascope.view;
 
-/*
- * GraphCanvas.java
+/**
+ * Sets up the Canvas on which all 3D stuff happens.  Lights, Behaviours, etc
+ * etc are all created here.
  *
  * Created on 16 April 2000, 17:06
- */
-
-/**
  *
  * @author  $Author$
  * @version $Version:$
  */
-import javax.media.j3d.*;
-import javax.vecmath.*;
-import com.sun.j3d.utils.behaviors.mouse.*;
-import com.sun.j3d.utils.universe.SimpleUniverse;
+import javax.media.j3d.Alpha;
+import javax.media.j3d.Background;
+import javax.media.j3d.Behavior;
+import javax.media.j3d.BoundingSphere;
+import javax.media.j3d.Bounds;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Canvas3D;
+import javax.media.j3d.ExponentialFog;
+import javax.media.j3d.RotationInterpolator;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.media.j3d.View;
+import javax.vecmath.Color3f;
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
+
+import org.wilmascope.light.LightManager;
+
+import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
+import com.sun.j3d.utils.behaviors.mouse.MouseTranslate;
+import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
 import com.sun.j3d.utils.picking.PickCanvas;
+import com.sun.j3d.utils.universe.SimpleUniverse;
 public class GraphCanvas extends Canvas3D {
 	protected GraphPickBehavior pb;
 	protected TransformGroup transformGroup;
@@ -48,6 +65,11 @@ public class GraphCanvas extends Canvas3D {
 	private Constants constants;
 	private Bounds bounds;
 	private SimpleUniverse universe;
+	private LightManager lightManager;
+
+	private MouseRotate MouseRotate;
+	private MouseTranslate MouseTranslate;
+	private MouseZoom MouseZoom;
 	/** Creates new GraphScene */
 	public GraphCanvas(
 		int xsize,
@@ -58,8 +80,10 @@ public class GraphCanvas extends Canvas3D {
 		setSize(xsize, ysize);
 		setLocation(5, 5);
 		bg = new BranchGroup();
+		bg.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
 		bg.setCapability(BranchGroup.ALLOW_DETACH);
 		bg.setCapability(BranchGroup.ENABLE_PICK_REPORTING);
+		bg.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
 		bounds = new BoundingSphere(new Point3d(0, 0, 0), 10000);
 		transformGroup = new TransformGroup();
 		transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -116,10 +140,14 @@ public class GraphCanvas extends Canvas3D {
 			new GraphPickBehavior(bg, (Canvas3D) this, bounds, PickCanvas.GEOMETRY);
 		pb.setSchedulingBounds(bounds);
 		transformGroup.addChild(pb);
-		addLights(bounds);
+
+		//when the lightManager is initialized, it will read in the light configuration in the
+		//specified property file.
+		lightManager = new LightManager(bg, bounds, "WILMA_CONSTANTS.properties");
 		addMouseRotators(bounds);
 		rotationTransformGroup.addChild(transformGroup);
 		bg.addChild(rotationTransformGroup);
+
 	}
 	public Bounds getBoundingSphere() {
 		return bounds;
@@ -188,56 +216,29 @@ public class GraphCanvas extends Canvas3D {
 		return gb;
 	}
 
-	private void addLights(Bounds bounds) {
-		// Set up ambient light source
-		AmbientLight ambientLight = new AmbientLight();
-		ambientLight.setInfluencingBounds(bounds);
-		ambientLight.setColor(constants.getColor3f("AmbientLightColour"));
-		bg.addChild(ambientLight);
-		// Set up directional light
-		DirectionalLight dirLight = new DirectionalLight();
-		dirLight.setInfluencingBounds(bounds);
-		Vector3f direction = constants.getVector3f("DirectionalLightVector");
-		direction.normalize();
-		dirLight.setDirection(direction);
-		dirLight.setColor(constants.getColor3f("DirectionalLightColour"));
-		bg.addChild(dirLight);
-		// Add point light sources for all that have a colour defined in
-		// the constants file
-		for (int i = 1;; i++) {
-			String l = new String("PointLight" + i);
-			if (constants.getProperty(l + "ColourR") == null)
-				break;
-			System.err.println("Adding Point Light " + i);
-			PointLight pl =
-				new PointLight(
-					constants.getColor3f(l + "Colour"),
-					new Point3f(constants.getVector3f(l + "Position")),
-					new Point3f(
-						constants.getFloatValue(l + "AttenuationConstant"),
-						constants.getFloatValue(l + "AttenuationLinear"),
-						constants.getFloatValue(l + "AttenuationQuadratic")));
-			pl.setInfluencingBounds(bounds);
-			bg.addChild(pl);
-		}
-	}
 	private void addMouseRotators(Bounds bounds) {
-		MouseRotate myMouseRotate = new MouseRotate();
-		myMouseRotate.setTransformGroup(transformGroup);
-		myMouseRotate.setSchedulingBounds(bounds);
-		bg.addChild(myMouseRotate);
-		mouseTranslate = new MouseTranslate();
-		mouseTranslate.setTransformGroup(transformGroup);
-		mouseTranslate.setSchedulingBounds(bounds);
-		bg.addChild(mouseTranslate);
-		MouseZoom myMouseZoom = new MouseZoom();
-		myMouseZoom.setTransformGroup(transformGroup);
-		myMouseZoom.setSchedulingBounds(bounds);
-		transformGroup.addChild(myMouseZoom);
+		MouseRotate = new MouseRotate();
+		MouseRotate.setTransformGroup(transformGroup);
+		MouseRotate.setSchedulingBounds(bounds);
+		bg.addChild(MouseRotate);
+		MouseTranslate = new MouseTranslate();
+		MouseTranslate.setTransformGroup(transformGroup);
+		MouseTranslate.setSchedulingBounds(bounds);
+		bg.addChild(MouseTranslate);
+		MouseZoom = new MouseZoom();
+		MouseZoom.setTransformGroup(transformGroup);
+		MouseZoom.setSchedulingBounds(bounds);
+		transformGroup.addChild(MouseZoom);
+
 	}
-	MouseTranslate mouseTranslate;
 	public MouseTranslate getMouseTranslate() {
-		return mouseTranslate;
+		return MouseTranslate;
+	}
+	public MouseRotate getMouseRotate() {
+		return MouseRotate;
+	}
+	public MouseZoom getMouseZoom() {
+		return MouseZoom;
 	}
 	public void addGraphElementView(GraphElementView view) {
 		BranchGroup b = view.getBranchGroup();
@@ -248,6 +249,8 @@ public class GraphCanvas extends Canvas3D {
 	}
 	public TransformGroup getTransformGroup() {
 		return transformGroup;
+	}
+	public void behaviorWakeup() {
 	}
 
 	public BranchGroup getBranchGroup() {
@@ -290,4 +293,9 @@ public class GraphCanvas extends Canvas3D {
 	public void setPickingEnabled(boolean enabled) {
 		pb.setEnable(enabled);
 	}
+	// method related to light source 
+	public LightManager getLightManager() {
+		return lightManager;
+	}
+
 }
