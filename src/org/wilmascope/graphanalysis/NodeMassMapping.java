@@ -28,12 +28,12 @@ import org.wilmascope.control.GraphControl.Node;
 import org.wilmascope.gui.HueSettingsPanel;
 
 /**
- * A mapping for node analysis properties to size
+ * A mapping for node analysis properties to repulsive mass
  * @author dwyer
  */
-public class NodeSizeMapping extends VisualMapping {
-  public NodeSizeMapping() {
-    super("Node Size");
+public class NodeMassMapping extends VisualMapping {
+  public NodeMassMapping() {
+    super("Node Repulsion");
   }
 
   JPanel controls = new JPanel();
@@ -41,9 +41,9 @@ public class NodeSizeMapping extends VisualMapping {
     for (Node n : c.getNodes()) {
       float attr = Float.parseFloat(n.getProperties().getProperty(
           analysisType));
-      n.setRadius(attr / 5f);
+      n.setMass(attr * 5f+1f);
     }
-    c.draw();
+    c.unfreeze();
   }
 
   public JPanel getControls() {

@@ -19,10 +19,12 @@
  */
 package org.wilmascope.graphmodifiers.plugin;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import javax.swing.Box;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -31,8 +33,11 @@ import org.wilmascope.control.GraphControl.Cluster;
 import org.wilmascope.control.GraphControl.Edge;
 import org.wilmascope.control.GraphControl.Node;
 import org.wilmascope.forcelayout.ForceLayout;
+import org.wilmascope.graph.LayoutEngine;
 import org.wilmascope.graphmodifiers.GraphModifier;
 import org.wilmascope.gui.SpinnerSlider;
+import org.wilmascope.view.ViewManager;
+import org.wilmascope.view.ViewManager.UnknownViewTypeException;
 
 /**
  * Copy the specified cluster and add the copy/ies to the cluster's owner
@@ -46,17 +51,27 @@ public class CopyCluster extends GraphModifier {
  * @see org.wilmascope.util.Plugin#getName()
  */
 	int copyCount = 1;
-	
+	boolean levels = false;
 	public CopyCluster(){
 		//User Interface
 		final SpinnerSlider numberSlider = new SpinnerSlider("Number of copies", 1,
 				10, copyCount);
+    final JCheckBox levelConstraintsCB = new JCheckBox("Constrain to Levels?");
+    levelConstraintsCB.setSelected(levels);
 		numberSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				copyCount = numberSlider.getValue();
 			}
 		});
+    levelConstraintsCB.addActionListener(new ActionListener() {
+
+      public void actionPerformed(ActionEvent e) {
+        levels = levelConstraintsCB.isSelected();
+      }
+      
+    });
 		controlPanel.add(numberSlider);  	
+    controlPanel.add(levelConstraintsCB);
 	}
 	
    public String getName() {
@@ -82,11 +97,34 @@ public class CopyCluster extends GraphModifier {
    	} else {
    		root = (Cluster)cluster.getCluster().getOwner().getUserData("Facade");
    		c1 = cluster;
-   	}
+   	}       
+    c1.setLayoutEngine(ForceLayout
+        .createDefaultClusterForceLayout(c1.getCluster()));
+    try {
+      c1.setView(ViewManager.getInstance().createClusterView("Ellipsoid Cluster"));
+    } catch (UnknownViewTypeException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
+    if(levels) {
+      root.getLayoutEngine().getProperties().setProperty("Levels",""+(copyCount+1));
+      root.getLayoutEngine().resetProperties();
+      // place contents of original cluster on level 0
+      c1.getLayoutEngine().getProperties().setProperty("Levels",""+(copyCount+1));
+      c1.getLayoutEngine().resetProperties();
+      c1.setProperty("LevelConstraint","0");
+      for(Node n:c1.getNodes()) {
+        n.setProperty("LevelConstraint","0");
+      }
+    }
    	for (int i=1;i<=copyCount;i++){
-   		Cluster c2 = root.addCluster();
-   		for (Node n : c1.getNodes()) {
-   			mapping.put(n, c2.addNode());
+   		Cluster c2 = root.addCluster("Ellipsoid Cluster");
+   		for (Node u : c1.getNodes()) {
+        Node v = c2.addNode();
+        Edge uv = root.addEdge(u,v);
+        uv.setRelaxedLength(0.2f);
+        uv.hide();
+   			mapping.put(u, v);
    		}
    		
    		for (Edge e : c1.getEdges()) {
@@ -94,14 +132,21 @@ public class CopyCluster extends GraphModifier {
    			Node b = (Node)e.getEdge().getEnd().getUserData("Facade");
    			c2.addEdge(mapping.get(a), mapping.get(b));
    		}
-   		
-   		c1.setLayoutEngine(ForceLayout
-   				.createDefaultClusterForceLayout(c1.getCluster()));
-   		c1.unfreeze();
+
    		c2.setLayoutEngine(ForceLayout
    				.createDefaultClusterForceLayout(c2.getCluster()));
-   		c2.unfreeze();
+
+      if(levels) {
+        c2.getLayoutEngine().getProperties().setProperty("Levels",""+(copyCount+1));
+        c2.getLayoutEngine().resetProperties();
+        c2.setProperty("LevelConstraint",""+i);
+        for(Node n:c2.getNodes()) {
+          n.setProperty("LevelConstraint",""+i);
+        }
+      }
+      c1=c2;
    	}
+    root.unfreeze();
    }
    /**
     * @see org.wilmascope.util.Plugin#getControls()

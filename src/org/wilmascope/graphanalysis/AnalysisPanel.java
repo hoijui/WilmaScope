@@ -61,6 +61,7 @@ public class AnalysisPanel extends JPanel {
 
     addMapping(new NoVisualMapping());
     addMapping(new NodeSizeMapping());
+    addMapping(new NodeMassMapping());
     addMapping(new NodeColourMapping());
     addMapping(new NodeLabelMapping());
     addMapping(new LevelConstraintMapping());
