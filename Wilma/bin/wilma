@@ -8,16 +8,16 @@ then
     arg=$(pwd)/$1
   fi
 fi
-if [ -e $JAVA_HOME/bin/java ]
+if [ -e "$JAVA_HOME"/bin/java ]
 then
-  if [ -e $WILMA_HOME/lib/wilma.jar ]
+  if [ -e $WILMA_HOME/lib ]
   then
     cd ${WILMA_HOME}/lib
     if [ x$OS = xWindows_NT ]
     then
-      $JAVA_HOME/bin/java -Dj3d.stereo=PREFERRED -Xmx300m -cp ..\\classes\;postgresql.jar\;xalan.jar\;crimson.jar\;jaxp.jar\;wilma.jar -Djdbc.drivers=org.postgresql.Driver org.wilmascope.control.WilmaMain "$arg"
+      "$JAVA_HOME"/bin/java -Dj3d.stereo=PREFERRED -Xmx300m -cp .\;..\\classes\;postgresql.jar\;Jama-1.0.1.jar -Djdbc.drivers=org.postgresql.Driver org.wilmascope.control.WilmaMain "$arg"
     else
-      $JAVA_HOME/bin/java -Dj3d.stereo=PREFERRED -Xmx300m -cp ../classes:/usr/share/java/postgresql.jar:xalan.jar:crimson.jar:jaxp.jar:wilma.jar -Djdbc.drivers=org.postgresql.Driver org.wilmascope.control.WilmaMain $arg
+      "$JAVA_HOME"/bin/java -Dj3d.stereo=PREFERRED -Xmx300m -cp .:../classes:Jama-1.0.1.jar -Djdbc.drivers=org.postgresql.Driver org.wilmascope.control.WilmaMain $arg
     fi
   else
     echo You must set the WILMA_HOME environment variable
@@ -25,4 +25,3 @@ then
 else
   echo You must set JAVA_HOME environment variable... could not find JAVA_HOME/bin/java
 fi
-#java -cp xalan.jar\;crimson.jar\;jaxp.jar\;.\;classes wilmatoo.control.Test
