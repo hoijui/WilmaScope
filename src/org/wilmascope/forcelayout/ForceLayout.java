@@ -209,6 +209,14 @@ public class ForceLayout extends
   private int levels = -1;
 
   private float levelSeparation = 1f;
+  public int getOrbits() {
+    return orbits;
+  }
+  private int orbits = -1;
+  public float getOrbitSeparation() {
+    return orbitSeparation;
+  }
+  private float orbitSeparation = 1f;
 
   /*
    * (non-Javadoc)
@@ -219,6 +227,10 @@ public class ForceLayout extends
     if (levels >= 0) {
       super.getProperties().setProperty("Levels", "" + levels);
       super.getProperties().setProperty("LevelSeparation", "" + levelSeparation);
+    }
+    if (orbits >= 0) {
+      super.getProperties().setProperty("Orbits", "" + orbits);
+      super.getProperties().setProperty("OrbitSeparation", "" + orbitSeparation);
     }
     for (Iterator i = forces.iterator(); i.hasNext();) {
       Force f = (Force) i.next();
@@ -242,6 +254,10 @@ public class ForceLayout extends
         levels = Integer.parseInt(super.getProperties().getProperty(key));
       } else if (key.equals("LevelSeparation")) {
         levelSeparation = Float.parseFloat(super.getProperties().getProperty(key));
+      } else if (key.equals("Orbits")) {
+        orbits = Integer.parseInt(super.getProperties().getProperty(key));
+      } else if (key.equals("OrbitSeparation")) {
+        orbitSeparation = Float.parseFloat(super.getProperties().getProperty(key));
       } else {
         try {
           Force f = m.createForce(key);

@@ -71,6 +71,7 @@ public class AnalysisPanel extends JPanel {
     });
     addMapping(new NodeColourMapping());
     addMapping(new LevelConstraintMapping());
+    addMapping(new OrbitalConstraintMapping());
     Box b = Box.createHorizontalBox();
     final JPanel mappingPanel = new JPanel();
     final Box vb = Box.createVerticalBox();

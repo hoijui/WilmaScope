@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
-<WilmaGraph><Cluster><LayoutEngineType Name="ForceLayout"></LayoutEngineType>
-<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 0.000000"/><LayoutEngineType Name="ForceLayout"></LayoutEngineType>
+<WilmaGraph><Cluster><LayoutEngineType Name="Force Directed"></LayoutEngineType>
+<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 0.000000"/><LayoutEngineType Name="Force Directed"></LayoutEngineType>
 <Node ID="N1"><ViewType Name="DefaultNodeView">
 <Property Key="Colour" Value="0.500000 0.500000 0.500000"/><Property Key="Radius" Value="0.050000"/></ViewType>
 <Property Key="Position" Value="5.482290 4.128526 0.000000"/></Node>
@@ -211,7 +211,7 @@
 <Edge StartID="N1" EndID="N42"><ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.020000"/><Property Key="Colour" Value="0.500000 0.500000 0.500000"/></ViewType></Edge>
 </Cluster>
-<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 1.000000"/><LayoutEngineType Name="ForceLayout"></LayoutEngineType>
+<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 1.000000"/><LayoutEngineType Name="Force Directed"></LayoutEngineType>
 <Node ID="N43"><ViewType Name="DefaultNodeView">
 <Property Key="Colour" Value="0.500000 0.500000 0.500000"/><Property Key="Radius" Value="0.050000"/></ViewType>
 <Property Key="Position" Value="5.442124 4.092446 1.000000"/></Node>
@@ -443,7 +443,7 @@
 </Cluster>
 <Edge StartID="N1" EndID="N43"><ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.040000"/><Property Key="Colour" Value="1.000000 1.000000 1.000000"/></ViewType></Edge>
-<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 2.000000"/><LayoutEngineType Name="ForceLayout"></LayoutEngineType>
+<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 2.000000"/><LayoutEngineType Name="Force Directed"></LayoutEngineType>
 <Node ID="N89"><ViewType Name="DefaultNodeView">
 <Property Key="Colour" Value="0.500000 0.500000 0.500000"/><Property Key="Radius" Value="0.050000"/></ViewType>
 <Property Key="Position" Value="5.463648 4.101601 2.000000"/></Node>
@@ -695,7 +695,7 @@
 </Cluster>
 <Edge StartID="N43" EndID="N89"><ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.040000"/><Property Key="Colour" Value="1.000000 1.000000 1.000000"/></ViewType></Edge>
-<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 3.000000"/><LayoutEngineType Name="ForceLayout"></LayoutEngineType>
+<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 3.000000"/><LayoutEngineType Name="Force Directed"></LayoutEngineType>
 <Node ID="N139"><ViewType Name="DefaultNodeView">
 <Property Key="Colour" Value="0.500000 0.500000 0.500000"/><Property Key="Radius" Value="0.050000"/></ViewType>
 <Property Key="Position" Value="5.468212 4.098735 3.000000"/></Node>
@@ -967,7 +967,7 @@
 </Cluster>
 <Edge StartID="N89" EndID="N139"><ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.040000"/><Property Key="Colour" Value="1.000000 1.000000 1.000000"/></ViewType></Edge>
-<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 4.000000"/><LayoutEngineType Name="ForceLayout"></LayoutEngineType>
+<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 4.000000"/><LayoutEngineType Name="Force Directed"></LayoutEngineType>
 <Node ID="N193"><ViewType Name="DefaultNodeView">
 <Property Key="Colour" Value="0.500000 0.500000 0.500000"/><Property Key="Radius" Value="0.050000"/></ViewType>
 <Property Key="Position" Value="5.206713 4.426024 4.000000"/></Node>
@@ -1299,7 +1299,7 @@
 </Cluster>
 <Edge StartID="N139" EndID="N193"><ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.040000"/><Property Key="Colour" Value="1.000000 1.000000 1.000000"/></ViewType></Edge>
-<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 5.000000"/><LayoutEngineType Name="ForceLayout"></LayoutEngineType>
+<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 5.000000"/><LayoutEngineType Name="Force Directed"></LayoutEngineType>
 <Node ID="N259"><ViewType Name="DefaultNodeView">
 <Property Key="Colour" Value="0.500000 0.500000 0.500000"/><Property Key="Radius" Value="0.050000"/></ViewType>
 <Property Key="Position" Value="5.709500 3.935298 5.000000"/></Node>
@@ -1651,7 +1651,7 @@
 </Cluster>
 <Edge StartID="N193" EndID="N259"><ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.040000"/><Property Key="Colour" Value="1.000000 1.000000 1.000000"/></ViewType></Edge>
-<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 6.000000"/><LayoutEngineType Name="ForceLayout"></LayoutEngineType>
+<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 6.000000"/><LayoutEngineType Name="Force Directed"></LayoutEngineType>
 <Node ID="N329"><ViewType Name="DefaultNodeView">
 <Property Key="Colour" Value="0.500000 0.500000 0.500000"/><Property Key="Radius" Value="0.050000"/></ViewType>
 <Property Key="Position" Value="5.619676 4.266636 6.000000"/></Node>
@@ -2163,7 +2163,7 @@
 </Cluster>
 <Edge StartID="N259" EndID="N329"><ViewType Name="Plain Edge">
 <Property Key="Radius" Value="0.040000"/><Property Key="Colour" Value="1.000000 1.000000 1.000000"/></ViewType></Edge>
-<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 7.000000"/><LayoutEngineType Name="ForceLayout"></LayoutEngineType>
+<Cluster><ViewType Name="Disc Cluster"/><Property Key="Position" Value="4.0 4.0 7.000000"/><LayoutEngineType Name="Force Directed"></LayoutEngineType>
 <Node ID="N431"><ViewType Name="DefaultNodeView">
 <Property Key="Colour" Value="0.500000 0.500000 0.500000"/><Property Key="Radius" Value="0.050000"/></ViewType>
 <Property Key="Position" Value="5.645937 4.200563 7.000000"/></Node>

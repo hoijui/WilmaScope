@@ -49,6 +49,10 @@ public class NodeForceLayout extends NodeLayout {
     if(str!=null) {
       levelConstraint = Integer.parseInt(str);
     }
+    str = getNode().getProperties().getProperty("OrbitConstraint");
+    if(str!=null) {
+      orbitConstraint = Integer.parseInt(str);
+    }
   }
 
   /** Add a force vector which will act on this NodeForceLayout */
@@ -106,11 +110,28 @@ public class NodeForceLayout extends NodeLayout {
     // Move the node
     node.reposition(velocity);
     ForceLayout fl = (ForceLayout)node.getOwner().getLayoutEngine();
+    // apply level constraint
     int totalLevels = fl.getLevels();
     float levelSeparation = fl.getLevelSeparation();
     if (totalLevels >= 0) {
       Point3f p = node.getPosition();
       p.z = levelSeparation * ((float)levelConstraint-(float)totalLevels/2f);
+    }
+    // apply orbit constraint
+    int totalOrbits = fl.getOrbits();
+    float orbitSeparation = fl.getOrbitSeparation();
+    if (totalOrbits >= 0) {
+      Point3f o = node.getOwner().getPosition();
+      Point3f p = node.getPosition();
+      Vector3f po = new Vector3f();
+      po.sub(o,p);
+      Vector3f rpo=new Vector3f(po);
+      rpo.normalize();
+      float r = orbitSeparation * (float)orbitConstraint;
+      rpo.scale(r);
+      Vector3f pq = new Vector3f();
+      pq.sub(po,rpo);
+      node.reposition(pq);
     }
   }
   /* If a {@link vec} is longer than {@link maxLength} then normalise it.
@@ -133,4 +154,5 @@ public class NodeForceLayout extends NodeLayout {
   // Acceleration of the node due to the forces on the node
   Vector3f acceleration = new Vector3f();
   int levelConstraint = -1;
+  int orbitConstraint = -1;
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
 <WilmaGraph>
 <Cluster>
-<LayoutEngineType Name="DotLayout">
+<LayoutEngineType Name="Dot Stratified">
 <Property Key="YScale" Value="15.0"/>
 <Property Key="XScale" Value="15.0"/>
 </LayoutEngineType>

@@ -95,17 +95,13 @@ public class LayoutEngineFrame extends JFrame implements BalancedEventListener {
     String s = (String)layoutEngineComboBox.getSelectedItem();
     box1.remove(controlsPanel);
     cluster.freeze();
-    Cluster c = cluster.getCluster();
-    LayoutEngine layoutEngine=null;
     try {
-      layoutEngine = LayoutManager.getInstance().createLayout(s);
+      cluster.setLayoutEngine(LayoutManager.getInstance().createLayout(s));
+      controlsPanel = cluster.getLayoutEngine().getControls();
+      box1.add(controlsPanel);
     } catch (UnknownLayoutTypeException e1) {
-
       WilmaMain.showErrorDialog("Unknown Layout Type",e1);
     }
-    c.setLayoutEngine(layoutEngine);
-    controlsPanel = layoutEngine.getControls();
-    box1.add(controlsPanel);
     pack();
   }
   public void clusterBalanced(Cluster c, boolean balanced) {

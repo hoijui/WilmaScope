@@ -2,7 +2,7 @@
 <!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
 <WilmaGraph>
 <Cluster>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Repulsion" Value="1.2"/>
 <Property Key="VelocityAttenuation" Value="0.02"/>

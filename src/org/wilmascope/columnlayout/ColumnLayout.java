@@ -127,7 +127,7 @@ public class ColumnLayout extends LayoutEngine {
       Float.parseFloat(super.getProperties().getProperty("LevelSeparation", "1.0")));
   }
   public String getName() {
-    return "Column";
+    return "ColumnLayout";
   }
 
 }

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+import javax.swing.ImageIcon;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
@@ -43,10 +44,10 @@ import com.sun.j3d.utils.geometry.Cylinder;
  * @version 1.0
  */
 
-public class MultiEdgeView extends EdgeView implements CompoundEdgeView {
+public class BendyEdgeView extends EdgeView implements CompoundEdgeView {
   float length = 1.0f;
-  public MultiEdgeView() {
-    setTypeName("Multi Edge");
+  public BendyEdgeView() {
+    setTypeName("Bendy Edge");
   }
   protected void setupDefaultMaterial() {
     setupDefaultAppearance(Colours.blueMaterial);
@@ -55,6 +56,7 @@ public class MultiEdgeView extends EdgeView implements CompoundEdgeView {
     setupHighlightAppearance(Colours.yellowMaterial);
   }
   public void init() {
+    bends = new ArrayList<Point3f>();
   }
   /* (non-Javadoc)
    * @see org.wilmascope.view.CompoundEdgeView#addBend(javax.vecmath.Point3f)
@@ -77,7 +79,7 @@ public class MultiEdgeView extends EdgeView implements CompoundEdgeView {
     addLiveBranch(bg);
   }
   void addCylinder(Point3f start, Point3f end) {
-    Cylinder cylinder = new Cylinder(1.0f, 0.9f, getAppearance());
+    Cylinder cylinder = new Cylinder(1.0f, 1f, getAppearance());
     Transform3D t3d = new Transform3D();
     Vector3f v = new Vector3f(end);
     v.sub(start);
@@ -91,6 +93,9 @@ public class MultiEdgeView extends EdgeView implements CompoundEdgeView {
     makePickable(cylinder.getShape(Cylinder.BODY));
     bg.addChild(tg);
   }
-  ArrayList<Point3f> bends = new ArrayList<Point3f>();
+  public ImageIcon getIcon() {
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("bendyedge.png"));
+  }
+  ArrayList<Point3f> bends;
   BranchGroup bg = null;
 }

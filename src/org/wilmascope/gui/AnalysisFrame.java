@@ -50,12 +50,6 @@ public class AnalysisFrame extends JFrame {
     final AnalysisManager manager = AnalysisManager.getInstance();
     final JComboBox analysisComboBox = new JComboBox(manager.getTypeList());
     JButton addButton = new JButton("Add");
-    JButton packButton = new JButton("Pack");
-    packButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        pack();
-      }
-    });
     addButton.addActionListener(new ActionListener() {
 
       public void actionPerformed(ActionEvent e) {
@@ -88,7 +82,6 @@ public class AnalysisFrame extends JFrame {
     });
     topBox.add(analysisComboBox);
     topBox.add(addButton);
-    topBox.add(packButton);
     analysersBox.add(topBox);
     add(analysersBox);
     pack();

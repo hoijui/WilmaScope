@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
-<WilmaGraph><Cluster><LayoutEngineType Name="ForceLayout"></LayoutEngineType>
+<WilmaGraph><Cluster><LayoutEngineType Name="Force Directed"></LayoutEngineType>
 <Node ID="N1"><ViewType Name="DefaultNodeView">
 <Property Key="Colour" Value="0.500000 0.500000 0.500000"/><Property Key="Radius" Value="0.050000"/></ViewType>
 <Property Key="Position" Value="0.100000 3.160000 0.000000"/></Node>

@@ -2,7 +2,7 @@
 <!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
 <WilmaGraph>
 <Cluster>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="1.0"/>
 <Property Key="Repulsion" Value="1.0"/>
@@ -16,7 +16,7 @@
 </ViewType>
 <Property Key="Position" Value="0.59149903 -1.8978461 0.0"/>
 <Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="15.0"/>
 <Property Key="Origin" Value="15.0"/>
 <Property Key="VelocityAttenuation" Value="0.02"/>
@@ -83,7 +83,7 @@
 </ViewType>
 <Property Key="Position" Value="-0.9767938 2.0131576 0.0"/>
 <Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="15.0"/>
 <Property Key="Origin" Value="15.0"/>
 <Property Key="VelocityAttenuation" Value="0.02"/>
@@ -150,7 +150,7 @@
 </ViewType>
 <Property Key="Position" Value="2.0851793 1.023744 0.0"/>
 <Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="15.0"/>
 <Property Key="Origin" Value="15.0"/>
 <Property Key="VelocityAttenuation" Value="0.02"/>
@@ -217,7 +217,7 @@
 </ViewType>
 <Property Key="Position" Value="-1.6998172 -1.139122 0.0"/>
 <Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="15.0"/>
 <Property Key="Origin" Value="15.0"/>
 <Property Key="VelocityAttenuation" Value="0.02"/>

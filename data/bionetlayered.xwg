@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
-<WilmaGraph><Cluster><LayoutEngineType Name="ForceLayout"><Property
+<WilmaGraph><Cluster><LayoutEngineType Name="Force Directed"><Property
 				Key="Spring" Value="5.6"/><Property
 				Key="Origin" Value="1.0"/><Property
 				Key="Repulsion" Value="0.5"/>
@@ -187,7 +187,7 @@
 <Node ID="N421"><ViewType Name="DefaultNodeView"><Property Key="Label" Value="znuABC"/><Property Key="Colour" Value="0.0 0.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="1"/></Node>
 <Node ID="N422"><ViewType Name="DefaultNodeView"><Property Key="Label" Value="zraP"/><Property Key="Colour" Value="0.0 0.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="1"/></Node>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -202,7 +202,7 @@
 <Edge StartID="N433" EndID="N435"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -217,7 +217,7 @@
 <Edge StartID="N424" EndID="N151"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -231,7 +231,7 @@
 <Edge StartID="N425" EndID="N60"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -246,7 +246,7 @@
 <Edge StartID="N426" EndID="N255"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -270,7 +270,7 @@
 <Edge StartID="N427" EndID="N23"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -285,7 +285,7 @@
 <Edge StartID="N428" EndID="N238"><ViewType Name="Arrow"><Property Key="GDType" Value="3"/><Property Key="Colour" Value="1.0 0.0 0.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -305,7 +305,7 @@
 <Edge StartID="N429" EndID="N451"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -320,7 +320,7 @@
 <Edge StartID="N430" EndID="N246"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -338,7 +338,7 @@
 <Edge StartID="N431" EndID="N271"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -355,7 +355,7 @@
 <Edge StartID="N432" EndID="N57"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -381,7 +381,7 @@
 <Edge StartID="N436" EndID="N142"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -395,7 +395,7 @@
 <Edge StartID="N437" EndID="N18"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -410,7 +410,7 @@
 <Edge StartID="N68" EndID="N68"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -428,7 +428,7 @@
 <Edge StartID="N441" EndID="N197"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -447,7 +447,7 @@
 <Edge StartID="N442" EndID="N267"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -479,7 +479,7 @@
 <Edge StartID="N446" EndID="N438"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -494,7 +494,7 @@
 <Edge StartID="N252" EndID="N252"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -518,7 +518,7 @@
 <Edge StartID="N453" EndID="N423"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="0.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="0"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -535,7 +535,7 @@
 <Edge StartID="N455" EndID="N439"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -555,7 +555,7 @@
 <Edge StartID="N30" EndID="N30"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -568,7 +568,7 @@
 <Edge StartID="N53" EndID="N52"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -584,7 +584,7 @@
 <Edge StartID="N64" EndID="N93"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -602,7 +602,7 @@
 <Edge StartID="N77" EndID="N81"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -616,7 +616,7 @@
 <Edge StartID="N114" EndID="N400"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -631,7 +631,7 @@
 <Edge StartID="N119" EndID="N395"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -651,7 +651,7 @@
 <Edge StartID="N137" EndID="N367"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -666,7 +666,7 @@
 <Edge StartID="N148" EndID="N326"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -698,7 +698,7 @@
 <Edge StartID="N222" EndID="N399"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -726,7 +726,7 @@
 <Edge StartID="N227" EndID="N352"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -739,7 +739,7 @@
 <Edge StartID="N269" EndID="N306"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -752,7 +752,7 @@
 <Edge StartID="N282" EndID="N296"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -766,7 +766,7 @@
 <Edge StartID="N298" EndID="N298"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -784,7 +784,7 @@
 <Edge StartID="N304" EndID="N316"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -822,7 +822,7 @@
 <Edge StartID="N324" EndID="N71"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -870,7 +870,7 @@
 <Edge StartID="N344" EndID="N99"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -899,7 +899,7 @@
 <Edge StartID="N345" EndID="N91"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -913,7 +913,7 @@
 <Edge StartID="N380" EndID="N380"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -933,7 +933,7 @@
 <Edge StartID="N385" EndID="N385"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -983,7 +983,7 @@
 <Edge StartID="N413" EndID="N45"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -996,7 +996,7 @@
 <Edge StartID="N444" EndID="N48"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -1011,7 +1011,7 @@
 <Edge StartID="N447" EndID="N44"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -1024,7 +1024,7 @@
 <Edge StartID="N448" EndID="N249"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -1037,7 +1037,7 @@
 <Edge StartID="N450" EndID="N239"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -1058,7 +1058,7 @@
 <Edge StartID="N452" EndID="N412"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -1075,7 +1075,7 @@
 <Edge StartID="N454" EndID="N295"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -1096,7 +1096,7 @@
 <Edge StartID="N457" EndID="N374"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -1111,7 +1111,7 @@
 <Edge StartID="N459" EndID="N242"><ViewType Name="Arrow"><Property Key="GDType" Value="2"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>
@@ -1144,7 +1144,7 @@
 <Edge StartID="N460" EndID="N83"><ViewType Name="Arrow"><Property Key="GDType" Value="1"/><Property Key="Colour" Value="0.0 1.0 1.0"/></ViewType></Edge>
 </Cluster>
 <Cluster><ViewType Name="Ellipsoid Cluster"><Property Key="Colour" Value="1.0 1.0 0.0"/></ViewType><Property Key="LevelConstraint" Value="2"/>
-<LayoutEngineType Name="ForceLayout">
+<LayoutEngineType Name="Force Directed">
 <Property Key="Spring" Value="5.0"/>
 <Property Key="Origin" Value="10.0"/>
 <Property Key="Repulsion" Value="1.2"/>

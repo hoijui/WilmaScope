@@ -38,6 +38,8 @@ import org.wilmascope.forcelayout.ForceLayout;
 import org.wilmascope.gmlparser.GMLLoader;
 import org.wilmascope.graph.LayoutEngine;
 import org.wilmascope.highdimensionlayout.HighDimensionLayout;
+import org.wilmascope.layoutregistry.LayoutManager;
+import org.wilmascope.layoutregistry.LayoutManager.UnknownLayoutTypeException;
 import org.wilmascope.multiscalelayout.MultiScaleLayout;
 import org.wilmascope.view.ClusterView;
 import org.wilmascope.view.EdgeView;
@@ -74,13 +76,16 @@ public class FileHandler {
 
   boolean needsLayout = true;
 
-  // at the moment it's possible for there to be multiple instances of FileHandler,
-  // so we'll make the lastFile static to ensure it really is the last File loaded
+  // at the moment it's possible for there to be multiple instances of
+  // FileHandler,
+  // so we'll make the lastFile static to ensure it really is the last File
+  // loaded
   static File lastFile;
-  
+
   public FileHandler(GraphControl graphControl) {
     this.graphControl = graphControl;
   }
+
   public File getLastFile() {
     return lastFile;
   }
@@ -215,24 +220,16 @@ public class FileHandler {
 
   private void loadLayoutEngine(XMLGraph.LayoutEngineType l,
       GraphControl.Cluster c) {
-    if (l == null)
-      return;
-    String type = l.getName();
-    LayoutEngine e = null;
-    if (type.equals("ForceLayout")) {
-      e = new ForceLayout();
-    } else if (type.equals("DotLayout")) {
-      e = new org.wilmascope.dotlayout.DotLayout();
-      needsLayout = true;
-    } else if (type.equals("ColumnLayout")) {
-      e = new org.wilmascope.columnlayout.ColumnLayout();
-    } else if (type.equals("MultiScaleLayout")) {
-      e = new MultiScaleLayout();
-    } else if (type.equals("HighDimensionLayout")) {
-      e = new HighDimensionLayout();
+    try {
+      if (l == null)
+        return;
+      String type = l.getName();
+      LayoutEngine e = LayoutManager.getInstance().createLayout(type);
+      c.setLayoutEngine(e);      
+      e.setProperties(l.getProperties());
+    } catch (UnknownLayoutTypeException e1) {
+      WilmaMain.showErrorDialog("Unknown Layout Type", e1);
     }
-    c.setLayoutEngine(e);
-    e.setProperties(l.getProperties());
   }
 
   public void save(String fileName) {
@@ -284,17 +281,7 @@ public class FileHandler {
     XMLGraph.LayoutEngineType l = null;
     Properties p = new Properties();
     org.wilmascope.graph.LayoutEngine gl = graphRoot.getLayoutEngine();
-    if (gl instanceof org.wilmascope.forcelayout.ForceLayout) {
-      l = xmlCluster.setLayoutEngineType("ForceLayout");
-    } else if (gl instanceof org.wilmascope.dotlayout.DotLayout) {
-      l = xmlCluster.setLayoutEngineType("DotLayout");
-    } else if (gl instanceof org.wilmascope.columnlayout.ColumnLayout) {
-      l = xmlCluster.setLayoutEngineType("ColumnLayout");
-    } else if (gl instanceof MultiScaleLayout) {
-      l = xmlCluster.setLayoutEngineType("MultiScaleLayout");
-    } else if (gl instanceof HighDimensionLayout) {
-      l = xmlCluster.setLayoutEngineType("HighDimensionLayout");
-    } 
+    l = xmlCluster.setLayoutEngineType(gl.getName());
     l.setProperties(gl.getProperties());
   }
 }

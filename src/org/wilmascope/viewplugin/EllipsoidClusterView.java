@@ -38,6 +38,14 @@ public class EllipsoidClusterView extends ClusterView {
     Plane p = c.getNodes().getBestFitPlane();
     Vector3f norm = p.getNormal();
     AxisAngle4f angle = getAxisAngle4f(new Vector3f(0, 1, 0), norm);
+    // I think this guarantees at least one axis of the
+    // ellipsoid is correct... I think we need to do more
+    // checking to find the correct orientation of the
+    // second axis...
+    // ie, in the following scale transformation, the third
+    // value is correct but the first two may be in the wrong
+    // order!
+    // meaning a second rotation is required about the normal?
     double[] s = p.getSingularValues();
     setFullTransform(new Vector3d(s[1], s[2], s[0]), new Vector3f(p
         .getCentroid()), angle);

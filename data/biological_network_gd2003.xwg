@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
-<WilmaGraph><Cluster><LayoutEngineType Name="ForceLayout"><Property
+<WilmaGraph><Cluster><LayoutEngineType Name="Force Directed"><Property
 				Key="Spring" Value="5.6"/><Property
 				Key="DirectedField" Value="9.5"/><Property
 				Key="Origin" Value="1.0"/><Property
