@@ -33,8 +33,8 @@ import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
+import org.wilmascope.columnlayout.ColumnCluster;
 import org.wilmascope.columnlayout.ColumnLayout;
-import org.wilmascope.control.ColumnCluster;
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.forcelayout.BalancedEventClient;
 import org.wilmascope.forcelayout.Origin;
@@ -51,7 +51,7 @@ import org.wilmascope.view.ElementData;
 public class QueryFrame extends JFrame {
   GraphControl graphControl;
   public QueryFrame(GraphControl c) {
-    this.graphRoot = c.getRootCluster();
+    QueryFrame.graphRoot = c.getRootCluster();
     this.graphControl = c;
     try {
       jbInit();
@@ -1001,7 +1001,7 @@ public class QueryFrame extends JFrame {
       while(st.hasMoreTokens()) {
         idStrings[i++] = st.nextToken();
       }
-      c = new ColumnCluster(parent, nodeScale*value/ maxmc, nodeScale*value/maxmc, level,"Tube");
+      c = new ColumnCluster(parent, nodeScale*value/ maxmc, nodeScale*value/maxmc, level,"Column Cluster", "Tube");
       c.setLabel(idStrings);
       ((ColumnLayout)c.getClusterFacade().getLayoutEngine()).setStrataSeparation(0.2f);
       columns.put(id, c);

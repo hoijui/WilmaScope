@@ -19,8 +19,6 @@
  */
 package org.wilmascope.forcelayout;
 
-import org.wilmascope.graph.NodeList;
-import org.wilmascope.graph.EdgeList;
 import org.wilmascope.graph.Cluster;
 
 /*

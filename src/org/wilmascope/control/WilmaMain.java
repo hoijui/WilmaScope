@@ -20,9 +20,21 @@
 package org.wilmascope.control;
 
 import java.awt.BorderLayout;
-import javax.swing.*;
-import org.wilmascope.gui.*;
+import java.io.File;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JPopupMenu;
+
 import org.wilmascope.file.FileHandler;
+import org.wilmascope.gmlparser.ColumnsImporter;
+import org.wilmascope.gui.Actions;
+import org.wilmascope.gui.ClusterOptionsMenu;
+import org.wilmascope.gui.ControlPanel;
+import org.wilmascope.gui.EdgeOptionsMenu;
+import org.wilmascope.gui.MenuBar;
+import org.wilmascope.gui.NodeOptionsMenu;
+import org.wilmascope.gui.SplashWindow;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular Wilma graph drawing engine
@@ -32,101 +44,85 @@ import org.wilmascope.file.FileHandler;
  * @version 1.0
  */
 public class WilmaMain extends JFrame {
-  {
-    // JPopupMenu won't work over a (heavyweight) Java3D canvas unless
-    // we do the following
-    //JPopupMenu.setDefaultLightWeightPopupEnabled(false);
-  }
-  java.awt.Component graphCanvas;
-  public void init() {
-    getContentPane().setLayout(new BorderLayout());
-    graphControl = new GraphControl(400,400);
-    graphCanvas = graphControl.getGraphCanvas();
-    getContentPane().add("Center",graphCanvas);
-    ControlPanel controlPanel = new ControlPanel();
-    getContentPane().add("South",controlPanel);
-    //RootClusterMenu rootMenu = new RootClusterMenu(this, r, controlPanel);
-    Actions actions = Actions.getInstance();
-    actions.init(this,graphControl,controlPanel);
-    getContentPane().add("North",actions.getToolPanel());
+	{
+		// JPopupMenu won't work over a (heavyweight) Java3D canvas unless
+		// we do the following
+		//JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+	}
+	java.awt.Component graphCanvas;
+	public void init() {
+		getContentPane().setLayout(new BorderLayout());
+		graphControl = new GraphControl(400, 400);
+		graphCanvas = graphControl.getGraphCanvas();
+		getContentPane().add("Center", graphCanvas);
+		ControlPanel controlPanel = new ControlPanel();
+		getContentPane().add("South", controlPanel);
+		//RootClusterMenu rootMenu = new RootClusterMenu(this, r, controlPanel);
+		Actions actions = Actions.getInstance();
+		actions.init(this, graphControl, controlPanel);
+		getContentPane().add("North", actions.getToolPanel());
 
-    MenuBar menuBar = new MenuBar(actions, graphControl, controlPanel);
-    setJMenuBar(menuBar);
-    //graphControl.setRootPickingClient(rootMenu);
-    GraphControl.ClusterFacade r = graphControl.getRootCluster();
-    GraphControl.getPickListener().setNodeOptionsClient(new NodeOptionsMenu(graphCanvas, graphControl, r, controlPanel));
-    GraphControl.getPickListener().setClusterOptionsClient(new ClusterOptionsMenu(graphCanvas, r, controlPanel));
-    GraphControl.getPickListener().setEdgeOptionsClient(new EdgeOptionsMenu(graphCanvas, r));
-    try {
-      r.addForce("Repulsion").setStrength(1f);
-      r.addForce("Spring").setStrength(5f);
-      r.addForce("Origin").setStrength(1f);
-    } catch(Exception e) {
-      System.out.println("Couldn't add forces to graph root from WilmaMain, reason: "+e.getMessage());
-    }
-    //r.setBalancedThreshold(0);
-    /*
-    GraphControl.ClusterFacade c1 = r.addCluster();
-    c1.addForce("Repulsion");
-    c1.addForce("Spring");
-    c1.addForce("Origin").setStrengthConstant(10f);
-    c1.setIterations(1);
-    GraphControl.ClusterFacade c2 = r.addCluster();
-    c2.addForce("Repulsion");
-    c2.addForce("Spring");
-    c2.addForce("Origin").setStrengthConstant(10f);
-    c2.setIterations(1);
-    GraphControl.NodeFacade a = c1.addNode();
-    GraphControl.NodeFacade b = c1.addNode();
-    GraphControl.EdgeFacade e1 = c1.addEdge(a,b);
-    GraphControl.NodeFacade c = c2.addNode();
-    GraphControl.NodeFacade d = c2.addNode();
-    GraphControl.EdgeFacade e2 = c2.addEdge(c,d);
-    GraphControl.EdgeFacade e3 = r.addEdge(b,c);
+		MenuBar menuBar = new MenuBar(actions, graphControl, controlPanel);
+		setJMenuBar(menuBar);
+		//graphControl.setRootPickingClient(rootMenu);
+		GraphControl.ClusterFacade r = graphControl.getRootCluster();
+		GraphControl.getPickListener().setNodeOptionsClient(
+			new NodeOptionsMenu(graphCanvas, graphControl, r, controlPanel));
+		GraphControl.getPickListener().setClusterOptionsClient(
+			new ClusterOptionsMenu(graphCanvas, r, controlPanel));
+		GraphControl.getPickListener().setEdgeOptionsClient(
+			new EdgeOptionsMenu(graphCanvas, r));
+		try {
+			r.addForce("Repulsion").setStrength(1f);
+			r.addForce("Spring").setStrength(5f);
+			r.addForce("Origin").setStrength(1f);
+		} catch (Exception e) {
+			System.out.println(
+				"Couldn't add forces to graph root from WilmaMain, reason: "
+					+ e.getMessage());
+		}
+		r.unfreeze();
+	}
 
-    GraphControl.ClusterFacade c3 = c2.addCluster();
-    c3.addForce("Repulsion");
-    c3.addForce("Spring");
-    c3.addForce("Origin").setStrengthConstant(10f);
-    c3.setIterations(1);
-    GraphControl.NodeFacade e = c3.addNode();
-    GraphControl.NodeFacade f = c3.addNode();
-    */
-    r.unfreeze();
-    //GraphControl.EdgeFacade e4 = c3.addEdge(e,f);
-    //GraphControl.EdgeFacade e5 = c2.addEdge(e,d);
-  }
-
-  public static void main(String argv[])
-  {
-    JPopupMenu.setDefaultLightWeightPopupEnabled(false);
-    WilmaMain main = new WilmaMain();
-    main.createJMainFrame();
-    System.out.println("In WilmaMain.main");
-    if(argv.length != 0) {
-      System.out.println("Loading "+argv[0]);
-      FileHandler fileHandler = new FileHandler(main.graphControl);
-      fileHandler.load(argv[0]);
-    }
-  }
-  public void createJMainFrame() {
-    new SplashWindow("images" +java.io.File.separator + "WilmaSplash.png", this, 5000);
-    init();
-    ImageIcon icon = new ImageIcon(WilmaMain.class.getResource("/images/WilmaW24.png"));
-    setIconImage(icon.getImage());
-    setTitle("Welcome to Wilma!");
-    setSize(600,600);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    show();
-  }
-  GraphControl graphControl;
-  public GraphControl getGraphControl() {
-    return graphControl;
-  }
-  public void setSize(int width, int height) {
-    System.out.println("resizing: width="+width+", height="+height);
-    super.setSize(width,height);
-    getRootPane().updateUI();
-    validate();
-  }
+	public static void main(String argv[]) {
+		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+		WilmaMain main = new WilmaMain();
+		main.createJMainFrame();
+		System.out.println("In WilmaMain.main");
+		if (argv.length != 0) {
+			File f = new File(argv[0]);
+			if (f.isDirectory()) {
+				System.out.println("Importing GML files in directory: " + argv[0]);
+				ColumnsImporter.load(main.graphControl, f.getAbsolutePath());
+			} else {
+				System.out.println("Loading " + argv[0]);
+				FileHandler fileHandler = new FileHandler(main.graphControl);
+				fileHandler.load(argv[0]);
+			}
+		}
+	}
+	public void createJMainFrame() {
+		new SplashWindow(
+			"images" + java.io.File.separator + "WilmaSplash.png",
+			this,
+			5000);
+		init();
+		ImageIcon icon =
+			new ImageIcon(WilmaMain.class.getResource("/images/WilmaW24.png"));
+		setIconImage(icon.getImage());
+		setTitle("Welcome to Wilma!");
+		setSize(600, 600);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		show();
+	}
+	GraphControl graphControl;
+	public GraphControl getGraphControl() {
+		return graphControl;
+	}
+	public void setSize(int width, int height) {
+		System.out.println("resizing: width=" + width + ", height=" + height);
+		super.setSize(width, height);
+		getRootPane().updateUI();
+		validate();
+	}
 }

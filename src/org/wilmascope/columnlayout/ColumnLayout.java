@@ -75,6 +75,23 @@ public class ColumnLayout implements LayoutEngine {
   public float getStrataSeparation() {
     return strataSeparation;
   }
+  public float getHeight() {
+    NodeList nodes = root.getAllNodes();
+    float zMax = Float.MIN_VALUE, zMin = Float.MAX_VALUE;
+    for (nodes.resetIterator(); nodes.hasNext();) {
+      org.wilmascope.graph.Node n = nodes.nextNode();
+      Point3f t = n.getPosition();
+      if (t.z > zMax) {
+        zMax = t.z;
+      }
+      if (t.z < zMin) {
+        zMin = t.z;
+      }
+    }
+    zMax+=((NodeColumnLayout)nodes.get(nodes.size()-1).getLayout()).getHeight()/2;
+    zMin-=((NodeColumnLayout)nodes.get(0).getLayout()).getHeight()/2;
+    return zMax - zMin;
+  }
 	private float strataSeparation;
 	int strataCount = 0;
 	int baseStratum = 0;

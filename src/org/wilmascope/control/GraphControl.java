@@ -431,18 +431,6 @@ public class GraphControl {
     ClusterFacade(GraphControl gc) throws ViewManager.UnknownViewTypeException{
       this(gc, ViewManager.getInstance().createClusterView());
     }
-    public ClusterFacade addNewCluster() {
-      synchronized(gc) {
-      try {
-        ClusterFacade c = new ClusterFacade(gc);
-        cluster.addNode(c.getCluster());
-        return c;
-      } catch (ViewManager.UnknownViewTypeException ex) {
-        ex.printStackTrace();
-        return null;
-      }
-      }
-    }
     /**
      * deprecated use ((ForceLayout)getLayoutEngine).addForce() instead
      */
@@ -847,7 +835,7 @@ public class GraphControl {
   public GraphControl(int xsize, int ysize) {
     viewManager = ViewManager.getInstance();
     forceManager = ForceManager.getInstance();
-      // load core views
+      /* load core views
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.ArrowEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.DirectedEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.InheritanceEdgeView());
@@ -868,13 +856,12 @@ public class GraphControl {
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.SplineRectTubeEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.LineEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.LineNodeView());
-      /*
+      */
     try {
-      viewManager.loadViews(new java.io.File("plugin"),"plugin");
+      viewManager.loadViews(new java.io.File("../classes/org/wilmascope/viewplugin"),"org.wilmascope.viewplugin");
     } catch(java.io.IOException e) {
       System.err.println("Couldn't load plugins because "+e.getMessage());
     }
-    */
     try {
       viewManager.getEdgeViewRegistry().setDefaultView("Plain Edge");
       viewManager.getNodeViewRegistry().setDefaultView("DefaultNodeView");

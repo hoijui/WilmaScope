@@ -20,9 +20,6 @@
 package org.wilmascope.forcelayout;
 
 import org.wilmascope.graph.EdgeLayout;
-import org.wilmascope.graph.Edge;
-
-import javax.vecmath.Vector3f;
 
 /**
  * Title:        WilmaToo

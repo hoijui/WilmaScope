@@ -14,6 +14,7 @@ import java.util.Vector;
 
 import javax.vecmath.Point3f;
 
+import org.wilmascope.columnlayout.*;
 import org.wilmascope.graph.Cluster;
 
 public class TestGraph {

@@ -1,6 +1,7 @@
 package org.wilmascope.dotparser;
-import java.io.*;
-import java.util.*;
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 /**
  * Creates a filter stream which removes linebreaks (dos or unix) escaped
  * with a back-slash, concatenating the lines together, ie:

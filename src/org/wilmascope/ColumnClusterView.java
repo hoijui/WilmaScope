@@ -30,13 +30,15 @@ import javax.vecmath.Vector3f;
 
 import org.wilmascope.columnlayout.ColumnLayout;
 import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.Node;
 import org.wilmascope.graph.NodeList;
 import org.wilmascope.view.ClusterView;
 import org.wilmascope.view.Colours;
+import org.wilmascope.view.SizeAdjustableNodeView;
 
 import com.sun.j3d.utils.geometry.Text2D;
 
-public class ColumnClusterView extends ClusterView {
+public class ColumnClusterView extends ClusterView implements SizeAdjustableNodeView {
   public void draw() {
     try {
       Point3f p = new Point3f();
@@ -46,12 +48,11 @@ public class ColumnClusterView extends ClusterView {
       for (nodes.resetIterator(); nodes.hasNext();) {
         org.wilmascope.graph.Node n = nodes.nextNode();
         Point3f t = n.getPosition();;
-        TubeView tnv = (TubeView)n.getView();
+        SizeAdjustableNodeView tnv = (SizeAdjustableNodeView)n.getView();
         if (t.z > p.z) {
           p.set(t);
           c.setRadius(tnv.getTopRadius());
         }
-        tnv.setHeight(nodeHeight);
       }
       Vector3f v = new Vector3f(p);
       // want the label floating just above (0.01f) the top node
@@ -114,4 +115,75 @@ public class ColumnClusterView extends ClusterView {
   public ImageIcon getIcon() {
     return new ImageIcon(getClass().getResource("/images/column.png"));
   }
+  /** returns the bottom radius of the lowest node
+   * @see org.wilmascope.view.SizeAdjustableNodeView#getBottomRadius()
+   */
+  public float getBottomRadius() {
+    float r = 0;
+    Cluster c = (Cluster)getNode();
+    Node n = c.getAllNodes().get(0);
+    if(n!=null) {
+      SizeAdjustableNodeView tnv = (SizeAdjustableNodeView)n.getView();
+      r = tnv.getBottomRadius();
+    }
+    return r;
+  }
+
+  /** returns maximum depth of the clusters children
+   * @see org.wilmascope.view.SizeAdjustableNodeView#getDepth()
+   */
+  public float getDepth() {
+    Cluster c = (Cluster)getNode();
+    NodeList nodes = c.getAllNodes();
+    float depthMax=0;
+    for (nodes.resetIterator(); nodes.hasNext();) {
+      org.wilmascope.graph.Node n = nodes.nextNode();
+      SizeAdjustableNodeView tnv = (SizeAdjustableNodeView)n.getView();
+      if (tnv.getDepth() > depthMax) {
+        depthMax = tnv.getDepth();
+      }
+    }
+    return depthMax;
+  }
+
+  /** always DISC
+   * @see org.wilmascope.view.SizeAdjustableNodeView#getShape()
+   */
+  public int getShape() {
+    return DISC;
+  }
+
+  /**
+   * @see org.wilmascope.view.SizeAdjustableNodeView#getTopRadius()
+   */
+  public float getTopRadius() {    
+    float r = 0;
+    Cluster c = (Cluster)getNode();
+    Node n = c.getAllNodes().get(c.getAllNodes().size()-1);
+    if(n!=null) {
+      SizeAdjustableNodeView tnv = (SizeAdjustableNodeView)n.getView();
+      r = tnv.getTopRadius();
+    }
+    return r;
+  }
+  public float getMaxRadius() {
+    float rad = 0;
+    NodeList children = ((Cluster)getNode()).getNodes();
+    for (children.resetIterator(); children.hasNext();) {
+      org.wilmascope.graph.Node c = children.nextNode();
+      float r;
+      r = ((SizeAdjustableNodeView)c.getView()).getTopRadius();
+      if (r > rad) {
+        rad = r;
+      }
+    }
+    return rad;
+  }
+
+  /* @see org.wilmascope.view.SizeAdjustableNodeView#setEndRadii(float, float)
+   */
+  public void setEndRadii(float bottomRadius, float topRadius) {
+    throw new Error("setEndRadii does nothing for column clusters");
+  }
+
 }
