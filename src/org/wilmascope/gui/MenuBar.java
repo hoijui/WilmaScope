@@ -377,8 +377,8 @@ public class MenuBar extends JMenuBar {
   }
 
   void testMenuItem_actionPerformed(ActionEvent e) {
-		GenerateTestGraphFrame setup =
-			new GenerateTestGraphFrame(
+		GenerateGraphFrame setup =
+			new GenerateGraphFrame(
 				"Generate Test Graph",
 				graphControl);
 		setup.show();

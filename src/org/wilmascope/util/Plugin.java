@@ -17,36 +17,34 @@
  *
  * -- Tim Dwyer, 2001
  */
-package org.wilmascope.forcelayout;
+package org.wilmascope.util;
 
-import java.util.Properties;
+import javax.swing.JPanel;
 
-import org.wilmascope.graph.EdgeLayout;
+import org.wilmascope.graph.Cluster;
 
 /**
- * @author Tim Dwyer
- * @version 1.0
+ * Implement this interface to create plugins that can be managed by
+ * a Registry
+ * 
+ * @author dwyer
  */
-
-public class EdgeForceLayout extends EdgeLayout {
-  public float getRelaxedLength() {
-    return relaxedLength;
-  }
-  public void setRelaxedLength(float relaxedLength) {
-    this.relaxedLength = relaxedLength;
-  }
-  public void setStiffness(float stiffness) {
-    this.stiffness = stiffness;
-  }
-  public float getStiffness() {
-    return stiffness;
-  }
-  private float relaxedLength = Constants.defaultEdgeLength;
-  private float stiffness = 1f;
-  /* (non-Javadoc)
-   * @see org.wilmascope.graph.EdgeLayout#resetProperties()
+public interface Plugin {
+  /**
+   * You should simply return a string constant that is a unique identifier.
+   * This string will appear in the Registry Window list so give it a
+   * capital letter and spaces where necessary.
+   * 
+   * @return unique identifier that will also appear in menus
    */
-  public void resetProperties() {
-    Properties p = getEdge().getProperties();
-  }
+  public String getName();
+
+  /**
+   * the best way to use this is to create a JPanel with controls for setting
+   * parameters for your plugin in your constructor and ensure that
+   * this method returns a reference to it.
+   * 
+   * @return a control panel for setting the parameters for the plugin
+   */
+  public JPanel getControls();
 }

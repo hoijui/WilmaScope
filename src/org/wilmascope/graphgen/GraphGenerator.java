@@ -23,14 +23,10 @@ import java.awt.Color;
 import java.util.Random;
 
 import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.vecmath.Point3f;
 
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.util.Plugin;
 
 /**
  * Boilerplate class for graph generators. Extend this class to create classes
@@ -38,16 +34,7 @@ import org.wilmascope.control.GraphControl;
  * 
  * @author dwyer
  */
-public abstract class GraphGenerator {
-  /**
-   * You should simply return a string constant that is a unique identifier.
-   * This string will appear in the Graph Generator Window list so give it a
-   * capital letter and spaces where necessary.
-   * 
-   * @return unique identifier that will also appear in menus
-   */
-  public abstract String getName();
-
+public abstract class GraphGenerator implements Plugin {
   /**
    * This method will do the work of actually creating the graph.
    * 
@@ -55,15 +42,6 @@ public abstract class GraphGenerator {
    *          the instance of GraphControl inwhich the graph will be generated
    */
   public abstract void generate(GraphControl gc);
-
-  /**
-   * the best way to use this is to create a JPanel with controls for setting
-   * parameters for your graph generator in your constructor and ensure that
-   * this method returns a reference to it.
-   * 
-   * @return a control panel for setting the parameters for the generated graph
-   */
-  public abstract JPanel getControls();
 
   /**
    * Set the glyph style for the generated graph

@@ -21,6 +21,7 @@ package org.wilmascope.graph;
 
 import javax.vecmath.Vector3f;
 import java.util.Hashtable;
+import java.util.Properties;
 /*
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular WilmaScope software
@@ -233,16 +234,12 @@ public class Edge extends GraphElement {
     end.removeEdge(this);
     if(view != null) {
       view.delete();
-    } else {
-      System.out.println("hmmm... null view while deleting edge, was it collapsed?");
+      view = null;
     }
-    view = null;
     if(layout != null) {
       layout.delete();
-    } else {
-      System.out.println("hmmm... null layout while deleting edge, was it collapsed?");
+      layout = null;
     }
-    layout = null;
     recalculateMultiEdgeOffsets();
   }
   public void recalculate() {
@@ -271,4 +268,30 @@ public class Edge extends GraphElement {
   private boolean directed = true;
   // A user assigned weighting for the edge between 0 and 1
   private float weight = 0.5f;
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.GraphElement#getProperties()
+   */
+  public Properties getProperties() {
+    if(properties==null) {
+      properties = new Properties();
+    }
+    properties.setProperty("Weight",""+getWeight());
+    properties.setProperty("IsDirected",""+isDirected());
+    return properties;
+  }
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.GraphElement#setProperties(java.util.Properties)
+   */
+  public void setProperties(Properties p) {
+    properties = p;
+    String value = properties.getProperty("Weight");
+    if(value!=null) {
+      setWeight(Float.parseFloat(value));
+    }
+    value = properties.getProperty("directed");
+    if(value!=null) {
+      directed = Boolean.parseBoolean(value.toLowerCase());
+    }
+  }
+  private Properties properties;
 }

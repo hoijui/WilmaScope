@@ -154,5 +154,32 @@ public class NodeList extends List<Node>{
     centroid.add(bottomLeft,topRight);
     centroid.scale(1f/2f);
   }
+  public NodeList getSinks() {
+    NodeList sinks = new NodeList();
+    for (Node v : elements) {
+      if (v.getOutDegree() == 0 && v.getInDegree() > 0) {
+        sinks.add(v);
+      }
+    }
+    return sinks;
+  }
+  public NodeList getIsolated() {
+    NodeList islands = new NodeList();
+    for (Node v : elements) {
+      if (v.getDegree() == 0) {
+        islands.add(v);
+      }
+    }
+    return islands;
+  }
+  public NodeList getSources() {
+    NodeList sources = new NodeList();
+    for (Node v : elements) {
+      if (v.getInDegree() == 0 && v.getOutDegree()>0) {
+        sources.add(v);
+      }
+    }
+    return sources;
+  }
 
 }

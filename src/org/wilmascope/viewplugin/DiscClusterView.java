@@ -57,10 +57,9 @@ public class DiscClusterView extends ClusterView {
   public void draw() {
     org.wilmascope.graph.Cluster c = (org.wilmascope.graph.Cluster)getNode();
     double radius = calcRadius();
-    setFullTransform(
+    setResizeTranslateTransform(
       new Vector3d(radius,radius,radius),
-      new Vector3f(c.getPosition()),
-      c.getOrientation());
+      new Vector3f(c.getPosition()));
   }
   public void init() {
     setExpandedView();

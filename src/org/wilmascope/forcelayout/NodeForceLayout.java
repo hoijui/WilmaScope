@@ -19,11 +19,13 @@
  */
 package org.wilmascope.forcelayout;
 
-import org.wilmascope.graph.NodeLayout;
-import org.wilmascope.graph.Node;
+import java.util.Properties;
 
-import javax.vecmath.Vector3f;
 import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
+
+import org.wilmascope.graph.Node;
+import org.wilmascope.graph.NodeLayout;
 
 /*
  * Title:        WilmaToo
@@ -41,6 +43,13 @@ import javax.vecmath.Point3f;
  */
 
 public class NodeForceLayout extends NodeLayout {
+  public void resetProperties() {
+    super.resetProperties();
+    String str = getNode().getProperties().getProperty("LevelConstraint");
+    if(str!=null) {
+      levelConstraint = Integer.parseInt(str);
+    }
+  }
 
   /** Add a force vector which will act on this NodeForceLayout */
   public void addForce(Vector3f force) {
@@ -56,6 +65,9 @@ public class NodeForceLayout extends NodeLayout {
 
   /** Get the aggregate (or net) force acting on this NodeForceLayout */
   public Vector3f getNetForce() {
+    if(levelConstraint>=0) {
+      netForce.z=0;
+    }
     return netForce;
   }
 
@@ -72,7 +84,7 @@ public class NodeForceLayout extends NodeLayout {
    */
   public void applyForce(float attenuation) {
     Node node = getNode();
-    if(node.isFixedPosition()) {
+    if(isFixedPosition()) {
       return;
     }
     // Calculate friction based on current velocity
@@ -93,13 +105,12 @@ public class NodeForceLayout extends NodeLayout {
 
     // Move the node
     node.reposition(velocity);
-  }
-  /**
-   * applies the constraint set for this node
-   */
-  public void applyConstraint() {
-    if(constraint != null) {
-      constraint.apply(this);
+    ForceLayout fl = (ForceLayout)node.getOwner().getLayoutEngine();
+    int totalLevels = fl.getLevels();
+    float levelSeparation = fl.getLevelSeparation();
+    if (totalLevels >= 0) {
+      Point3f p = node.getPosition();
+      p.z = levelSeparation * ((float)levelConstraint-(float)totalLevels/2f);
     }
   }
   /* If a {@link vec} is longer than {@link maxLength} then normalise it.
@@ -114,12 +125,6 @@ public class NodeForceLayout extends NodeLayout {
     }
     return false;
   }
-  public void setConstraint(Constraint c) {
-    constraint = c;
-  }
-  public Constraint getConstraint() {
-    return constraint;
-  }
   //The sum of all force vectors on the node
   Vector3f netForce = new Vector3f();
   // The velocity with which the node was travelling after the last time the
@@ -127,5 +132,5 @@ public class NodeForceLayout extends NodeLayout {
   Vector3f velocity = new Vector3f();
   // Acceleration of the node due to the forces on the node
   Vector3f acceleration = new Vector3f();
-  Constraint constraint;
+  int levelConstraint = -1;
 }

@@ -377,21 +377,31 @@ public class DotLayout implements LayoutEngine {
     }
     return s;
   }
+  Properties properties;
   /* (non-Javadoc)
    * @see org.wilmascope.graph.LayoutEngine#getProperties()
    */
   public Properties getProperties() {
-    Properties p = new Properties();
-    p.setProperty("XScale", "" + getXScale());
-    p.setProperty("YScale", "" + getYScale());
-    return p;
+    if(properties == null) {
+      properties = new Properties(); 
+    }
+    properties.setProperty("XScale", "" + getXScale());
+    properties.setProperty("YScale", "" + getYScale());
+    return properties;
   }
   /* (non-Javadoc)
    * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
    */
   public void setProperties(Properties p) {
-    setXScale(Float.parseFloat(p.getProperty("XScale", "1")));
-    setYScale(Float.parseFloat(p.getProperty("YScale", "1")));
+    properties=p;
+    resetProperties();
+  }
+  public void resetProperties() {
+    if(properties==null) {
+      return;
+    }
+    setXScale(Float.parseFloat(properties.getProperty("XScale", "1")));
+    setYScale(Float.parseFloat(properties.getProperty("YScale", "1")));
   }
   public String getName() {
     return "Dot Stratified";

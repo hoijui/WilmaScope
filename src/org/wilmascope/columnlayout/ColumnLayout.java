@@ -113,23 +113,30 @@ public class ColumnLayout implements LayoutEngine {
     return null;
   }
 
+  Properties properties;
   /* (non-Javadoc)
    * @see org.wilmascope.graph.LayoutEngine#getProperties()
    */
   public Properties getProperties() {
-    Properties p = new Properties();
-    p.setProperty("BaseLevel", "" + getBaseStratum());
-    p.setProperty("LevelSeparation", "" + getStrataSeparation());
-    return p;
+    if(properties==null) {
+      properties = new Properties();
+    }
+    properties.setProperty("BaseLevel", "" + getBaseStratum());
+    properties.setProperty("LevelSeparation", "" + getStrataSeparation());
+    return properties;
   }
 
   /* (non-Javadoc)
    * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
    */
   public void setProperties(Properties p) {
-    setBaseStratum(Integer.parseInt(p.getProperty("BaseLevel", "0")));
+    this.properties = p;
+    resetProperties();
+  }
+  public void resetProperties() {
+    setBaseStratum(Integer.parseInt(properties.getProperty("BaseLevel", "0")));
     setStrataSeparation(
-      Float.parseFloat(p.getProperty("LevelSeparation", "1.0")));
+      Float.parseFloat(properties.getProperty("LevelSeparation", "1.0")));
   }
   public String getName() {
     return "Column";

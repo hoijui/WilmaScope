@@ -385,4 +385,12 @@ public class FadeLayout implements LayoutEngine {
       //e.recalculate();
     }
   }
+
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.LayoutEngine#resetProperties()
+   */
+  public void resetProperties() {
+    // TODO Auto-generated method stub
+    
+  }
 }

@@ -16,4 +16,11 @@ public class DegreeEdgeLayout extends EdgeLayout {
 	
 	public float idealLength = defaultEdgeLength;
 	//public float resilience = defaultEdgeResilience;
+  /* No properties at this stage
+   * @see org.wilmascope.graph.EdgeLayout#resetProperties()
+   */
+  public void resetProperties() {
+    // TODO Auto-generated method stub
+    
+  }
 }

@@ -19,12 +19,16 @@
  */
 package org.wilmascope.graphgen.plugin;
 
+import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.graph.LayoutEngine;
 import org.wilmascope.graphgen.GraphGenerator;
 import org.wilmascope.gui.SpinnerSlider;
 
@@ -33,9 +37,10 @@ import org.wilmascope.gui.SpinnerSlider;
  * and edges with random node positions in either 2 or 3 dimensions.
  * <p>
  * The algorithm is extremely simplistic:
- * <ul> 
- * <li>create the specified number of nodes</li> 
- * <li>for each node randomly pick another and create an edge between them</li> 
+ * <ul>
+ * <li>create the specified number of nodes</li>
+ * <li>for each node randomly pick another and create an edge between them
+ * </li>
  * <li>delete disconnected nodes</li>
  * </ul>
  * 
@@ -56,32 +61,46 @@ public class RandomGraphGenerator extends GraphGenerator {
   /** generate with 3D positions? (or in 2D plane) */
   boolean threeDimensional = true;
 
+  /** constrain to levels? */
+  boolean stratified = false;
+
+  /** number of levels */
+  int levels = 3;
+
   /**
    * Generate the random graph
    * 
-   * @see org.wilmascope.graphgen.GraphGenerator#generate(org.wilmascope.control.GraphControl)
+   * @see org.wilmascope.graphgen.GraphModifier#generate(org.wilmascope.control.GraphControl)
    */
   public void generate(GraphControl gc) {
     GraphControl.Cluster root = gc.getRootCluster();
-    /* The default layout engine will be used unless
-     * an alternative is set up as follows: */ 
-    
+    /*
+     * The default layout engine will be used unless an alternative is set up as
+     * follows:
+     */
+
     //LayoutEngine layout = new FastLayout(cluster, threeD);
     //root.setLayoutEngine(layout);
-
     // clean up before we start
     root.deleteAll();
 
+    if (stratified) {
+      LayoutEngine l = root.getLayoutEngine();
+      l.getProperties().setProperty("Levels", "" + levels);
+      l.resetProperties();
+    }
     GraphControl.Node[] nodes = new GraphControl.Node[nodeCount];
 
     for (int i = 0; i < nodeCount; i++) {
       nodes[i] = addRandomNode(root, threeDimensional);
+      if (stratified) {
+        nodes[i].setProperty("LevelConstraint", ""
+            + getRandom().nextInt(levels));
+      }
     }
     for (int i = 1; i < edgeCount; i++) {
-      GraphControl.Node a = nodes[GraphGenerator.getRandom().nextInt(
-          nodeCount)];
-      GraphControl.Node b = nodes[GraphGenerator.getRandom().nextInt(
-          nodeCount)];
+      GraphControl.Node a = nodes[getRandom().nextInt(nodeCount)];
+      GraphControl.Node b = nodes[getRandom().nextInt(nodeCount)];
       if (a != b) {
         root.addEdge(a, b, getEdgeView());
       } else {
@@ -96,12 +115,14 @@ public class RandomGraphGenerator extends GraphGenerator {
       } while (a == b);
       root.addEdge(a, b, getEdgeView());
     }
-    /* if we don't unfreeze the layoutengine 
-     * then we must invoke the following method
-     * to draw the graph with the random positions we have assigned */
+    /*
+     * if we don't unfreeze the layoutengine then we must invoke the following
+     * method to draw the graph with the random positions we have assigned
+     */
     root.draw();
-    /* trigger layout... 
-     * if we do this then we don't need the above call to draw */
+    /*
+     * trigger layout... if we do this then we don't need the above call to draw
+     */
     // root.unfreeze();
   }
 
@@ -128,15 +149,35 @@ public class RandomGraphGenerator extends GraphGenerator {
     final JCheckBox threeDimButton = new JCheckBox("3D Positions");
     threeDimButton.setSelected(threeDimensional);
     threeDimButton.addChangeListener(new ChangeListener() {
-
       public void stateChanged(ChangeEvent e) {
         threeDimensional = threeDimButton.isSelected();
       }
-
     });
-    controlPanel.add(nodesSlider);
-    controlPanel.add(edgesSlider);
-    controlPanel.add(threeDimButton);
+    final JCheckBox stratifiedCB = new JCheckBox("Levels");
+    stratifiedCB.setSelected(stratified);
+    SpinnerNumberModel sm = new SpinnerNumberModel(levels, 0, 20, 1);
+    final JSpinner levelsSpinner = new JSpinner(sm);
+    levelsSpinner.setEnabled(stratified);
+    stratifiedCB.addChangeListener(new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        stratified = stratifiedCB.isSelected();
+        levelsSpinner.setEnabled(stratified);
+      }
+    });
+    levelsSpinner.addChangeListener(new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        levels = ((Integer) levelsSpinner.getValue()).intValue();
+      }
+    });
+    Box sliders = Box.createVerticalBox();
+    Box options = Box.createVerticalBox();
+    sliders.add(nodesSlider);
+    sliders.add(edgesSlider);
+    options.add(threeDimButton);
+    options.add(stratifiedCB);
+    options.add(levelsSpinner);
+    controlPanel.add(sliders);
+    controlPanel.add(options);
   }
 
   public JPanel getControls() {

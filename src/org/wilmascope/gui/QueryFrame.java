@@ -880,7 +880,8 @@ public class QueryFrame extends JFrame {
 			if (firstToken.equals("subcluster")) {
 				if (companyCluster == null) {
 					companyCluster = graphRoot.addCluster("Tube Cluster");
-					companyCluster.setLevelConstraint(0);
+					companyCluster.setProperty("LevelConstraint","0");
+          companyCluster.getNode().getLayout().resetProperties();
 					org.wilmascope.forcelayout.ForceLayout f = (org.wilmascope.forcelayout.ForceLayout) companyCluster
 							.getLayoutEngine();
 					f.addForce(new Origin(8f));
@@ -1119,7 +1120,8 @@ public class QueryFrame extends JFrame {
 				String label = r.getString(1);
 				float cap = r.getFloat(2);
 				if (planar) {
-					n.setLevelConstraint(0);
+          n.setProperty("LevelConstraint","0");
+          n.getNode().getLayout().resetProperties();
 				}
 				n.setLabel(label);
 				// I've hard coded the max and min market caps accross all sectors

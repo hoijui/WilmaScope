@@ -17,7 +17,7 @@ public class ColumnCluster {
 		this.root = root;
 		lastValue = this.initValue = initValue;
 		column = root.addCluster(clusterViewType);
-		column.setLevelConstraint(0);
+		setLevelConstraint(column,0);
 		this.level = initLevel;
 		//layout = new ColLayout(level);
 		if (columnStyle == FORCECOLUMNS || columnStyle == DOTCOLUMNS) {
@@ -38,7 +38,7 @@ public class ColumnCluster {
     } else {
 			column = root.addCluster("Column Cluster");
 		}
-		column.setLevelConstraint(0);
+		setLevelConstraint(column,0);
 		column.setLabel(label);
 		this.level = initLevel;
 		//layout = new ColLayout(level);
@@ -112,7 +112,7 @@ public class ColumnCluster {
 		}
 		public GraphControl.Node addNode(float radius) {
 			GraphControl.Node n = column.addNode();
-			n.setLevelConstraint(level++);
+			setLevelConstraint(n,level++);
 			n.setRadius(n.getRadius() * radius);
 			//n.setColour(211f/255f, 199f/255f, 182f/255f);
 			n.setColour(102f / 255f, 255f / 255f, 51f / 255f);
@@ -181,6 +181,9 @@ public class ColumnCluster {
 	public GraphControl.Cluster getClusterFacade() {
 		return column;
 	}
+  protected static void setLevelConstraint(GraphControl.Node n,int level) {
+    n.setProperty("LevelConstraint",""+level);
+  }
 	public static final int DOTCOLUMNS = 1;
 	public static final int FORCECOLUMNS = 2;
 	public static final int WORMS = 3;

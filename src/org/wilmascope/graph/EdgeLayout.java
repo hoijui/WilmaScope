@@ -41,5 +41,12 @@ public abstract class EdgeLayout implements Layable, EdgeAbility {
     public Edge getEdge() {
         return edge;
     }
+    /** Should be overridden (with a call to this super implementation) to load any properties from the
+     * node properties that are specific to the layout engine
+     */
+    public void resetProperties() {
+      
+    }
+
     private Edge edge;
 }

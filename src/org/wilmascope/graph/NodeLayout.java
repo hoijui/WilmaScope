@@ -20,16 +20,17 @@
 
 package org.wilmascope.graph;
 
+import java.util.Properties;
+
 /**
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular WilmaScope software
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaScope.org
+ * Title: WilmaToo Description: Sequel to the ever popular WilmaScope software
+ * Copyright: Copyright (c) 2001 Company: WilmaScope.org
+ * 
  * @author Tim Dwyer
  * @version 1.0
- *
- * An interface to be implemented by classes providing properties for nodes
- * that can be placed by a LayoutEngine
+ * 
+ * An interface to be implemented by classes providing properties for nodes that
+ * can be placed by a LayoutEngine
  */
 
 public abstract class NodeLayout implements Layable, NodeAbility {
@@ -37,6 +38,7 @@ public abstract class NodeLayout implements Layable, NodeAbility {
   public void delete() {
     node = null;
   }
+
   /** Set the node for the NodeForceLayout */
   public void setNode(Node node) {
     this.node = node;
@@ -46,5 +48,38 @@ public abstract class NodeLayout implements Layable, NodeAbility {
   public Node getNode() {
     return node;
   }
+  
+  public boolean isFixedPosition() {
+    return fixedPosition;
+  }
+  public void setFixedPosition(boolean fixed) {
+    Properties p = node.getProperties();
+    if(fixed) {
+      p.setProperty("FixedPosition","true");
+    } else {
+      p.remove("FixedPosition");
+    }
+  }
+
+  boolean fixedPosition = false;
+
+  /**
+   * Reset's properties common to all layouts, these include:
+   *   FixedPosition
+   *   
+   * Should be overridden with a call to this inherited method to load any
+   * properties from the node properties that are specific to the layout engine
+   */
+  public void resetProperties() {
+    Properties nodeProperties = getNode().getProperties();
+    fixedPosition = false;
+    String str = nodeProperties.getProperty("FixedPosition");
+    if (str != null) {
+      if (str.toLowerCase().equals("true")) {
+        fixedPosition = true;
+      }
+    }
+  }
+
   Node node;
 }

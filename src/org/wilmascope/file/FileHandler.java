@@ -156,20 +156,7 @@ public class FileHandler {
     }
     Properties p = xn.getProperties();
     if (p != null) {
-      String position = p.getProperty("Position");
-      if (position != null) {
-        StringTokenizer st = new StringTokenizer(position);
-        gn.setPosition(new Point3f(Float.parseFloat(st.nextToken()), Float
-            .parseFloat(st.nextToken()), Float.parseFloat(st.nextToken())));
-      }
-      String levelConstraint = p.getProperty("LevelConstraint");
-      String fixedPosition = p.getProperty("FixedPosition");
-      if (levelConstraint != null) {
-        gn.setLevelConstraint(Integer.parseInt(levelConstraint));
-      }
-      if (fixedPosition != null) {
-        gn.setFixedPosition(true);
-      }
+      gn.setProperties(p);
     }
   }
 
@@ -190,21 +177,7 @@ public class FileHandler {
       XMLGraph.ViewType xv = xn.setViewType(v.getTypeName());
       xv.setProperties(v.getProperties());
     }
-    Properties p = new Properties();
-    String data;
-    /*
-     * if((data = graphNode.getData())!=null && data.length()!=0) {
-     * xmlNode.setData(data); }
-     */
-    Point3f pos = gn.getPosition();
-    p.setProperty("Position", pos.x + " " + pos.y + " " + pos.z);
-    if (gn.getLevelConstraint() != Integer.MIN_VALUE) {
-      p.setProperty("LevelConstraint", "" + gn.getLevelConstraint());
-    }
-    if (gn.isFixedPosition()) {
-      p.setProperty("FixedPosition", "True");
-    }
-    xn.setProperties(p);
+    xn.setProperties(gn.getProperties());
   }
 
   private void loadCluster(XMLGraph.Cluster xmlRoot,

@@ -17,7 +17,7 @@
  *
  * -- Tim Dwyer, 2001
  */
-package org.wilmascope.graphgen;
+package org.wilmascope.graphmodifiers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,26 +37,29 @@ import org.wilmascope.util.Registry;
  * @author dwyer
  *  
  */
-public class GeneratorManager extends Registry<GraphGenerator> {
-  private static GeneratorManager instance = new GeneratorManager();
+public class ModifierManager extends Registry<GraphModifier>{
+
+  private static ModifierManager instance = new ModifierManager();
 
   /**
    * Builds up the table of available generators and sets the default based on
    * the "DefaultGenerator" field in the WILMA_CONSTANTS.properties file.
    * 
    * @throws UnknownTypeException
-   *           if the default generator
+   *           if the default modifier
    */
-  private GeneratorManager() {
-    super("DefaultGenerator","GeneratorPlugins");
+  private ModifierManager() {
+    super("DefaultModifier","ModifierPlugins");
   }
+
+
   /**
    * There should only ever be one instance of this class. Access via the
    * following method.
    * 
    * @return the singleton instance of Registry
    */
-  public static GeneratorManager getInstance() {
+  public static ModifierManager getInstance() {
     return instance;
   }
 }

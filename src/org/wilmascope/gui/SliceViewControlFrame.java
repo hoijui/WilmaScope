@@ -1,6 +1,5 @@
 package org.wilmascope.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,7 +9,9 @@ import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
 import java.util.Enumeration;
+import java.util.Properties;
 import java.util.Vector;
+
 import javax.media.j3d.Appearance;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Material;
@@ -29,13 +30,14 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
-import org.wilmascope.columnlayout.ColumnLayout;
+
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.control.WilmaMain;
 import org.wilmascope.graph.BalancedEventListener;
 import org.wilmascope.graph.Cluster;
-import org.wilmascope.graph.Node;
 import org.wilmascope.graph.NodeList;
 import org.wilmascope.view.GraphCanvas;
+
 import com.sun.j3d.utils.picking.PickTool;
 
 /**
@@ -113,16 +115,18 @@ public class SliceViewControlFrame extends JFrame {
     root = gc.getRootCluster();
     getContentPane().removeAll();
     NodeList l = root.getCluster().getAllNodes();
-    for (Node n:l) {
-      if (n instanceof Cluster) {
-        if (((Cluster) n).getLayoutEngine() instanceof ColumnLayout) {
-          ColumnLayout c = (ColumnLayout) ((Cluster) n).getLayoutEngine();
-          strataSeparation = c.getStrataSeparation();
-          strataCount = c.getStrataCount();
-          extraSpacing = c.getExtraSpacing();
-          break;
-        }
+    Properties prop = root.getLayoutEngine().getProperties();
+    String levelsString = prop.getProperty("Levels");
+    if(levelsString!=null) {
+      strataCount=Integer.parseInt(levelsString);
+      String levelSepString = prop.getProperty("LevelSeparation");
+      if(levelSepString!=null) {
+        strataSeparation=Float.parseFloat(levelSepString);
+      } else {
+        strataSeparation=1f;
       }
+    } else {
+      WilmaMain.showErrorDialog("Not a stratified graph!",new Exception());
     }
     bottomLeft = new Point3f();
     topRight = new Point3f();
@@ -282,13 +286,9 @@ public class SliceViewControlFrame extends JFrame {
     this.selectedStratum = selectedStratum;
     downButton.setEnabled(selectedStratum == 0 ? false : true);
     upButton.setEnabled(selectedStratum == (strataCount - 1) ? false : true);
-    drawingPanel.setStratum(selectedStratum);
     Transform3D trans = new Transform3D();
-    float extraSpace = 0;
-    for (int i = 0; i < selectedStratum && i < extraSpacing.size(); i++) {
-      extraSpace += ((Float) extraSpacing.get(i)).floatValue();
-    }
-    centroid.z = bottomLeft.z + strataSeparation * selectedStratum + extraSpace;
+    centroid.z = strataSeparation * ((float)selectedStratum - (float)strataCount/2f) ;
+    drawingPanel.setStratum(centroid.z);
     trans.setTranslation(new Vector3f(centroid));
     axisPlaneTG.setTransform(trans);
   }
@@ -346,7 +346,7 @@ public class SliceViewControlFrame extends JFrame {
 
   float strataSeparation = 1.0f;
 
-  int strataCount = 12;
+  int strataCount;
 
   int selectedStratum = 0;
 

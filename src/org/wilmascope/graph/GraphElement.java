@@ -19,6 +19,8 @@
  */
 package org.wilmascope.graph;
 
+import java.util.Properties;
+
 /**
  * A GraphElement is the basic ancestor of anything that can appear in graph
  * be it a Node, Edge or Cluster.
@@ -73,6 +75,15 @@ public abstract class GraphElement {
    * delete the element, removing all references to it, forever!
    */
   public abstract void delete();
+  /**
+   * Any properties loaded or saved in files con be stored
+   * in a Properties object.  This method is called to extract the
+   * GraphElement's properties when the
+   * file is created.
+   * @return Custom properties associated with this GraphElement.
+   */
+  public abstract Properties getProperties();
+  public abstract void setProperties(Properties p);
   protected Viewable view;
   protected Layable layout;
   protected boolean visible = false;

@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.PickListener;
+import org.wilmascope.control.GraphControl.Node;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular Wilma graph drawing engine
@@ -46,8 +47,9 @@ public class RemoveFromClusterPanel extends MultiPickPanel {
     PickListener pl = GraphControl.getPickListener();
     while(pl.getPickedListSize()>0) {
       GraphControl.GraphElementFacade element = pl.pop();
-      cluster.remove(element);
-      rootCluster.add(element);
+      if(element instanceof Node) {
+        cluster.moveToParent((Node)element);
+      }
     }
     rootCluster.unfreeze();
     cleanup();

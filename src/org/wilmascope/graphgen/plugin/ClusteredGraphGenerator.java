@@ -118,7 +118,7 @@ public class ClusteredGraphGenerator extends GraphGenerator {
                                                  // nodes
         temp = (GraphControl.Node) nodevec.get(i);
         if (temp.getDegree() == 0) {
-          root.removeNode(temp);
+          temp.delete();
           allnodes.remove(temp);
         }
       }
@@ -138,7 +138,7 @@ public class ClusteredGraphGenerator extends GraphGenerator {
   /*
    * (non-Javadoc)
    * 
-   * @see org.wilmascope.graphgen.GraphGenerator#getControls()
+   * @see org.wilmascope.util.plugin#getControls()
    */
   public JPanel getControls() {
     return controlPanel;

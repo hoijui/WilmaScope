@@ -42,7 +42,8 @@ import org.wilmascope.graph.NodeList;
  * incrementally.
  */
 
-public class ForceLayout implements LayoutEngine<NodeForceLayout,EdgeForceLayout> {
+public class ForceLayout implements
+    LayoutEngine<NodeForceLayout, EdgeForceLayout> {
 
   public void init(Cluster root) {
     this.root = root;
@@ -79,9 +80,6 @@ public class ForceLayout implements LayoutEngine<NodeForceLayout,EdgeForceLayout
         maxNetForce = currentNetForce;
       }
       nodeLayout.applyForce(velocityAttenuation);
-      if (constrained) {
-        nodeLayout.applyConstraint();
-      }
     }
     for (int i = 0; i < edges.size(); i++) {
       edges.get(i).recalculate();
@@ -100,9 +98,9 @@ public class ForceLayout implements LayoutEngine<NodeForceLayout,EdgeForceLayout
    */
   public void addForce(Force force) {
     // Only want one of each force!
-    for(Iterator<Force> i=forces.iterator();i.hasNext();) {
+    for (Iterator<Force> i = forces.iterator(); i.hasNext();) {
       Force f = i.next();
-      if(f.getTypeName()==force.getTypeName()) {
+      if (f.getTypeName() == force.getTypeName()) {
         i.remove();
       }
     }
@@ -114,8 +112,9 @@ public class ForceLayout implements LayoutEngine<NodeForceLayout,EdgeForceLayout
    * Remove a force from ForceLayout's list of forces to apply
    */
   public void removeForce(Force force) {
-    if(!forces.remove(force)) {
-      WilmaMain.showErrorDialog("Removing non existant force!",new Exception("Removing non existant force exception!"));
+    if (!forces.remove(force)) {
+      WilmaMain.showErrorDialog("Removing non existant force!", new Exception(
+          "Removing non existant force exception!"));
     }
   }
 
@@ -175,13 +174,11 @@ public class ForceLayout implements LayoutEngine<NodeForceLayout,EdgeForceLayout
     }
   }
 
-  public NodeForceLayout createNodeLayout(
-      org.wilmascope.graph.Node n) {
+  public NodeForceLayout createNodeLayout(org.wilmascope.graph.Node n) {
     return new NodeForceLayout();
   }
 
-  public EdgeForceLayout createEdgeLayout(
-      org.wilmascope.graph.Edge e) {
+  public EdgeForceLayout createEdgeLayout(org.wilmascope.graph.Edge e) {
     return new EdgeForceLayout();
   }
 
@@ -213,23 +210,42 @@ public class ForceLayout implements LayoutEngine<NodeForceLayout,EdgeForceLayout
     return new ForceControlsPanel((GraphControl.Cluster) root.getUserFacade());
   }
 
+  public String getName() {
+    return "Force Directed";
+  }
+
+  public int getLevels() {
+    return levels;
+  }
+
+  public float getLevelSeparation() {
+    return levelSeparation;
+  }
+
+  private int levels = -1;
+
+  private float levelSeparation = 1f;
+
   /*
    * (non-Javadoc)
    * 
    * @see org.wilmascope.graph.LayoutEngine#getProperties()
    */
   public Properties getProperties() {
-    Properties p = new Properties();
-    for (Iterator i = forces.iterator(); i.hasNext();) {
-      Force f = (Force) i.next();
-      p.setProperty(f.getTypeName(), "" + f.getStrengthConstant());
+    if (properties == null) {
+      properties = new Properties();
+      if (levels >= 0) {
+        properties.setProperty("Levels", "" + levels);
+        properties.setProperty("LevelSeparation", "" + levelSeparation);
+      }
+      for (Iterator i = forces.iterator(); i.hasNext();) {
+        Force f = (Force) i.next();
+        properties.setProperty(f.getTypeName(), "" + f.getStrengthConstant());
+      }
+      properties.setProperty("VelocityAttenuation", ""
+          + getVelocityAttenuation());
     }
-    p.setProperty("VelocityAttenuation", "" + getVelocityAttenuation());
-    return p;
-  }
-
-  public String getName() {
-    return "Force Directed";
+    return properties;
   }
 
   /*
@@ -238,15 +254,27 @@ public class ForceLayout implements LayoutEngine<NodeForceLayout,EdgeForceLayout
    * @see org.wilmascope.graph.LayoutEngine#setProperties(java.util.Properties)
    */
   public void setProperties(Properties p) {
+    this.properties = p;
+    resetProperties();
+  }
+
+  public void resetProperties() {
+    if (properties == null) {
+      return;
+    }
     ForceManager m = ForceManager.getInstance();
-    for (Enumeration k = p.keys(); k.hasMoreElements();) {
-      String forceName = (String) k.nextElement();
-      float strength = Float.parseFloat(p.getProperty(forceName));
-      if (forceName.equals("VelocityAttenuation")) {
+    for (Enumeration k = properties.keys(); k.hasMoreElements();) {
+      String key = (String) k.nextElement();
+      float strength = Float.parseFloat(properties.getProperty(key));
+      if (key.equals("VelocityAttenuation")) {
         setVelocityAttenuation(strength);
+      } else if (key.equals("Levels")) {
+        levels = Integer.parseInt(properties.getProperty(key));
+      } else if (key.equals("LevelSeparation")) {
+        levelSeparation = Float.parseFloat(properties.getProperty(key));
       } else {
         try {
-          Force f = m.createForce(forceName);
+          Force f = m.createForce(key);
           f.setStrengthConstant(strength);
           addForce(f);
         } catch (ForceManager.UnknownForceTypeException e) {
@@ -255,6 +283,8 @@ public class ForceLayout implements LayoutEngine<NodeForceLayout,EdgeForceLayout
       }
     }
   }
+
+  Properties properties;
 
   public static ForceLayout createDefaultForceLayout(Cluster root) {
     ForceLayout fl = new ForceLayout();

@@ -64,7 +64,12 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
         detailsMenuItem.setText(((ElementData)userData).getActionDescription());
       }
     }
-    fixedCheckBoxMenuItem.setSelected(this.node.isFixedPosition());
+    boolean fixed = false;
+    String fixedString = this.node.getProperties().getProperty("FixedPosition");
+    if(fixedString!=null) {
+      fixed=Boolean.parseBoolean(fixedString.toLowerCase());
+    }
+    fixedCheckBoxMenuItem.setSelected(fixed);
     show(parent, e.getX(), e.getY());
     updateUI();
   }
@@ -242,11 +247,12 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
   GraphControl graphControl;
   JMenuItem dragMenuItem = new JMenuItem();
   void fixedCheckBoxMenuItem_actionPerformed(ActionEvent e) {
-    node.setFixedPosition(fixedCheckBoxMenuItem.isSelected());
     if(fixedCheckBoxMenuItem.isSelected()) {
       node.setColour(java.awt.Color.cyan);
+      node.setProperty("FixedPosition","true");
     } else {
       node.defaultColour();
+      node.removeProperty("FixedPosition");
     }
   }
 

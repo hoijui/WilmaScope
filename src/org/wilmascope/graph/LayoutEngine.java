@@ -66,6 +66,7 @@ public interface LayoutEngine<N extends NodeLayout,E extends EdgeLayout> {
   public E createEdgeLayout(Edge e);
   public Properties getProperties();
   public void setProperties(Properties p);
+  public void resetProperties();
   public JPanel getControls();
   /**
    * The LayoutEngine should have no constructor.  It should be initialised with this method.

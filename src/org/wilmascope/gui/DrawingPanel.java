@@ -204,12 +204,12 @@ public class DrawingPanel extends JPanel implements Printable {
 	BufferedImage bi;
 	Cluster root;
 	Point3f bottomLeft, topRight;
-	int stratum = 0;
+	float stratum = 0;
 	/**
 	 * @param i
 	 */
-	public void setStratum(int i) {
-		stratum = i;
+	public void setStratum(float z) {
+		stratum = z;
 		bi = null;
 		updateUI();
 	}

@@ -27,6 +27,9 @@ package org.wilmascope.graph;
  * 
  * @version 1.0
  */
+import java.util.Properties;
+import java.util.StringTokenizer;
+
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
@@ -58,7 +61,7 @@ public class Node extends GraphElement {
   /**
    * remove a reference to an edge from this node
    */
-  public void removeEdge(Edge edge) {
+  protected void removeEdge(Edge edge) {
     // When removing an edge we should also make sure that it's removed from
     // the owner cluster's external edge list
     if (owner != null) { // owner will be null if this is the root cluster
@@ -99,10 +102,14 @@ public class Node extends GraphElement {
    */
   public void delete() {
     owner.remove(this);
-    view.delete();
-    view = null;
-    layout.delete();
-    layout = null;
+    if (view != null) {
+      view.delete();
+      view = null;
+    }
+    if (layout != null) {
+      layout.delete();
+      layout = null;
+    }
     edges.delete();
   }
 
@@ -216,18 +223,45 @@ public class Node extends GraphElement {
     return mass;
   }
 
-  public boolean isFixedPosition() {
-    return fixedPosition;
-  }
-
-  public void setFixedPosition(boolean fixed) {
-    fixedPosition = fixed;
-  }
-
+  /**
+   * @return the number of edges connected to this node
+   */
   public int getDegree() {
     return edges.size();
   }
 
+  /**
+   * @return the number of edges starting at this node
+   */
+  public int getOutDegree() {
+    return getOutEdges().size();
+  }
+
+  /**
+   * @return the number of edges ending at this node
+   */
+  public int getInDegree() {
+    return getInEdges().size();
+  }
+  
+  public Properties getProperties() {
+    if(properties==null) {
+      properties = new Properties();
+    }
+    Point3f pos = getPosition();
+    properties.setProperty("Position", pos.x + " " + pos.y + " " + pos.z);
+    return properties;
+  }
+  public void setProperties(Properties p) {
+    properties = p;
+    String position = p.getProperty("Position");
+    if (position != null) {
+      StringTokenizer st = new StringTokenizer(position);
+      setPosition(new Point3f(Float.parseFloat(st.nextToken()), Float
+          .parseFloat(st.nextToken()), Float.parseFloat(st.nextToken())));
+    }
+  }
+  private Properties properties;
   private EdgeList edges = new EdgeList();
 
   private Point3f position = new Point3f();
@@ -235,12 +269,4 @@ public class Node extends GraphElement {
   // node's Spherical radius
   private float mass = 1f;
 
-  private boolean fixedPosition = false;
-
-  /**
-   * @return the number of edges connected to this node
-   */
-  public int degree() {
-    return edges.size();
-  }
 }

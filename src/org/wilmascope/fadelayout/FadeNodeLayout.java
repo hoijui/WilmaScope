@@ -48,7 +48,7 @@ public class FadeNodeLayout extends NodeLayout {
 	}
 	public void applyForce() {
 		Node node = getNode();
-		if (node.isFixedPosition()) {
+		if (node.getLayout().isFixedPosition()) {
 			return;
 		}
 		// Move the node

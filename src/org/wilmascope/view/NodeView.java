@@ -84,7 +84,7 @@ public abstract class NodeView extends GraphElementView implements
     WeakReference<NodeGeometryObserver> wr = new WeakReference<NodeGeometryObserver>(
         o);
     if (geometryObservers == null) { // lazy instantiation avoids needing init
-                                     // method
+      // method
       geometryObservers = new Vector<WeakReference<NodeGeometryObserver>>();
     }
     geometryObservers.add(wr);
@@ -119,8 +119,9 @@ public abstract class NodeView extends GraphElementView implements
     // typically grow or shrink after a label is set... when the label will be
     // scaled linearly along with the cluster. A more correct solution would be
     // to have the label branch scaled separately in the draw method.
-    addLabel(text, 10d / Math.log(radius * 10 * Math.E), new Point3f(0.0f, 0.05f,
-        -0.07f), new Vector3f(-0.1f * (float) text.length(), 1.3f, 0.0f),
+    addLabel(text, 10d / Math.log(radius * 10 * Math.E), new Point3f(0.0f,
+        0.05f, -0.07f),
+        new Vector3f(-0.1f * (float) text.length(), 1.3f, 0.0f),
         getAppearance());
   }
 
@@ -218,20 +219,25 @@ public abstract class NodeView extends GraphElementView implements
     super.setColour(c);
     notifyGeometryObservers();
   }
+
   /**
    * sets the radius of the node's boundary sphere
-   * @param radius the radius of the node, (0.25 is a good size)
+   * 
+   * @param radius
+   *          the radius of the node, (0.25 is a good size)
    */
   public void setRadius(float radius) {
     this.radius = radius;
     notifyGeometryObservers();
   }
+
   /**
    * @return radius of the nodes boundary sphere
    */
   public float getRadius() {
     return radius;
   }
+
   public void setProperties(Properties p) {
     super.setProperties(p);
     String radius = p.getProperty("Radius");
@@ -247,6 +253,7 @@ public abstract class NodeView extends GraphElementView implements
   }
 
   private Node node;
+
   private float radius = 0.1f;
 
   /*
@@ -257,9 +264,12 @@ public abstract class NodeView extends GraphElementView implements
    */
   public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
     Color3f c = new Color3f();
-    getAppearance().getMaterial().getDiffuseColor(c);
-    //    g.setColor(new Color(c.x,c.y,c.z,transparency));
-
+    try {
+      getAppearance().getMaterial().getDiffuseColor(c);
+      // g.setColor(new Color(c.x,c.y,c.z,transparency));
+    } catch (NullPointerException e) {
+      System.err.println("Null pointer getting node colour... fix!");
+    }
     g.setColor(c.get());
     r.fillCircle(g, getNode().getPosition(), radius);
   }

@@ -18,14 +18,14 @@ import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.WilmaMain;
 import org.wilmascope.graphgen.GeneratorManager;
 import org.wilmascope.graphgen.GraphGenerator;
-import org.wilmascope.graphgen.GeneratorManager.UnknownTypeException;
+import org.wilmascope.util.Registry.UnknownTypeException;
 
 /**
  * @author dwyer
  * 
  * Controls for generating random test graphs
  */
-public class GenerateTestGraphFrame extends JFrame implements ActionListener {
+public class GenerateGraphFrame extends JFrame implements ActionListener {
   String title;
 
   boolean lineRend = true;
@@ -53,7 +53,7 @@ public class GenerateTestGraphFrame extends JFrame implements ActionListener {
 
   GraphGenerator generator;
 
-  public GenerateTestGraphFrame(String title, GraphControl gc) {
+  public GenerateGraphFrame(String title, GraphControl gc) {
     this.title = title;
     this.gc = gc;
     generator = GeneratorManager.getInstance().getDefault();
@@ -100,7 +100,7 @@ public class GenerateTestGraphFrame extends JFrame implements ActionListener {
 
   public void generatorsComboBox_actionPerformed(ActionEvent e) {
     try {
-      generator = GeneratorManager.getInstance().getGenerator(
+      generator = GeneratorManager.getInstance().getPlugin(
           (String) generatorsComboBox.getSelectedItem());
     } catch (UnknownTypeException e1) {
       WilmaMain.showErrorDialog("Unknown generator error!",e1);

@@ -112,4 +112,11 @@ public class MultiScaleLayout implements LayoutEngine {
 	public String getName() {
 		return "Multiscale";
 	}
+  /* (non-Javadoc)
+   * @see org.wilmascope.graph.LayoutEngine#resetProperties()
+   */
+  public void resetProperties() {
+    // TODO Auto-generated method stub
+    
+  }
 }

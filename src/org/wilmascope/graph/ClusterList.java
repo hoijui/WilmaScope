@@ -19,6 +19,8 @@
  */
 package org.wilmascope.graph;
 
+import java.util.Vector;
+
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular WilmaScope software
@@ -29,6 +31,10 @@ package org.wilmascope.graph;
  */
 
 public class ClusterList extends List<Cluster> {
+  public ClusterList(ClusterList l) {
+    addAll(l);
+  }
+  public ClusterList() {};
   public void add(Cluster c) {
     elements.add(c);
   }

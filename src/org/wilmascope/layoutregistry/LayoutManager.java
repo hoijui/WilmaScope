@@ -29,8 +29,6 @@ import java.util.StringTokenizer;
 import org.wilmascope.control.WilmaMain;
 import org.wilmascope.global.GlobalConstants;
 import org.wilmascope.graph.LayoutEngine;
-import org.wilmascope.graphgen.GraphGenerator;
-import org.wilmascope.graphgen.GeneratorManager.UnknownTypeException;
 
 /*
  * Title: WilmaToo Description: Sequel to the ever popular WilmaScope software

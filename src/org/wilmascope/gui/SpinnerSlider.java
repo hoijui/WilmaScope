@@ -47,7 +47,6 @@ public class SpinnerSlider extends JPanel {
    *          maximim value of slider
    * @param initValue
    *          default
-   * @return the new slider
    */
   public SpinnerSlider(String label, int min, int max, int initValue) {
     value = initValue;
@@ -56,12 +55,12 @@ public class SpinnerSlider extends JPanel {
     spinner = new JSpinner(sm);
     int range = max - min;
     setBorder(new javax.swing.border.TitledBorder(label));
-    slider.setMinorTickSpacing(range / 4);
-    slider.setMajorTickSpacing(range / 8);
+    slider.setMinorTickSpacing(range / 10);
+    slider.setMajorTickSpacing(slider.getMinorTickSpacing()*2);
     slider.setPaintLabels(true);
     slider.setPaintTicks(true);
     slider.setValue(initValue);
-    slider.setLabelTable(slider.createStandardLabels(range / 4));
+    slider.setLabelTable(slider.createStandardLabels(range / 5));
     add(slider);
     add(spinner);
     slider.addChangeListener(new ChangeListener() {

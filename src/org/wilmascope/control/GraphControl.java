@@ -18,27 +18,23 @@
  */
 package org.wilmascope.control;
 
+import java.util.Properties;
 import java.util.Vector;
 
 import javax.media.j3d.TransparencyAttributes;
 import javax.vecmath.Vector3f;
 
-import org.wilmascope.degreelayout.DegreeLayout;
-import org.wilmascope.fadelayout.FadeLayout;
-import org.wilmascope.fadelayout.FadeNodeLayout;
-import org.wilmascope.fastlayout.FastLayout;
 import org.wilmascope.forcelayout.BalancedEventClient;
 import org.wilmascope.forcelayout.EdgeForceLayout;
 import org.wilmascope.forcelayout.Force;
 import org.wilmascope.forcelayout.ForceLayout;
-import org.wilmascope.forcelayout.NodeForceLayout;
 import org.wilmascope.graph.EdgeList;
 import org.wilmascope.graph.GraphElement;
 import org.wilmascope.graph.LayoutEngine;
+import org.wilmascope.graph.NodeLayout;
 import org.wilmascope.graph.NodeList;
 import org.wilmascope.layoutregistry.LayoutManager;
 import org.wilmascope.layoutregistry.LayoutManager.UnknownLayoutTypeException;
-import org.wilmascope.multiscalelayout.MultiScaleLayout;
 import org.wilmascope.view.BehaviorClient;
 import org.wilmascope.view.ClusterView;
 import org.wilmascope.view.EdgeView;
@@ -415,19 +411,6 @@ public class GraphControl {
       return ((org.wilmascope.view.NodeView)node.getView()).getRadius();
     }
 
-    public void setFixedPosition(boolean fixed) {
-      node.setFixedPosition(fixed);
-      if (fixed) {
-        ((NodeView) node.getView()).showAnchor();
-      } else {
-        ((NodeView) node.getView()).hideAnchor();
-      }
-    }
-
-    public boolean isFixedPosition() {
-      return node.isFixedPosition();
-    }
-
     public void moveToCanvasPos(int x, int y) {
       ((NodeView) node.getView()).moveToCanvasPos(graphCanvas, x, y);
     }
@@ -443,30 +426,23 @@ public class GraphControl {
                   inverse_alpha));
     } // setTransparency
 
-    public void setLevelConstraint(int level) {
-      if (node.getLayout() instanceof NodeForceLayout) {
-        ((NodeForceLayout) node.getLayout())
-            .setConstraint(new org.wilmascope.forcelayout.LevelConstraint(
-                level, 0.5f));
-        ((ForceLayout) node.getOwner().getLayoutEngine()).setConstrained();
-      } else if (node.getLayout() instanceof FadeNodeLayout) {
-        ((FadeNodeLayout) node.getLayout()).setLevelConstraint(level);
+    public void setProperties(Properties p) {
+      node.setProperties(p);
+      NodeLayout l = node.getLayout();
+      if(l!=null) {
+        l.resetProperties();
       }
     }
-
-    public int getLevelConstraint() {
-      if (node.getLayout() instanceof NodeForceLayout) {
-        org.wilmascope.forcelayout.LevelConstraint c = (org.wilmascope.forcelayout.LevelConstraint) ((NodeForceLayout) node
-            .getLayout()).getConstraint();
-        if (c != null) {
-          return c.getLevel();
-        }
-      } else if (node.getLayout() instanceof org.wilmascope.columnlayout.NodeColumnLayout) {
-        org.wilmascope.columnlayout.NodeColumnLayout n = (org.wilmascope.columnlayout.NodeColumnLayout) node
-            .getLayout();
-        return n.getStratum();
-      }
-      return Integer.MIN_VALUE;
+    public void setProperty(String key, String value) {
+      node.getProperties().setProperty(key,value);
+      node.getLayout().resetProperties();
+    }
+    public void removeProperty(String key) {
+      node.getProperties().remove(key);
+      node.getLayout().resetProperties();
+    }
+    public Properties getProperties() {
+      return node.getProperties();
     }
 
     /**
@@ -749,27 +725,11 @@ public class GraphControl {
     }
 
     /**
-     * remove a node from the cluster Doesn't delete, to delete the node use
-     * node.delete() method
+     * move a node out of this cluster and into the parent cluster
+     * @param n node to move
      */
-    public void removeNode(Node n) {
-      cluster.removeNode(n.getNode());
-    }
-
-    /**
-     * remove an edge from the cluster Doesn't delete, to delete the node use
-     * {@link GraphElement#delete()}method
-     */
-    public void removeEdge(Edge e) {
-      cluster.removeEdge(e.getEdge());
-    }
-
-    public void remove(GraphElementFacade e) {
-      if (e instanceof Node) {
-        removeNode((Node) e);
-      } else if (e instanceof Edge) {
-        removeEdge((Edge) e);
-      }
+    public void moveToParent(Node n) {
+      cluster.moveToParent(n.getNode());
     }
 
     public void expand() {

@@ -13,6 +13,14 @@ import org.wilmascope.graph.EdgeLayout;
 
 public class EdgeColumnLayout extends EdgeLayout {
 
+  
     public EdgeColumnLayout() {
+    }
+
+    /** No custom properties at this stage
+     * @see org.wilmascope.graph.EdgeLayout#resetProperties()
+     */
+    public void resetProperties() {
+      
     }
 }

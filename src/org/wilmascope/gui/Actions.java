@@ -172,8 +172,8 @@ public class Actions {
     };
     graphOperationsAction = new AbstractAction("Graph Operations") {
       public void actionPerformed(ActionEvent e) {
-        ClusteriseFrame graphOps =
-          new ClusteriseFrame(rootCluster, "Graph Operations");
+        ModifyGraphFrame graphOps =
+          new ModifyGraphFrame("Modify Graph",graphControl);
         graphOps.show();
       }
     };
