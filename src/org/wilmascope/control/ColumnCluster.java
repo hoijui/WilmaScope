@@ -13,9 +13,7 @@ import org.wilmascope.forcelayout.*;
 import org.wilmascope.columnlayout.*;
 import org.wilmascope.viewplugin.TaperedEdgeView;
 import org.wilmascope.viewplugin.TubeNodeView;
-import org.wilmascope.viewplugin.ColumnClusterView;
 import org.wilmascope.view.ViewManager;
-import org.wilmascope.view.Colours;
 public class ColumnCluster {
     public ColumnCluster(String label, GraphControl.ClusterFacade root, float initValue, float bottomRadius, int initLevel) {
         this.root = root;

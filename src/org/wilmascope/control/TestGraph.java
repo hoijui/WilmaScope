@@ -8,22 +8,14 @@ package org.wilmascope.control;
  * @author unascribed
  * @version 1.0
  */
-import org.wilmascope.columnlayout.ColumnLayout;
-import org.wilmascope.columnlayout.NodeColumnLayout;
-import org.wilmascope.fastlayout.FastLayout;
+import java.util.Random;
+import java.util.TreeMap;
+import java.util.Vector;
+
+import javax.vecmath.Point3f;
+
 import org.wilmascope.fastlayout.InitFrame;
-import org.wilmascope.fastlayout.ParamsPanel;
-import org.wilmascope.viewplugin.TubeNodeView;
-import org.wilmascope.forcelayout.BalancedEventClient;
 import org.wilmascope.graph.Cluster;
-import org.wilmascope.graph.LayoutEngine;
-import javax.vecmath.*;
-import java.util.*;
-import java.io.*;
-import javax.swing.*;
-import java.awt.*;
-//import com.borland.jbcl.layout.*;
-import javax.swing.border.*;
 
 public class TestGraph {
 
@@ -77,7 +69,6 @@ public class TestGraph {
     public void randomGraph(GraphControl gc) {
         System.out.println("starting");
         this.gc = gc;
-        this.root = root;
         root = gc.getRootCluster();
 
         InitFrame setup = new InitFrame("Fast-Layout Setup", this);

@@ -1,7 +1,6 @@
 package org.wilmascope.columnlayout;
 
 import org.wilmascope.graph.EdgeLayout;
-import org.wilmascope.graph.Edge;
 
 /**
  * <p>Title: </p>

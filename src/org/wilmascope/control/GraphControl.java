@@ -47,7 +47,7 @@ import org.wilmascope.view.NodeView;
 import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.PickingClient;
 import java.util.Vector;
-import javax.media.j3d.TransparencyAttributes ;
+import javax.media.j3d.TransparencyAttributes;
 
 /*
  * Title:        WilmaToo
