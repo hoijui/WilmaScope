@@ -48,8 +48,8 @@ public class NodeList extends List{
    * clusters then also from the cluster list beneath this NodeList
    */
   public void removeAll(NodeList l) {
-    for(int i=0;i<l.size();i++) {
-      remove(l.get(i));
+    for(l.resetIterator();l.hasNext();) {
+      remove(l.nextNode());
     }
   }
   public Node get(int index) {
@@ -59,13 +59,13 @@ public class NodeList extends List{
     return elements.contains(node);
   }
   public void reposition(Vector3f delta) {
-    for(int i = 0; i<elements.size(); i++) {
-      ((Node)elements.get(i)).reposition(delta);
+    for(resetIterator(); hasNext();) {
+      nextNode().reposition(delta);
     }
   }
   public void setPosition(Point3f position) {
-    for(int i = 0; i<elements.size(); i++) {
-      ((Node)elements.get(i)).setPosition(position);
+    for(resetIterator(); hasNext();) {
+      nextNode().setPosition(position);
     }
   }
 
@@ -73,42 +73,43 @@ public class NodeList extends List{
     clusters.setBalanced(balanced);
   }
   public float calcMass() {
-    for(int i = 0; i<clusters.size(); i++) {
-      clusters.get(i).calcMass();
+    for(clusters.resetIterator(); clusters.hasNext();) {
+      clusters.nextCluster().calcMass();
     }
     float netMass = 0f;
-    for(int i = 0; i<elements.size(); i++) {
-      netMass += ((Node)elements.get(i)).getMass();
+    for(resetIterator(); hasNext();) {
+      netMass += nextNode().getMass();
     }
     return netMass;
   }
   public void hide() {
     super.hide();
-    for(int i = 0; i<clusters.size(); i++) {
-      ((Cluster)clusters.get(i)).hideChildren();
+    for(clusters.resetIterator(); clusters.hasNext();) {
+      clusters.nextCluster().hideChildren();
     }
   }
   public void show(org.wilmascope.view.GraphCanvas gc) {
     super.show(gc);
-    for(int i=0; i<clusters.size(); i++) {
-      ((Cluster)clusters.get(i)).showChildren(gc);
+    for(clusters.resetIterator(); clusters.hasNext();) {
+      clusters.nextCluster().showChildren(gc);
     }
   }
   public EdgeList getEdges() {
     Set edges = new HashSet();
-    for(int i=0; i<elements.size(); i++) {
-      Node node = (Node)elements.get(i);
-      edges.addAll(node.getEdges().getElementsVector());
+    for(resetIterator();hasNext();) {
+      edges.addAll(nextNode().getEdges().getElementsVector());
     }
     return new EdgeList(edges);
   }
   public Point3f getBarycenter() {
     Point3f barycenter = new Point3f();
-    for(int i=0; i<elements.size(); i++) {
-      Node node = (Node)elements.get(i);
-      barycenter.add(node.getPosition());
+    for(resetIterator(); hasNext();) {
+      barycenter.add(nextNode().getPosition());
     }
     barycenter.scale(1f/(float)elements.size());
     return barycenter;
+  }
+  public final Node nextNode() {
+    return (Node)next();
   }
 }

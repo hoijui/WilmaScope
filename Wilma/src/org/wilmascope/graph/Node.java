@@ -57,6 +57,11 @@ public class Node extends GraphElement {
    * remove a reference to an edge from this node
    */
   public void removeEdge(Edge edge) {
+    // When removing an edge we should also make sure that it's removed from
+    // the owner cluster's external edge list
+    if(owner!=null) { // owner will be null if this is the root cluster
+      owner.removeExternalEdge(edge);
+    }
     edges.remove(edge);
   }
   /**
@@ -76,8 +81,8 @@ public class Node extends GraphElement {
    */
   public EdgeList getCommonEdges(Node node) {
     EdgeList commonEdges = new EdgeList();
-    for(int i=0;i<edges.size();i++) {
-      Edge e = edges.get(i);
+    for(edges.resetIterator();edges.hasNext();) {
+      Edge e = edges.nextEdge();
       if(e.getNeighbour(this)==node) {
         commonEdges.add(e);
       }
@@ -105,9 +110,10 @@ public class Node extends GraphElement {
   }
   /**
    * set the edges by which this node is connected to other nodes
+   * copies the values in to preserve external references to the original list
    */
   public void setEdges(EdgeList edges) {
-    this.edges = edges;
+    this.edges.addAll(edges);
   }
   /**
    * set the view representing all visual aspects of the node and make the
@@ -181,9 +187,16 @@ public class Node extends GraphElement {
   public float getMass() {
     return mass;
   }
+  public boolean isFixedPosition() {
+    return fixedPosition;
+  }
+  public void setFixedPosition(boolean fixed) {
+    fixedPosition = fixed;
+  }
   private EdgeList edges = new EdgeList();
   private Point3f position = new Point3f();
   // node's Spherical radius
   private float radius = 0.1f;
   private float mass = 1f;
+  private boolean fixedPosition = false;
 }

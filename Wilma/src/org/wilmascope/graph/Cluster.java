@@ -29,6 +29,9 @@ package org.wilmascope.graph;
 
 import javax.vecmath.Vector3f;
 import javax.vecmath.Point3f;
+import javax.vecmath.Quat4f;
+import javax.vecmath.AxisAngle4f;
+import java.util.Hashtable;
 /**
  * a Cluster is a set of Nodes ({@link Node}) and Edges
  * ({@link Edge}) sharing the same ({@link LayoutEngine}).
@@ -40,6 +43,9 @@ public class Cluster extends Node {
   private NodeList nodes = new NodeList();
   // the list of edges internal to the cluster
   private EdgeList internalEdges = new EdgeList();
+  // an angle by which the Cluster and all its contents will be rotated at the
+  // next draw
+  private Quat4f orientation = new Quat4f();
 
   public NodeList getNodes() {
     return nodes;
@@ -49,34 +55,24 @@ public class Cluster extends Node {
    * @param node the Node to add
    */
   public void addNode(Node node) {
+//    System.out.println("Cluster id="+id+": addNode()  before: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
+
     nodes.add(node);
     node.setOwner(this);
-    EdgeList neighbourEdges;
-    if(node instanceof Cluster && ((Cluster)node).isExpanded()) {
-      neighbourEdges = ((Cluster)node).getExternalEdges();
-    } else {
-      neighbourEdges = node.getEdges();
-    }
-    for(int i=0; i<neighbourEdges.size(); i++ ){
-      Edge edge = neighbourEdges.get(i);
-      addInternalEdge(edge);
+    // get this node's edges.  Edges between the node to be added and nodes
+    // that are members of this cluster will be added to this cluster's
+    // internal edge list -- addEdge is a bit brute force: it
+    // adds the edge to the common ancestor of the two ends -- see the notes
+    // on additional witchcraft in addEdge
+    EdgeList newNodeEdges = node.getEdges();
+    for(newNodeEdges.resetIterator(); newNodeEdges.hasNext();){
+      Edge edge = newNodeEdges.nextEdge();
+      Node neighbour = edge.getNeighbour(node);
+      // add the edge at the appropriate level in the cluster hierarchy
+      addEdge(edge);
     }
     calcMass();
-  }
-  public EdgeList getExternalEdges() {
-    NodeList allNodes = getAllNodes();
-    EdgeList allEdges = allNodes.getEdges();
-    EdgeList externalEdges = new EdgeList();
-    for(int i=0; i<allEdges.size(); i++) {
-      Edge edge = allEdges.get(i);
-      if(!(
-        allNodes.contains(edge.getStart()) &&
-        allNodes.contains(edge.getEnd())
-      )) {
-        externalEdges.add(edge);
-      }
-    }
-    return externalEdges;
+//    System.out.println("Cluster id="+id+": addNode()  after: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
   }
   public EdgeList getInternalEdges() {
     return internalEdges;
@@ -87,8 +83,8 @@ public class Cluster extends Node {
       return true;
     }
     ClusterList clusters = nodes.getClusters();
-    for(int i=0;i<clusters.size();i++) {
-      if(clusters.get(i).isAncestor(n)) {
+    for(clusters.resetIterator();clusters.hasNext();) {
+      if(clusters.nextCluster().isAncestor(n)) {
         return true;
       }
     }
@@ -100,21 +96,93 @@ public class Cluster extends Node {
    * @param node which Node to remove
    */
   public void removeNode(Node n) {
+//    System.out.println("Cluster id="+id+": removeNode()  before: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
     nodes.remove(n);
+    // remove all the nodes edges
+    EdgeList edges = n.getEdges();
+    for(edges.resetIterator(); edges.hasNext();) {
+      Edge e = edges.nextEdge();
+      // if edge is already an external edge then remove it altogether
+      if(super.getEdges().contains(e)) {
+        super.removeEdge(e);
+      } else {
+        // otherwise it was an internal edge that should now be made external
+        internalEdges.remove(e);
+        addExternalEdge(e, e.getNeighbour(n));
+      }
+    }
+
+//    System.out.println("Cluster id="+id+": removeNode()  after: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
   }
 
   /**
    * Add an {@link Edge} to the Cluster
+   * Note that the edge may not finish up being added to this cluster,
+   * it will be added to the lowest common ancestor of the two ends of the
+   * edge.
+   * @param e the edge to add
    */
-  public void addInternalEdge(Edge e) {
+  public void addEdge(Edge e) {
+//    System.out.println("Cluster id="+id+": addEdge()  before: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
     Cluster cluster;
     if((cluster = e.getStart().getCommonAncestor(e.getEnd()))!=null) {
       cluster.addInternalEdgeHere(e);
+    } else {
+      throw new Error("No root cluster!  Edge not added!");
     }
+//    System.out.println("Cluster id="+id+": addEdge()  after: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
   }
-  private void addInternalEdgeHere(Edge e) {
-    internalEdges.add(e);
-    e.setOwner(this);
+  /**
+   * Add a reference to an external edge, an edge that has one end in the
+   * cluster and the other outside
+   * @param edge the external edge to add
+   * @param portalNode the connection point of the edge inside the cluster
+   */
+  private void addExternalEdge(Edge edge, Node portalNode) {
+    // the EdgeList we inherited from Node is our external node list
+    super.addEdge(edge);
+    // make a mapping from the external edge to its connection point
+    // inside the cluster (a "portal" node)
+    portalNodes.put(edge, portalNode);
+  }
+  /**
+   * An external edge is one which has one end in this cluster and one end in
+   * another cluster that is not a child (or descendent) of this cluster.
+   * A portal node is a node in this cluster which has an external edge
+   * This method looks up the portal node in this cluster for a specific
+   * external edge.
+   * @param edge an edge external to this cluster
+   */
+  public Node getPortalNode(Edge edge) {
+    return (Node)portalNodes.get(edge);
+  }
+  /**
+   * Add an internal edge to this cluster...
+   * If the edge is already a member of this cluster it will be removed
+   * and then added again.  Nothing like brute force to get the job done.
+   */
+  protected void addInternalEdgeHere(Edge e) {
+    if(!internalEdges.contains(e)) {
+      e.setOwner(this);
+      internalEdges.add(e);
+      // just in case the edge was already external to this cluster
+      //   ie one end of the edge was already in this cluster and the other
+      // has just been added
+      super.removeEdge(e);
+    }
+    // for the each node of the edge, if the parent of that node is not
+    // this cluster (ie the cluster that now owns the edge) then this edge
+    // is external to that parent cluster
+    Node n = e.getStart();
+    Cluster owner = n.getOwner();
+    if(owner != this) {
+      owner.addExternalEdge(e,n);
+    }
+    n = e.getEnd();
+    owner = n.getOwner();
+    if(owner != this) {
+      owner.addExternalEdge(e,n);
+    }
   }
 
   public void remove(GraphElement e) {
@@ -129,19 +197,32 @@ public class Cluster extends Node {
    */
   public void removeEdge(Edge e) {
     internalEdges.remove(e);
+    portalNodes.remove(e);
+    removeExternalEdge(e);
+  }
+
+  public void removeExternalEdge(Edge e) {
+    super.removeEdge(e);
   }
 
   /**
    * The default constructor - an empty cluster
    */
   public Cluster() {
+    id=-1;
   }
   /**
    * Create a new cluster with the specified {@link NodeView}
    */
   public Cluster(NodeView view) {
     super(view);
+    id = idcounter++;
+//    System.out.println("New cluster: ID="+id);
+    normal = new Vector3f(0f,1f,0f);
+    orientation.set(new AxisAngle4f(normal,0f));
   }
+  private static int idcounter=0;
+  private final int id;
   private boolean expanded = true;
   public boolean isExpanded() {
     return expanded;
@@ -153,6 +234,9 @@ public class Cluster extends Node {
       calcRadius();
     }
     super.draw();
+  }
+  public Vector3f getNormal() {
+    return normal;
   }
 
   /**
@@ -182,8 +266,8 @@ public class Cluster extends Node {
   public NodeList getAllNodes() {
     NodeList allNodes = new NodeList(this.nodes);
     ClusterList clusters = this.nodes.getClusters();
-    for(int i=0;i<clusters.size();i++) {
-      allNodes.addAll(clusters.get(i).getAllNodes());
+    for(clusters.resetIterator();clusters.hasNext();) {
+      allNodes.addAll(clusters.nextCluster().getAllNodes());
     }
     return allNodes;
   }
@@ -191,25 +275,16 @@ public class Cluster extends Node {
   public void collapse() {
     this.expanded = false;
     hideChildren();
-    EdgeList externalEdges = new EdgeList();
-    NodeList leafNodes = getLeafNodes();
-    for(int i=0;i<leafNodes.size();i++) {
-      Node node = leafNodes.get(i);
-      EdgeList nodeEdges = new EdgeList(node.getEdges());
-      for(int j=0;j<nodeEdges.size();j++) {
-        Edge edge = nodeEdges.get(j);
-        if(!leafNodes.contains(edge.getNeighbour(node))) {
-          externalEdges.add(edge);
-          edge.collapse(this, node);
-        }
-      }
+    EdgeList externalEdges = super.getEdges();
+    for(externalEdges.resetIterator(); externalEdges.hasNext();) {
+      Edge e = externalEdges.nextEdge();
+      e.collapse(this, (Node)portalNodes.get(e));
     }
-    super.setEdges(externalEdges);
   }
   private NodeList getLeafNodes() {
     NodeList leafNodes = new NodeList();
-    for(int i=0; i<nodes.size(); i++) {
-      Node node = nodes.get(i);
+    for(nodes.resetIterator(); nodes.hasNext();) {
+      Node node = nodes.nextNode();
       if(node instanceof Cluster) {
         Cluster cluster = (Cluster)node;
         if(cluster.isExpanded()) {
@@ -229,10 +304,9 @@ public class Cluster extends Node {
     nodes.show(graphCanvas);
     internalEdges.show(graphCanvas);
     EdgeList externalEdges = super.getEdges();
-    for(int i=0; i<externalEdges.size(); i++) {
-      externalEdges.get(i).expand(this);
+    for(externalEdges.resetIterator(); externalEdges.hasNext();) {
+      externalEdges.nextEdge().expand(this);
     }
-    super.setEdges(new EdgeList());
   }
 
   /**
@@ -241,7 +315,7 @@ public class Cluster extends Node {
   public float layout() {
     if(expanded) {
       float maxVelocity = nodes.getClusters().layout();
-      float velocity = layoutEngine.layout(nodes, internalEdges);
+      float velocity = layoutEngine.layout();
       if(velocity > maxVelocity) {
         maxVelocity = velocity;
       }
@@ -258,8 +332,8 @@ public class Cluster extends Node {
   private void calcRadius() {
     float newRadius = 0;
     float tmpRadius;
-    for (int i = 0; i < nodes.size(); i++) {
-      Node member = nodes.get(i);
+    for (nodes.resetIterator(); nodes.hasNext();) {
+      Node member = nodes.nextNode();
       tmpRadius = getPosition().distance(member.getPosition()) + member.getRadius();
       if(tmpRadius > newRadius) {
         newRadius = tmpRadius;
@@ -283,13 +357,15 @@ public class Cluster extends Node {
       nodes.reposition(delta);
     }
   }
+  /**
+   * delete a cluster and its contents
+   */
   public void delete() {
-    super.delete();
     NodeList tmplist = new NodeList(nodes);
-    for(int i=0; i<tmplist.size(); i++) {
-      Node n = tmplist.get(i);
-      n.delete();
+    for(tmplist.resetIterator(); tmplist.hasNext();) {
+      tmplist.nextNode().delete();
     }
+    super.delete();
   }
   /**
    * Moves this cluster to the new position, and repositions all of its
@@ -300,6 +376,24 @@ public class Cluster extends Node {
     Vector3f delta = new Vector3f();
     delta.sub(getPosition(), newPosition);
     reposition(delta);
+  }
+
+  public AxisAngle4f getRotationAngle() {
+    return rotationAngle;
+  }
+
+  public void setOrientation(Quat4f orientation) {
+    this.orientation = orientation;
+  }
+  public Quat4f getOrientation() {
+    return orientation;
+  }
+
+  public void rotate(AxisAngle4f angle) {
+    Quat4f orientationDelta = new Quat4f();
+    orientationDelta.set(angle);
+    orientation.mul(orientationDelta);
+    this.rotationAngle = angle;
   }
 
   public void freeze(boolean balanced) {
@@ -315,8 +409,8 @@ public class Cluster extends Node {
    * Add the specified nodes to this cluster
    */
   public void addNodes(NodeList startNodes) {
-    for(int i=0;i<startNodes.size(); i++) {
-      addNode(startNodes.get(i));
+    for(startNodes.resetIterator();startNodes.hasNext();) {
+      addNode(startNodes.nextNode());
     }
     Vector3f delta = new Vector3f(nodes.getBarycenter());
     delta.sub(getPosition());
@@ -327,6 +421,11 @@ public class Cluster extends Node {
     setMass(mass);
     return mass;
   }
+  // a table mapping this cluster's external edges to their
+  // connection points (portal nodes) in the cluster
+  private Hashtable portalNodes = new Hashtable();
+  private Vector3f normal = new Vector3f();
+  private AxisAngle4f rotationAngle = new AxisAngle4f();
 }
 
 
