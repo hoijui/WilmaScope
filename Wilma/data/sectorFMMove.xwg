@@ -1,0 +1,1760 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
+<WilmaGraph>
+<Cluster>
+<LayoutEngineType Name="DotLayout">
+<Property Key="YScale" Value="15.0"/>
+<Property Key="XScale" Value="15.0"/>
+</LayoutEngineType>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="Venture"/>
+<Property Key="Radius" Value="1.183155"/>
+</ViewType>
+<Property Key="Position" Value="6.7747254 -0.28021976 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="0"/>
+</LayoutEngineType>
+<Node ID="N81">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="3.7633953"/>
+<Property Key="BottomRadius" Value="3.7633953"/>
+<Property Key="Radius" Value="0.37633952"/>
+</ViewType>
+<Property Key="Position" Value="6.7747254 -0.28021976 0.0"/>
+</Node>
+<Node ID="N82">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7529412 0.7529412"/>
+<Property Key="TopRadius" Value="3.1289785"/>
+<Property Key="BottomRadius" Value="3.7633953"/>
+<Property Key="Radius" Value="0.3446187"/>
+</ViewType>
+<Property Key="Position" Value="6.7747254 -0.28021976 0.5"/>
+</Node>
+<Node ID="N83">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.8433897"/>
+<Property Key="BottomRadius" Value="3.1289785"/>
+<Property Key="Radius" Value="0.2986184"/>
+</ViewType>
+<Property Key="Position" Value="6.7747254 -0.28021976 1.0"/>
+</Node>
+<Node ID="N84">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7411765 0.7411765"/>
+<Property Key="TopRadius" Value="2.692193"/>
+<Property Key="BottomRadius" Value="2.8433897"/>
+<Property Key="Radius" Value="0.27677915"/>
+</ViewType>
+<Property Key="Position" Value="6.7747254 -0.28021976 1.5"/>
+</Node>
+<Node ID="N85">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.2872043"/>
+<Property Key="BottomRadius" Value="2.692193"/>
+<Property Key="Radius" Value="0.24896987"/>
+</ViewType>
+<Property Key="Position" Value="6.7747254 -0.28021976 2.0"/>
+</Node>
+<Node ID="N86">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="1.8802285"/>
+<Property Key="BottomRadius" Value="2.2872043"/>
+<Property Key="Radius" Value="0.20837164"/>
+</ViewType>
+<Property Key="Position" Value="6.7747254 -0.28021976 2.5"/>
+</Node>
+<Node ID="N87">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="1.8802285"/>
+<Property Key="BottomRadius" Value="1.8802285"/>
+<Property Key="Radius" Value="0.18802285"/>
+</ViewType>
+<Property Key="Position" Value="6.7747254 -0.28021976 3.0"/>
+</Node>
+<Node ID="N88">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.62352943 0.62352943"/>
+<Property Key="TopRadius" Value="1.6973815"/>
+<Property Key="BottomRadius" Value="1.8802285"/>
+<Property Key="Radius" Value="0.1788805"/>
+</ViewType>
+<Property Key="Position" Value="6.7747254 -0.28021976 3.5"/>
+</Node>
+<Node ID="N89">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7490196 0.8 0.7490196"/>
+<Property Key="TopRadius" Value="1.7373495"/>
+<Property Key="BottomRadius" Value="1.6973815"/>
+<Property Key="Radius" Value="0.17173655"/>
+</ViewType>
+<Property Key="Position" Value="6.7747254 -0.28021976 4.0"/>
+</Node>
+<Node ID="N90">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.34509805 0.34509805"/>
+<Property Key="TopRadius" Value="1.2747589"/>
+<Property Key="BottomRadius" Value="1.7373495"/>
+<Property Key="Radius" Value="0.15060543"/>
+</ViewType>
+<Property Key="Position" Value="6.7747254 -0.28021976 4.5"/>
+</Node>
+<Node ID="N91">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.74509805 0.8 0.74509805"/>
+<Property Key="TopRadius" Value="1.2443374"/>
+<Property Key="BottomRadius" Value="1.2747589"/>
+<Property Key="Radius" Value="0.12595482"/>
+</ViewType>
+<Property Key="Position" Value="6.7747254 -0.28021976 5.0"/>
+</Node>
+<Node ID="N92">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7019608 0.7019608"/>
+<Property Key="TopRadius" Value="1.183155"/>
+<Property Key="BottomRadius" Value="1.2443374"/>
+<Property Key="Radius" Value="0.12137462"/>
+</ViewType>
+<Property Key="Position" Value="6.7747254 -0.28021976 5.5"/>
+</Node>
+</Cluster>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="Aerospace"/>
+<Property Key="Radius" Value="4.8383603"/>
+</ViewType>
+<Property Key="Position" Value="-6.247253 2.9835167 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="0"/>
+</LayoutEngineType>
+<Node ID="N23">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="6.1615405"/>
+<Property Key="BottomRadius" Value="6.1615405"/>
+<Property Key="Radius" Value="0.6161541"/>
+</ViewType>
+<Property Key="Position" Value="-6.247253 2.9835167 0.0"/>
+</Node>
+<Node ID="N24">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7058824 0.7058824"/>
+<Property Key="TopRadius" Value="5.7713118"/>
+<Property Key="BottomRadius" Value="6.1615405"/>
+<Property Key="Radius" Value="0.5966426"/>
+</ViewType>
+<Property Key="Position" Value="-6.247253 2.9835167 0.5"/>
+</Node>
+<Node ID="N25">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7607843 0.8 0.7607843"/>
+<Property Key="TopRadius" Value="5.9444957"/>
+<Property Key="BottomRadius" Value="5.7713118"/>
+<Property Key="Radius" Value="0.58579034"/>
+</ViewType>
+<Property Key="Position" Value="-6.247253 2.9835167 1.0"/>
+</Node>
+<Node ID="N26">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.69803923 0.8 0.69803923"/>
+<Property Key="TopRadius" Value="6.304885"/>
+<Property Key="BottomRadius" Value="5.9444957"/>
+<Property Key="Radius" Value="0.612469"/>
+</ViewType>
+<Property Key="Position" Value="-6.247253 2.9835167 1.5"/>
+</Node>
+<Node ID="N27">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="6.3245554"/>
+<Property Key="BottomRadius" Value="6.304885"/>
+<Property Key="Radius" Value="0.63147205"/>
+</ViewType>
+<Property Key="Position" Value="-6.247253 2.9835167 2.0"/>
+</Node>
+<Node ID="N28">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.21176471 0.21176471"/>
+<Property Key="TopRadius" Value="4.141281"/>
+<Property Key="BottomRadius" Value="6.3245554"/>
+<Property Key="Radius" Value="0.5232918"/>
+</ViewType>
+<Property Key="Position" Value="-6.247253 2.9835167 2.5"/>
+</Node>
+<Node ID="N29">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.78431374 0.8 0.78431374"/>
+<Property Key="TopRadius" Value="4.1836543"/>
+<Property Key="BottomRadius" Value="4.141281"/>
+<Property Key="Radius" Value="0.4162468"/>
+</ViewType>
+<Property Key="Position" Value="-6.247253 2.9835167 3.0"/>
+</Node>
+<Node ID="N30">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7019608 0.8 0.7019608"/>
+<Property Key="TopRadius" Value="4.383703"/>
+<Property Key="BottomRadius" Value="4.1836543"/>
+<Property Key="Radius" Value="0.4283679"/>
+</ViewType>
+<Property Key="Position" Value="-6.247253 2.9835167 3.5"/>
+</Node>
+<Node ID="N31">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7137255 0.8 0.7137255"/>
+<Property Key="TopRadius" Value="4.6658278"/>
+<Property Key="BottomRadius" Value="4.383703"/>
+<Property Key="Radius" Value="0.45247656"/>
+</ViewType>
+<Property Key="Position" Value="-6.247253 2.9835167 4.0"/>
+</Node>
+<Node ID="N32">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="4.6890497"/>
+<Property Key="BottomRadius" Value="4.6658278"/>
+<Property Key="Radius" Value="0.46774387"/>
+</ViewType>
+<Property Key="Position" Value="-6.247253 2.9835167 4.5"/>
+</Node>
+<Node ID="N33">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.75686276 0.75686276"/>
+<Property Key="TopRadius" Value="5.0521207"/>
+<Property Key="BottomRadius" Value="4.6890497"/>
+<Property Key="Radius" Value="0.48705855"/>
+</ViewType>
+<Property Key="Position" Value="-6.247253 2.9835167 5.0"/>
+</Node>
+<Node ID="N34">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.70980394 0.70980394"/>
+<Property Key="TopRadius" Value="4.8383603"/>
+<Property Key="BottomRadius" Value="5.0521207"/>
+<Property Key="Radius" Value="0.49452406"/>
+</ViewType>
+<Property Key="Position" Value="-6.247253 2.9835167 5.5"/>
+</Node>
+</Cluster>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="Engineering"/>
+<Property Key="Radius" Value="1.7593029"/>
+</ViewType>
+<Property Key="Position" Value="2.423077 -0.28021976 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="0"/>
+</LayoutEngineType>
+<Node ID="N69">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.6538157"/>
+<Property Key="BottomRadius" Value="2.6538157"/>
+<Property Key="Radius" Value="0.26538157"/>
+</ViewType>
+<Property Key="Position" Value="2.423077 -0.28021976 0.0"/>
+</Node>
+<Node ID="N70">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.6627451 0.6627451"/>
+<Property Key="TopRadius" Value="2.4968395"/>
+<Property Key="BottomRadius" Value="2.6538157"/>
+<Property Key="Radius" Value="0.25753278"/>
+</ViewType>
+<Property Key="Position" Value="2.423077 -0.28021976 0.5"/>
+</Node>
+<Node ID="N71">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.54509807 0.54509807"/>
+<Property Key="TopRadius" Value="2.0819147"/>
+<Property Key="BottomRadius" Value="2.4968395"/>
+<Property Key="Radius" Value="0.22893773"/>
+</ViewType>
+<Property Key="Position" Value="2.423077 -0.28021976 1.0"/>
+</Node>
+<Node ID="N72">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7294118 0.8 0.7294118"/>
+<Property Key="TopRadius" Value="2.1320455"/>
+<Property Key="BottomRadius" Value="2.0819147"/>
+<Property Key="Radius" Value="0.21069801"/>
+</ViewType>
+<Property Key="Position" Value="2.423077 -0.28021976 1.5"/>
+</Node>
+<Node ID="N73">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7647059 0.7647059"/>
+<Property Key="TopRadius" Value="2.1453469"/>
+<Property Key="BottomRadius" Value="2.1320455"/>
+<Property Key="Radius" Value="0.21386962"/>
+</ViewType>
+<Property Key="Position" Value="2.423077 -0.28021976 2.0"/>
+</Node>
+<Node ID="N74">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.73333335 0.73333335"/>
+<Property Key="TopRadius" Value="2.007271"/>
+<Property Key="BottomRadius" Value="2.1453469"/>
+<Property Key="Radius" Value="0.2076309"/>
+</ViewType>
+<Property Key="Position" Value="2.423077 -0.28021976 2.5"/>
+</Node>
+<Node ID="N75">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.1253157"/>
+<Property Key="BottomRadius" Value="2.007271"/>
+<Property Key="Radius" Value="0.20662932"/>
+</ViewType>
+<Property Key="Position" Value="2.423077 -0.28021976 3.0"/>
+</Node>
+<Node ID="N76">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.6627451 0.8 0.6627451"/>
+<Property Key="TopRadius" Value="2.2617319"/>
+<Property Key="BottomRadius" Value="2.1253157"/>
+<Property Key="Radius" Value="0.2193524"/>
+</ViewType>
+<Property Key="Position" Value="2.423077 -0.28021976 3.5"/>
+</Node>
+<Node ID="N77">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.74509805 0.8 0.74509805"/>
+<Property Key="TopRadius" Value="2.2100883"/>
+<Property Key="BottomRadius" Value="2.2617319"/>
+<Property Key="Radius" Value="0.223591"/>
+</ViewType>
+<Property Key="Position" Value="2.423077 -0.28021976 4.0"/>
+</Node>
+<Node ID="N78">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.78039217 0.8 0.78039217"/>
+<Property Key="TopRadius" Value="1.9605007"/>
+<Property Key="BottomRadius" Value="2.2100883"/>
+<Property Key="Radius" Value="0.20852946"/>
+</ViewType>
+<Property Key="Position" Value="2.423077 -0.28021976 4.5"/>
+</Node>
+<Node ID="N79">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.6431373 0.6431373"/>
+<Property Key="TopRadius" Value="1.7881718"/>
+<Property Key="BottomRadius" Value="1.9605007"/>
+<Property Key="Radius" Value="0.18743363"/>
+</ViewType>
+<Property Key="Position" Value="2.423077 -0.28021976 5.0"/>
+</Node>
+<Node ID="N80">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7411765 0.7411765"/>
+<Property Key="TopRadius" Value="1.7593029"/>
+<Property Key="BottomRadius" Value="1.7881718"/>
+<Property Key="Radius" Value="0.17737374"/>
+</ViewType>
+<Property Key="Position" Value="2.423077 -0.28021976 5.5"/>
+</Node>
+</Cluster>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="Food"/>
+<Property Key="Radius" Value="2.3387227"/>
+</ViewType>
+<Property Key="Position" Value="1.6318685 -3.3131866 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="0"/>
+</LayoutEngineType>
+<Node ID="N105">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="3.565291"/>
+<Property Key="BottomRadius" Value="3.565291"/>
+<Property Key="Radius" Value="0.3565291"/>
+</ViewType>
+<Property Key="Position" Value="1.6318685 -3.3131866 0.0"/>
+</Node>
+<Node ID="N106">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.54901963 0.54901963"/>
+<Property Key="TopRadius" Value="3.0832725"/>
+<Property Key="BottomRadius" Value="3.565291"/>
+<Property Key="Radius" Value="0.3324282"/>
+</ViewType>
+<Property Key="Position" Value="1.6318685 -3.3131866 0.5"/>
+</Node>
+<Node ID="N107">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.77254903 0.77254903"/>
+<Property Key="TopRadius" Value="3.1449707"/>
+<Property Key="BottomRadius" Value="3.0832725"/>
+<Property Key="Radius" Value="0.31141216"/>
+</ViewType>
+<Property Key="Position" Value="1.6318685 -3.3131866 1.0"/>
+</Node>
+<Node ID="N108">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.69411767 0.8 0.69411767"/>
+<Property Key="TopRadius" Value="3.238092"/>
+<Property Key="BottomRadius" Value="3.1449707"/>
+<Property Key="Radius" Value="0.31915313"/>
+</ViewType>
+<Property Key="Position" Value="1.6318685 -3.3131866 1.5"/>
+</Node>
+<Node ID="N109">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="3.2154548"/>
+<Property Key="BottomRadius" Value="3.238092"/>
+<Property Key="Radius" Value="0.32267734"/>
+</ViewType>
+<Property Key="Position" Value="1.6318685 -3.3131866 2.0"/>
+</Node>
+<Node ID="N110">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.76862746 0.8 0.76862746"/>
+<Property Key="TopRadius" Value="2.8180773"/>
+<Property Key="BottomRadius" Value="3.2154548"/>
+<Property Key="Radius" Value="0.3016766"/>
+</ViewType>
+<Property Key="Position" Value="1.6318685 -3.3131866 2.5"/>
+</Node>
+<Node ID="N111">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.8180773"/>
+<Property Key="BottomRadius" Value="2.8180773"/>
+<Property Key="Radius" Value="0.28180775"/>
+</ViewType>
+<Property Key="Position" Value="1.6318685 -3.3131866 3.0"/>
+</Node>
+<Node ID="N112">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.78039217 0.8 0.78039217"/>
+<Property Key="TopRadius" Value="2.782751"/>
+<Property Key="BottomRadius" Value="2.8180773"/>
+<Property Key="Radius" Value="0.28004143"/>
+</ViewType>
+<Property Key="Position" Value="1.6318685 -3.3131866 3.5"/>
+</Node>
+<Node ID="N113">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7372549 0.8 0.7372549"/>
+<Property Key="TopRadius" Value="2.4452403"/>
+<Property Key="BottomRadius" Value="2.782751"/>
+<Property Key="Radius" Value="0.26139957"/>
+</ViewType>
+<Property Key="Position" Value="1.6318685 -3.3131866 4.0"/>
+</Node>
+<Node ID="N114">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.5647059 0.8 0.5647059"/>
+<Property Key="TopRadius" Value="2.7255166"/>
+<Property Key="BottomRadius" Value="2.4452403"/>
+<Property Key="Radius" Value="0.25853786"/>
+</ViewType>
+<Property Key="Position" Value="1.6318685 -3.3131866 4.5"/>
+</Node>
+<Node ID="N115">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.52156866 0.8 0.52156866"/>
+<Property Key="TopRadius" Value="3.057496"/>
+<Property Key="BottomRadius" Value="2.7255166"/>
+<Property Key="Radius" Value="0.28915063"/>
+</ViewType>
+<Property Key="Position" Value="1.6318685 -3.3131866 5.0"/>
+</Node>
+<Node ID="N116">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.43529412 0.43529412"/>
+<Property Key="TopRadius" Value="2.3387227"/>
+<Property Key="BottomRadius" Value="3.057496"/>
+<Property Key="Radius" Value="0.26981094"/>
+</ViewType>
+<Property Key="Position" Value="1.6318685 -3.3131866 5.5"/>
+</Node>
+</Cluster>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="General"/>
+<Property Key="Radius" Value="3.188837"/>
+</ViewType>
+<Property Key="Position" Value="-1.1703296 -3.3131866 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="0"/>
+</LayoutEngineType>
+<Node ID="N148">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="3.9785058"/>
+<Property Key="BottomRadius" Value="3.9785058"/>
+<Property Key="Radius" Value="0.3978506"/>
+</ViewType>
+<Property Key="Position" Value="-1.1703296 -3.3131866 0.0"/>
+</Node>
+<Node ID="N149">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.44705883 0.44705883"/>
+<Property Key="TopRadius" Value="2.991644"/>
+<Property Key="BottomRadius" Value="3.9785058"/>
+<Property Key="Radius" Value="0.3485075"/>
+</ViewType>
+<Property Key="Position" Value="-1.1703296 -3.3131866 0.5"/>
+</Node>
+<Node ID="N150">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.6184158"/>
+<Property Key="BottomRadius" Value="2.991644"/>
+<Property Key="Radius" Value="0.280503"/>
+</ViewType>
+<Property Key="Position" Value="-1.1703296 -3.3131866 1.0"/>
+</Node>
+<Node ID="N151">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.74509805 0.8 0.74509805"/>
+<Property Key="TopRadius" Value="2.4947827"/>
+<Property Key="BottomRadius" Value="2.6184158"/>
+<Property Key="Radius" Value="0.2556599"/>
+</ViewType>
+<Property Key="Position" Value="-1.1703296 -3.3131866 1.5"/>
+</Node>
+<Node ID="N152">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.5058824 0.8 0.5058824"/>
+<Property Key="TopRadius" Value="2.841439"/>
+<Property Key="BottomRadius" Value="2.4947827"/>
+<Property Key="Radius" Value="0.2668111"/>
+</ViewType>
+<Property Key="Position" Value="-1.1703296 -3.3131866 2.0"/>
+</Node>
+<Node ID="N153">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.56078434 0.8 0.56078434"/>
+<Property Key="TopRadius" Value="3.0839107"/>
+<Property Key="BottomRadius" Value="2.841439"/>
+<Property Key="Radius" Value="0.29626748"/>
+</ViewType>
+<Property Key="Position" Value="-1.1703296 -3.3131866 2.5"/>
+</Node>
+<Node ID="N154">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7647059 0.8 0.7647059"/>
+<Property Key="TopRadius" Value="3.1555436"/>
+<Property Key="BottomRadius" Value="3.0839107"/>
+<Property Key="Radius" Value="0.3119727"/>
+</ViewType>
+<Property Key="Position" Value="-1.1703296 -3.3131866 3.0"/>
+</Node>
+<Node ID="N155">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.67058825 0.8 0.67058825"/>
+<Property Key="TopRadius" Value="3.157559"/>
+<Property Key="BottomRadius" Value="3.1555436"/>
+<Property Key="Radius" Value="0.31565514"/>
+</ViewType>
+<Property Key="Position" Value="-1.1703296 -3.3131866 3.5"/>
+</Node>
+<Node ID="N156">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.73333335 0.73333335"/>
+<Property Key="TopRadius" Value="3.0834246"/>
+<Property Key="BottomRadius" Value="3.157559"/>
+<Property Key="Radius" Value="0.31204918"/>
+</ViewType>
+<Property Key="Position" Value="-1.1703296 -3.3131866 4.0"/>
+</Node>
+<Node ID="N157">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7176471 0.8 0.7176471"/>
+<Property Key="TopRadius" Value="3.2810373"/>
+<Property Key="BottomRadius" Value="3.0834246"/>
+<Property Key="Radius" Value="0.3182231"/>
+</ViewType>
+<Property Key="Position" Value="-1.1703296 -3.3131866 4.5"/>
+</Node>
+<Node ID="N158">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.627451 0.8 0.627451"/>
+<Property Key="TopRadius" Value="3.4128377"/>
+<Property Key="BottomRadius" Value="3.2810373"/>
+<Property Key="Radius" Value="0.33469376"/>
+</ViewType>
+<Property Key="Position" Value="-1.1703296 -3.3131866 5.0"/>
+</Node>
+<Node ID="N159">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.69411767 0.69411767"/>
+<Property Key="TopRadius" Value="3.188837"/>
+<Property Key="BottomRadius" Value="3.4128377"/>
+<Property Key="Radius" Value="0.33008376"/>
+</ViewType>
+<Property Key="Position" Value="-1.1703296 -3.3131866 5.5"/>
+</Node>
+</Cluster>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="Support"/>
+<Property Key="Radius" Value="2.2556257"/>
+</ViewType>
+<Property Key="Position" Value="-0.08241758 -6.379121 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="0"/>
+</LayoutEngineType>
+<Node ID="N124">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.2259893"/>
+<Property Key="BottomRadius" Value="2.2259893"/>
+<Property Key="Radius" Value="0.22259894"/>
+</ViewType>
+<Property Key="Position" Value="-0.08241758 -6.379121 0.0"/>
+</Node>
+<Node ID="N125">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.49803922 0.8 0.49803922"/>
+<Property Key="TopRadius" Value="2.5137346"/>
+<Property Key="BottomRadius" Value="2.2259893"/>
+<Property Key="Radius" Value="0.2369862"/>
+</ViewType>
+<Property Key="Position" Value="-0.08241758 -6.379121 0.5"/>
+</Node>
+<Node ID="N126">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.4853265"/>
+<Property Key="BottomRadius" Value="2.5137346"/>
+<Property Key="Radius" Value="0.24995306"/>
+</ViewType>
+<Property Key="Position" Value="-0.08241758 -6.379121 1.0"/>
+</Node>
+<Node ID="N127">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.76862746 0.8 0.76862746"/>
+<Property Key="TopRadius" Value="2.3923764"/>
+<Property Key="BottomRadius" Value="2.4853265"/>
+<Property Key="Radius" Value="0.24388514"/>
+</ViewType>
+<Property Key="Position" Value="-0.08241758 -6.379121 1.5"/>
+</Node>
+<Node ID="N128">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.5565758"/>
+<Property Key="BottomRadius" Value="2.3923764"/>
+<Property Key="Radius" Value="0.24744761"/>
+</ViewType>
+<Property Key="Position" Value="-0.08241758 -6.379121 2.0"/>
+</Node>
+<Node ID="N129">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7607843 0.7607843"/>
+<Property Key="TopRadius" Value="2.6236246"/>
+<Property Key="BottomRadius" Value="2.5565758"/>
+<Property Key="Radius" Value="0.25901005"/>
+</ViewType>
+<Property Key="Position" Value="-0.08241758 -6.379121 2.5"/>
+</Node>
+<Node ID="N130">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.78431374 0.8 0.78431374"/>
+<Property Key="TopRadius" Value="2.6462321"/>
+<Property Key="BottomRadius" Value="2.6236246"/>
+<Property Key="Radius" Value="0.26349282"/>
+</ViewType>
+<Property Key="Position" Value="-0.08241758 -6.379121 3.0"/>
+</Node>
+<Node ID="N131">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7529412 0.8 0.7529412"/>
+<Property Key="TopRadius" Value="2.7208698"/>
+<Property Key="BottomRadius" Value="2.6462321"/>
+<Property Key="Radius" Value="0.2683551"/>
+</ViewType>
+<Property Key="Position" Value="-0.08241758 -6.379121 3.5"/>
+</Node>
+<Node ID="N132">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.78431374 0.78431374"/>
+<Property Key="TopRadius" Value="2.5468907"/>
+<Property Key="BottomRadius" Value="2.7208698"/>
+<Property Key="Radius" Value="0.263388"/>
+</ViewType>
+<Property Key="Position" Value="-0.08241758 -6.379121 4.0"/>
+</Node>
+<Node ID="N133">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.76862746 0.76862746"/>
+<Property Key="TopRadius" Value="2.470378"/>
+<Property Key="BottomRadius" Value="2.5468907"/>
+<Property Key="Radius" Value="0.25086343"/>
+</ViewType>
+<Property Key="Position" Value="-0.08241758 -6.379121 4.5"/>
+</Node>
+<Node ID="N134">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7058824 0.7058824"/>
+<Property Key="TopRadius" Value="2.1506526"/>
+<Property Key="BottomRadius" Value="2.470378"/>
+<Property Key="Radius" Value="0.23105155"/>
+</ViewType>
+<Property Key="Position" Value="-0.08241758 -6.379121 5.0"/>
+</Node>
+<Node ID="N135">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.78039217 0.8 0.78039217"/>
+<Property Key="TopRadius" Value="2.2556257"/>
+<Property Key="BottomRadius" Value="2.1506526"/>
+<Property Key="Radius" Value="0.22031394"/>
+</ViewType>
+<Property Key="Position" Value="-0.08241758 -6.379121 5.5"/>
+</Node>
+</Cluster>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="Transport"/>
+<Property Key="Radius" Value="3.752657"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -6.379121 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="0"/>
+</LayoutEngineType>
+<Node ID="N57">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="3.883041"/>
+<Property Key="BottomRadius" Value="3.883041"/>
+<Property Key="Radius" Value="0.38830408"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -6.379121 0.0"/>
+</Node>
+<Node ID="N58">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.67058825 0.67058825"/>
+<Property Key="TopRadius" Value="3.841816"/>
+<Property Key="BottomRadius" Value="3.883041"/>
+<Property Key="Radius" Value="0.38624284"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -6.379121 0.5"/>
+</Node>
+<Node ID="N59">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.45490196 0.45490196"/>
+<Property Key="TopRadius" Value="3.104327"/>
+<Property Key="BottomRadius" Value="3.841816"/>
+<Property Key="Radius" Value="0.34730718"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -6.379121 1.0"/>
+</Node>
+<Node ID="N60">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7490196 0.8 0.7490196"/>
+<Property Key="TopRadius" Value="3.181674"/>
+<Property Key="BottomRadius" Value="3.104327"/>
+<Property Key="Radius" Value="0.31430006"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -6.379121 1.5"/>
+</Node>
+<Node ID="N61">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="3.1508496"/>
+<Property Key="BottomRadius" Value="3.181674"/>
+<Property Key="Radius" Value="0.31662616"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -6.379121 2.0"/>
+</Node>
+<Node ID="N62">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.73333335 0.8 0.73333335"/>
+<Property Key="TopRadius" Value="3.2434378"/>
+<Property Key="BottomRadius" Value="3.1508496"/>
+<Property Key="Radius" Value="0.31971437"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -6.379121 2.5"/>
+</Node>
+<Node ID="N63">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7882353 0.8 0.7882353"/>
+<Property Key="TopRadius" Value="3.2418504"/>
+<Property Key="BottomRadius" Value="3.2434378"/>
+<Property Key="Radius" Value="0.3242644"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -6.379121 3.0"/>
+</Node>
+<Node ID="N64">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7372549 0.8 0.7372549"/>
+<Property Key="TopRadius" Value="3.3225095"/>
+<Property Key="BottomRadius" Value="3.2418504"/>
+<Property Key="Radius" Value="0.32821798"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -6.379121 3.5"/>
+</Node>
+<Node ID="N65">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.09411765 0.8 0.09411765"/>
+<Property Key="TopRadius" Value="4.338887"/>
+<Property Key="BottomRadius" Value="3.3225095"/>
+<Property Key="Radius" Value="0.38306984"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -6.379121 4.0"/>
+</Node>
+<Node ID="N66">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="4.346175"/>
+<Property Key="BottomRadius" Value="4.338887"/>
+<Property Key="Radius" Value="0.43425313"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -6.379121 4.5"/>
+</Node>
+<Node ID="N67">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.6901961 0.6901961"/>
+<Property Key="TopRadius" Value="4.1856594"/>
+<Property Key="BottomRadius" Value="4.346175"/>
+<Property Key="Radius" Value="0.42659172"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -6.379121 5.0"/>
+</Node>
+<Node ID="N68">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.67058825 0.67058825"/>
+<Property Key="TopRadius" Value="3.752657"/>
+<Property Key="BottomRadius" Value="4.1856594"/>
+<Property Key="Radius" Value="0.39691582"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -6.379121 5.5"/>
+</Node>
+</Cluster>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="Food"/>
+<Property Key="Radius" Value="1.6761385"/>
+</ViewType>
+<Property Key="Position" Value="0.84065974 -0.28021976 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="0"/>
+</LayoutEngineType>
+<Node ID="N93">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.3725116"/>
+<Property Key="BottomRadius" Value="2.3725116"/>
+<Property Key="Radius" Value="0.23725116"/>
+</ViewType>
+<Property Key="Position" Value="0.84065974 -0.28021976 0.0"/>
+</Node>
+<Node ID="N94">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.74509805 0.74509805"/>
+<Property Key="TopRadius" Value="2.1851661"/>
+<Property Key="BottomRadius" Value="2.3725116"/>
+<Property Key="Radius" Value="0.22788389"/>
+</ViewType>
+<Property Key="Position" Value="0.84065974 -0.28021976 0.5"/>
+</Node>
+<Node ID="N95">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7529412 0.8 0.7529412"/>
+<Property Key="TopRadius" Value="2.2099688"/>
+<Property Key="BottomRadius" Value="2.1851661"/>
+<Property Key="Radius" Value="0.21975675"/>
+</ViewType>
+<Property Key="Position" Value="0.84065974 -0.28021976 1.0"/>
+</Node>
+<Node ID="N96">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7490196 0.7490196"/>
+<Property Key="TopRadius" Value="2.199206"/>
+<Property Key="BottomRadius" Value="2.2099688"/>
+<Property Key="Radius" Value="0.22045875"/>
+</ViewType>
+<Property Key="Position" Value="0.84065974 -0.28021976 1.5"/>
+</Node>
+<Node ID="N97">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.76862746 0.76862746"/>
+<Property Key="TopRadius" Value="2.1673207"/>
+<Property Key="BottomRadius" Value="2.199206"/>
+<Property Key="Radius" Value="0.21832633"/>
+</ViewType>
+<Property Key="Position" Value="0.84065974 -0.28021976 2.0"/>
+</Node>
+<Node ID="N98">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.70980394 0.8 0.70980394"/>
+<Property Key="TopRadius" Value="2.1908207"/>
+<Property Key="BottomRadius" Value="2.1673207"/>
+<Property Key="Radius" Value="0.21790707"/>
+</ViewType>
+<Property Key="Position" Value="0.84065974 -0.28021976 2.5"/>
+</Node>
+<Node ID="N99">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.1908207"/>
+<Property Key="BottomRadius" Value="2.1908207"/>
+<Property Key="Radius" Value="0.21908207"/>
+</ViewType>
+<Property Key="Position" Value="0.84065974 -0.28021976 3.0"/>
+</Node>
+<Node ID="N100">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.6901961 0.6901961"/>
+<Property Key="TopRadius" Value="1.9774182"/>
+<Property Key="BottomRadius" Value="2.1908207"/>
+<Property Key="Radius" Value="0.20841193"/>
+</ViewType>
+<Property Key="Position" Value="0.84065974 -0.28021976 3.5"/>
+</Node>
+<Node ID="N101">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.78039217 0.8 0.78039217"/>
+<Property Key="TopRadius" Value="1.9938408"/>
+<Property Key="BottomRadius" Value="1.9774182"/>
+<Property Key="Radius" Value="0.19856296"/>
+</ViewType>
+<Property Key="Position" Value="0.84065974 -0.28021976 4.0"/>
+</Node>
+<Node ID="N102">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7764706 0.7764706"/>
+<Property Key="TopRadius" Value="1.9696876"/>
+<Property Key="BottomRadius" Value="1.9938408"/>
+<Property Key="Radius" Value="0.19817643"/>
+</ViewType>
+<Property Key="Position" Value="0.84065974 -0.28021976 4.5"/>
+</Node>
+<Node ID="N103">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.58431375 0.58431375"/>
+<Property Key="TopRadius" Value="1.7453786"/>
+<Property Key="BottomRadius" Value="1.9696876"/>
+<Property Key="Radius" Value="0.18575332"/>
+</ViewType>
+<Property Key="Position" Value="0.84065974 -0.28021976 5.0"/>
+</Node>
+<Node ID="N104">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7490196 0.8 0.7490196"/>
+<Property Key="TopRadius" Value="1.6761385"/>
+<Property Key="BottomRadius" Value="1.7453786"/>
+<Property Key="Radius" Value="0.17107587"/>
+</ViewType>
+<Property Key="Position" Value="0.84065974 -0.28021976 5.5"/>
+</Node>
+</Cluster>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="Telecommunication"/>
+<Property Key="Radius" Value="1.882379"/>
+</ViewType>
+<Property Key="Position" Value="-0.4120879 2.9835167 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="0"/>
+</LayoutEngineType>
+<Node ID="N35">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.3159578"/>
+<Property Key="BottomRadius" Value="2.3159578"/>
+<Property Key="Radius" Value="0.23159578"/>
+</ViewType>
+<Property Key="Position" Value="-0.4120879 2.9835167 0.0"/>
+</Node>
+<Node ID="N36">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.6627451 0.6627451"/>
+<Property Key="TopRadius" Value="2.3358192"/>
+<Property Key="BottomRadius" Value="2.3159578"/>
+<Property Key="Radius" Value="0.23258887"/>
+</ViewType>
+<Property Key="Position" Value="-0.4120879 2.9835167 0.5"/>
+</Node>
+<Node ID="N37">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.3358192"/>
+<Property Key="BottomRadius" Value="2.3358192"/>
+<Property Key="Radius" Value="0.23358193"/>
+</ViewType>
+<Property Key="Position" Value="-0.4120879 2.9835167 1.0"/>
+</Node>
+<Node ID="N38">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.63529414 0.63529414"/>
+<Property Key="TopRadius" Value="2.1296701"/>
+<Property Key="BottomRadius" Value="2.3358192"/>
+<Property Key="Radius" Value="0.22327447"/>
+</ViewType>
+<Property Key="Position" Value="-0.4120879 2.9835167 1.5"/>
+</Node>
+<Node ID="N39">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.70980394 0.70980394"/>
+<Property Key="TopRadius" Value="2.0305607"/>
+<Property Key="BottomRadius" Value="2.1296701"/>
+<Property Key="Radius" Value="0.20801154"/>
+</ViewType>
+<Property Key="Position" Value="-0.4120879 2.9835167 2.0"/>
+</Node>
+<Node ID="N40">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.6117647 0.6117647"/>
+<Property Key="TopRadius" Value="1.9075863"/>
+<Property Key="BottomRadius" Value="2.0305607"/>
+<Property Key="Radius" Value="0.19690736"/>
+</ViewType>
+<Property Key="Position" Value="-0.4120879 2.9835167 2.5"/>
+</Node>
+<Node ID="N41">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.0136724"/>
+<Property Key="BottomRadius" Value="1.9075863"/>
+<Property Key="Radius" Value="0.19606294"/>
+</ViewType>
+<Property Key="Position" Value="-0.4120879 2.9835167 3.0"/>
+</Node>
+<Node ID="N42">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.73333335 0.8 0.73333335"/>
+<Property Key="TopRadius" Value="2.0845315"/>
+<Property Key="BottomRadius" Value="2.0136724"/>
+<Property Key="Radius" Value="0.20491019"/>
+</ViewType>
+<Property Key="Position" Value="-0.4120879 2.9835167 3.5"/>
+</Node>
+<Node ID="N43">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7490196 0.7490196"/>
+<Property Key="TopRadius" Value="2.0796237"/>
+<Property Key="BottomRadius" Value="2.0845315"/>
+<Property Key="Radius" Value="0.20820776"/>
+</ViewType>
+<Property Key="Position" Value="-0.4120879 2.9835167 4.0"/>
+</Node>
+<Node ID="N44">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.1890895"/>
+<Property Key="BottomRadius" Value="2.0796237"/>
+<Property Key="Radius" Value="0.21343565"/>
+</ViewType>
+<Property Key="Position" Value="-0.4120879 2.9835167 4.5"/>
+</Node>
+<Node ID="N45">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.6431373 0.6431373"/>
+<Property Key="TopRadius" Value="2.0175197"/>
+<Property Key="BottomRadius" Value="2.1890895"/>
+<Property Key="Radius" Value="0.21033047"/>
+</ViewType>
+<Property Key="Position" Value="-0.4120879 2.9835167 5.0"/>
+</Node>
+<Node ID="N46">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.67058825 0.67058825"/>
+<Property Key="TopRadius" Value="1.882379"/>
+<Property Key="BottomRadius" Value="2.0175197"/>
+<Property Key="Radius" Value="0.19499494"/>
+</ViewType>
+<Property Key="Position" Value="-0.4120879 2.9835167 5.5"/>
+</Node>
+</Cluster>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="Electricity"/>
+<Property Key="Radius" Value="1.5770931"/>
+</ViewType>
+<Property Key="Position" Value="-3.5109887 -0.28021976 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="0"/>
+</LayoutEngineType>
+<Node ID="N136">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="4.1149287"/>
+<Property Key="BottomRadius" Value="4.1149287"/>
+<Property Key="Radius" Value="0.41149288"/>
+</ViewType>
+<Property Key="Position" Value="-3.5109887 -0.28021976 0.0"/>
+</Node>
+<Node ID="N137">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.74509805 0.74509805"/>
+<Property Key="TopRadius" Value="3.768564"/>
+<Property Key="BottomRadius" Value="4.1149287"/>
+<Property Key="Radius" Value="0.39417464"/>
+</ViewType>
+<Property Key="Position" Value="-3.5109887 -0.28021976 0.5"/>
+</Node>
+<Node ID="N138">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="3.5111856"/>
+<Property Key="BottomRadius" Value="3.768564"/>
+<Property Key="Radius" Value="0.3639875"/>
+</ViewType>
+<Property Key="Position" Value="-3.5109887 -0.28021976 1.0"/>
+</Node>
+<Node ID="N139">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.6431373 0.6431373"/>
+<Property Key="TopRadius" Value="3.0843546"/>
+<Property Key="BottomRadius" Value="3.5111856"/>
+<Property Key="Radius" Value="0.329777"/>
+</ViewType>
+<Property Key="Position" Value="-3.5109887 -0.28021976 1.5"/>
+</Node>
+<Node ID="N140">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7764706 0.7764706"/>
+<Property Key="TopRadius" Value="3.0855134"/>
+<Property Key="BottomRadius" Value="3.0843546"/>
+<Property Key="Radius" Value="0.3084934"/>
+</ViewType>
+<Property Key="Position" Value="-3.5109887 -0.28021976 2.0"/>
+</Node>
+<Node ID="N141">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.6313726 0.8 0.6313726"/>
+<Property Key="TopRadius" Value="3.2257721"/>
+<Property Key="BottomRadius" Value="3.0855134"/>
+<Property Key="Radius" Value="0.31556427"/>
+</ViewType>
+<Property Key="Position" Value="-3.5109887 -0.28021976 2.5"/>
+</Node>
+<Node ID="N142">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="3.2445052"/>
+<Property Key="BottomRadius" Value="3.2257721"/>
+<Property Key="Radius" Value="0.32351387"/>
+</ViewType>
+<Property Key="Position" Value="-3.5109887 -0.28021976 3.0"/>
+</Node>
+<Node ID="N143">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="3.222105"/>
+<Property Key="BottomRadius" Value="3.2445052"/>
+<Property Key="Radius" Value="0.3233305"/>
+</ViewType>
+<Property Key="Position" Value="-3.5109887 -0.28021976 3.5"/>
+</Node>
+<Node ID="N144">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.78431374 0.8 0.78431374"/>
+<Property Key="TopRadius" Value="3.258003"/>
+<Property Key="BottomRadius" Value="3.222105"/>
+<Property Key="Radius" Value="0.32400542"/>
+</ViewType>
+<Property Key="Position" Value="-3.5109887 -0.28021976 4.0"/>
+</Node>
+<Node ID="N145">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.59607846 0.59607846"/>
+<Property Key="TopRadius" Value="1.8819398"/>
+<Property Key="BottomRadius" Value="3.258003"/>
+<Property Key="Radius" Value="0.25699714"/>
+</ViewType>
+<Property Key="Position" Value="-3.5109887 -0.28021976 4.5"/>
+</Node>
+<Node ID="N146">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.53333336 0.53333336"/>
+<Property Key="TopRadius" Value="1.5449239"/>
+<Property Key="BottomRadius" Value="1.8819398"/>
+<Property Key="Radius" Value="0.17134319"/>
+</ViewType>
+<Property Key="Position" Value="-3.5109887 -0.28021976 5.0"/>
+</Node>
+<Node ID="N147">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="1.5770931"/>
+<Property Key="BottomRadius" Value="1.5449239"/>
+<Property Key="Radius" Value="0.15610085"/>
+</ViewType>
+<Property Key="Position" Value="-3.5109887 -0.28021976 5.5"/>
+</Node>
+</Cluster>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="Banks"/>
+<Property Key="Radius" Value="5.1026936"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -3.3131866 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="0"/>
+</LayoutEngineType>
+<Node ID="N11">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.6453123"/>
+<Property Key="BottomRadius" Value="2.6453123"/>
+<Property Key="Radius" Value="0.26453122"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -3.3131866 0.0"/>
+</Node>
+<Node ID="N12">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.6901961 0.6901961"/>
+<Property Key="TopRadius" Value="2.5184467"/>
+<Property Key="BottomRadius" Value="2.6453123"/>
+<Property Key="Radius" Value="0.25818798"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -3.3131866 0.5"/>
+</Node>
+<Node ID="N13">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.5921569 0.8 0.5921569"/>
+<Property Key="TopRadius" Value="4.148799"/>
+<Property Key="BottomRadius" Value="2.5184467"/>
+<Property Key="Radius" Value="0.3333623"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -3.3131866 1.0"/>
+</Node>
+<Node ID="N14">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.77254903 0.8 0.77254903"/>
+<Property Key="TopRadius" Value="4.196469"/>
+<Property Key="BottomRadius" Value="4.148799"/>
+<Property Key="Radius" Value="0.41726342"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -3.3131866 1.5"/>
+</Node>
+<Node ID="N15">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7882353 0.8 0.7882353"/>
+<Property Key="TopRadius" Value="4.2246647"/>
+<Property Key="BottomRadius" Value="4.196469"/>
+<Property Key="Radius" Value="0.42105666"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -3.3131866 2.0"/>
+</Node>
+<Node ID="N16">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7607843 0.8 0.7607843"/>
+<Property Key="TopRadius" Value="4.292996"/>
+<Property Key="BottomRadius" Value="4.2246647"/>
+<Property Key="Radius" Value="0.42588302"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -3.3131866 2.5"/>
+</Node>
+<Node ID="N17">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="4.358973"/>
+<Property Key="BottomRadius" Value="4.292996"/>
+<Property Key="Radius" Value="0.43259844"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -3.3131866 3.0"/>
+</Node>
+<Node ID="N18">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="4.332734"/>
+<Property Key="BottomRadius" Value="4.358973"/>
+<Property Key="Radius" Value="0.4345854"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -3.3131866 3.5"/>
+</Node>
+<Node ID="N19">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.64705884 0.64705884"/>
+<Property Key="TopRadius" Value="4.024239"/>
+<Property Key="BottomRadius" Value="4.332734"/>
+<Property Key="Radius" Value="0.41784868"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -3.3131866 4.0"/>
+</Node>
+<Node ID="N20">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7607843 0.7607843"/>
+<Property Key="TopRadius" Value="3.943584"/>
+<Property Key="BottomRadius" Value="4.024239"/>
+<Property Key="Radius" Value="0.39839116"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -3.3131866 4.5"/>
+</Node>
+<Node ID="N21">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.67058825 0.67058825"/>
+<Property Key="TopRadius" Value="5.178184"/>
+<Property Key="BottomRadius" Value="3.943584"/>
+<Property Key="Radius" Value="0.4560884"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -3.3131866 5.0"/>
+</Node>
+<Node ID="N22">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.76862746 0.76862746"/>
+<Property Key="TopRadius" Value="5.1026936"/>
+<Property Key="BottomRadius" Value="5.178184"/>
+<Property Key="Radius" Value="0.5140439"/>
+</ViewType>
+<Property Key="Position" Value="3.9395607 -3.3131866 5.5"/>
+</Node>
+</Cluster>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="Mining"/>
+<Property Key="Radius" Value="1.041783"/>
+</ViewType>
+<Property Key="Position" Value="-3.6428568 2.9835167 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="1"/>
+</LayoutEngineType>
+<Node ID="N0">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.616021"/>
+<Property Key="BottomRadius" Value="2.616021"/>
+<Property Key="Radius" Value="0.2616021"/>
+</ViewType>
+<Property Key="Position" Value="-3.6428568 2.9835167 0.5"/>
+</Node>
+<Node ID="N1">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7490196 0.8 0.7490196"/>
+<Property Key="TopRadius" Value="2.6828623"/>
+<Property Key="BottomRadius" Value="2.616021"/>
+<Property Key="Radius" Value="0.26494417"/>
+</ViewType>
+<Property Key="Position" Value="-3.6428568 2.9835167 1.0"/>
+</Node>
+<Node ID="N2">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7176471 0.8 0.7176471"/>
+<Property Key="TopRadius" Value="2.7930386"/>
+<Property Key="BottomRadius" Value="2.6828623"/>
+<Property Key="Radius" Value="0.27379504"/>
+</ViewType>
+<Property Key="Position" Value="-3.6428568 2.9835167 1.5"/>
+</Node>
+<Node ID="N3">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.7930386"/>
+<Property Key="BottomRadius" Value="2.7930386"/>
+<Property Key="Radius" Value="0.27930388"/>
+</ViewType>
+<Property Key="Position" Value="-3.6428568 2.9835167 2.0"/>
+</Node>
+<Node ID="N4">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.41568628 0.41568628"/>
+<Property Key="TopRadius" Value="2.188037"/>
+<Property Key="BottomRadius" Value="2.7930386"/>
+<Property Key="Radius" Value="0.24905376"/>
+</ViewType>
+<Property Key="Position" Value="-3.6428568 2.9835167 2.5"/>
+</Node>
+<Node ID="N5">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.78431374 0.8 0.78431374"/>
+<Property Key="TopRadius" Value="2.203047"/>
+<Property Key="BottomRadius" Value="2.188037"/>
+<Property Key="Radius" Value="0.21955419"/>
+</ViewType>
+<Property Key="Position" Value="-3.6428568 2.9835167 3.0"/>
+</Node>
+<Node ID="N6">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.7764706 0.7764706"/>
+<Property Key="TopRadius" Value="2.0123315"/>
+<Property Key="BottomRadius" Value="2.203047"/>
+<Property Key="Radius" Value="0.21076894"/>
+</ViewType>
+<Property Key="Position" Value="-3.6428568 2.9835167 3.5"/>
+</Node>
+<Node ID="N7">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7764706 0.8 0.7764706"/>
+<Property Key="TopRadius" Value="2.0558867"/>
+<Property Key="BottomRadius" Value="2.0123315"/>
+<Property Key="Radius" Value="0.20341091"/>
+</ViewType>
+<Property Key="Position" Value="-3.6428568 2.9835167 4.0"/>
+</Node>
+<Node ID="N8">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.78039217 0.78039217"/>
+<Property Key="TopRadius" Value="2.0119884"/>
+<Property Key="BottomRadius" Value="2.0558867"/>
+<Property Key="Radius" Value="0.20339374"/>
+</ViewType>
+<Property Key="Position" Value="-3.6428568 2.9835167 4.5"/>
+</Node>
+<Node ID="N9">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.6745098 0.6745098"/>
+<Property Key="TopRadius" Value="2.3142295"/>
+<Property Key="BottomRadius" Value="2.0119884"/>
+<Property Key="Radius" Value="0.21631089"/>
+</ViewType>
+<Property Key="Position" Value="-3.6428568 2.9835167 5.0"/>
+</Node>
+<Node ID="N10">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.0 0.0"/>
+<Property Key="TopRadius" Value="1.041783"/>
+<Property Key="BottomRadius" Value="2.3142295"/>
+<Property Key="Radius" Value="0.16780062"/>
+</ViewType>
+<Property Key="Position" Value="-3.6428568 2.9835167 5.5"/>
+</Node>
+</Cluster>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="Media"/>
+<Property Key="Radius" Value="2.1889272"/>
+</ViewType>
+<Property Key="Position" Value="-1.9285713 2.9835167 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="2"/>
+</LayoutEngineType>
+<Node ID="N47">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.0148814"/>
+<Property Key="BottomRadius" Value="2.0148814"/>
+<Property Key="Radius" Value="0.20148814"/>
+</ViewType>
+<Property Key="Position" Value="-1.9285713 2.9835167 1.0"/>
+</Node>
+<Node ID="N48">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.7176471 0.8 0.7176471"/>
+<Property Key="TopRadius" Value="2.3602753"/>
+<Property Key="BottomRadius" Value="2.0148814"/>
+<Property Key="Radius" Value="0.21875782"/>
+</ViewType>
+<Property Key="Position" Value="-1.9285713 2.9835167 1.5"/>
+</Node>
+<Node ID="N49">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.68235296 0.68235296"/>
+<Property Key="TopRadius" Value="2.3929856"/>
+<Property Key="BottomRadius" Value="2.3602753"/>
+<Property Key="Radius" Value="0.23766303"/>
+</ViewType>
+<Property Key="Position" Value="-1.9285713 2.9835167 2.0"/>
+</Node>
+<Node ID="N50">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.61960787 0.61960787"/>
+<Property Key="TopRadius" Value="2.1577237"/>
+<Property Key="BottomRadius" Value="2.3929856"/>
+<Property Key="Radius" Value="0.22753547"/>
+</ViewType>
+<Property Key="Position" Value="-1.9285713 2.9835167 2.5"/>
+</Node>
+<Node ID="N51">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.2743535"/>
+<Property Key="BottomRadius" Value="2.1577237"/>
+<Property Key="Radius" Value="0.22160387"/>
+</ViewType>
+<Property Key="Position" Value="-1.9285713 2.9835167 3.0"/>
+</Node>
+<Node ID="N52">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.6627451 0.8 0.6627451"/>
+<Property Key="TopRadius" Value="2.414234"/>
+<Property Key="BottomRadius" Value="2.2743535"/>
+<Property Key="Radius" Value="0.23442936"/>
+</ViewType>
+<Property Key="Position" Value="-1.9285713 2.9835167 3.5"/>
+</Node>
+<Node ID="N53">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.3862917"/>
+<Property Key="BottomRadius" Value="2.414234"/>
+<Property Key="Radius" Value="0.24002628"/>
+</ViewType>
+<Property Key="Position" Value="-1.9285713 2.9835167 4.0"/>
+</Node>
+<Node ID="N54">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.76862746 0.76862746"/>
+<Property Key="TopRadius" Value="2.414704"/>
+<Property Key="BottomRadius" Value="2.3862917"/>
+<Property Key="Radius" Value="0.2400498"/>
+</ViewType>
+<Property Key="Position" Value="-1.9285713 2.9835167 4.5"/>
+</Node>
+<Node ID="N55">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.42745098 0.42745098"/>
+<Property Key="TopRadius" Value="2.1497614"/>
+<Property Key="BottomRadius" Value="2.414704"/>
+<Property Key="Radius" Value="0.22822328"/>
+</ViewType>
+<Property Key="Position" Value="-1.9285713 2.9835167 5.0"/>
+</Node>
+<Node ID="N56">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.1889272"/>
+<Property Key="BottomRadius" Value="2.1497614"/>
+<Property Key="Radius" Value="0.21693444"/>
+</ViewType>
+<Property Key="Position" Value="-1.9285713 2.9835167 5.5"/>
+</Node>
+</Cluster>
+<Cluster>
+<ViewType Name="Column Cluster">
+<Property Key="Label" Value="Leisure"/>
+<Property Key="Radius" Value="0.9429305"/>
+</ViewType>
+<Property Key="Position" Value="5.9505496 -3.3131866 0.0"/>
+<LayoutEngineType Name="ColumnLayout">
+<Property Key="LevelSeparation" Value="0.5"/>
+<Property Key="BaseLevel" Value="5"/>
+</LayoutEngineType>
+<Node ID="N117">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="2.0133953"/>
+<Property Key="BottomRadius" Value="2.0133953"/>
+<Property Key="Radius" Value="0.20133953"/>
+</ViewType>
+<Property Key="Position" Value="5.9505496 -3.3131866 2.5"/>
+</Node>
+<Node ID="N118">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.74509805 0.74509805"/>
+<Property Key="TopRadius" Value="1.8964319"/>
+<Property Key="BottomRadius" Value="2.0133953"/>
+<Property Key="Radius" Value="0.19549136"/>
+</ViewType>
+<Property Key="Position" Value="5.9505496 -3.3131866 3.0"/>
+</Node>
+<Node ID="N119">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.28627452 0.28627452"/>
+<Property Key="TopRadius" Value="1.2964516"/>
+<Property Key="BottomRadius" Value="1.8964319"/>
+<Property Key="Radius" Value="0.15964417"/>
+</ViewType>
+<Property Key="Position" Value="5.9505496 -3.3131866 3.5"/>
+</Node>
+<Node ID="N120">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.3137255 0.3137255"/>
+<Property Key="TopRadius" Value="0.92514694"/>
+<Property Key="BottomRadius" Value="1.2964516"/>
+<Property Key="Radius" Value="0.11107993"/>
+</ViewType>
+<Property Key="Position" Value="5.9505496 -3.3131866 4.0"/>
+</Node>
+<Node ID="N121">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.78431374 0.8 0.78431374"/>
+<Property Key="TopRadius" Value="0.93275124"/>
+<Property Key="BottomRadius" Value="0.92514694"/>
+<Property Key="Radius" Value="0.09289491"/>
+</ViewType>
+<Property Key="Position" Value="5.9505496 -3.3131866 4.5"/>
+</Node>
+<Node ID="N122">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.78431374 0.8 0.78431374"/>
+<Property Key="TopRadius" Value="0.94502044"/>
+<Property Key="BottomRadius" Value="0.93275124"/>
+<Property Key="Radius" Value="0.09388858"/>
+</ViewType>
+<Property Key="Position" Value="5.9505496 -3.3131866 5.0"/>
+</Node>
+<Node ID="N123">
+<ViewType Name="Tube Node">
+<Property Key="Colour" Value="0.8 0.8 0.8"/>
+<Property Key="TopRadius" Value="0.9429305"/>
+<Property Key="BottomRadius" Value="0.94502044"/>
+<Property Key="Radius" Value="0.094397545"/>
+</ViewType>
+<Property Key="Position" Value="5.9505496 -3.3131866 5.5"/>
+</Node>
+</Cluster>
+<Edge StartID="N106" EndID="N125">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.07450981 0.07450981 1.0"/>
+<Property Key="Radius" Value="0.029940274"/>
+</ViewType>
+</Edge>
+<Edge StartID="N149" EndID="N125">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.07450981 0.07450981 1.0"/>
+<Property Key="Radius" Value="0.046619788"/>
+</ViewType>
+</Edge>
+<Edge StartID="N71" EndID="N13">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.14509805 0.14509805 1.0"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+</Edge>
+<Edge StartID="N59" EndID="N13">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.14509805 0.14509805 1.0"/>
+<Property Key="Radius" Value="0.09687427"/>
+</ViewType>
+</Edge>
+<Edge StartID="N4" EndID="N153">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.3647059 0.3647059 1.0"/>
+<Property Key="Radius" Value="0.027248615"/>
+</ViewType>
+</Edge>
+<Edge StartID="N4" EndID="N141">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.3647059 0.3647059 1.0"/>
+<Property Key="Radius" Value="0.025397442"/>
+</ViewType>
+</Edge>
+<Edge StartID="N28" EndID="N153">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.3647059 0.3647059 1.0"/>
+<Property Key="Radius" Value="0.011851173"/>
+</ViewType>
+</Edge>
+<Edge StartID="N28" EndID="N141">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.3647059 0.3647059 1.0"/>
+<Property Key="Radius" Value="0.01"/>
+</ViewType>
+</Edge>
+<Edge StartID="N50" EndID="N153">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.3647059 0.3647059 1.0"/>
+<Property Key="Radius" Value="0.027403135"/>
+</ViewType>
+</Edge>
+<Edge StartID="N50" EndID="N141">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.3647059 0.3647059 1.0"/>
+<Property Key="Radius" Value="0.025551964"/>
+</ViewType>
+</Edge>
+<Edge StartID="N40" EndID="N153">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.3647059 0.3647059 1.0"/>
+<Property Key="Radius" Value="0.02404711"/>
+</ViewType>
+</Edge>
+<Edge StartID="N40" EndID="N141">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.3647059 0.3647059 1.0"/>
+<Property Key="Radius" Value="0.022195935"/>
+</ViewType>
+</Edge>
+<Edge StartID="N120" EndID="N65">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.5803922 0.5803922 1.0"/>
+<Property Key="Radius" Value="0.030655613"/>
+</ViewType>
+</Edge>
+<Edge StartID="N19" EndID="N65">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.5803922 0.5803922 1.0"/>
+<Property Key="Radius" Value="0.02738328"/>
+</ViewType>
+</Edge>
+<Edge StartID="N90" EndID="N114">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.654902 0.654902 1.0"/>
+<Property Key="Radius" Value="0.03108146"/>
+</ViewType>
+</Edge>
+<Edge StartID="N145" EndID="N114">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.654902 0.654902 1.0"/>
+<Property Key="Radius" Value="0.08227293"/>
+</ViewType>
+</Edge>
+<Edge StartID="N79" EndID="N115">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.7254902 0.7254902 1.0"/>
+<Property Key="Radius" Value="0.029968973"/>
+</ViewType>
+</Edge>
+<Edge StartID="N79" EndID="N158">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.7254902 0.7254902 1.0"/>
+<Property Key="Radius" Value="0.023953388"/>
+</ViewType>
+</Edge>
+<Edge StartID="N55" EndID="N115">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.7254902 0.7254902 1.0"/>
+<Property Key="Radius" Value="0.016865004"/>
+</ViewType>
+</Edge>
+<Edge StartID="N55" EndID="N158">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.7254902 0.7254902 1.0"/>
+<Property Key="Radius" Value="0.010849417"/>
+</ViewType>
+</Edge>
+<Edge StartID="N103" EndID="N115">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.7254902 0.7254902 1.0"/>
+<Property Key="Radius" Value="0.029512243"/>
+</ViewType>
+</Edge>
+<Edge StartID="N103" EndID="N158">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.7254902 0.7254902 1.0"/>
+<Property Key="Radius" Value="0.023496658"/>
+</ViewType>
+</Edge>
+<Edge StartID="N45" EndID="N115">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.7254902 0.7254902 1.0"/>
+<Property Key="Radius" Value="0.029220477"/>
+</ViewType>
+</Edge>
+<Edge StartID="N45" EndID="N158">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.7254902 0.7254902 1.0"/>
+<Property Key="Radius" Value="0.023204891"/>
+</ViewType>
+</Edge>
+<Edge StartID="N146" EndID="N115">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.7254902 0.7254902 1.0"/>
+<Property Key="Radius" Value="0.031928144"/>
+</ViewType>
+</Edge>
+<Edge StartID="N146" EndID="N158">
+<ViewType Name="SplineTube">
+<Property Key="Colour" Value="0.7254902 0.7254902 1.0"/>
+<Property Key="Radius" Value="0.025912559"/>
+</ViewType>
+</Edge>
+</Cluster>
+</WilmaGraph>

@@ -241,11 +241,15 @@ public class SplineTubeEdgeView
 			b.addChild(tubeShape);
 		}
 	}
+
+  /**
+   * draws a 2D representation of the edge on the specified Graphics2D
+   * @see org.wilmascope.view.View2D#draw2D(org.wilmascope.view.Renderer2D, java.awt.Graphics2D)
+   */
 	public void draw2D(Renderer2D r, Graphics2D g) {
 		float thickness = 4f * r.scaleX(getRadius());
 		Color3f c = new Color3f();
 		getAppearance().getMaterial().getDiffuseColor(c);
-		/*
 		if(c.x>0.5f) {
 		  g.setStroke(new BasicStroke(thickness, 
 		  BasicStroke.CAP_ROUND, 
@@ -256,7 +260,7 @@ public class SplineTubeEdgeView
 		  BasicStroke.CAP_BUTT, 
 		  BasicStroke.JOIN_MITER, 
 		  10.0f, new float[]{5.0f}, 0.0f));
-		} else */
+		} else
 		g.setStroke(new BasicStroke(thickness));
 		g.setColor(c.get());
 		GeneralPath p = new GeneralPath();

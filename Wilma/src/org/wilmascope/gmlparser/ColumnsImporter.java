@@ -24,10 +24,8 @@ import org.wilmascope.global.Constants;
 /**
  * @author dwyer
  *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
+ * Imports a set of GML files and compiles them into a stratified graph
+ * by matching node IDs.
  */
 class ColumnGraphClient implements GraphClient {
 	private static String[] toStringArray(ArrayList l) {
@@ -86,10 +84,10 @@ class ColumnGraphClient implements GraphClient {
 					new ColumnCluster(
 						r,
 						100f,
-						4*radius,
-						level,
-						constants.getProperty("ImportedColumnClusterStyle"),
-						constants.getProperty("ImportedColumnNodeStyle"));
+						radius,
+						level,"Column Cluster","Tube Node");
+						//constants.getProperty("ImportedColumnClusterStyle"),
+						//constants.getProperty("ImportedColumnNodeStyle"));
 				c.c.setLabel(toStringArray(labelLines));
 				c.level = level - 1;
 				columns.put(id, c);
@@ -98,7 +96,7 @@ class ColumnGraphClient implements GraphClient {
 			while (c.level < level) {
 				c.level++;
 				if (c.level == level) {
-					GraphControl.NodeFacade n = c.c.addStraightNode(4*radius);
+					GraphControl.NodeFacade n = c.c.addStraightNode(radius);
 					n.setColour(
 						0.9f,
 						0.9f,
@@ -121,7 +119,7 @@ class ColumnGraphClient implements GraphClient {
 		String label,
 		String arrowPosition) {
 		TransientColumn c =
-			(TransientColumn) edgeColumns.get(startID + "," + endID);
+			(TransientColumn) edgeColumns.get(label+","+startID + "," + endID);
 
 		if (c == null) {
 			c = new TransientColumn();
@@ -131,10 +129,10 @@ class ColumnGraphClient implements GraphClient {
 					10f,
 					10f,
 					level,
-					"Column Cluster",
+					"Box Column Cluster",
 					"Box Node");
 			c.c.setLabel(new String[] { label });
-			edgeColumns.put(startID + "," + endID, c);
+			edgeColumns.put(label+","+startID + "," + endID, c);
 			c.level = level - 1;
 
 		}
@@ -233,8 +231,8 @@ public class ColumnsImporter {
 			//r.hide();
 			org.wilmascope.dotlayout.DotLayout d =
 				new org.wilmascope.dotlayout.DotLayout(r.getCluster());
-			d.setXScale(16f);
-			d.setYScale(6f);
+			d.setXScale(18f);
+			d.setYScale(8f);
 			r.setLayoutEngine(d);
 			Hashtable columns = new Hashtable();
 			Hashtable edgeColumns = new Hashtable();

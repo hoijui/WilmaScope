@@ -59,6 +59,7 @@ public class FileHandler {
   GraphControl graphControl;
   Hashtable nodeLookup;
   Hashtable idLookup;
+  boolean needsLayout=false;
   public FileHandler(GraphControl graphControl) {
     this.graphControl = graphControl;
   }
@@ -79,6 +80,9 @@ public class FileHandler {
       long time = endTime - startTime;
       System.out.println("Loaded... in milliseconds: " + time);
       graphControl.getRootCluster().getCluster().draw();
+      if(needsLayout) {
+        graphControl.unfreeze();
+      }
     } else if (fileName.endsWith(".gml")) {
       GMLLoader gmlLoader = new GMLLoader(graphControl,fileName);
     }
@@ -219,6 +223,7 @@ public class FileHandler {
       e=new ForceLayout(c.getCluster());
     } else if (type.equals("DotLayout")) {
       e=new org.wilmascope.dotlayout.DotLayout(c.getCluster());
+      needsLayout=true;
     } else if (type.equals("ColumnLayout")) {
       e=new org.wilmascope.columnlayout.ColumnLayout(c.getCluster());
     }
