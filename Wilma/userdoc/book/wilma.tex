@@ -380,11 +380,12 @@ wide range of graph visualisation problems.  One variation on these
 algorithms, advocated by Fruchtermann \&
 Rheingold~\cite{fruchtermann90force-directed} and Davidson {\em et.
 al.}~\cite{davidson01noise}, attempts to avoid calculation of repulsion force
-vectors, which is $O(n^2)$ in the number of vertices:  
+vectors, which is $O(n)$ in the number of vertices for each node $i$, and
+$O(n^2)$ for the whole graph:
 
 \begin{equation}
 \label{repulsion}
-\vec{R}_i \equiv \sum_{j \in V, j \neq i} \vec{r}_{i,j}
+\vec{R}_i \equiv \sum_{j \in V \setminus \{i\}} \vec{r}_{i,j}
 \end{equation}
 
 \noindent Where $\vec{r}_{i,j} = \vec{r}_i - \vec{r}_j$ is the displacement
@@ -448,7 +449,8 @@ so that the two nodes at either end are combined, and the process is repeated.
 
 In order to perform these simplifications rapidly, the stochastic matching
 approach of Hendrickson \& Leland~\cite{hendrickson95multilevel} is employed,
-which is linear time for sparse graphs.
+which takes $O(|V| \centerdot {|E| \over |V|})$ time, and is linear for
+sparse graphs.
 
 After each level of force-directed layout has stabilised, the aggregated
 nodes are replaced by their pairs of matched children, and the thermal energy
@@ -463,7 +465,7 @@ become apparent to the user, as the level of detail increases.
 
 Walshaw's algorithm also addresses the $O(n^2)$ cost of the calculating the
 repulsion force (see Equation~\ref{repulsion}).  As with the fast simulated
-annealing strategy, this involves storing information about the replusion in
+annealing strategy, this involves storing information about the repulsion in
 a spatial data structure, although the details are different.
 
 Instead of trying to approximate the potential field of the force, the
@@ -478,16 +480,26 @@ If the repulsion force is constructed so that it cuts off beyond a certain
 distance $d_\infty$, that is:
 
 \begin{equation}
-\exists d_\infty : \forall d > d_\infty, f_g(d) = 0
+\exists \, d_\infty : \, 
+||\vec{r_i} - \vec{r_j}|| > d_\infty
+\Rightarrow 
+repulsionforce (\vec{r_i},\vec{r_j}) = \vec{0}
 \end{equation}
+%\forall d > d_\infty, f_g(d) = 0
 
 Then it is possible to calculate the repulsion force on a particular node $i$
 with reference solely to the positions of nearby nodes.  If the cells for
 the spatial data structure are of a size greater than or equal to $d_\infty$,
 then all such nodes may be addressed through the cell containing $i$, and
 those adjacent to it.  In this algorithm, the cost of calculating the
-replusion force is $O(n \centerdot \rho)$, where $\rho$ is the average spatial
-density of nodes.
+replusion force is $O(|V| \centerdot \rho)$, where $\rho$ is the average 
+of the embedding density around each node.  Provided that the repulsion
+force is {\em strong} --- that it does not fall of faster than the square
+of the distance between nodes --- then we can expect $\rho$ to be bounded
+independently of $|V|$, and thus, repulsion force evaluation to be linear.
+
+The multilevel force-directed layout engine thus provides WilmaScope with
+an efficient mechanism for handling large graphs.
 
 \subsubsection{DOT: heirarchical layout}
 DOT is a program included in the Graphviz
