@@ -204,7 +204,11 @@ public class ColumnsImporter {
 			int level = 0;
 			GraphControl.ClusterFacade r = g.getRootCluster();
 			r.deleteAll();
-      r.setUserData(files);
+      String[] strataNames = new String[files.length];
+      for(int i=0; i<files.length; i++) {
+        strataNames[i]=files[i].getName();
+      }
+      r.setUserData(strataNames);
 			r = r.addCluster();
 			r.hide();
 			org.wilmascope.dotlayout.DotLayout d =

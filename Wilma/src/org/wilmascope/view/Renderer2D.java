@@ -121,6 +121,11 @@ public class Renderer2D {
     int ry = (int)scaleY(size);
     g.fillOval((int)p.x-rx,(int)p.y-ry,rx*2,ry*2);
   }
+  public void linePath(Graphics2D g, Point3f start, Point3f end) {
+    Point2f p1 = getScreenPoint(start);
+    Point2f p2 = getScreenPoint(end);
+    g.drawLine((int)p1.x,(int)p1.y,(int)p2.x,(int)p2.y);
+  }
   public void arrowPath(Graphics2D g, float width, Point3f start, Point3f end) {
     float r = width/2f;
     Vector3f v = new Vector3f();

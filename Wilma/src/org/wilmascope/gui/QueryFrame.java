@@ -35,6 +35,7 @@ import javax.swing.JTextField;
 
 import org.wilmascope.columnlayout.ColumnCluster;
 import org.wilmascope.columnlayout.ColumnLayout;
+import org.wilmascope.columnlayout.NodeColumnLayout;
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.forcelayout.BalancedEventClient;
 import org.wilmascope.forcelayout.Origin;
@@ -736,7 +737,11 @@ public class QueryFrame extends JFrame {
       StringTokenizer stl = new StringTokenizer(rec, ", ");
       int numofsectors = Integer.parseInt(stl.nextToken());
       int numofmonths = Integer.parseInt(stl.nextToken());
-
+      String[] strataNames = new String[numofmonths];
+      for(int i=0;i<numofmonths;i++) {
+        strataNames[i] = new String("Month "+i);
+      }
+      graphControl.getRootCluster().setUserData(strataNames);
       count = new long[numofmonths][numofsectors];
       value = new float[numofmonths][numofsectors];
       for (int i = 0; i < numofmonths; i++) {
@@ -944,7 +949,7 @@ public class QueryFrame extends JFrame {
     ColumnCluster c = (ColumnCluster) columns.get(id);
 
     if (c == null) {
-      c = new ColumnCluster(id, graphRoot, value, 1f, level,"Tube");
+      c = new ColumnCluster(id, graphRoot, value, 1f, level,"Tube Node");
       columns.put(id, c);
     }
     if (c.getNextLevel() < level + 1) {
@@ -1001,7 +1006,7 @@ public class QueryFrame extends JFrame {
       while(st.hasMoreTokens()) {
         idStrings[i++] = st.nextToken();
       }
-      c = new ColumnCluster(parent, nodeScale*value/ maxmc, nodeScale*value/maxmc, level,"Column Cluster", "Tube");
+      c = new ColumnCluster(parent, nodeScale*value/ maxmc, nodeScale*value/maxmc, level,"Column Cluster", "Tube Node");
       c.setLabel(idStrings);
       ((ColumnLayout)c.getClusterFacade().getLayoutEngine()).setStrataSeparation(0.2f);
       columns.put(id, c);
@@ -1017,6 +1022,7 @@ public class QueryFrame extends JFrame {
     }
     d.last = l;
     GraphControl.NodeFacade n = c.addVariableNode(nodeScale*value / maxmc);
+    ((NodeColumnLayout)n.getNode().getLayout()).setHeight(0.2f);
     // colour the node according to change in share value:
     // white if no change
     // shade toward green if value increases, red if it decreases
