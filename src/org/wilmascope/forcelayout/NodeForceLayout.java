@@ -121,8 +121,12 @@ public class NodeForceLayout extends NodeLayout {
     int totalOrbits = fl.getOrbits();
     float orbitSeparation = fl.getOrbitSeparation();
     if (totalOrbits >= 0) {
-      Point3f o = node.getOwner().getPosition();
-      Point3f p = node.getPosition();
+      Point3f o = node.getOwner().getPosition();   
+      Point3f p = node.getPosition();  
+      // if there are also level constraints then orbit constraints apply only in the plane
+      if (totalLevels >= 0) {
+      	o.z=p.z;
+      }
       Vector3f po = new Vector3f();
       po.sub(o,p);
       Vector3f rpo=new Vector3f(po);
@@ -131,6 +135,10 @@ public class NodeForceLayout extends NodeLayout {
       rpo.scale(r);
       Vector3f pq = new Vector3f();
       pq.sub(po,rpo);
+      // if there are also level constraints then orbit constraints apply only in the plane
+      if (totalLevels >= 0) {
+      	pq.z=0;
+      }
       node.reposition(pq);
     }
   }
