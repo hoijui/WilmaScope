@@ -18,6 +18,9 @@
  * -- Tim Dwyer, 2001
  */
 package org.wilmascope.viewplugin;
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
+
 import javax.media.j3d.GeometryStripArray;
 import javax.media.j3d.Material;
 import javax.media.j3d.Shape3D;
@@ -26,11 +29,14 @@ import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
+
 import org.wilmascope.graph.Edge;
 import org.wilmascope.view.Colours;
 import org.wilmascope.view.Constants;
 import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.NodeView;
+import org.wilmascope.view.Renderer2D;
+
 import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.GeometryInfo;
 import com.sun.j3d.utils.geometry.NormalGenerator;
@@ -45,7 +51,7 @@ public class TaperedEdgeView extends EdgeView {
 	// create the basic reference geometries from the shape sections of a
 	// cylinder
 	//
-	static float topRadius = 1f, bottomRadius = 1f;
+	private float topRadius = 1f, bottomRadius = 1f;
 	static Point3f[] tubePoints;
 	static int[] tubeStripCounts;
 	static NormalGenerator normalGenerator = new NormalGenerator();
@@ -89,14 +95,14 @@ public class TaperedEdgeView extends EdgeView {
 	 * adjust the radius of the top of the tube @parameter r xScale factor, ie
 	 * the resulting top radius will be r * node radius
 	 */
-	static public void setTopRadius(float r) {
+	private void setTopRadius(float r) {
 		topRadius = r;
 	}
 	/**
 	 * adjust the radius of the bottom of the tube @parameter r xScale factor, ie
 	 * the resulting bottom radius will be r * node radius
 	 */
-	static public void setBottomRadius(float r) {
+	private void setBottomRadius(float r) {
 		bottomRadius = r;
 	}
 	public void init() {
@@ -146,7 +152,33 @@ public class TaperedEdgeView extends EdgeView {
 		v.scaleAdd(0.5f, e.getStart().getPosition());
 		setFullTransform(new Vector3d(getRadius(), l, getRadius()), v,
 				getPositionAngle());
-	}
+	} 
+  /**
+   * 2D version of tapered edge is just a two colour solid line 
+   *   of width tapering from startWidth to endWidth.
+   *   First half line is coloured same as start node
+   *   Second half is coloured as for end node
+   */
+  public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
+    float thickness = r.scaleX(getRadius());
+    g.setStroke(new BasicStroke(thickness));
+    
+    Point3f start = getEdge().getStart().getPosition();
+    Point3f end = getEdge().getEnd().getPosition();
+    Vector3f v = new Vector3f();
+    v.sub(end,start);
+    v.scale(0.5f);
+    Point3f mid = new Point3f(start);
+    mid.add(v);
+    // actual screen width is end radius * edge radius(scale factor) * 2
+    float sW = bottomRadius*getRadius()*2f;
+    float eW = topRadius*getRadius()*2f;
+    float mW = (sW+eW)/2f;
+    g.setColor(((NodeView)getEdge().getStart().getView()).getColour());
+    r.taperedLinePath(g,sW,mW,start,mid);
+    g.setColor(((NodeView)getEdge().getEnd().getView()).getColour());
+    r.taperedLinePath(g,mW,eW,mid,end);
+  }
 	public ImageIcon getIcon() {
 		return new ImageIcon("images/taperedEdge.png");
 	}

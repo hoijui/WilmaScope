@@ -1,30 +1,20 @@
 package org.wilmascope.viewplugin;
 
-import org.wilmascope.view.*;
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
 
-/*
- * The following source code is part of the WilmaScope 3D Graph Drawing Engine
- * which is distributed under the terms of the GNU Lesser General Public License
- * (LGPL - http://www.gnu.org/copyleft/lesser.html).
- *
- * As usual we distribute it with no warranties and anything you chose to do
- * with it you do at your own risk.
- *
- * Copyright for this work is retained by Tim Dwyer and the WilmaScope organisation
- * (www.wilmascope.org) however it may be used or modified to work as part of
- * other software subject to the terms of the LGPL.  I only ask that you cite
- * WilmaScope as an influence and inform us (tgdwyer@yahoo.com)
- * if you do anything really cool with it.
- *
- * The WilmaScope software source repository is hosted by Source Forge:
- * www.sourceforge.net/projects/wilma
- *
- * -- Tim Dwyer, 2002
- */
-import javax.media.j3d.*;
-import javax.vecmath.*;
+import javax.media.j3d.GeometryArray;
+import javax.media.j3d.LineArray;
+import javax.media.j3d.Shape3D;
 import javax.swing.ImageIcon;
-import org.wilmascope.view.Colours;
+import javax.vecmath.Color3f;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
+
+import org.wilmascope.view.EdgeView;
+import org.wilmascope.view.GraphElementView;
+import org.wilmascope.view.NodeView;
+import org.wilmascope.view.Renderer2D;
 public class LineEdgeView extends EdgeView {
   public LineEdgeView() {
     setTypeName("LineEdge");
@@ -56,6 +46,27 @@ public class LineEdgeView extends EdgeView {
   public void draw() {
     myLine.setCoordinate(0,getEdge().getStart().getPosition());
     myLine.setCoordinate(1,getEdge().getEnd().getPosition());
+  }
+  /**
+   * 2D version of line edge is just a two colour solid line.
+   *   First half line is coloured same as start node
+   *   Second half is coloured as for end node
+   */
+  public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
+    float thickness = r.scaleX(getRadius());
+    g.setStroke(new BasicStroke(thickness));
+    
+    Point3f start = getEdge().getStart().getPosition();
+    Point3f end = getEdge().getEnd().getPosition();
+    Vector3f v = new Vector3f();
+    v.sub(end,start);
+    v.scale(0.5f);
+    Point3f mid = new Point3f(start);
+    mid.add(v);
+    g.setColor(((NodeView)getEdge().getStart().getView()).getColour());
+    r.linePath(g,start,mid);
+    g.setColor(((NodeView)getEdge().getEnd().getView()).getColour());
+    r.linePath(g,mid,end);
   }
   public void setStartColour(Color3f c) {
     myLine.setColor(0,c);

@@ -21,7 +21,6 @@
 package org.wilmascope.view;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Properties;
 
@@ -143,7 +142,10 @@ implements org.wilmascope.graph.EdgeView, View2D  {
     float thickness = r.scaleX(getRadius());
     g.setStroke(new BasicStroke(thickness));
     
-    g.setColor(Color.BLACK);
+    Color3f c = new Color3f();
+    getAppearance().getMaterial().getDiffuseColor(c);
+    g.setColor(c.get());
+
     Point3f start = getEdge().getStart().getPosition();
     Point3f end = getEdge().getEnd().getPosition();
     Vector3f v = new Vector3f();

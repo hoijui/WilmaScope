@@ -20,6 +20,10 @@
 
 package org.wilmascope.viewplugin;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 import javax.media.j3d.GeometryStripArray;
 import javax.media.j3d.Material;
 import javax.media.j3d.Shape3D;
@@ -34,11 +38,11 @@ import org.wilmascope.view.Colours;
 import org.wilmascope.view.Constants;
 import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.NodeView;
+import org.wilmascope.view.Renderer2D;
 
 import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.GeometryInfo;
 import com.sun.j3d.utils.geometry.NormalGenerator;
-import com.sun.j3d.utils.geometry.Stripifier;
 
 /**
  * Graphical representation of the edge
@@ -163,6 +167,27 @@ public class AttenuatedEdgeView extends EdgeView {
     Vector3f v = new Vector3f(e.getVector());
     v.scaleAdd(0.5f, e.getStart().getPosition());
     setFullTransform(new Vector3d(getRadius(), l, getRadius()), v, getPositionAngle());
+  }
+  /**
+   * 2D version of attenuated edge is just a two colour solid line.
+   *   First half line is coloured same as start node
+   *   Second half is coloured as for end node
+   */
+  public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
+    float thickness = r.scaleX(getRadius());
+    g.setStroke(new BasicStroke(thickness));
+    
+    Point3f start = getEdge().getStart().getPosition();
+    Point3f end = getEdge().getEnd().getPosition();
+    Vector3f v = new Vector3f();
+    v.sub(end,start);
+    v.scale(0.5f);
+    Point3f mid = new Point3f(start);
+    mid.add(v);
+    g.setColor(((NodeView)getEdge().getStart().getView()).getColour());
+    r.linePath(g,start,mid);
+    g.setColor(((NodeView)getEdge().getEnd().getView()).getColour());
+    r.linePath(g,mid,end);
   }
   public ImageIcon getIcon() {
     return new ImageIcon("images/attenuatedEdge.png");

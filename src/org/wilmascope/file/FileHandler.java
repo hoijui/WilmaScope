@@ -107,13 +107,6 @@ public class FileHandler {
 						viewTypeString);
 				ge.setView(v);
 				v.setProperties(viewType.getProperties());
-        {
-          Point3f s = ge.getStartNode().getPosition();
-          Point3f e = ge.getEndNode().getPosition();
-          if(s.z<e.z) {
-            System.out.println("Backward Edge, type="+viewTypeString+", startLabel="+ge.getStartNode().getLabel()+", endLabel="+ge.getEndNode().getLabel());
-          }
-        }
 			} catch (ViewManager.UnknownViewTypeException e) {
 				e.printStackTrace();
 			}

@@ -107,11 +107,15 @@ public class DrawingPanel extends JPanel implements Printable {
 				Node n = null;
 				for (nodes.resetIterator(); nodes.hasNext();) {
 					n = nodes.nextNode();
-					int distance = Math.abs(((NodeColumnLayout) n.getLayout())
-							.getStratum()
-							- stratum);
-					if (distance == 0) {
-            draw2D(w, h, g, n);
+					float distance = Math.abs(n.getPosition().z - (float) stratum);
+					// the following is better because it doesn't rely on column
+					// separation being 1f
+					if (n.getLayout() instanceof NodeColumnLayout) {
+						distance = Math.abs(((NodeColumnLayout) n.getLayout()).getStratum()
+								- stratum);
+					}
+					if (distance < 0.01f) {
+						draw2D(w, h, g, n);
 					}
 					//setViewTransparency((float)distance/5f, (GraphElementView)
 					// n.getView());
@@ -135,7 +139,7 @@ public class DrawingPanel extends JPanel implements Printable {
 	 * @param n
 	 */
 	private void draw2D(int w, int h, Graphics2D g, Node n) {
-    EdgeList outEdges = n.getOutEdges();
+		EdgeList outEdges = n.getOutEdges();
 		View2D v = (View2D) n.getView();
 		v.draw2D(new Renderer2D(bottomLeft, topRight, w, h), g, 1f);
 		for (outEdges.resetIterator(); outEdges.hasNext();) {
