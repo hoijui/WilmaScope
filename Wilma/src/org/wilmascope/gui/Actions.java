@@ -200,7 +200,7 @@ public class Actions {
 			"Open a previously saved graph.",
 			"control O",
 			'O',
-			"/images/Open16.gif");
+			"images/Open16.gif");
 		fileNewAction =
 			new AbstractAction(
 				"New",
@@ -214,7 +214,7 @@ public class Actions {
 			"Create a new graph.",
 			"control N",
 			'N',
-			"/images/New16.gif");
+			"images/New16.gif");
 		fileSaveAsAction =
 			new AbstractAction(
 				"Save As",
@@ -236,7 +236,7 @@ public class Actions {
 			"Select a file name and save the graph.",
 			"control A",
 			'A',
-			"/images/SaveAs16.gif");
+			"images/SaveAs16.gif");
 		fileSaveAction =
 			new AbstractAction(
 				"Save",
@@ -250,7 +250,7 @@ public class Actions {
 			"Save the graph.",
 			"control S",
 			'S',
-			"/images/Save16.gif");
+			"images/Save16.gif");
 	}
 	public JToolBar getToolPanel() {
 		JToolBar p = new JToolBar();

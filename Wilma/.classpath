@@ -5,5 +5,5 @@
     <classpathentry kind="lib" path="C:/j2sdk1.4.1_03/jre/lib/ext/j3dcore.jar"/>
     <classpathentry kind="lib" path="C:/j2sdk1.4.1_03/jre/lib/ext/j3dutils.jar"/>
     <classpathentry kind="lib" path="C:/j2sdk1.4.1_03/jre/lib/ext/vecmath.jar"/>
-    <classpathentry kind="output" path="bin"/>
+    <classpathentry kind="output" path="classes"/>
 </classpath>

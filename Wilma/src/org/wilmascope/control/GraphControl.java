@@ -858,7 +858,7 @@ public class GraphControl {
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.LineNodeView());
       */
     try {
-      viewManager.loadViews(new java.io.File("../bin/org/wilmascope/viewplugin"),"org.wilmascope.viewplugin");
+      viewManager.loadViews(new java.io.File("../classes/org/wilmascope/viewplugin"),"org.wilmascope.viewplugin");
     } catch(java.io.IOException e) {
       System.err.println("Couldn't load plugins because "+e.getMessage());
     }
