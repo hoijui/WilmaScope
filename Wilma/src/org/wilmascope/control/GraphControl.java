@@ -377,6 +377,9 @@ public class GraphControl {
         if(c!=null) {
           return c.getLevel();
         }
+      } else if (node.getLayout() instanceof org.wilmascope.columnlayout.NodeColumnLayout) {
+        org.wilmascope.columnlayout.NodeColumnLayout n = (org.wilmascope.columnlayout.NodeColumnLayout)node.getLayout();
+        return n.getLevel();
       }
       return Integer.MIN_VALUE;
     }

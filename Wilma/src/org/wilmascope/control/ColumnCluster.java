@@ -53,7 +53,7 @@ public class ColumnCluster {
             ((TubeNodeView)n.getView()).setEndRadii(lastTopRadius,radius);
             System.out.println("n.getRadius()="+n.getRadius());
             //n.setRadius(n.getRadius()*radius);
-            n.setColour(102f/255f, 255f/255f, 51f/255f);
+            //n.setColour(102f/255f, 255f/255f, 51f/255f);
             return n;
         }
         public int getNextLevel() {
