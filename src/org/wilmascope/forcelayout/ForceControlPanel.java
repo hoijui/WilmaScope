@@ -73,10 +73,10 @@ public class ForceControlPanel extends javax.swing.JPanel {
     Force existingForce;
     if((existingForce = forceLayout.getForce(force.getTypeName()))!=null) {
       enabledCheckBox.setSelected(true);
-      force = existingForce;
+      this.force = existingForce;
     } else {
       try {
-        force = ForceManager.getInstance().createForce(force.getTypeName());
+        this.force = ForceManager.getInstance().createForce(force.getTypeName());
       } catch (UnknownForceTypeException e1) {
         WilmaMain.showErrorDialog("Unknown Force Type!",e1);
       }

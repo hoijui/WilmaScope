@@ -1,8 +1,10 @@
 package org.wilmascope.viewplugin;
 import javax.swing.ImageIcon;
+import javax.vecmath.AxisAngle4f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
+import org.wilmascope.graph.Plane;
 import org.wilmascope.view.ClusterView;
 import org.wilmascope.view.Colours;
 
@@ -29,10 +31,15 @@ public class ConeClusterView extends ClusterView {
   public void draw() {
     org.wilmascope.graph.Cluster c = (org.wilmascope.graph.Cluster)getNode();
     double radius = (double)getRadius();
+    Plane p = c.getNodes().getBestFitPlane();    
+    Vector3f norm = new Vector3f();
+    Vector3f v = p.getNormal();
+    AxisAngle4f angle = getAxisAngle4f(new Vector3f(0,1,0),v);
+
     setFullTransform(
       new Vector3d(radius,radius,radius),
-      new Vector3f(c.getPosition()),
-      c.getOrientation());
+      new Vector3f(p.getCentroid()),
+      angle);
   }
   public void init() {
     setExpandedView();

@@ -441,6 +441,16 @@ public abstract class GraphElementView
 					.nextToken()), Float.parseFloat(st.nextToken()));
 		}
 	}
+  /**
+   * @param init
+   * @param target
+   * @return AxisAngle for rotation of init vector to be oriented with target vector
+   */
+  public static AxisAngle4f getAxisAngle4f(Vector3f init, Vector3f target) {
+    Vector3f norm = new Vector3f();
+    norm.cross(init,target);
+    return new AxisAngle4f(norm.x,norm.y,norm.z,init.angle(target));
+  }
 	protected abstract void showLabel(String text);
 	// the branch group for the whole GraphElement
 	private BranchGroup bg;
