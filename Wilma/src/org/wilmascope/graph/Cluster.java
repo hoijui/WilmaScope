@@ -35,8 +35,16 @@ import java.util.Hashtable;
 /**
  * a Cluster is a set of Nodes ({@link Node}) and Edges
  * ({@link Edge}) sharing the same ({@link LayoutEngine}).
- * This class is the main interface for the graph package for
- * adding {@link GraphElement}s
+ * This class is the main interface to the graph package for
+ * adding {@link GraphElement}s to a graph hierarchy.
+ * $Id$
+ * Revision history:
+ * $Log$
+ * Revision 1.6  2002/03/27 07:28:14  tgdwyer
+ * Documentation changes
+ *
+ * @Author: Tim Dwyer
+ * @Version: $Revision$
  */
 public class Cluster extends Node {
   // the list of nodes in the cluster
