@@ -77,6 +77,9 @@ public class Constants extends AbstractConstants {
     d.setProperty("BalancedThreshold", "0.03");
     d.setProperty("VelocityAttenuation", "0.02");
 
+  // default data path
+    d.setProperty("DefaultDataPath", "../data");
+
     return d;
   }
   // the following are fairly definitive, I don't think we need to load them

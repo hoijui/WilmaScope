@@ -400,12 +400,11 @@ public class GraphControl {
       Force f = forceManager.createForce(name);
       layout.addForce(f);
       ForceFacade forceFacade = new ForceFacade(f);
-      forces.add(forceFacade);
       return forceFacade;
       }
     }
     public ForceFacade[] getForces() {
-      forces.clear();
+      Vector forces = new Vector();
       ForceLayout layout = (ForceLayout)cluster.getLayoutEngine();
       Vector fs = layout.getForces();
       for(int i=0;i<fs.size();i++) {
@@ -416,7 +415,6 @@ public class GraphControl {
     public void removeAllForces() {
       ForceLayout layout = (ForceLayout)cluster.getLayoutEngine();
       layout.removeAllForces();
-      forces.clear();
     }
     public void deleteAll() {
       NodeList condemned = new NodeList(cluster.getNodes());
@@ -426,7 +424,6 @@ public class GraphControl {
       }
     }
 
-    private Vector forces = new Vector();
     public org.wilmascope.graph.LayoutEngine getLayoutEngine() {
       return cluster.getLayoutEngine();
     }
