@@ -39,6 +39,7 @@ public class Actions {
   Action pickableClusterAction;
   Action showHiddenAction;
   Action adjustForcesAction;
+  Action rotateAction;
   Action graphOperationsAction;
   Action fileOpenAction;
   Action fileSaveAction;
@@ -52,7 +53,7 @@ public class Actions {
     fileNewAction.setEnabled(enabled);
   }
   protected Actions() {};
-  public void init(final Component parent, GraphControl graphControl, final ControlPanel controlPanel) {
+  public void init(final Component parent, final GraphControl graphControl, final ControlPanel controlPanel) {
     final GraphControl.ClusterFacade rootCluster = graphControl.getRootCluster();
     fileHandler = new FileHandler(graphControl);
     addNodeAction = new AbstractAction(
@@ -104,6 +105,13 @@ public class Actions {
         LayoutEngineFrame controls
           = new LayoutEngineFrame(rootCluster,"Global Layout Engine Controls");
         controls.show();
+      }
+    };
+    rotateAction = new AbstractAction("Auto-Rotate",
+      new ImageIcon(getClass().getResource("/images/rotate.png")))
+    {
+      public void actionPerformed(ActionEvent e) {
+        graphControl.getGraphCanvas().toggleRotator();
       }
     };
     graphOperationsAction = new AbstractAction("Graph Operations")
@@ -197,6 +205,7 @@ public class Actions {
     toolbar.add(pickableClusterAction).setToolTipText("Make all Clusters pickable");
     toolbar.add(showHiddenAction).setToolTipText("Show hidden objects");
     toolbar.add(adjustForcesAction).setToolTipText("Adjust root Cluster Forces");
+    toolbar.add(rotateAction).setToolTipText("Toggle Auto-rotation of scene");
     return toolbar;
   }
   private JToolBar getFilebar() {

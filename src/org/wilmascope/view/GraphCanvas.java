@@ -42,6 +42,7 @@ public class GraphCanvas extends Canvas3D {
   protected TransformGroup transformGroup;
   protected TransformGroup stretchTransformGroup;
   protected TransformGroup rotationTransformGroup;
+  RotationInterpolator rotator;
   private BranchGroup bg;
   private Background background;
   private ExponentialFog fog;
@@ -76,6 +77,16 @@ public class GraphCanvas extends Canvas3D {
     rotationTransformGroup.setCapability(TransformGroup.ENABLE_PICK_REPORTING);
     rotationTransformGroup.setCapability(TransformGroup.ALLOW_LOCAL_TO_VWORLD_READ);
 
+    Transform3D yAxis = new Transform3D();
+    Alpha rotationAlpha = new Alpha(-1, 10000);
+
+    rotator =
+        new RotationInterpolator(rotationAlpha, rotationTransformGroup, yAxis,
+                                 0.0f, (float) Math.PI*2.0f);
+    rotator.setSchedulingBounds(bounds);
+    rotator.setEnable(false);
+    bg.addChild(rotator);
+
     //stretchTransformGroup = new TransformGroup();
     Transform3D stretch = new Transform3D();
     stretch.setScale(new Vector3d(1,1,1));
@@ -100,11 +111,22 @@ public class GraphCanvas extends Canvas3D {
     transformGroup.addChild(pb);
     addLights(bounds);
     addMouseRotators(bounds);
-    transformGroup.addChild(rotationTransformGroup);
-    bg.addChild(transformGroup);
+    rotationTransformGroup.addChild(transformGroup);
+    bg.addChild(rotationTransformGroup);
   }
   public Bounds getBoundingSphere() {
     return bounds;
+  }
+  public void toggleRotator() {
+    boolean enabled = rotator.getEnable();
+    Transform3D t = new Transform3D();
+    Vector3f m = new Vector3f();
+    transformGroup.getTransform(t);
+    t.get(m);
+    t.setIdentity();
+    t.setTranslation(m);
+    rotator.setTransformAxis(t);
+    rotator.setEnable(!rotator.getEnable());
   }
   public void createUniverse() {
     bg.compile();
@@ -181,7 +203,7 @@ public class GraphCanvas extends Canvas3D {
  }
  private void addMouseRotators(Bounds bounds) {
    MouseRotate myMouseRotate = new MouseRotate();
-   myMouseRotate.setTransformGroup(rotationTransformGroup);
+   myMouseRotate.setTransformGroup(transformGroup);
    myMouseRotate.setSchedulingBounds(bounds);
    bg.addChild(myMouseRotate);
    mouseTranslate = new MouseTranslate();
@@ -191,7 +213,7 @@ public class GraphCanvas extends Canvas3D {
    MouseZoom myMouseZoom = new MouseZoom();
    myMouseZoom.setTransformGroup(transformGroup);
    myMouseZoom.setSchedulingBounds(bounds);
-   bg.addChild(myMouseZoom);
+   transformGroup.addChild(myMouseZoom);
  }
  MouseTranslate mouseTranslate;
  public MouseTranslate getMouseTranslate() {
@@ -201,11 +223,11 @@ public class GraphCanvas extends Canvas3D {
    BranchGroup b = view.getBranchGroup();
    if(!b.isLive()) {
      b.compile();
-     rotationTransformGroup.addChild(b);
+     transformGroup.addChild(b);
    }
  }
  public TransformGroup getTransformGroup() {
-   return rotationTransformGroup;
+   return transformGroup;
  }
   public void behaviorWakeup() {
   }
