@@ -113,7 +113,7 @@ public class Actions {
         chooser.setFileFilter(fileHandler.getFileFilter());
         int returnVal = chooser.showOpenDialog(parent);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
-          fileHandler.load(chooser.getSelectedFile().getName());
+          fileHandler.load(chooser.getSelectedFile().getAbsolutePath());
         }
       }
     };
@@ -181,7 +181,10 @@ public class Actions {
       new DropDownButtonPanel(addEdgeAction,
         ViewManager.getInstance().getEdgeViewRegistry()));
     component.setToolTipText("Create a new Edge");
-    toolbar.add(addClusterAction).setToolTipText("Create a new Cluster");
+    component = (JComponent)toolbar.add(
+      new DropDownButtonPanel(addClusterAction,
+        ViewManager.getInstance().getClusterViewRegistry()));
+    component.setToolTipText("Create a new Cluster");
     toolbar.add(pickableClusterAction).setToolTipText("Make all Clusters pickable");
     toolbar.add(showHiddenAction).setToolTipText("Show hidden objects");
     toolbar.add(adjustForcesAction).setToolTipText("Adjust root Cluster Forces");

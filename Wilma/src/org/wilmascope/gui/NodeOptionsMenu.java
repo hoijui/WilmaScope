@@ -21,8 +21,11 @@
 package org.wilmascope.gui;
 
 import java.awt.Component;
+import java.awt.Cursor;
 import org.wilmascope.control.*;
+import org.wilmascope.view.PickingClient;
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 import java.awt.event.*;
 /**
  * Title:        WilmaToo
@@ -34,9 +37,10 @@ import java.awt.event.*;
  */
 
 public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
-  public NodeOptionsMenu(Component parent, GraphControl.ClusterFacade rootCluster, ControlPanel controlPanel) {
+  public NodeOptionsMenu(Component parent, GraphControl graphControl, GraphControl.ClusterFacade rootCluster, ControlPanel controlPanel) {
     this();
     this.parent = parent;
+    this.graphControl = graphControl;
     this.rootCluster = rootCluster;
     this.controlPanel = controlPanel;
   }
@@ -49,6 +53,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
       this.detailsMenuItem = detailsMenuItem;
       //pack();
     }
+    fixedCheckBoxMenuItem.setSelected(this.node.isFixedPosition());
     show(parent, e.getX(), e.getY());
   }
   JMenuItem addEdgeMenuItem = new JMenuItem();
@@ -103,9 +108,23 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
         setColourMenuItem_actionPerformed(e);
       }
     });
+    fixedCheckBoxMenuItem.setText("Fixed Position");
+    fixedCheckBoxMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        fixedCheckBoxMenuItem_actionPerformed(e);
+      }
+    });
+    dragMenuItem.setText("Drag");
+    dragMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        dragMenuItem_actionPerformed(e);
+      }
+    });
     this.add(addNodeMenuItem);
     this.add(addEdgeMenuItem);
     this.add(deleteMenuItem);
+    this.add(dragMenuItem);
+    this.add(fixedCheckBoxMenuItem);
     this.add(setLabelMenuItem);
     this.add(setColourMenuItem);
     this.add(hideMenuItem);
@@ -135,6 +154,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
   JMenuItem setLabelMenuItem = new JMenuItem();
   JMenuItem hideMenuItem = new JMenuItem();
   JMenuItem setColourMenuItem = new JMenuItem();
+  JCheckBoxMenuItem fixedCheckBoxMenuItem = new JCheckBoxMenuItem();
 
   void addNodeMenuItem_actionPerformed(ActionEvent e) {
     GraphControl.NodeFacade newNode = rootCluster.addNode();
@@ -171,5 +191,49 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     if(colour!=null) {
       node.setColour(colour);
     }
+  }
+
+  GraphControl graphControl;
+  JMenuItem dragMenuItem = new JMenuItem();
+  void fixedCheckBoxMenuItem_actionPerformed(ActionEvent e) {
+    node.setFixedPosition(fixedCheckBoxMenuItem.isSelected());
+  }
+
+  void dragMenuItem_actionPerformed(ActionEvent e) {
+    node.highlightColour();
+    final org.wilmascope.view.GraphCanvas c = graphControl.getGraphCanvas();
+    c.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+    final JButton doneButton = new JButton("Done");
+    final MouseInputAdapter ma = new MouseInputAdapter() {
+      public void mouseDragged(MouseEvent mevent) {
+        reposition(mevent);
+      }
+      public void mouseClicked(MouseEvent mevent) {
+        reposition(mevent);
+      }
+      private void reposition(MouseEvent e) {
+        if(!e.isAltDown() && e.isMetaDown()) {
+          node.moveToCanvasPos(e.getX(),e.getY());
+        }
+      }
+    };
+    doneButton.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        controlPanel.remove(doneButton);
+        c.setPickingEnabled(true);
+        c.getMouseTranslate().setEnable(true);
+        c.removeMouseListener(ma);
+        c.removeMouseMotionListener(ma);
+        c.setCursor(null);
+        node.defaultColour();
+      }
+    });
+    controlPanel.add(doneButton);
+    controlPanel.updateUI();
+    controlPanel.setMessage("Right click (or drag) above to place node...");
+    c.setPickingEnabled(false);
+    c.getMouseTranslate().setEnable(false);
+    c.addMouseMotionListener(ma);
+    c.addMouseListener(ma);
   }
 }

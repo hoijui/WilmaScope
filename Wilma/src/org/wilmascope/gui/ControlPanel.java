@@ -85,8 +85,12 @@ public class ControlPanel extends JPanel {
     dialogPanel.add(panel, BorderLayout.CENTER);
     doLayout();
   }
-  public void remove(JPanel panel) {
-    dialogPanel.remove(panel);
+  public void add(JButton button) {
+    dialogPanel.add(button, BorderLayout.CENTER);
+    doLayout();
+  }
+  public void remove(Component component) {
+    dialogPanel.remove(component);
     setMessage();
     updateUI();
   }
