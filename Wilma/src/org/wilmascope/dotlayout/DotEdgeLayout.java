@@ -2,7 +2,6 @@ package org.wilmascope.dotlayout;
 
 
 import org.wilmascope.graph.EdgeLayout;
-import org.wilmascope.graph.Edge;
 
 
 /**

@@ -21,7 +21,6 @@ package org.wilmascope.control;
 
 import java.awt.BorderLayout;
 import com.sun.j3d.utils.applet.JMainFrame;
-import org.wilmascope.view.PickingClient;
 import javax.swing.*;
 import org.wilmascope.gui.*;
 /**
@@ -54,9 +53,9 @@ public class WilmaApplet extends JApplet {
     setJMenuBar(menuBar);
     //graphControl.setRootPickingClient(rootMenu);
     GraphControl.ClusterFacade r = graphControl.getRootCluster();
-    graphControl.getPickListener().setNodeOptionsClient(new NodeOptionsMenu(graphCanvas, graphControl, r, controlPanel));
-    graphControl.getPickListener().setClusterOptionsClient(new ClusterOptionsMenu(graphCanvas, r, controlPanel));
-    graphControl.getPickListener().setEdgeOptionsClient(new EdgeOptionsMenu(graphCanvas, r));
+    GraphControl.getPickListener().setNodeOptionsClient(new NodeOptionsMenu(graphCanvas, graphControl, r, controlPanel));
+    GraphControl.getPickListener().setClusterOptionsClient(new ClusterOptionsMenu(graphCanvas, r, controlPanel));
+    GraphControl.getPickListener().setEdgeOptionsClient(new EdgeOptionsMenu(graphCanvas, r));
     try {
       r.addForce("Repulsion").setStrength(1f);
       r.addForce("Spring").setStrength(5f);

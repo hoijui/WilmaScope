@@ -20,8 +20,6 @@
 package org.wilmascope.control;
 
 import java.awt.BorderLayout;
-import com.sun.j3d.utils.applet.JMainFrame;
-import org.wilmascope.view.PickingClient;
 import javax.swing.*;
 import org.wilmascope.gui.*;
 import org.wilmascope.file.FileHandler;
@@ -37,13 +35,13 @@ public class WilmaMain extends JFrame {
   {
     // JPopupMenu won't work over a (heavyweight) Java3D canvas unless
     // we do the following
-    JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+    //JPopupMenu.setDefaultLightWeightPopupEnabled(false);
   }
-
+  java.awt.Component graphCanvas;
   public void init() {
     getContentPane().setLayout(new BorderLayout());
     graphControl = new GraphControl(400,400);
-    java.awt.Component graphCanvas = graphControl.getGraphCanvas();
+    graphCanvas = graphControl.getGraphCanvas();
     getContentPane().add("Center",graphCanvas);
     ControlPanel controlPanel = new ControlPanel();
     getContentPane().add("South",controlPanel);
@@ -56,9 +54,9 @@ public class WilmaMain extends JFrame {
     setJMenuBar(menuBar);
     //graphControl.setRootPickingClient(rootMenu);
     GraphControl.ClusterFacade r = graphControl.getRootCluster();
-    graphControl.getPickListener().setNodeOptionsClient(new NodeOptionsMenu(graphCanvas, graphControl, r, controlPanel));
-    graphControl.getPickListener().setClusterOptionsClient(new ClusterOptionsMenu(graphCanvas, r, controlPanel));
-    graphControl.getPickListener().setEdgeOptionsClient(new EdgeOptionsMenu(graphCanvas, r));
+    GraphControl.getPickListener().setNodeOptionsClient(new NodeOptionsMenu(graphCanvas, graphControl, r, controlPanel));
+    GraphControl.getPickListener().setClusterOptionsClient(new ClusterOptionsMenu(graphCanvas, r, controlPanel));
+    GraphControl.getPickListener().setEdgeOptionsClient(new EdgeOptionsMenu(graphCanvas, r));
     try {
       r.addForce("Repulsion").setStrength(1f);
       r.addForce("Spring").setStrength(5f);
@@ -112,7 +110,6 @@ public class WilmaMain extends JFrame {
     }
   }
   public void createJMainFrame() {
-    //JMainFrame mf = new JMainFrame(this, 400, 400);
     new SplashWindow("images" +java.io.File.separator + "WilmaSplash.png", this, 5000);
     init();
     ImageIcon icon = new ImageIcon(WilmaMain.class.getResource("/images/WilmaW24.png"));

@@ -5,7 +5,6 @@ import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.Node;
 import org.wilmascope.graph.NodeList;
 import javax.vecmath.Point3f;
-import java.util.Iterator;
 /**
  * <p>Title: </p>
  * <p>Description: </p>

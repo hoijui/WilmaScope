@@ -34,8 +34,8 @@ import javax.media.j3d.*;
 import java.util.*;
 
 public class GraphBehavior extends Behavior {
-  WakeupOnElapsedFrames w = new WakeupOnElapsedFrames(1);
-  //WakeupOnElapsedTime w = new WakeupOnElapsedTime(1000);
+  WakeupOnElapsedFrames w = new WakeupOnElapsedFrames(0);
+  //WakeupOnElapsedTime w = new WakeupOnElapsedTime(10);
   private BehaviorClient client;
 
   public GraphBehavior(BehaviorClient client) {
@@ -50,7 +50,6 @@ public class GraphBehavior extends Behavior {
    * @param criteria Enumeration of the criteria for the call
    */
   public void processStimulus(Enumeration criteria) {
-    long t=System.currentTimeMillis();
     client.callback();
     wakeupOn(w);
   }

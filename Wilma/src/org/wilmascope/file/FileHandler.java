@@ -28,18 +28,23 @@ package org.wilmascope.file;
  * @version 1.0
  */
 
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
 import javax.swing.filechooser.FileFilter;
-import java.util.*;
-import org.wilmascope.control.GraphControl;
-import org.wilmascope.view.ViewManager;
-import org.wilmascope.view.GraphElementView;
-import org.wilmascope.view.NodeView;
-import org.wilmascope.view.EdgeView;
-import org.wilmascope.forcelayout.ForceManager;
-import org.wilmascope.forcelayout.ForceLayout;
-import org.wilmascope.forcelayout.Force;
 import javax.vecmath.Point3f;
-import javax.vecmath.Color3f;
+
+import org.wilmascope.control.GraphControl;
+import org.wilmascope.forcelayout.Force;
+import org.wilmascope.forcelayout.ForceLayout;
+import org.wilmascope.forcelayout.ForceManager;
+import org.wilmascope.view.EdgeView;
+import org.wilmascope.view.NodeView;
+import org.wilmascope.view.ViewManager;
 
 class GraphFileFilter extends FileFilter {
   public boolean accept(java.io.File file) {

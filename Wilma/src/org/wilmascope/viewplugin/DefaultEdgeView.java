@@ -42,11 +42,7 @@ public class DefaultEdgeView extends EdgeView {
     setTypeName("Plain Edge");
   }
   protected void setupDefaultMaterial() {
-    Material material = new Material();
-    material.setDiffuseColor(0.0f, 0.0f, 1.0f);
-    material.setAmbientColor(0f,0f,0.4f);
-    material.setShininess(50.0f);
-    setupDefaultAppearance(material);
+    setupDefaultAppearance(Colours.blueMaterial);
   }
   protected void setupHighlightMaterial() {
     setupHighlightAppearance(Colours.yellowMaterial);

@@ -1,7 +1,5 @@
 package org.wilmascope.control;
 
-import org.wilmascope.graph.Node;
-import org.wilmascope.graph.NodeList;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 import java.util.*;
