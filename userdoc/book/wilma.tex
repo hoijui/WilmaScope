@@ -108,20 +108,14 @@ drawing techniques, there is a lack of state-of-the-art, general-purpose
 visualisation systems, particularly for application to 3-dimensional
 embeddings.
 
-\paragraph{}
-
 Graph drawing problems are, of course, exsitent within an enourmous range of
 fields; a key motivation for creating a general purpose 3D visualisation
 system is to provide easy-to-use components which can be employed by future
 software across these application domains.
 
-\paragraph{}
-
 Within the graph drawing community itself, a system may also aspire to 
 streamline, elucidate and beautify the work of algorithm design, comparison
 and optimisation.
-
-\paragraph{}
 
 In this chapter, we describe WilmaScope, a sophisticated graph visualisation
 infrastructure, which attempts to meet these goals.  In
@@ -143,8 +137,6 @@ layout algorithm implementations to be added or removed easily.
 Therefore the design needed to decouple these components as much as
 possible so that altering one component would have minimal impact on
 the other components.
-
-\paragraph{}
 
 To achieve this we began by exploring the well known Model-View-Controller
 architecture (MVC) \cite{gamma94design}.  In an MVC architecture the Model is the core
@@ -169,16 +161,12 @@ standard data flow diagram for the MVC architecture is shown in Figure
   \caption{The classic MVC framework and Wilma's utilisation of MVC.}
 \end{figure}
 
-\paragraph{}
-
 In our system the Model is further broken down into two components:
 the Graph data structure itself, capable of representing the structure
 and state of the graph including its arrangement in space, and
 the Layout Engine, which is an abstraction of the basic methods required for
 an implementation of any layout algorithm that will change the graph's
 arrangement in space.
-
-\paragraph{}
 
 A further requirement for our system is that the graph data model and
 the layout engine should able to be controlled either interactively by
@@ -191,27 +179,51 @@ bridge layer can then be called by either the GUI interface component,
 a component providing a CORBA interface for RPC or a component which
 can load and save files to an XML format.
 
-\paragraph{}
+
+Figure \ref{fig-wilmamvc} depicts this expanded MVC architecture for graph
+visualisation. 
+
 \subsection{An Object-Oriented Graph Model}
-\ref{fig-wilmaclasses}
-\ref{fig-wilmaclasses3D}
+In designing the Graph Model, ie, the data structures for storing the
+graph and the methods for manipulating them, some common
+elements were identified.  Firstly a graph consists fundamentally
+of nodes and edges.  These are the basic Graph Elements.  A clustered
+graph has nodes which may themselves be graphs, or clusters.
+
+This description of a graph is modelled in a class hierarchy by
+defining an abstract class {\em GraphElement} which is implemented by
+both the {\em Node} and {\em Edge} classes.  A {Cluster} will inherit
+all the properties of the {\em Node} class and also contains an
+aggregation of {\em Nodes} and {\em Edges}.  A {Cluster} also contains
+a reference to an abstract definition of a {\em LayoutEngine} which
+provides a common interface to an implementation of a layout algorithm
+for arranging the graph in 2 or 3 dimensional space.  Since the
+details of the algorithm are kept separate it is easy to mix and match
+different layout styles to different graphs or even clusters within
+the one graph.  A similar class hierarchy was developed independantly
+by Marshall et.  al\cite{marshall00object} around the same time.
+Figure \ref{fig-wilmaclasses} shows a UML diagram depicting this
+graph class hierarchy, and also shows how this relates to a force
+directed {\em LayoutEngine} implementation, discussed further in
+Section \ref{sec:forcedirectedlayout}.  In Figure
+\ref{fig-wilmaclasses3d} we show a 3D
+interpretation of this UML diagram rendered by Wilma in an application
+of the system described further in \ref{sec:3duml}.
+
 \begin{figure}[h]
   \centering
-  \subfigure[MVC Architecture]{
+  \subfigure[UML Class diagram.]{
     \label{fig-wilmaclasses}
     \includegraphics[width=0.35\textwidth]{figures/wilmaclasses.eps}}
-  \subfigure[Wilma Architecture]{
+  \subfigure[A 3D interpretation of the class hierarchy.]{
     \label{fig-wilmaclasses3D}
     \includegraphics[width=0.55\textwidth]{figures/wilmaclasses3d.eps}}
-  \caption{The classic MVC framework and Wilma's utilisation of MVC.}
+  \caption{A class hierarchy for the graph model and the classes used
+  in the Force Directed Layout Engine implementation.}
 \end{figure}
 
-
-Figure \ref{fig-wilmamvc} shows a collaboration diagram for this overall
-architecture. 
-
 \subsection{Layout Algorithms}
-\subsubsection{Force Directed}
+\subsubsection{Force Directed} \label{sec:forcedirectedlayout}
 \subsubsection{Multiscale Force Directed}
 
 \subsubsection{Fast Simulated Annealing}
@@ -219,8 +231,6 @@ architecture.
 As we stated in Section~\ref{motivation}, a major design goal for Wilma
 was to provide a platform within which algorithmic experimentation could be
 conducted elegantly and efficiently.
-
-\paragraph{}
 
 Force-directed layout algorithms are of course the method of choice for a
 wide range of graph visualisation problems.  One variation on these
@@ -236,16 +246,12 @@ vectors, which is $O(n^2)$ in the number of verticies:
 \noindent Where $\vec{r}_{i,j} = \vec{r}_i - \vec{r}_j$ is the displacement
 of node $i$ relative to $j$.
 
-\paragraph{}
-
 To avoid this expense, it is possible to approximate scalar energy potential
 values, caching this information at grid points across space.  Iterated
 updates to the potential well then cost only $O(|V|)$ time per iteration.  On
 the downside, the cache array itself takes $O(v \centerdot d)$ memory, where
 $v$ is the spatial volume of the embedded graph and $d$ is the density of
 stored potential information.
-
-\paragraph{}
 
 Cowling~\cite{cowling02fast} has implemented a fast layout engine for
 WilmaScope which employs simulated annealing with potential energy caching
@@ -254,8 +260,6 @@ that the algorithms of \cite{davidson01noise} do appear to achieve linear
 time results, but that when the grid size $v \centerdot d$ must be adjusted to
 prevent folding in large graphs, space and time complexity are
 no longer linear.
-
-\paragraph{}
 
 Cowling's work serves to demonstrate the utility of Wilma as an empirical
 platform; with the WilmaScope rendering and navigation system, and the
@@ -279,13 +283,9 @@ The simplest and lowest-energy programming interface to Wilma is the WilmaChat
 language.  WilmaChat operates by creating a server daemon which listens on a
 socket or pipe on the machine in question.
 
-\paragraph{}
-
 Clients can connect to WilmaChat and control graphs by passing commands
 in a simple language which allows them to instantiate arbitrary graph
 structures.
-
-\paragraph{}
 
 The advantage of WilmaChat is that it requires extremely little infrastructure
 from the developers's programming environment.  The ability to traverse
@@ -303,8 +303,6 @@ the presence of access-control mediation; or if they wish to perform detailed
 interrogation of the graph embedding which Wilma has created --- then the use
 of a custom language requires more overhead.
 
-\paragraph{}
-
 In order to meet these more sophisticated requirements, we have implemented a
 Wilma control interface which sits atop CORBA (the Common Object Request
 Broker Archicture --- see \url{http://www.corba.org}).  Since CORBA provides
@@ -318,7 +316,7 @@ writing additional code.
 
 \subsection{Applications}
 
-\subsubsection{3D UML Visualisation}
+\subsubsection{3D UML Visualisation} \label{sec:3duml}
 
 Dwyer~\cite{dwyer013D-UML} has managed to obtain a peer-reviewed paper by
 using Wilma to visualise UML structures for software engineering purposes.
@@ -329,8 +327,6 @@ Therefore, Wilma rocks.
 One early application of Wilma was to the representation of web structure, and
 to visualising clustering algorithms for categorising such
 structure\cite{eckersley2kclassiscope}.
-
-\paragraph{}
 
 An example of web structure visualisation is shown in Figure~\ref{fig-web}.
 This is a dataset collected in 2000 from the website \url{www.linuxlinks.com}.
