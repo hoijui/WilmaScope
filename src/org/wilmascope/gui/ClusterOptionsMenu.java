@@ -37,8 +37,8 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
   JMenuItem deleteMenuItem = new JMenuItem();
   public ClusterOptionsMenu(Component parent, GraphControl.ClusterFacade rootCluster, ControlPanel controlPanel) {
     this();
-    this.parent = parent;
     this.rootCluster = rootCluster;
+    this.parent = parent;
     this.controlPanel = controlPanel;
   }
   public void callback(java.awt.event.MouseEvent e, GraphControl.GraphElementFacade cluster) {
@@ -52,6 +52,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
     }
     pack();
     show(parent, e.getX(), e.getY());
+    updateUI();
   }
   public ClusterOptionsMenu() {
     try {
@@ -139,12 +140,11 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 
   void deleteMenuItem_actionPerformed(ActionEvent e) {
     cluster.delete();
-    rootCluster.unfreeze();
+    cluster.unfreeze();
   }
 
   private Component parent;
   private GraphControl.ClusterFacade cluster;
-  private GraphControl.ClusterFacade rootCluster;
   JMenuItem hideMenuItem = new JMenuItem();
   JMenu clusterTypeMenu = new JMenu();
   JMenuItem contentsPickingMenuItem = new JMenuItem();
@@ -187,7 +187,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
   }
 
   void addToMenuItem_actionPerformed(ActionEvent e) {
-    controlPanel.add(new AddToClusterPanel(controlPanel, cluster, rootCluster));
+    controlPanel.add(new AddToClusterPanel(controlPanel, cluster));
     controlPanel.updateUI();
     cluster.makeNonChildrenPickable();
     GraphControl.getPickListener().enableMultiPicking(100, new Class[]{GraphControl.nodeClass,GraphControl.clusterClass});
@@ -204,7 +204,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 
   void collapseMenuItem_actionPerformed(ActionEvent e) {
     cluster.collapse();
-    rootCluster.unfreeze();
+    cluster.unfreeze();
   }
   boolean expanded = true;
   JMenuItem expandMenuItem = new JMenuItem();
@@ -212,7 +212,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 
   void expandMenuItem_actionPerformed(ActionEvent e) {
     cluster.expand();
-    rootCluster.unfreeze();
+    cluster.unfreeze();
   }
 
   void setLabelMenuItem_actionPerformed(ActionEvent e) {
@@ -223,4 +223,5 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
     controlPanel.setMessage();
     cluster.setLabel(label);
   }
+  private GraphControl.ClusterFacade rootCluster;
 }

@@ -257,9 +257,17 @@ public class Edge extends GraphElement {
   public boolean isDirected() {
     return directed;
   }
+  public void setWeight(float weight) {
+    this.weight = weight;
+  }
+  public float getWeight() {
+    return weight;
+  }
   private float length;
   // Vector along the length of the edge
   private Vector3f vector = new Vector3f();
   private Hashtable collapseHistoryTable = new Hashtable();
   private boolean directed = true;
+  // A user assigned weighting for the edge between 0 and 1
+  private float weight = 0.5f;
 }

@@ -57,13 +57,13 @@ public class FileHandler {
     }
     nodeLookup = new Hashtable();
     graphControl.getRootCluster().removeAllForces();
-    graphControl.stall();
+    graphControl.freeze();
     long startTime = System.currentTimeMillis();
     expandXMLCluster(xmlGraph.getRootCluster(),graphControl.getRootCluster());
     long endTime = System.currentTimeMillis();
     long time = endTime - startTime;
     System.out.println("Loaded... in milliseconds: "+time);
-    graphControl.unstall();
+    graphControl.unfreeze();
   }
   public FileFilter getFileFilter() {
     return new GraphFileFilter();

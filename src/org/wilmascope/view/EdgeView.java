@@ -100,6 +100,14 @@ implements org.wilmascope.graph.EdgeView {
   public void setEdge(Edge edge) {
     this.edge = edge;
   }
+  public void setHueByWeight(float minHue, float maxHue) {
+    // seeing as we are using hues the wrong way round (ie, blue has higher hue
+    // value than yellow but we consider yellow to indicate a greater weight
+    // value than blue... usually: maxHue < minHue
+    float hue = maxHue + (minHue - maxHue) * (1 - edge.getWeight());
+    setColour(java.awt.Color.getHSBColor(hue,1f,1f));
+  }
+
   public ImageIcon getIcon() {
     return new ImageIcon(getClass().getResource("/images/edge.png"));
   }

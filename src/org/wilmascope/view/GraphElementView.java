@@ -168,6 +168,7 @@ implements org.wilmascope.graph.Viewable {
     appearance = new Appearance();
     appearance.setCapability(Appearance.ALLOW_MATERIAL_WRITE);
     appearance.setCapability(Appearance.ALLOW_MATERIAL_READ);
+    appearance.setCapability(Appearance.ALLOW_TRANSPARENCY_ATTRIBUTES_WRITE);
     this.defaultMaterial = defaultMaterial;
     appearance.setMaterial(defaultMaterial);
     /*

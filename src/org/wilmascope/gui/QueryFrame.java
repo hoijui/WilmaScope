@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.sql.*;
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.view.ElementData;
+import org.wilmascope.view.EdgeView;
 import java.util.*;
 
 /**
@@ -294,9 +295,9 @@ public class QueryFrame extends JFrame {
         }
         addNode(buySector,r.getString("buy_sec_name"));
         addNode(sellSector,r.getString("sell_sec_name"));
-	      float shareValue = r.getFloat("value");
-	      float edginess = (shareValue - minValue)/(maxValue - minValue);
-        addEdge(sellSector,buySector,edginess);
+        float shareValue = r.getFloat("value");
+        float weight = (shareValue - minValue)/(maxValue - minValue);
+        addEdge(sellSector,buySector,weight);
         System.out.println("Buy Sector = "+buySector+", Sell Sector = "+sellSector);
       }
       stmt.close();
@@ -313,15 +314,13 @@ public class QueryFrame extends JFrame {
       nodes.put(id,n);
     }
   }
-  void addEdge(String fromID, String toID, float edginess) {
-    float radius = 0.005f * (2*edginess + 1);
-    float hue = (231f/357f * (1-edginess));
-    java.awt.Color c = Color.getHSBColor(hue,1f,1f);
+  void addEdge(String fromID, String toID, float weight) {
+    float radius = 0.005f * (2*weight + 1);
 
     GraphControl.NodeFacade start = (GraphControl.NodeFacade)nodes.get(fromID);
     GraphControl.NodeFacade end = (GraphControl.NodeFacade)nodes.get(toID);
     GraphControl.EdgeFacade edge = graphRoot.addEdge(start,end,"Arrow",radius);
-    edge.setColour(c);
+    edge.setWeight(weight);
   }
   Hashtable nodes = new Hashtable();
   JTabbedPane queryPane = new JTabbedPane();

@@ -39,7 +39,6 @@ import javax.swing.event.*;
  */
 
 public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
-  JMenuItem deleteMenuItem = new JMenuItem();
   public EdgeOptionsMenu(Component parent, GraphControl.ClusterFacade rootCluster) {
     this();
     this.parent = parent;
@@ -57,6 +56,7 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
     }
     */
     show(parent, e.getX(), e.getY());
+    updateUI();
   }
   public EdgeOptionsMenu() {
     try {
@@ -79,6 +79,12 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
         hideMenuItem_actionPerformed(e);
       }
     });
+    weightMenuItem.setText("Weight...");
+    weightMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        weightMenuItem_actionPerformed(e);
+      }
+    });
     edgeTypeMenu.setText("Select Type");
     edgeTypeMenu.addMenuListener(new javax.swing.event.MenuListener() {
       public void menuSelected(MenuEvent e) {
@@ -97,6 +103,7 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
     });
     this.add(deleteMenuItem);
     this.add(hideMenuItem);
+    this.add(weightMenuItem);
     this.add(reverseMenuItem);
     this.add(edgeTypeMenu);
   }
@@ -104,6 +111,23 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
   void deleteMenuItem_actionPerformed(ActionEvent e) {
     edge.delete();
     rootCluster.unfreeze();
+  }
+  void weightMenuItem_actionPerformed(ActionEvent e) {
+    String s = (String)JOptionPane.showInputDialog(parent,
+      "Enter weight for this edge...",
+      (String)"Edge Weight", JOptionPane.QUESTION_MESSAGE,null,null,""+edge.getWeight());
+    if(s==null) {
+      return;
+    }
+    try {
+      float w = Float.parseFloat(s);
+      if(w < 0 || w > 1) {
+        throw new NumberFormatException();
+      }
+      edge.setWeight(w);
+    } catch(NumberFormatException ex) {
+      JOptionPane.showMessageDialog(parent, "Invalid edge weight entered... enter a floating point number between 0 and 1", "Invalid edge weight", JOptionPane.ERROR_MESSAGE);
+    }
   }
 
   private Component parent;
@@ -146,4 +170,6 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
   void reverseMenuItem_actionPerformed(ActionEvent e) {
     edge.reverseDirection();
   }
+  JMenuItem deleteMenuItem = new JMenuItem();
+  JMenuItem weightMenuItem = new JMenuItem();
 }

@@ -41,7 +41,7 @@ import java.util.Properties;
 
 public class Constants extends AbstractConstants {
 
-  public final static String defaultFileName = new String("WILMA_CONSTANTS.properties");
+  public final static String defaultFileName = "WILMA_CONSTANTS.properties";
 
   private static final Constants instance = new Constants();
   public static Constants getInstance() {
