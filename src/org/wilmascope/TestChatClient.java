@@ -42,7 +42,7 @@ import java.util.*;
 
 /** A class for handling callbacks from a node when it is nudged
  */
-class PickingClientServant extends _PickingClientImplBase
+class PickingClientServant extends _PickingClientStub
 {
     public void callback(int x, int y, short button)
     {
@@ -52,7 +52,7 @@ class PickingClientServant extends _PickingClientImplBase
 
 /** A class for handling callbacks from when the graph settles
  */
-class BalancedEventClientServant extends _BalancedEventClientImplBase
+class BalancedEventClientServant extends _BalancedEventClientStub
 {
   public void callback()
   {
