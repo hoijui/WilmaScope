@@ -80,6 +80,7 @@ public class DetailFrame extends JFrame {
     });
     controlsPanel.setMaximumSize(new Dimension(12345,50));
     pack();
+    setSize(400,400);
   }
   public void closeButtonActionPerformed() {
     this.dispose();
@@ -110,8 +111,8 @@ public class DetailFrame extends JFrame {
     okPanel.add(okButton);
     okPanel.add(cancelButton);
     editFrame.getContentPane().add(BorderLayout.NORTH,okPanel);
-    editFrame.setSize(320,200);
     editFrame.pack();
+    editFrame.setSize(400,400);
     editFrame.show();
   }
 }
