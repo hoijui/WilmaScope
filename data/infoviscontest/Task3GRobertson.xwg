@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
+<WilmaGraph>
+<Cluster>
+<LayoutEngineType Name="FadeLayout"/>
+<Node ID="N0">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="1.0 1.0 0.0"/>
+<Property Key="Label" Value="George G. Robertson"/>
+<Property Key="Radius" Value="0.05"/>
+</ViewType>
+<Property Key="Position" Value="5.178285 3.9474638 9.0"/>
+</Node>
+<Node ID="N1">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.09411765 0.9882353 0.11764706"/>
+<Property Key="Label" Value="Database Query and Data Mining"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="6.324747 2.7972403 9.0"/>
+</Node>
+<Node ID="N2">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.5529412 0.9882353 0.1764706"/>
+<Property Key="Label" Value="System Design"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-8.117569 -27.049103 9.0"/>
+</Node>
+<Node ID="N3">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.98039216 0.9882353 0.20784314"/>
+<Property Key="Label" Value="Web Data"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="5.6480937 5.5254693 9.0"/>
+</Node>
+<Node ID="N4">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.9882353 0.6039216 0.20392157"/>
+<Property Key="Label" Value="Interaction"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="6.8041835 3.7953205 9.0"/>
+</Node>
+<Node ID="N5">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.9882353 0.84705883 0.6392157"/>
+<Property Key="Label" Value="Graph Drawing"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="4.5457606 5.4601183 9.0"/>
+</Node>
+<Node ID="N6">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.9882353 0.5254902 0.65882355"/>
+<Property Key="Label" Value="Focus + Context Techniques"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="3.7340977 4.716295 9.0"/>
+</Node>
+<Node ID="N7">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.99215686 0.23921569 0.75686276"/>
+<Property Key="Label" Value="Software Visualization"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="5.2928057 2.333237 9.0"/>
+</Node>
+<Node ID="N8">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.8 0.23529412 0.99215686"/>
+<Property Key="Label" Value="Hierarchy"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="6.540477 4.8652997 9.0"/>
+</Node>
+<Node ID="N9">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.35686275 0.16862746 0.99215686"/>
+<Property Key="Label" Value="Multidimensional Data Analysis"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="4.2065287 2.6558173 9.0"/>
+</Node>
+<Node ID="N10">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.20392157 0.43529412 0.99215686"/>
+<Property Key="Label" Value="Trees"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="3.5921926 3.6082013 9.0"/>
+</Node>
+<Node ID="N11">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.21568628 0.8627451 0.9882353"/>
+<Property Key="Label" Value="Text and Image Information Retrieval"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-28.733843 7.9372535 9.0"/>
+</Node>
+<Edge StartID="N0" EndID="N1">
+<ViewType Name="Spike">
+<Property Key="Colour" Value="0.09411765 0.9882353 0.11764706"/>
+<Property Key="Radius" Value="0.01"/>
+</ViewType>
+<Property Key="Weight" Value="1.0"/>
+</Edge>
+<Edge StartID="N0" EndID="N3">
+<ViewType Name="Spike">
+<Property Key="Colour" Value="0.98039216 0.9882353 0.20784314"/>
+<Property Key="Radius" Value="0.01"/>
+</ViewType>
+<Property Key="Weight" Value="1.0"/>
+</Edge>
+<Edge StartID="N0" EndID="N4">
+<ViewType Name="Spike">
+<Property Key="Colour" Value="0.9882353 0.6039216 0.20392157"/>
+<Property Key="Radius" Value="0.01"/>
+</ViewType>
+<Property Key="Weight" Value="2.0"/>
+</Edge>
+<Edge StartID="N0" EndID="N5">
+<ViewType Name="Spike">
+<Property Key="Colour" Value="0.9882353 0.84705883 0.6392157"/>
+<Property Key="Radius" Value="0.01"/>
+</ViewType>
+<Property Key="Weight" Value="1.0"/>
+</Edge>
+<Edge StartID="N0" EndID="N6">
+<ViewType Name="Spike">
+<Property Key="Colour" Value="0.9882353 0.5254902 0.65882355"/>
+<Property Key="Radius" Value="0.01"/>
+</ViewType>
+<Property Key="Weight" Value="2.0"/>
+</Edge>
+<Edge StartID="N0" EndID="N7">
+<ViewType Name="Spike">
+<Property Key="Colour" Value="0.99215686 0.23921569 0.75686276"/>
+<Property Key="Radius" Value="0.01"/>
+</ViewType>
+<Property Key="Weight" Value="1.0"/>
+</Edge>
+<Edge StartID="N0" EndID="N8">
+<ViewType Name="Spike">
+<Property Key="Colour" Value="0.8 0.23529412 0.99215686"/>
+<Property Key="Radius" Value="0.01"/>
+</ViewType>
+<Property Key="Weight" Value="1.0"/>
+</Edge>
+<Edge StartID="N0" EndID="N9">
+<ViewType Name="Spike">
+<Property Key="Colour" Value="0.35686275 0.16862746 0.99215686"/>
+<Property Key="Radius" Value="0.01"/>
+</ViewType>
+<Property Key="Weight" Value="1.0"/>
+</Edge>
+<Edge StartID="N0" EndID="N10">
+<ViewType Name="Spike">
+<Property Key="Colour" Value="0.20392157 0.43529412 0.99215686"/>
+<Property Key="Radius" Value="0.01"/>
+</ViewType>
+<Property Key="Weight" Value="1.0"/>
+</Edge>
+</Cluster>
+</WilmaGraph>

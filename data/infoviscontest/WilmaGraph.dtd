@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+  <!ELEMENT WilmaGraph (Cluster)>
+  <!ELEMENT Cluster (ViewType?,
+                     Property*,
+		     LayoutEngineType?,
+		     Node*,
+		     Cluster*,
+		     Edge*)>
+  <!ELEMENT Node (ViewType?,Property*)>
+  <!ATTLIST Node
+    ID ID #REQUIRED>
+  <!ELEMENT Edge (ViewType?,Property*)>
+  <!ATTLIST Edge
+    StartID IDREF #REQUIRED
+    EndID IDREF #REQUIRED>
+  <!ELEMENT ViewType (Property*)>
+  <!ATTLIST ViewType
+    Name CDATA #REQUIRED>
+  <!ELEMENT LayoutEngineType (Property*)>
+  <!ATTLIST LayoutEngineType 
+    Name CDATA #REQUIRED>
+  <!ELEMENT Property EMPTY>
+  <!ATTLIST Property
+    Key CDATA #REQUIRED
+    Value CDATA #REQUIRED>

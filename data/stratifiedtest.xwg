@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
+<WilmaGraph>
+<Cluster>
+<LayoutEngineType Name="ForceLayout">
+<Property Key="Spring" Value="5.0"/>
+<Property Key="Origin" Value="1.0"/>
+<Property Key="Repulsion" Value="1.0"/>
+<Property Key="VelocityAttenuation" Value="0.02"/>
+</LayoutEngineType>
+<Cluster>
+<ViewType Name="Spherical Cluster">
+<Property Key="Visible" Value="false"/>
+<Property Key="Label" Value="ABC"/>
+<Property Key="Radius" Value="1.7095311"/>
+</ViewType>
+<Property Key="Position" Value="0.59149903 -1.8978461 0.0"/>
+<Property Key="LevelConstraint" Value="0"/>
+<LayoutEngineType Name="ForceLayout">
+<Property Key="Spring" Value="15.0"/>
+<Property Key="Origin" Value="15.0"/>
+<Property Key="VelocityAttenuation" Value="0.02"/>
+</LayoutEngineType>
+<Node ID="N8">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.15"/>
+</ViewType>
+<Property Key="Position" Value="0.37989813 -1.6645398 0.0"/>
+<Property Key="LevelConstraint" Value="0"/>
+</Node>
+<Node ID="N9">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="0.6013289 -1.55419 0.5"/>
+<Property Key="LevelConstraint" Value="1"/>
+</Node>
+<Node ID="N10">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="0.5114203 -1.7287745 1.0"/>
+<Property Key="LevelConstraint" Value="2"/>
+</Node>
+<Node ID="N11">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.080000006"/>
+</ViewType>
+<Property Key="Position" Value="0.34127814 -1.7339724 1.5"/>
+<Property Key="LevelConstraint" Value="3"/>
+</Node>
+<Edge StartID="N8" EndID="N9">
+<ViewType Name="Tapered Edge">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge StartID="N9" EndID="N10">
+<ViewType Name="Tapered Edge">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge StartID="N10" EndID="N11">
+<ViewType Name="Tapered Edge">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+</Cluster>
+<Cluster>
+<ViewType Name="Spherical Cluster">
+<Property Key="Visible" Value="false"/>
+<Property Key="Label" Value="DEF"/>
+<Property Key="Radius" Value="1.7298567"/>
+</ViewType>
+<Property Key="Position" Value="-0.9767938 2.0131576 0.0"/>
+<Property Key="LevelConstraint" Value="0"/>
+<LayoutEngineType Name="ForceLayout">
+<Property Key="Spring" Value="15.0"/>
+<Property Key="Origin" Value="15.0"/>
+<Property Key="VelocityAttenuation" Value="0.02"/>
+</LayoutEngineType>
+<Node ID="N4">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-0.62041295 1.8160839 0.0"/>
+<Property Key="LevelConstraint" Value="0"/>
+</Node>
+<Node ID="N5">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.15"/>
+</ViewType>
+<Property Key="Position" Value="-0.86086357 1.8326753 0.5"/>
+<Property Key="LevelConstraint" Value="1"/>
+</Node>
+<Node ID="N6">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-0.9851806 1.668451 1.0"/>
+<Property Key="LevelConstraint" Value="2"/>
+</Node>
+<Node ID="N7">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.120000005"/>
+</ViewType>
+<Property Key="Position" Value="-0.98098314 1.8409672 1.5"/>
+<Property Key="LevelConstraint" Value="3"/>
+</Node>
+<Edge StartID="N4" EndID="N5">
+<ViewType Name="Tapered Edge">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge StartID="N5" EndID="N6">
+<ViewType Name="Tapered Edge">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge StartID="N6" EndID="N7">
+<ViewType Name="Tapered Edge">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+</Cluster>
+<Cluster>
+<ViewType Name="Spherical Cluster">
+<Property Key="Visible" Value="false"/>
+<Property Key="Label" Value="GHI"/>
+<Property Key="Radius" Value="1.751972"/>
+</ViewType>
+<Property Key="Position" Value="2.0851793 1.023744 0.0"/>
+<Property Key="LevelConstraint" Value="0"/>
+<LayoutEngineType Name="ForceLayout">
+<Property Key="Spring" Value="15.0"/>
+<Property Key="Origin" Value="15.0"/>
+<Property Key="VelocityAttenuation" Value="0.02"/>
+</LayoutEngineType>
+<Node ID="N0">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="1.6394938 1.0065653 0.0"/>
+<Property Key="LevelConstraint" Value="0"/>
+</Node>
+<Node ID="N1">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.120000005"/>
+</ViewType>
+<Property Key="Position" Value="1.7904708 0.7753467 0.5"/>
+<Property Key="LevelConstraint" Value="1"/>
+</Node>
+<Node ID="N2">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.14"/>
+</ViewType>
+<Property Key="Position" Value="1.9674013 0.92447364 1.0"/>
+<Property Key="LevelConstraint" Value="2"/>
+</Node>
+<Node ID="N3">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.15"/>
+</ViewType>
+<Property Key="Position" Value="2.0263488 0.9741578 1.5"/>
+<Property Key="LevelConstraint" Value="3"/>
+</Node>
+<Edge StartID="N0" EndID="N1">
+<ViewType Name="Tapered Edge">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge StartID="N1" EndID="N2">
+<ViewType Name="Tapered Edge">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge StartID="N2" EndID="N3">
+<ViewType Name="Tapered Edge">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+</Cluster>
+<Cluster>
+<ViewType Name="Spherical Cluster">
+<Property Key="Visible" Value="false"/>
+<Property Key="Label" Value="JKL"/>
+<Property Key="Radius" Value="1.7834508"/>
+</ViewType>
+<Property Key="Position" Value="-1.6998172 -1.139122 0.0"/>
+<Property Key="LevelConstraint" Value="0"/>
+<LayoutEngineType Name="ForceLayout">
+<Property Key="Spring" Value="15.0"/>
+<Property Key="Origin" Value="15.0"/>
+<Property Key="VelocityAttenuation" Value="0.02"/>
+</LayoutEngineType>
+<Node ID="N12">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-1.3989018 -1.1581844 0.0"/>
+<Property Key="LevelConstraint" Value="0"/>
+</Node>
+<Node ID="N13">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.120000005"/>
+</ViewType>
+<Property Key="Position" Value="-1.5308715 -1.0538948 0.5"/>
+<Property Key="LevelConstraint" Value="1"/>
+</Node>
+<Node ID="N14">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.14"/>
+</ViewType>
+<Property Key="Position" Value="-1.4935758 -0.8642218 1.0"/>
+<Property Key="LevelConstraint" Value="2"/>
+</Node>
+<Node ID="N15">
+<ViewType Name="DefaultNodeView">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.15"/>
+</ViewType>
+<Property Key="Position" Value="-1.3865795 -1.0812104 1.5"/>
+<Property Key="LevelConstraint" Value="3"/>
+</Node>
+<Edge StartID="N12" EndID="N13">
+<ViewType Name="Tapered Edge">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge StartID="N13" EndID="N14">
+<ViewType Name="Tapered Edge">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge StartID="N14" EndID="N15">
+<ViewType Name="Tapered Edge">
+<Property Key="Colour" Value="0.4 1.0 0.2"/>
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+</Cluster>
+<Edge StartID="N9" EndID="N1">
+<ViewType Name="Arrow">
+<Property Key="Colour" Value="0.5019608 0.5019608 1.0"/>
+<Property Key="Radius" Value="0.0080"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge StartID="N4" EndID="N0">
+<ViewType Name="Arrow">
+<Property Key="Colour" Value="0.7490196 0.7490196 1.0"/>
+<Property Key="Radius" Value="0.01"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge StartID="N6" EndID="N14">
+<ViewType Name="Arrow">
+<Property Key="Colour" Value="0.7490196 0.7490196 1.0"/>
+<Property Key="Radius" Value="0.01"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge StartID="N8" EndID="N12">
+<ViewType Name="Arrow">
+<Property Key="Colour" Value="1.0 1.0 1.0"/>
+<Property Key="Radius" Value="0.015"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+<Edge StartID="N11" EndID="N15">
+<ViewType Name="Arrow">
+<Property Key="Colour" Value="1.0 1.0 1.0"/>
+<Property Key="Radius" Value="0.015"/>
+</ViewType>
+<Property Key="Weight" Value="0.5"/>
+</Edge>
+</Cluster>
+</WilmaGraph>
