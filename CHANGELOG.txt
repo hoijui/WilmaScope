@@ -11,6 +11,7 @@ Changes Since 3.0.1
 - GraphModifier plugins now defined for methods that change
   the structure of an existing graph (cluster), eg: DirectedCycleRemoval
 - Added various methods to Cluster: inDegree, inEdges, outEdges, acyclicEdges etc
+- Save the property of cluster
 
 Changes Since 3.0
 -----------------
