@@ -14,13 +14,13 @@
 \usepackage{subfigure} % subfigures in one figure
 
 %\usepackage{algorithm2e}
-\usepackage[ruled,algonl]{algorithm2e}
+%\usepackage[ruled,algonl]{algorithm2e}
 %\setlength{\algomargin}{2.1em}
-\dontprintsemicolon
-\SetInd{0.5em}{1em}
-\SetKwFor{Forall}{forall}{do}{od}
-\SetKwFor{WhileDo}{while}{do}{od}
-\SetKw{Let}{let}
+%\dontprintsemicolon
+%\SetInd{0.5em}{1em}
+%\SetKwFor{Forall}{forall}{do}{od}
+%\SetKwFor{WhileDo}{while}{do}{od}
+%\SetKw{Let}{let}
 
 \makeindex            % used for the subject index
                       % please use the style sprmidx.sty with
@@ -32,6 +32,7 @@
 \newcommand{\umu}{\mbox{\euler{\char22}}}
 \newcommand{\umub}{\mbox{\eulerbold{\char22}}}
 \newcommand{\url}[1]{{\small{\tt #1}}}
+\newcommand{\avec}[1]{\vec{\overrightarrow{ #1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -100,14 +101,34 @@
 \label{motivation}
 
 Despite, or perhaps because of, the extensive research literature on graph
-drawing techniques, there is a lack of state-of-the-art, general-purpose
-visualisation systems, particularly for application to 3-dimensional
+drawing techniques, there is a lack of state of the art, general purpose
+visualisation systems, particularly for application to three dimensional
 embeddings.
 
 Graph drawing problems are, of course, existent within an enormous range of
 fields; a key motivation for creating a general purpose 3D visualisation
 system is to provide easy-to-use components which can be employed by future
 software across these application domains.
+
+3D graph visualisation has not yet found the degree of acceptance that
+graph drawing in 2D has found.  Probably since 2D graph drawing's
+``killer app'' is the printed page or poster\footnote{Certainly the
+screen-shots of Wilma's 3D graphics display included in this chapter
+do not do 3D visualisation much justice.  Due to their small size and
+without the ability to rotate or zoom the scenes the labels are very
+difficult to read and their structure is sometimes obscured.}.
+Although 3D graphics
+technology is improving very quickly it may be that 3D visualisation
+will have to await the advent of cheap, ubiquitous holographic,
+augmented or virtual reality environments before it gains widespread
+acceptance.  However, clever research into this embryonic area will
+hopefully produce examples which demonstrate some benefits of 3D
+visualisation even using current hardware or will
+at least aid in the rapid adoption of the paradigm once today's
+science fiction becomes tomorrow's reality.
+It was with hope of supporting such research that Wilma was conceived
+and offered as open
+source to researchers and experimenters under the GNU Public License.
 
 Within the graph drawing community itself, a system may also aspire to 
 streamline, elucidate and beautify the work of algorithm design, comparison
@@ -141,7 +162,7 @@ the other components.
 
 To achieve this we began by exploring the well known {\em
 Model-View-Controller} architecture (MVC) \cite{gamma94design}.
-Briefly, the 3 primary components of the MVC architecture are as
+Briefly, the three primary components of the MVC architecture are as
 follows: 
 
 \begin{description}
@@ -214,7 +235,7 @@ all the properties of the {\em Node} class and also contains an
 aggregation of {\em Nodes} and {\em Edges}.  A {Cluster} also contains
 a reference to an abstract definition of a {\em LayoutEngine} which
 provides a common interface to an implementation of a layout algorithm
-for arranging the graph in 2 or 3 dimensional space.  Since the
+for arranging the graph in two or three dimensional space.  Since the
 details of the algorithm are kept separate it is easy to mix and match
 different layout styles to different graphs or even clusters within
 the one graph.  A similar class hierarchy was developed independently
@@ -240,55 +261,103 @@ of the system described further in \ref{sec:3duml}.
 \end{figure}
 
 \subsection{User Interface Design}
-A screenshot of the main Wilma window, with labels describing the main
+A screen-shot of the main Wilma window, with labels describing the main
 features is shown in Figure \ref{fig-controls}.
 The majority of the space in this window is given over to the 3D
 canvas in which the graph structure is visualised.  Users may ``fly''
 through the virtual space rendered on this canvas by dragging with the
 various mouse buttons.  The possible mouse navigation actions (rotate,
 zoom and translate) are
-shown in the reminder panel at the bottom of the window.
+shown in the reminder panel at the bottom of the window (which may be
+hidden to gain 3D canvas real-estate).
 \begin{figure}[h]
   \centering
     \label{fig-controls}
-    \includegraphics[width=0.7\textwidth]{figures/wilmacontrols.eps}
+    \includegraphics[width=\textwidth]{figures/wilmacontrols.eps}
+    \caption{The main WilmaScope window}
 \end{figure}
 
 The user may also navigate through the cluster hierarchy through this
 window.  Clusters are generally shown as transparent spheres or other
 convex shape enveloping the nodes in the cluster.  Clicking on a
-cluster opens a popup menu in which the user may choose to expand or
-collapse the cluster.  Collapsing the cluster shrinks the cluster to a
-size directly proportional to the sum of the mass of its child nodes.
+cluster opens a pop-up menu in which the user may choose to expand or
+collapse that cluster.  Collapsing the cluster removes its contents
+from the 3D scene, shrinks the cluster to a
+size proportional to the sum of the mass of its child nodes
+and makes the (normally transparent) cluster glyph opaque.
+
+For expanded spherical clusters, calculating the radius such that all the
+cluster's children are enclosed is a simple matter.
+We define the geometric distance of a node $v$ from the centroid
+$c$ of its parent cluster $C$ as: $d_{cv}$.  The farthest child $n$ from
+$c$ is the one for which the condition $d_{cn} >= d_{ci}$ holds for
+all $i \in C$.  We usually set the radius of an expanded cluster to
+${R_e}(C) = d_{cn} + R(n)$.  Thus the radius of expanded clusters
+depends on the layout algorithm used within the cluster and can be
+quite large.
+
+We have found a convenient way to determine the radius of a collapsed cluster
+$R_c(C)$ is to assume a volume for the cluster proportional to its
+total mass and density $\rho$, where for us density is simply a convenient scale
+factor.  The following is obtained from the formula for volume of a
+sphere:
+\[R_c(C) = \sqrt[3]{\frac{3}{(4d\pi)}\sum_{v \in C}m_v} \] 
+
+This method produces collapsed clusters whose size gives the user a
+feeling for the number of children it contains but which is still
+compact enough to be useful in the elision of unnecessary detail from
+the collapsed parts of a clustered graph.
+
 Note that a cluster's mass is the sum of its children so that a
 collapsed cluster's size will reflect the sum of all its descendents
 in the cluster tree.  Section \ref{sec:forcedirectedlayout} describes
-how this mass is used to layout expanded clusters.  When a cluster is
-collapsed its contents are also removed from the 3D scene and it is
-made opaque.
+how this mass is used to layout expanded clusters.
 
 Wilma was conceived as an interactive graph editor and therefore there
 are a range of basic actions which a user may perform in editing the
 graph structure.  A user may add nodes and edges or group nodes into
-clusters using the toolbar buttons.  Alternately they make changes to
-the graph by clicking on the graph elements on the 3D Canvas directly.
+clusters using the toolbar buttons.  The default appearance of the
+graph element that will appear may be selected from a menu that
+appears when the small arrow on the buttons is clicked, see Figure
+\ref{fig-defaultnode}.
+Some of these actions are modal.  For example, clicking the ``add
+edge'' button causes a message prompting the user to ``select two
+nodes to join with an edge''.  Then clicking on a node causes that node
+to change colour showing it has been selected.  The user may then
+select another node to create the edge or click on the selected node a
+second time to cancel the whole operation.  Adding a cluster is
+similar, however an extra ``OK'' button is displayed.  The user can
+then select nodes individually and pressing the ``OK'' button creates
+a cluster around the selected nodes.
+\begin{figure}
+\begin{center}
+  \label{fig-defaultnode}
+  \includegraphics[width=0.5\textwidth]{figures/defaultnode.eps}
+  \caption{Setting the default Node}
+\end{center}
+\end{figure}
+
+Alternately they can make changes to
+the graph or change the appearance of particular graph elements by
+clicking on the nodes, edges or clusters on the 3D Canvas directly.
 This brings up a menu of actions which may be performed on the graph
-element.  Figure \ref{fig-popupmenus} shows the various popup menus.
+element.  Figure \ref{fig-popupmenus} shows the various pop-up menus.
+
 \begin{figure}
   \label{fig-popupmenus}
   \subfigure[Node]{
-    \label{fig-forcecontrols}
+    \label{fig-nodemenu}
 \scalebox{0.3}{
     \includegraphics{figures/nodemenu.eps}}}
   \subfigure[Edge] {
-    \label{fig-multiscalecontrols}
+    \label{fig-edgemenu}
 \scalebox{0.3}{
     \includegraphics{figures/edgemenu.eps}}}
   \subfigure[Cluster] {
-    \label{fig-simannealcontrols}
+    \label{fig-clustermenu}
 \scalebox{0.3}{
     \includegraphics{figures/clustermenu.eps}}}
-  \caption{The popup menus that appear when right-clicking on graph
+  \caption{The pop-up menus that appear when right-clicking on graph
   elements in Wilma}
 \end{figure}
 
@@ -314,6 +383,78 @@ element.  Figure \ref{fig-popupmenus} shows the various popup menus.
   \caption{The various layout engine control windows in Wilma.}
 \end{figure}
 
+\subsection{3D Graph Elements}
+As previously mentioned Wilma provides a number of different 3D
+``widgets'' or ``glyphs'' representing nodes, edges and clusters.
+The MVC architecture allows other custom graph elements to be added
+with ease.  The graph element classes defined in the {\em graph}
+package, see Figure \ref{fig-wilmaclasses}, each have a reference to
+an object implementing the appropriate View interface ({\em NodeView, EdgeView or ClusterView}).
+Custom glyphs for these components need only implement these
+interfaces.  Abstract convenience classes implementing these
+interfaces with default methods can be extended to define new glyphs
+with very little new code.
+
+We briefly describe some of the glyphs so far designed for Wilma:
+\begin{description}
+\item[Defaults]  The standard glyph for nodes and clusters is a sphere. 
+The default
+edge glyph is a simple cylinder.  Such simple shapes are useful
+because they look the same from all viewpoints.  Level of Detail (LOD)
+scaling is used to improve rendering speed, thus maintaining high
+frame rates when the seen is rotated or zoomed.  The underlying
+framework of all 3D shapes is a triangular mesh.  LOD scaling reduces
+the total number of triangles that need to be displayed at any one
+time by drawing shapes distant from the view point in a courser fashion.
+This is, of course, at the expense of the additional video memory
+required to store both the detailed and course triangular meshes.
+
+By default labels appear as banners hovering above the nodes and edges.  These
+banners rotate to face the viewpoint so that
+they may be read even as the scene is being rotated. 
+\item[Nodes]  Different applications require different node
+representations.  For example, the 3D UML model shown in Figure
+\ref{fig-wilmaclasses3D} uses boxes to represent UML classes.  The
+class name is texture mapped onto the surface of the box.  In a
+similar fashion to the banner labels described above, the boxes rotate
+to face the user.  In order to enhance the 3D effect the edges of the
+boxes are bevelled.  An application which uses cylindrical nodes is
+described in Section \ref{sec:fmflow}.  As can be seen in the example,
+the top and bottom radius of
+these cylinders may be adjusted.
+\item[Edges] In addition to the basic cylindrical edge we have arrows
+for representing directed edges.  The head of the arrow is shown with a cone.
+
+A very efficient way to represent larger graphs is not to show the
+nodes at all and use line segments to show the edges.  3D Graphics
+hardware can store a large set of vertices joined by line segments as
+a single 3D shape without surface normals.  Not having to render the
+surfaces means graphs with tens of thousands of nodes can be viewed in
+their entirety.  This style of rendering is shown in Figure
+\ref{fig-multiscale}.
+
+In Wilma multiple edges joining a pair of nodes are shown slightly
+offset, an example can be seen in Figure \ref{fig-controls}.
+
+\item[Clusters] So far clusters have been represented with simple
+transparent 3D
+primitives: spheres and boxes.  Figure \ref{fig-spincluster} shows a
+style of cluster in which nodes are constrained to lie on a plane
+inside the cluster.  Again we use a simple transparent sphere but the
+constraint plane is also highlighted with a transparent surface inside
+the cluster.
+
+A more ambitious representation of a cluster might be a complex hull
+surrounding the cluster's children.  Such a representation
+would probably be too computationally intensive to allow animated
+changes to the positions of the cluster's contents.  However, it may
+be useful to show collapsed clusters in this way.  Thus some of the
+cluster's internal structure would still be visible even when the
+individual nodes have been elided.
+
+\end{description}
+
+
 \subsection{Platform}
 
 WilmaScope has been implemented in Java, using the Java3D graphics library.
@@ -333,7 +474,7 @@ implement this algorithm first, notably:
 graphs by application of the basic attractive spring force and
 repulsive inter-node force.
 \item it is easy to animate the layout process in a dynamic
-graph visualization to preserve a user's ``mental map''\cite{Misue:VLC95}
+graph visualisation to preserve a user's ``mental map''\cite{Misue:VLC95}
 between changes in the graph structure.  We can animate simply by
 redrawing the graph between each iteration of the algorithm.
 \item since the algorithm is iterative and does not require any
@@ -345,9 +486,9 @@ aesthetics can be enhanced by adding extra forces, such as the Sugiyama and Misu
 directed field force for aligning directed edges to emphasise flow.
 \item the force directed approach can be easily extended to support
 clustered graphs \cite{Huang:GD98}
-\item it works just as well in 3-dimensions as in 2.
+\item it works just as well in three dimensions as in two.
 \end{itemize}
-The wilma implementation of the force directed algorithm attempts to make the most
+The Wilma implementation of the force directed algorithm attempts to make the most
 of all of these advantages.  Firstly it offers a user interface which
 allows the user to control all the parameters of the layout algorithm
 even while the layout is still in progress.  The user can control the
@@ -375,13 +516,26 @@ achieves a net result similar to the ``dummy node'' approach of Huang
 and Eades\cite{Huang:GD98} however repulsive forces do not need to be
 calculated between nodes inside different clusters.
 
+As noted previously a cluster's mass is the sum of the masses of all
+its children.
+The repulsive force used considers the mass of nodes such
+that nodes with large mass, such as clusters with many descendents,
+will exert a strong repulsive force on their neighbours, ie,
+\[ \mathit{repulsiveforce}(p_u,p_v) \equiv \frac{m_u m_v}{\|p_u-p_v\|}
+\centerdot \avec{p_u p_v} \]
+This ensures
+that clusters have plenty of space and avoids overlaps.  It also helps
+to give the user a feeling for the size of collapsed clusters, ie even
+though their contents is ellided, the space around them gives an
+indication as to their complexity.
+
 A novel extension that has been added to our force directed layout
 engine is the ability for the contents of clusters to be constrained
 to a plane.  The orientation of this plane is then able to rotate in
 order to help minimise the spring force of inter cluster edges.  This
 is illustrated in Figure \ref{fig-spincluster}.  Restricting the
 contents of clusters to planes, but then allowing the clusters
-themselves to be arranged in 3-dimensions allows certain types of
+themselves to be arranged in three dimensions allows certain types of
 clustered
 graphs to be more clearly displayed.  For example a graph which is not
 {\em c-planar}\cite{Eades:GD96} but which has planar clusters may be best
@@ -390,7 +544,7 @@ intersecting edges.
 \begin{figure}[h]
   \centering
     \includegraphics[width=0.8\textwidth]{figures/enterprise.eps}
-  \caption{A screenshot showing a clustered graph with planar
+  \caption{A screen-shot showing a clustered graph with planar
   clusters.  The clusters are rotated to minimise the lengths of the
   edges between clusters.}
   \label{fig-spincluster}
@@ -412,10 +566,10 @@ $O(n^2)$ for the whole graph:
 
 \begin{equation}
 \label{repulsion}
-\vec{R}_i \equiv \sum_{j \in V \setminus \{i\}} \vec{r}_{i,j}
+\avec{R_i} \equiv \sum_{j \in V \setminus \{i\}} \avec{r_{ij}}
 \end{equation}
 
-\noindent Where $\vec{r}_{i,j} = \vec{r}_i - \vec{r}_j$ is the displacement
+\noindent Where $\avec{r_{ij}} = \avec{r_i} - \avec{r_j}$ is the displacement
 of node $i$ relative to $j$.
 
 To avoid this expense, it is possible to approximate scalar energy potential
@@ -431,7 +585,7 @@ achieve linear-time graph embeddings.  Cowling was able to demonstrate that
 the algorithms of \cite{davidson01noise} do appear to achieve linear time
 results, but that when the grid size $v \centerdot \rho$ must be adjusted to
 prevent folding in large graphs, space and time complexity are no longer
-linear.  Figure \ref{fig-fastlayout} shows before and after screenshots of
+linear.  Figure \ref{fig-fastlayout} shows before and after screen-shots of
 the algorithm's effects.
 
 Cowling's work serves to demonstrate the utility of Wilma as an empirical
@@ -447,7 +601,7 @@ algorithmic experiments can be performed at optimal speeds.
   \subfigure[After a complete run of the algorithm.]{
     \label{fig-fastlayout2}
     \includegraphics[width=0.4\textwidth]{figures/fastlayout2.eps}}
-  \caption{These screenshots demonstrate the effects of the simulated
+  \caption{These screen-shots demonstrate the effects of the simulated
   annealing algorithm with potential caching.  Note that the colour of
   the nodes indicates the force potential at that location.}
   \label{fig-fastlayout}
@@ -508,9 +662,9 @@ distance $d_\infty$, that is:
 
 \begin{equation}
 \exists \, d_\infty : \, 
-||\vec{r_i} - \vec{r_j}|| > d_\infty
+||\avec{r_i} - \avec{r_j}|| > d_\infty
 \Rightarrow 
-repulsionforce (\vec{r_i},\vec{r_j}) = \vec{0}
+repulsionforce (\avec{r_i},\avec{r_j}) = \avec{0}
 \end{equation}
 %\forall d > d_\infty, f_g(d) = 0
 
@@ -519,19 +673,45 @@ with reference solely to the positions of nearby nodes.  If the cells for
 the spatial data structure are of a size greater than or equal to $d_\infty$,
 then all such nodes may be addressed through the cell containing $i$, and
 those adjacent to it.  In this algorithm, the cost of calculating the
-replusion force is $O(|V| \centerdot \rho)$, where $\rho$ is the average 
+repulsion force is $O(|V| \centerdot \rho)$, where $\rho$ is the average 
 of the embedding density around each node.  Provided that the repulsion
 force is {\em strong} --- that it does not fall of faster than the square
 of the distance between nodes --- then we can expect $\rho$ to be bounded
 independently of $|V|$, and thus, repulsion force evaluation to be linear.
 
 The multilevel force-directed layout engine thus provides WilmaScope with
-an efficient mechanism for handling large graphs.
+an efficient mechanism for handling large graphs.  Figure
+\ref{fig-multiscale} gives six screen shots showing the progressive
+addition of detail as a large graph is embedded using the Wilma multiscale
+layout engine.  Figure \ref{fig-multiscalecontrols} shows the full
+control panel for the multiscale layout engine.  Each of these
+parameters may be adjusted as the layout progresses and the effect
+instantly seen on screen.
+
+\begin{figure}[h]
+  \centering
+  \subfigure{
+    \includegraphics[width=0.3\textwidth]{figures/multiscale1.eps}}
+  \subfigure{
+    \includegraphics[width=0.3\textwidth]{figures/multiscale2.eps}}
+  \subfigure{
+    \includegraphics[width=0.3\textwidth]{figures/multiscale3.eps}}
+  \subfigure{
+    \includegraphics[width=0.3\textwidth]{figures/multiscale4.eps}}
+  \subfigure{
+    \includegraphics[width=0.3\textwidth]{figures/multiscale5.eps}}
+  \subfigure{
+    \includegraphics[width=0.3\textwidth]{figures/multiscale6.eps}}
+  \caption{Six screen shots showing the progress of the Wilma
+  multiscale layout engine as it finds an embedding for a regular mesh
+  containing 900 nodes.}
+  \label{fig-multiscale}
+\end{figure}
 
 \subsubsection{DOT: Hierarchical Layout}
 DOT is a program included in the Graphviz
 (\url{http://www.graphviz.org}) open source graph visualisation
-toolkit from AT\&T.  It produces effective 2-dimensional layered graph
+toolkit from AT\&T.  It produces effective two dimensional layered graph
 layouts using a Sugiyama\cite{Sugiyama81methods} style algorithm.
 The Wilma DOT layout engine runs dot in a sub-process, pipes in the graph
 data converted into DOT file format and parses the DOT output to
@@ -539,9 +719,9 @@ obtain the new layout.
 DOT also features aesthetically pleasing spline edges which Wilma
 is able to render as curved tubes.
 
-Since the DOT layouts are strictly 2-dimensional we are free to use the
+Since the DOT layouts are strictly two dimensional we are free to use the
 third dimension to capture additional information.  For example
-Section \ref{sec:fmflow} describes an application where the 3rd
+Section \ref{sec:fmflow} describes an application where the third
 dimension (the {\em z}-axis) is used to capture changes in the graph over time.
 That is, the nodes are rendered as tubes and the edges may appear at different
 levels in the {\em z} dimension.
@@ -610,7 +790,7 @@ shown in Figure \ref{fig-wilmaclasses3D}.
 
 \subsection{Fund Manager Flow Visualisation} \label{sec:fmflow}
 Most stock market visualisations involve a fairly straightforward
-mapping of share attributes into 2 or 3 dimensional space.  The most
+mapping of share attributes into two or three dimensional space.  The most
 obvious example is share price time series charts.  In an experiment
 into graph based visualisation techniques for stock market data
 Dwyer~\cite{dwyer02fmflow} defined a graph model for Fund Manager
@@ -640,14 +820,14 @@ used in these layout algorithms to suit such stratified graphs.
 
 \begin{figure}[h]
   \centering
-  \subfigure[]{
+  \subfigure[Perspective view]{
     \label{fig-fmflow}
     \includegraphics[width=0.5\textwidth]{figures/dot_waterlevel2.eps}}
   \subfigure[Side view]{
     \label{fig-fmflow}
     \includegraphics[width=0.4\textwidth]{figures/dot_waterlevel2_sideview.eps}}
   \caption{A visualisation of fund manager movement within the UK
-  Computer Services sector for 5 time periods over 2 weeks in December.}
+  Computer Services sector for five time periods over two weeks in December.}
   \label{fig-fm}
 \end{figure}
 
@@ -665,7 +845,7 @@ The clusters are defined over similarity between pages; also note the set of
 \begin{figure}
 \begin{center}
 \scalebox{0.8}{\includegraphics{figures/cluster1.eps}} \\
-\caption{{\sc WilmaScope Visualisation of Web Site Structure}}
+\caption{WilmaScope Visualisation of Web Site Structure}
 \label{fig-web}
 \end{center}
 \end{figure}
@@ -673,8 +853,8 @@ The clusters are defined over similarity between pages; also note the set of
 \subsection{Concept Maps}
 
 A common application of automated graph drawing systems is to visualise
-``concept map'' graphs, in which nodes represent ideas and edges, the
-concections between them.  These models can be useful for recognising
+``concept map'' graphs or ``semantic webs'', in which nodes represent ideas and edges, the
+connections between them.  These models can be useful for recognising
 the important concepts which lie at the heart of expansive ontological
 frameworks, and for explaining these structures quickly.
 
@@ -685,7 +865,7 @@ embeddings.  One example of this is shown in Figure~\ref{fig-concept}
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{figures/concepts2.eps} \\
-\caption{{\sc Example of a WilmaScope Concept Map}}
+\caption{Example of a WilmaScope Concept Map}
 \label{fig-concept}
 \end{center}
 \end{figure}
@@ -708,12 +888,15 @@ functionality-transparency for users.
 Finally, WilmaScope is released under a free software license --- the Lesser
 GNU General Public License (\url{http://www.gnu.org/copyleft/lesser.html}),
 which maximises benefits for the user community, guarantees an open
-development ecology and thus encourage creative hacking all round.
+development ecology and thus encourages creative input all round.
 
 Although WilmaScope is a mature and featureful package, there are no doubt a
 few interesting bugs still to be discovered by enthusiastic users; and, since
-research in 3D graph drawing tecniques is ongoing, we hope that Wilma can
-grow and evolve with the field.  
+research in 3D graph drawing techniques is ongoing, we hope that Wilma can
+grow and evolve with the field.  Our eventual hope is that the Wilma
+user and developer community will grow to the point where the software
+will 
+continue to evolve and outlive its original authors.
 
 \paragraph{}
 
