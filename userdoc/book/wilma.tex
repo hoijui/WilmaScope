@@ -248,17 +248,48 @@ through the virtual space rendered on this canvas by dragging with the
 various mouse buttons.  The possible mouse navigation actions (rotate,
 zoom and translate) are
 shown in the reminder panel at the bottom of the window.
-
-The user may also navigate through the cluster hierarchy through this
-window.  Clusters are generally shown as transparent spheres or other 
-
-Wilma was conceived as an interactive graph editor and therefore there
-are a range of basic actions which a user may perform in editing the
-graph structure.
 \begin{figure}[h]
   \centering
     \label{fig-controls}
     \includegraphics[width=0.7\textwidth]{figures/wilmacontrols.eps}
+\end{figure}
+
+The user may also navigate through the cluster hierarchy through this
+window.  Clusters are generally shown as transparent spheres or other
+convex shape enveloping the nodes in the cluster.  Clicking on a
+cluster opens a popup menu in which the user may choose to expand or
+collapse the cluster.  Collapsing the cluster shrinks the cluster to a
+size directly proportional to the sum of the mass of its child nodes.
+Note that a cluster's mass is the sum of its children so that a
+collapsed cluster's size will reflect the sum of all its descendents
+in the cluster tree.  Section \ref{sec:forcedirectedlayout} describes
+how this mass is used to layout expanded clusters.  When a cluster is
+collapsed its contents are also removed from the 3D scene and it is
+made opaque.
+
+Wilma was conceived as an interactive graph editor and therefore there
+are a range of basic actions which a user may perform in editing the
+graph structure.  A user may add nodes and edges or group nodes into
+clusters using the toolbar buttons.  Alternately they make changes to
+the graph by clicking on the graph elements on the 3D Canvas directly.
+This brings up a menu of actions which may be performed on the graph
+element.  Figure \ref{fig-popupmenus} shows the various popup menus.
+\begin{figure}
+  \label{fig-popupmenus}
+  \subfigure[Node]{
+    \label{fig-forcecontrols}
+\scalebox{0.3}{
+    \includegraphics{figures/nodemenu.eps}}}
+  \subfigure[Edge] {
+    \label{fig-multiscalecontrols}
+\scalebox{0.3}{
+    \includegraphics{figures/edgemenu.eps}}}
+  \subfigure[Cluster] {
+    \label{fig-simannealcontrols}
+\scalebox{0.3}{
+    \includegraphics{figures/clustermenu.eps}}}
+  \caption{The popup menus that appear when right-clicking on graph
+  elements in Wilma}
 \end{figure}
 
 \begin{figure}
@@ -348,13 +379,13 @@ A novel extension that has been added to our force directed layout
 engine is the ability for the contents of clusters to be constrained
 to a plane.  The orientation of this plane is then able to rotate in
 order to help minimise the spring force of inter cluster edges.  This
-is illustrated in Figure \ref{fig-spincluster}.  By restricting the
+is illustrated in Figure \ref{fig-spincluster}.  Restricting the
 contents of clusters to planes, but then allowing the clusters
-themselves to be arranged in 3-Dimensions allows certain types of
+themselves to be arranged in 3-dimensions allows certain types of
 clustered
 graphs to be more clearly displayed.  For example a graph which is not
-c-planar\cite{Eades:GD96} but which has planar clusters may be best
-shown in this way to show planarity where possible but to avoid
+{\em c-planar}\cite{Eades:GD96} but which has planar clusters may be best
+shown in this way, showing planarity where possible but avoiding
 intersecting edges.
 \begin{figure}[h]
   \centering
@@ -497,7 +528,7 @@ independently of $|V|$, and thus, repulsion force evaluation to be linear.
 The multilevel force-directed layout engine thus provides WilmaScope with
 an efficient mechanism for handling large graphs.
 
-\subsubsection{DOT: heirarchical layout}
+\subsubsection{DOT: Hierarchical Layout}
 DOT is a program included in the Graphviz
 (\url{http://www.graphviz.org}) open source graph visualisation
 toolkit from AT\&T.  It produces effective 2-dimensional layered graph
