@@ -44,6 +44,7 @@ public class MenuBar extends JMenuBar {
   JMenuItem exitMenuItem = new JMenuItem();
   JMenu viewMenu = new JMenu();
   JCheckBoxMenuItem antialiasingCheckBoxMenuItem = new JCheckBoxMenuItem();
+  JMenuItem backgroundColourMenuItem = new JMenuItem();
   JMenuItem helpMenuItem = new JMenuItem();
   JMenuItem licenseMenuItem = new JMenuItem();
   JMenuItem aboutMenuItem = new JMenuItem();
@@ -68,9 +69,17 @@ public class MenuBar extends JMenuBar {
     viewMenu.setText("View");
     viewMenu.setMnemonic('V');
     antialiasingCheckBoxMenuItem.setText("Antialiasing");
+    antialiasingCheckBoxMenuItem.setMnemonic('A');
     antialiasingCheckBoxMenuItem.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
         antialiasingCheckBoxMenuItem_actionPerformed(e);
+      }
+    });
+    backgroundColourMenuItem.setText("Set Background Colour...");
+    backgroundColourMenuItem.setMnemonic('B');
+    backgroundColourMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        backgroundColourMenuItem_actionPerformed(e);
       }
     });
     helpMenuItem.setText("Help Contents...");
@@ -100,6 +109,7 @@ public class MenuBar extends JMenuBar {
     this.add(helpMenu);
     fileMenu.add(exitMenuItem);
     viewMenu.add(antialiasingCheckBoxMenuItem);
+    viewMenu.add(backgroundColourMenuItem);
     helpMenu.add(helpMenuItem);
     helpMenu.add(licenseMenuItem);
     helpMenu.add(aboutMenuItem);
@@ -128,5 +138,13 @@ public class MenuBar extends JMenuBar {
   }
   void aboutMenuItem_actionPerformed(ActionEvent e) {
     new About(null,"images" +java.io.File.separator + "WilmaSplash.png").show();
+  }
+
+  void backgroundColourMenuItem_actionPerformed(ActionEvent e) {
+    java.awt.Color colour = JColorChooser.showDialog(
+      this,"Please select nice colours...", graphControl.getGraphCanvas().getBackgroundColor());
+    if(colour!=null) {
+      graphControl.getGraphCanvas().setBackgroundColor(colour);
+    }
   }
 }

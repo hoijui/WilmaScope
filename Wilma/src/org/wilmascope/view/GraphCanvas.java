@@ -70,6 +70,7 @@ public class GraphCanvas extends Canvas3D {
     background = new Background(constants.getColor3f("BackgroundColour"));
     background.setApplicationBounds(bounds);
     background.setCapability(Background.ALLOW_COLOR_WRITE);
+    background.setCapability(Background.ALLOW_COLOR_READ);
     bg.addChild(background);
 
     // Set up fog
@@ -180,6 +181,14 @@ public class GraphCanvas extends Canvas3D {
   }
   public void setBackgroundColor(Color3f c) {
     background.setColor(c);
+  }
+  public void setBackgroundColor(java.awt.Color c) {
+    background.setColor(new Color3f(c));
+  }
+  public java.awt.Color getBackgroundColor() {
+    Color3f c = new Color3f();
+    background.getColor(c);
+    return c.get();
   }
   public float getFogDensity() {
     return fog.getDensity();
