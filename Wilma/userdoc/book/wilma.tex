@@ -143,15 +143,22 @@ Therefore the design needed to decouple these components as much as
 possible so that altering one component would have minimal impact on
 the other components.
 
-To achieve this we began by exploring the well known Model-View-Controller
-architecture (MVC) \cite{gamma94design}.  In an MVC architecture the Model is the core
+To achieve this we began by exploring the well known {\em Model-View-Controller}
+architecture (MVC) \cite{gamma94design}.  Briefly, the 3 primary components of the MVC architecture are as follows:
+\begin{description}
+\item[Model] the core
 of the application, the data and algorithms that automatically modify
-the data.  The View is a user interface which displays information
-about the model to the user.  The Controller is a separate user
+the data. 
+\item[View] a user interface which displays information
+about the model to the user. 
+\item[Controller] a separate user
 interface that provides methods for the user to manipulate the
-application, ie to control the Model.  Each components reference to
+application, ie to control the Model.  
+\end{description}
+
+Each component's reference to
 the other components is via a carefully defined interface which should
-not require change one of the components is modified in some way.  The
+not require change when one of the components is modified in some way.  The
 standard data flow diagram for the MVC architecture is shown in Figure
 \ref{fig-mvc}.
 
@@ -166,24 +173,29 @@ standard data flow diagram for the MVC architecture is shown in Figure
   \caption{The classic MVC framework and Wilma's utilisation of MVC.}
 \end{figure}
 
-In our system the Model is further broken down into two components:
-the Graph data structure itself, capable of representing the structure
-and state of the graph including its arrangement in space, and
-the Layout Engine, which is an abstraction of the basic methods required for
+In our system the Model component is further broken down into two sub-components:
+\begin{description}
+\item[Graph] a data structure capable of representing the structure
+and state of the graph including its arrangement in space.
+\item[Layout Engine] an abstraction of the basic methods required for
 an implementation of any layout algorithm that will change the graph's
 arrangement in space.
+\end{description}
 
-A further requirement for our system is that the graph data model and
-the layout engine should able to be controlled either interactively by
-the user, by loading data from a file or even by remote
-procedure call from a program running in another process or possibly on
-another machine (Wilma's APIs are described in Section~\ref{API}).  Therefore the Controller component was also broken
-down into several components.  A ``bridge'' layer provides a common
+A further requirement for our system is that the graph data model,
+the layout engine and the visual representation of the graph elements should be controllable from multiple different sources, primarily:
+\begin{description}
+\item[Graphical User Interface] a user can interactively construct or edit the graph structure.  Also the user can adjust the layout engine parameters and change the visual representation of the graph elements.
+\item[File Handler] a previously constructed graph may be loaded from a file.
+\item[API Hooks] supports remote control from a program running in another process or possibly on
+another machine. 
+\end{description}
+The Controller component was therefore also broken
+down into several sub-components.  A ``bridge'' layer provides a common
 programmatic interface to the Model.  The methods provided by this
 bridge layer can then be called by either the GUI interface component,
-a component providing a CORBA interface for RPC or a component which
+a component providing a CORBA interface for remote access or a component which
 can load and save files to an XML format.
-
 
 Figure \ref{fig-wilmamvc} depicts this expanded MVC architecture for graph
 visualisation. 
@@ -191,7 +203,8 @@ visualisation.
 \subsection{An Object-Oriented Graph Model}
 In designing the Graph Model, ie, the data structures for storing the
 graph and the methods for manipulating them, some common
-elements were identified.  Firstly a graph consists fundamentally
+elements were identified.  From the definitions given in Chapter 
+\ref{chap-intro}: a graph consists fundamentally
 of nodes and edges.  These are the basic Graph Elements.  A clustered
 graph has nodes which may themselves be graphs, or clusters.
 
@@ -227,6 +240,38 @@ of the system described further in \ref{sec:3duml}.
   in the Force Directed Layout Engine implementation.}
 \end{figure}
 
+<<<<<<< wilma.tex
+\subsection{User Interface Design}
+\ref{fig-controls}
+\begin{figure}[h]
+  \centering
+    \label{fig-controls}
+    \includegraphics[width=0.7\textwidth]{figures/wilmacontrols.eps}
+\end{figure}
+
+\begin{figure}
+  \subfigure[Controls for generating random graphs for testing layout
+  algorithms]{
+    \label{fig-randomcontrols}
+\scalebox{0.3}{
+\includegraphics{figures/wilma-randomcontrols.eps}}}
+  \subfigure[Controls for the force directed layout engine]{
+    \label{fig-forcecontrols}
+\scalebox{0.3}{
+    \includegraphics{figures/wilma-forcecontrols.eps}}}
+  \subfigure[Controls for the multiscale force directed layout
+  engine]{
+    \label{fig-multiscalecontrols}
+\scalebox{0.3}{
+    \includegraphics{figures/wilma-multiscalecontrols.eps}}}
+  \subfigure[Controls for the simulated annealing layout engine]{
+    \label{fig-simannealcontrols}
+\scalebox{0.3}{
+    \includegraphics{figures/wilma-simannealcontrols.eps}}}
+  \caption{The various control windows in Wilma.}
+\end{figure}
+
+=======
 \subsection{Platform}
 
 WilmaScope has been implemented in Java, using the Java3D graphics library.
@@ -235,8 +280,60 @@ portability and performance.  Java3D is an excellent high-level 3D graphics
 API; its only drawback is its proprietary license (unfortunately, there are
 no free graphics libraries which currently provide comparable functionality).
 
+>>>>>>> 1.21
 \subsection{Layout Algorithms}
 \subsubsection{Force Directed} \label{sec:forcedirectedlayout}
+The first layout algorithm implemented in Wilma was Force Directed
+layout the basic principles of which are described in Chapter
+\ref{chap-intro}.  There were several reasons that led us to
+implement this algorithm first, notably:
+\begin{itemize}
+\item it is relatively easy to obtain good results for most types of
+graphs by application of the basic attractive spring force and
+repulsive inter-node force.
+\item since the algorithm is iterative and does not require any
+special pre or post-processing it is easy to use in a dynamic graph
+editor, where the graph structure may be changed by the user even
+before the layout has stabilised.
+\item similarly it is easy to animate the layout process in a dynamic
+graph visualization to preserve a user's ``mental map''\cite{Misue:VLC95}
+between changes in the graph structure.  We can animate simply by
+redrawing the graph between each iteration of the algorithm.
+\item different layout
+aesthetics can be enhanced by adding extra forces, such as the Sugiyama and Misue\cite{Sugiyama:VLC95}
+directed field force for aligning directed edges to emphasise flow.
+\item the force directed approach can be easily extended to support
+clustered graphs \cite{Huang:GD98}
+\item it works just as well in 3-dimensions as in 2.
+\end{itemize}
+The wilma implementation of the force directed algorithm attempts to make the most
+of all of these advantages.  Firstly it offers a user interface which
+allows the user to control all the parameters of the layout algorithm
+even while the layout is still in progress.  The user can control the
+number of iterations of the algorithm that are executed between frames
+of animation so that they can choose to run the algorithm to
+convergence as fast as possible or to watch the layout unfold, and if
+necessary tweak the controls to adjust the layout or to help it
+converge.
+
+Different forces, such as the directed field force or
+a gravitational force which keeps the graph centred, may be added or removed
+at any time to achieve different aesthetic effects.  Figure
+\ref{fig-wilmaclasses} gives the UML class diagram for the force
+directed layout engine.  Since each of the different forces implements
+a common interface new forces can be added or removed at any time.
+
+Finally the force directed layout engine fits well into Wilma's object
+oriented clustered graph model.  As mentioned previously each cluster
+has its own layout engine but when the force directed engine is used,
+edges connecting nodes in different clusters exert a force on
+the nodes inside these clusters.  The nodes inside a cluster are
+attracted to the centroid of the cluster by a ``gravitional force''.
+The gravitational force then balances the inter-cluster forces.  This
+achieves a net result similar to the ``dummy node'' approach of Huang
+and Eades\cite{Huang:GD98} however repulsive forces do not need to be
+calculated between nodes inside different clusters.
+
 \subsubsection{Multiscale Force Directed}
 
 \subsubsection{Fast Simulated Annealing}
@@ -272,12 +369,28 @@ to achieve linear-time graph embeddings.  Cowling was able to demonstrate
 that the algorithms of \cite{davidson01noise} do appear to achieve linear
 time results, but that when the grid size $v \centerdot d$ must be adjusted to
 prevent folding in large graphs, space and time complexity are
-no longer linear.
+no longer linear.  Figure \ref{fig-fastlayout} shows before and after
+screenshots of the algorithm's effects.
 
 Cowling's work serves to demonstrate the utility of Wilma as an empirical
 platform; with the WilmaScope rendering and navigation system, and the
 availability of convenient data structures for input and dataset management,
 algorithmic experiments can be performed at optimal speeds.
+
+\begin{figure}[h]
+  \centering
+  \subfigure[After only a few iterations.]{
+    \label{fig-fastlayout1}
+    \includegraphics[width=0.4\textwidth]{figures/fastlayout1.eps}}
+  \subfigure[After a complete run of the algorithm.]{
+    \label{fig-fastlayout2}
+    \includegraphics[width=0.4\textwidth]{figures/fastlayout2.eps}}
+  \caption{These screenshots demonstrate the effects of the simulated
+  annealing algorithm with potential caching.  Note that the colour of
+  the nodes indicates the force potential at that location.}
+  \label{fig-fastlayout}
+\end{figure}
+
 
 \subsubsection{DOT: heirarchical layout}
 \subsection{User Interfaces}
