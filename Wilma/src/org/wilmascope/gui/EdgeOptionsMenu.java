@@ -20,14 +20,14 @@
 
 package org.wilmascope.gui;
 
-import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
-import java.awt.Component;
+import javax.swing.*;
+import javax.swing.event.*;
+
 import org.wilmascope.control.*;
 import org.wilmascope.view.*;
-import java.util.Vector;
-import javax.swing.event.*;
 
 /**
  * Title:        WilmaToo

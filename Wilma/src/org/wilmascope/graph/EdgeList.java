@@ -19,15 +19,6 @@
  */
 package org.wilmascope.graph;
 
-/**
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular WilmaScope software
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaScope.org
- * @author Tim Dwyer
- * @version 1.0
- */
-
 public class EdgeList extends List {
   public EdgeList(EdgeList edgeList) {
     addAll(edgeList);

@@ -56,6 +56,7 @@ TOKEN:
 | < HEIGHT: "height" >
 | < CONCENTRATE: "concentrate" >
 | < LAYER: "layer" >
+| < LAYERS: "layers" >
 | < MINLEN: "minlen" >
 }
 TOKEN :
@@ -98,7 +99,9 @@ void graphAtts(GraphClient g) : {}
 {
   "[" (
     <CONCENTRATE> "=true"
-  | <BB> "=" "\"" bounds(g) "\"" )*
+  | <LAYERS> "=" "\"" <ID> (":" <ID>)* "\"" 
+  | <BB> "=" "\"" bounds(g) "\""
+  | ",")*
   "]"
 }
 
@@ -142,7 +145,7 @@ void edgeAtts(EdgeClient e) : {
 } {
   "[" ((
       <MINLEN> "=" <NUM>
-    | <LAYER> "=" ("\"")? t = <NUM> ("\"")? { e.setLayer(t.image); }
+    | <LAYER> "=" ("\"")? t = <ID> ("\"")? { e.setLayer(t.image); System.out.println("EdgeLayer="+t.image); }
     | <WEIGHT> "=" ("\"")? <NUM> ("\"")?
     | <POS> "=" "\"" 
       curve(e,curves) (";" curve(e,curves))*

@@ -10,9 +10,9 @@ public class DotParser implements DotParserConstants {
   static final public void graph(GraphClient g) throws ParseException {
     jj_consume_token(DIGRAPH);
     jj_consume_token(ID);
-    jj_consume_token(28);
-    stmtList(g);
     jj_consume_token(29);
+    stmtList(g);
+    jj_consume_token(30);
     jj_consume_token(0);
   }
 
@@ -34,8 +34,8 @@ public class DotParser implements DotParserConstants {
       }
       stmt(g);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 30:
-        jj_consume_token(30);
+      case 31:
+        jj_consume_token(31);
         break;
       default:
         jj_la1[1] = jj_gen;
@@ -58,10 +58,10 @@ public class DotParser implements DotParserConstants {
     case NUM:
       n = node(g);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 38:
+      case 40:
         e = edgeRHS(g,n);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 31:
+        case 32:
           edgeAtts(e);
           break;
         default:
@@ -72,7 +72,7 @@ public class DotParser implements DotParserConstants {
       default:
         jj_la1[4] = jj_gen;
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 31:
+        case 32:
           nodeAtts(n);
           break;
         default:
@@ -89,12 +89,14 @@ public class DotParser implements DotParserConstants {
   }
 
   static final public void graphAtts(GraphClient g) throws ParseException {
-    jj_consume_token(31);
+    jj_consume_token(32);
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case BB:
       case CONCENTRATE:
+      case LAYERS:
+      case 37:
         ;
         break;
       default:
@@ -104,32 +106,55 @@ public class DotParser implements DotParserConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case CONCENTRATE:
         jj_consume_token(CONCENTRATE);
-        jj_consume_token(32);
+        jj_consume_token(33);
+        break;
+      case LAYERS:
+        jj_consume_token(LAYERS);
+        jj_consume_token(34);
+        jj_consume_token(35);
+        jj_consume_token(ID);
+        label_3:
+        while (true) {
+          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          case 36:
+            ;
+            break;
+          default:
+            jj_la1[7] = jj_gen;
+            break label_3;
+          }
+          jj_consume_token(36);
+          jj_consume_token(ID);
+        }
+        jj_consume_token(35);
         break;
       case BB:
         jj_consume_token(BB);
-        jj_consume_token(33);
         jj_consume_token(34);
+        jj_consume_token(35);
         bounds(g);
-        jj_consume_token(34);
+        jj_consume_token(35);
+        break;
+      case 37:
+        jj_consume_token(37);
         break;
       default:
-        jj_la1[7] = jj_gen;
+        jj_la1[8] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
     }
-    jj_consume_token(35);
+    jj_consume_token(38);
   }
 
   static final public void bounds(GraphClient g) throws ParseException {
                               Token t1,t2,t3,t4;
     t1 = jj_consume_token(NUM);
-    jj_consume_token(36);
+    jj_consume_token(37);
     t2 = jj_consume_token(NUM);
-    jj_consume_token(36);
+    jj_consume_token(37);
     t3 = jj_consume_token(NUM);
-    jj_consume_token(36);
+    jj_consume_token(37);
     t4 = jj_consume_token(NUM);
     g.setBoundingBox(
       Integer.parseInt(t1.image),
@@ -141,8 +166,8 @@ public class DotParser implements DotParserConstants {
 
   static final public void nodeAtts(NodeClient n) throws ParseException {
                                Token t1,t2;
-    jj_consume_token(31);
-    label_3:
+    jj_consume_token(32);
+    label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case LABEL:
@@ -153,97 +178,97 @@ public class DotParser implements DotParserConstants {
         ;
         break;
       default:
-        jj_la1[8] = jj_gen;
-        break label_3;
+        jj_la1[9] = jj_gen;
+        break label_4;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case LABEL:
         jj_consume_token(LABEL);
-        jj_consume_token(33);
+        jj_consume_token(34);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 34:
-          jj_consume_token(34);
-          break;
-        default:
-          jj_la1[9] = jj_gen;
-          ;
-        }
-        jj_consume_token(ID);
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 37:
-          jj_consume_token(37);
+        case 35:
+          jj_consume_token(35);
           break;
         default:
           jj_la1[10] = jj_gen;
           ;
         }
+        jj_consume_token(ID);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 34:
-          jj_consume_token(34);
+        case 39:
+          jj_consume_token(39);
           break;
         default:
           jj_la1[11] = jj_gen;
           ;
         }
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case 35:
+          jj_consume_token(35);
+          break;
+        default:
+          jj_la1[12] = jj_gen;
+          ;
+        }
         break;
       case SHAPE:
         jj_consume_token(SHAPE);
-        jj_consume_token(33);
+        jj_consume_token(34);
         jj_consume_token(ID);
         break;
       case POS:
         jj_consume_token(POS);
-        jj_consume_token(33);
         jj_consume_token(34);
+        jj_consume_token(35);
         t1 = jj_consume_token(NUM);
-        jj_consume_token(36);
+        jj_consume_token(37);
         t2 = jj_consume_token(NUM);
-        jj_consume_token(34);
+        jj_consume_token(35);
       n.setPosition(Integer.parseInt(t1.image),Integer.parseInt(t2.image));
         break;
       case WIDTH:
         jj_consume_token(WIDTH);
-        jj_consume_token(33);
         jj_consume_token(34);
+        jj_consume_token(35);
         jj_consume_token(DEC);
-        jj_consume_token(34);
+        jj_consume_token(35);
         break;
       case HEIGHT:
         jj_consume_token(HEIGHT);
-        jj_consume_token(33);
         jj_consume_token(34);
+        jj_consume_token(35);
         jj_consume_token(DEC);
-        jj_consume_token(34);
+        jj_consume_token(35);
         break;
       default:
-        jj_la1[12] = jj_gen;
+        jj_la1[13] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 36:
-        jj_consume_token(36);
+      case 37:
+        jj_consume_token(37);
         break;
       default:
-        jj_la1[13] = jj_gen;
+        jj_la1[14] = jj_gen;
         ;
       }
     }
-    jj_consume_token(35);
+    jj_consume_token(38);
   }
 
   static final public EdgeClient edgeRHS(GraphClient g, NodeClient start) throws ParseException {
   NodeClient end;
   EdgeClient e;
-    jj_consume_token(38);
+    jj_consume_token(40);
     end = node(g);
                         e = g.addEdge(start,end);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 38:
+    case 40:
       e = edgeRHS(g,end);
       break;
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[15] = jj_gen;
       ;
     }
     {if (true) return e;}
@@ -253,8 +278,8 @@ public class DotParser implements DotParserConstants {
   static final public void edgeAtts(EdgeClient e) throws ParseException {
   Vector curves = new Vector();
   Token t;
-    jj_consume_token(31);
-    label_4:
+    jj_consume_token(32);
+    label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case POS:
@@ -264,93 +289,93 @@ public class DotParser implements DotParserConstants {
         ;
         break;
       default:
-        jj_la1[15] = jj_gen;
-        break label_4;
+        jj_la1[16] = jj_gen;
+        break label_5;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case MINLEN:
         jj_consume_token(MINLEN);
-        jj_consume_token(33);
+        jj_consume_token(34);
         jj_consume_token(NUM);
         break;
       case LAYER:
         jj_consume_token(LAYER);
-        jj_consume_token(33);
+        jj_consume_token(34);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 34:
-          jj_consume_token(34);
-          break;
-        default:
-          jj_la1[16] = jj_gen;
-          ;
-        }
-        t = jj_consume_token(NUM);
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 34:
-          jj_consume_token(34);
+        case 35:
+          jj_consume_token(35);
           break;
         default:
           jj_la1[17] = jj_gen;
           ;
         }
-                                              e.setLayer(t.image);
-        break;
-      case WEIGHT:
-        jj_consume_token(WEIGHT);
-        jj_consume_token(33);
+        t = jj_consume_token(ID);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 34:
-          jj_consume_token(34);
+        case 35:
+          jj_consume_token(35);
           break;
         default:
           jj_la1[18] = jj_gen;
           ;
         }
-        jj_consume_token(NUM);
+                                             e.setLayer(t.image); System.out.println("EdgeLayer="+t.image);
+        break;
+      case WEIGHT:
+        jj_consume_token(WEIGHT);
+        jj_consume_token(34);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 34:
-          jj_consume_token(34);
+        case 35:
+          jj_consume_token(35);
           break;
         default:
           jj_la1[19] = jj_gen;
           ;
         }
+        jj_consume_token(NUM);
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case 35:
+          jj_consume_token(35);
+          break;
+        default:
+          jj_la1[20] = jj_gen;
+          ;
+        }
         break;
       case POS:
         jj_consume_token(POS);
-        jj_consume_token(33);
         jj_consume_token(34);
+        jj_consume_token(35);
         curve(e,curves);
-        label_5:
+        label_6:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-          case 30:
+          case 31:
             ;
             break;
           default:
-            jj_la1[20] = jj_gen;
-            break label_5;
+            jj_la1[21] = jj_gen;
+            break label_6;
           }
-          jj_consume_token(30);
+          jj_consume_token(31);
           curve(e,curves);
         }
-        jj_consume_token(34);
+        jj_consume_token(35);
         break;
       default:
-        jj_la1[21] = jj_gen;
+        jj_la1[22] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 36:
-        jj_consume_token(36);
+      case 37:
+        jj_consume_token(37);
         break;
       default:
-        jj_la1[22] = jj_gen;
+        jj_la1[23] = jj_gen;
         ;
       }
     }
-    jj_consume_token(35);
+    jj_consume_token(38);
     e.setCurves(curves);
   }
 
@@ -358,38 +383,38 @@ public class DotParser implements DotParserConstants {
   Vector pnts = new Vector();
   Token t1, t2;
   boolean arrowAtStart = false;
-    label_6:
+    label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 39:
-      case 40:
+      case 41:
+      case 42:
         ;
         break;
       default:
-        jj_la1[23] = jj_gen;
-        break label_6;
+        jj_la1[24] = jj_gen;
+        break label_7;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 39:
-        jj_consume_token(39);
+      case 41:
+        jj_consume_token(41);
            arrowAtStart = false;
         break;
-      case 40:
-        jj_consume_token(40);
+      case 42:
+        jj_consume_token(42);
                                            arrowAtStart = true;
         break;
       default:
-        jj_la1[24] = jj_gen;
+        jj_la1[25] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       t1 = jj_consume_token(NUM);
-      jj_consume_token(36);
+      jj_consume_token(37);
       t2 = jj_consume_token(NUM);
       e.addArrow(curves.size(),arrowAtStart,new Point(
         Integer.parseInt(t1.image), Integer.parseInt(t2.image)));
     }
-    label_7:
+    label_8:
     while (true) {
       bezierPnt(pnts);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -397,8 +422,8 @@ public class DotParser implements DotParserConstants {
         ;
         break;
       default:
-        jj_la1[25] = jj_gen;
-        break label_7;
+        jj_la1[26] = jj_gen;
+        break label_8;
       }
     }
     curves.add(pnts);
@@ -409,7 +434,7 @@ public class DotParser implements DotParserConstants {
   int a,b;
     t = jj_consume_token(NUM);
     a = Integer.parseInt(t.image);
-    jj_consume_token(36);
+    jj_consume_token(37);
     t = jj_consume_token(NUM);
     b = Integer.parseInt(t.image);
     pnts.add(new Point(a,b));
@@ -426,7 +451,7 @@ public class DotParser implements DotParserConstants {
       t = jj_consume_token(ID);
       break;
     default:
-      jj_la1[26] = jj_gen;
+      jj_la1[27] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -440,9 +465,9 @@ public class DotParser implements DotParserConstants {
   static public Token token, jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[27];
-  static final private int[] jj_la1_0 = {0xc00a00,0x40000000,0x80000000,0x80000000,0x0,0xc00a00,0x88000,0x88000,0x57000,0x0,0x0,0x0,0x57000,0x0,0x0,0x322000,0x0,0x0,0x0,0x0,0x40000000,0x322000,0x0,0x0,0x0,0x800000,0xc00000,};
-  static final private int[] jj_la1_1 = {0x0,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x4,0x20,0x4,0x0,0x10,0x40,0x0,0x4,0x4,0x4,0x4,0x0,0x0,0x10,0x180,0x180,0x0,0x0,};
+  static final private int[] jj_la1 = new int[28];
+  static final private int[] jj_la1_0 = {0x1800a00,0x80000000,0x0,0x0,0x0,0x1800a00,0x288000,0x0,0x288000,0x57000,0x0,0x0,0x0,0x57000,0x0,0x0,0x522000,0x0,0x0,0x0,0x0,0x80000000,0x522000,0x0,0x0,0x0,0x1000000,0x1800000,};
+  static final private int[] jj_la1_1 = {0x0,0x0,0x1,0x1,0x100,0x0,0x20,0x10,0x20,0x0,0x8,0x80,0x8,0x0,0x20,0x100,0x0,0x8,0x8,0x8,0x8,0x0,0x0,0x20,0x600,0x600,0x0,0x0,};
 
   public DotParser(java.io.InputStream stream) {
     if (jj_initialized_once) {
@@ -457,7 +482,7 @@ public class DotParser implements DotParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   static public void ReInit(java.io.InputStream stream) {
@@ -466,7 +491,7 @@ public class DotParser implements DotParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   public DotParser(java.io.Reader stream) {
@@ -482,7 +507,7 @@ public class DotParser implements DotParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   static public void ReInit(java.io.Reader stream) {
@@ -491,7 +516,7 @@ public class DotParser implements DotParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   public DotParser(DotParserTokenManager tm) {
@@ -506,7 +531,7 @@ public class DotParser implements DotParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   public void ReInit(DotParserTokenManager tm) {
@@ -514,7 +539,7 @@ public class DotParser implements DotParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   static final private Token jj_consume_token(int kind) throws ParseException {
@@ -561,15 +586,15 @@ public class DotParser implements DotParserConstants {
 
   static final public ParseException generateParseException() {
     jj_expentries.removeAllElements();
-    boolean[] la1tokens = new boolean[41];
-    for (int i = 0; i < 41; i++) {
+    boolean[] la1tokens = new boolean[43];
+    for (int i = 0; i < 43; i++) {
       la1tokens[i] = false;
     }
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 27; i++) {
+    for (int i = 0; i < 28; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -581,7 +606,7 @@ public class DotParser implements DotParserConstants {
         }
       }
     }
-    for (int i = 0; i < 41; i++) {
+    for (int i = 0; i < 43; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

@@ -95,6 +95,7 @@ public class TubeNodeView extends NodeView {
   }
     protected void init() {
         float radius = getNode().getRadius();
+        System.out.println("Radius="+radius+"TopRadius="+topRadius);
         taperedTubePoints = new Point3f[tubePoints.length];
         scaledTopPoints = new Point3f[topPoints.length];
         for(int i=0;i<topPoints.length;i++) {
@@ -133,6 +134,7 @@ public class TubeNodeView extends NodeView {
         Shape3D tubeShape = new Shape3D(tubeGeometryArray,getAppearance());
         makePickable(tubeShape);
         addTransformGroupChild(tubeShape);
+        // cap on the tube
         GeometryInfo git = new GeometryInfo(GeometryInfo.TRIANGLE_FAN_ARRAY);
         git.setCoordinates(scaledTopPoints);
         git.setStripCounts(topStripCounts);
@@ -196,6 +198,12 @@ public class TubeNodeView extends NodeView {
     p.setProperty("BottomRadius",""+bottomRadius);
     p.setProperty("TopRadius",""+topRadius);
     return p;
+  }
+  public float getBottomRadius() {
+    return bottomRadius;
+  }
+  public float getTopRadius() {
+    return topRadius;
   }
   Point3f[] taperedTubePoints;
   Point3f[] scaledTopPoints;

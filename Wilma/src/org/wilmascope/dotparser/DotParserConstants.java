@@ -19,11 +19,12 @@ public interface DotParserConstants {
   int HEIGHT = 18;
   int CONCENTRATE = 19;
   int LAYER = 20;
-  int MINLEN = 21;
-  int ID = 22;
-  int NUM = 23;
-  int DEC = 24;
-  int IGNOREPARAMETERS = 27;
+  int LAYERS = 21;
+  int MINLEN = 22;
+  int ID = 23;
+  int NUM = 24;
+  int DEC = 25;
+  int IGNOREPARAMETERS = 28;
 
   int DEFAULT = 0;
   int NODEPARAMETERS = 1;
@@ -50,6 +51,7 @@ public interface DotParserConstants {
     "\"height\"",
     "\"concentrate\"",
     "\"layer\"",
+    "\"layers\"",
     "\"minlen\"",
     "<ID>",
     "<NUM>",
@@ -64,8 +66,9 @@ public interface DotParserConstants {
     "\"=true\"",
     "\"=\"",
     "\"\\\"\"",
-    "\"]\"",
+    "\":\"",
     "\",\"",
+    "\"]\"",
     "\".\"",
     "\"->\"",
     "\"e,\"",
