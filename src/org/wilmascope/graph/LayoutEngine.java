@@ -20,10 +20,18 @@
 
 package org.wilmascope.graph;
 
+/**
+ * $Id$
+ * An interface which a class which determines a layout for a cluster must
+ * implement
+ * $Log$
+ * Revision 1.5  2002/03/27 07:20:50  tgdwyer
+ * Minor changes
+ *
+ */
 public interface LayoutEngine {
   /**
    * calculate the changes required to move the graph to a nicer layout
-   * @return cost function of the new layout
    */
   public void calculateLayout();
   /**
@@ -32,7 +40,14 @@ public interface LayoutEngine {
    * @return true when a stable state is reached
    */
   public boolean applyLayout();
-  public void reset();
+  /**
+   * Factory method to create a new NodeLayout implementation compatible with
+   * the layout engine implementing this interface.
+   */
   public NodeLayout createNodeLayout();
+  /**
+   * Factory method to create a new EdgeLayout implementation compatible with
+   * the layout engine implementing this interface.
+   */
   public EdgeLayout createEdgeLayout();
 }
