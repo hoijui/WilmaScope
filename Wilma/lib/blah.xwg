@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
-<WilmaGraph><Cluster><Force Type="Repulsion" Strength="1.0"/><Force Type="Spring" Strength="5.0"/><Force Type="Origin" Strength="1.0"/><Node ID="N0"/><Node ID="N1"/><Node ID="N2"/><Node ID="N3"/><Edge StartID="N0" EndID="N3"/></Cluster></WilmaGraph>
