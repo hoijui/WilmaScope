@@ -21,7 +21,7 @@ package org.wilmascope.forcelayout;
 
 import org.wilmascope.graph.NodeList;
 import org.wilmascope.graph.Node;
-import org.wilmascope.graph.EdgeList;
+import org.wilmascope.graph.Cluster;
 
 import javax.vecmath.*;
 
@@ -42,13 +42,16 @@ public class Repulsion extends Force {
     super(strengthConstant, "Repulsion");
     this.limitRadiusSquared = limitRadius * limitRadius;
   }
+  public void setCluster(Cluster root) {
+    nodes = root.getNodes();
+  }
 
   /** Calculate deltas for the repulsive (electrostatic) forces
    *  between all nodes
    * @param nodes The nodes to which this force applies
    * @param edges Not used in this method (here to match the interface)
    */
-  public void calculate(NodeList nodes, EdgeList edges) {
+  public void calculate() {
     Node node1, node2;
     for(int i=0; i < nodes.size(); i++) {
       node1 = nodes.get(i);
@@ -85,4 +88,6 @@ public class Repulsion extends Force {
 
   // keeping this saves us squaring limitRadius every time
   private float limitRadiusSquared;
+
+  private NodeList nodes;
 }

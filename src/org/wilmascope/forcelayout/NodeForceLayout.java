@@ -82,6 +82,9 @@ public class NodeForceLayout implements NodeLayout {
    * @param attenuation scale factor for the velocity
    */
   public void applyForce(float attenuation) {
+    if(node.isFixedPosition()) {
+      return;
+    }
     // Calculate friction based on current velocity
     Vector3f friction = new Vector3f(velocity);
     friction.scale(Constants.frictionCoefficient * node.getRadius());

@@ -25,6 +25,7 @@ import org.wilmascope.graph.EdgeList;
 import org.wilmascope.graph.Node;
 import org.wilmascope.graph.Cluster;
 import java.util.Vector;
+import javax.vecmath.*;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular WilmaScope software
@@ -38,8 +39,9 @@ public class ForceLayout implements LayoutEngine {
 
   public ForceLayout(Cluster root) {
     this.root = root;
+    root.setLayoutEngine(this);
   }
-  public float layout(NodeList nodes, EdgeList edges) {
+  public float layout() {
     balanced = false;
     float maxVelocity = 0;
     for(int i = 0; i < iterations; i++) {
@@ -52,7 +54,7 @@ public class ForceLayout implements LayoutEngine {
       // Calculate the force on each node for each of our forces
       for(int j = 0; j < forces.size(); j++) {
         Force f = (Force)forces.get(j);
-        f.calculate(nodes, edges);
+        f.calculate();
       }
     }
     return maxVelocity;
@@ -62,8 +64,8 @@ public class ForceLayout implements LayoutEngine {
     // reposition nodes, calculating maxNetForce as you go
     float maxNetForce=0;
     float currentNetForce=0;
-    for(int i=0; i < nodes.size(); i++) {
-      nodeLayout = (NodeForceLayout)(nodes.get(i).getLayout());
+    for(nodes.resetIterator(); nodes.hasNext();) {
+      nodeLayout = (NodeForceLayout)(nodes.nextNode().getLayout());
       currentNetForce = nodeLayout.getNetForce().length();
       if(currentNetForce > maxNetForce) {
         maxNetForce = currentNetForce;
@@ -90,9 +92,7 @@ public class ForceLayout implements LayoutEngine {
    */
   public void addForce(Force force) {
     forces.add(force);
-    if(root != null) {
-      force.setRoot(root);
-    }
+    force.setCluster(root);
   }
   /**
    * Remove a force from ForceLayout's list of forces to apply

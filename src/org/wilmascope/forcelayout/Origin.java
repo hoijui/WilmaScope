@@ -21,7 +21,6 @@ package org.wilmascope.forcelayout;
 
 import org.wilmascope.graph.Node;
 import org.wilmascope.graph.Cluster;
-import org.wilmascope.graph.EdgeList;
 import org.wilmascope.graph.NodeList;
 
 import javax.vecmath.*;
@@ -46,6 +45,10 @@ public class Origin extends Force {
     super(strengthConstant, "Origin");
     this.centreNode = null;
     originPoint = new Point3f(Constants.vZero);
+  }
+  public void setCluster(Cluster root) {
+    setOriginNode(root);
+    nodes = root.getNodes();
   }
 
   // calculate the origin force on an individual node
@@ -72,15 +75,12 @@ public class Origin extends Force {
     originPoint = originNode.getPosition();
     originNodeLayout = (NodeForceLayout)originNode.getLayout();
   }
-  public void setRoot(Cluster root) {
-    setOriginNode(root);
-  }
 
   /** Calculate the origin centering deltas for all the nodes, or if a CentreNode
-   * has been specified the just for that centre node.
+   * has been specified then just for that centre node.
    * @param nodes Nodes to which this force applies
    */
-  public void calculate(NodeList nodes, EdgeList edges) {
+  public void calculate() {
     if(centreNode != null) {
       calculateNode(centreNode);
     } else {
@@ -102,4 +102,5 @@ public class Origin extends Force {
   private Node centreNode;
   private Point3f originPoint = new Point3f();
   private NodeForceLayout originNodeLayout;
+  private NodeList nodes;
 }

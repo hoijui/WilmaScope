@@ -19,7 +19,9 @@
  */
 package org.wilmascope.forcelayout;
 
-import org.wilmascope.graph.*;
+import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.EdgeList;
+import org.wilmascope.graph.Edge;
 import javax.vecmath.*;
 import java.util.Vector;
 
@@ -38,6 +40,10 @@ public class DirectedField extends Force {
     this.vector = vector;
     vector.normalize();
   }
+
+  public void setCluster(Cluster root) {
+    edges = root.getInternalEdges();
+  }
   public DirectedField(float strengthConstant) {
     this(strengthConstant,new javax.vecmath.Vector3f(0,-1f,0));
   }
@@ -47,7 +53,7 @@ public class DirectedField extends Force {
    * @param edges the list of edges to which this force is to
    * be applied
    */
-  public void calculate(NodeList nodes, EdgeList edges) {
+  public void calculate() {
     for(int i=0; i < edges.size(); i++) {
       Edge edge = (Edge)edges.get(i);
       Vector3f edgeVector = edge.getVector();
@@ -61,4 +67,5 @@ public class DirectedField extends Force {
       }
     }
   }
+  private EdgeList edges;
 }

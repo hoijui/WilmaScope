@@ -20,7 +20,7 @@
 package org.wilmascope.forcelayout;
 
 import org.wilmascope.graph.Node;
-import org.wilmascope.graph.EdgeList;
+import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.NodeList;
 
 import javax.vecmath.*;
@@ -45,6 +45,9 @@ public class FixedOrigin extends Force {
     super(strengthConstant, "FixedOrigin");
     this.centreNode = null;
   }
+  public void setCluster(Cluster root) {
+    nodes = root.getNodes();
+  }
 
   // calculate the origin force on an individual node
   private void calculateNode(Node node) {
@@ -60,9 +63,8 @@ public class FixedOrigin extends Force {
 
   /** Calculate the origin centering deltas for all the nodes, or if a CentreNode
    * has been specified the just for that centre node.
-   * @param nodes Nodes to which this force applies
    */
-  public void calculate(NodeList nodes, EdgeList edges) {
+  public void calculate() {
     if(centreNode != null) {
       calculateNode(centreNode);
     } else {
@@ -82,4 +84,6 @@ public class FixedOrigin extends Force {
   // if centreNode is set then that node is drawn to the origin
   // otherwise whole graph is attracted to the origin and thus centred
   private Node centreNode;
+
+  private NodeList nodes;
 }
