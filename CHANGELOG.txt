@@ -3,6 +3,14 @@ Changes Since 3.0.1
 - FADE Repulsive force added as force in ForceLayout
 - SpinnerSlider used in place of regular sliders in Generator and
   force control panels
+- Properties object now defined for all graph elements,
+  this also holds properties for layouts
+- Levels and LevelSeparation now properties of the 
+  LayoutEngine
+- Stratified graphs now centred about the origin
+- GraphModifier plugins now defined for methods that change
+  the structure of an existing graph (cluster), eg: DirectedCycleRemoval
+- Added various methods to Cluster: inDegree, inEdges, outEdges, acyclicEdges etc
 
 Changes Since 3.0
 -----------------
