@@ -39,12 +39,12 @@ public abstract class NodeLayout implements Layable, NodeAbility {
     node = null;
   }
 
-  /** Set the node for the NodeForceLayout */
+  /** Set the node for the NodeLayout */
   public void setNode(Node node) {
     this.node = node;
   }
 
-  /** Return the node for the NodeForceLayout */
+  /** Return the node for the NodeLayout */
   public Node getNode() {
     return node;
   }

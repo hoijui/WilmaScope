@@ -49,7 +49,7 @@ public class GlobalConstants
 
   private static GlobalConstants instance = null;
 
-  public GlobalConstants(Properties defaultProps, ResourceBundle bundle) {
+  private GlobalConstants(Properties defaultProps, ResourceBundle bundle) {
     super(defaultProps, bundle);
   }
 

@@ -4,6 +4,7 @@
 	<property name="src" value="src" />
 	<property name="doc" value="doc" />
 	<property name="lib" value="lib" />
+	<property name="AreaChart3D" value="../AreaChart3D/bin" />
 	<property name="dest" value="classes" />
 	<property name="optimization" value="on" />
 	<property name="cvsroot" value="tgdwyer@cvs.wilma.sourceforge.net:/cvsroot/wilma" />
@@ -17,48 +18,51 @@
 
 	<target name="compile" depends="init" description="Compile just the core wilma code">
 		<!-- Compile the java code from ${src} into ${classes} -->
-		<javac srcdir="${src}" destdir="${dest}" optimize="${optimization}" excludes="org/wilmascope/chat/**,org/wilmascope/TestChatClient.java,org/wilmascope/control/TalkingGraph.java,org/wilmascope/control/WilmaChatServCORBA.java">
+		<javac source="1.5" target="1.5" srcdir="${src}" destdir="${dest}" optimize="${optimization}" excludes="org/wilmascope/chat/**,org/wilmascope/TestChatClient.java,org/wilmascope/control/TalkingGraph.java,org/wilmascope/control/WilmaChatServCORBA.java">
 			<classpath>
 				<pathelement location="${lib}/Jama-1.0.1.jar" />
+				<pathelement location="${lib}/j3d-vrml97.jar" />
+				<pathelement location="${AreaChart3D}" />
 			</classpath>
 		</javac>
 	</target>
 
 	<target name="dist" depends="compile">
-		<!-- Create the distribution directory -->
-		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-		<copy todir="${dest}/org">
-			<fileset dir="${lib}/org" />
+		<copy file="${lib}/WILMA_CONSTANTS.properties" todir="tmp_${DSTAMP}"/>
+		<mkdir dir="tmp_${DSTAMP}"/>
+		<mkdir dir="tmp_${DSTAMP}/org"/>
+		<copy todir="tmp_${DSTAMP}/org">
+			<fileset dir="${lib}/org"/>
 		</copy>
-		<copy todir="${dest}/">
-			<fileset file="${lib}/WILMA_CONSTANTS.properties" />
+		<copy todir="tmp_${DSTAMP}">
+			<fileset dir="${dest}"/>
 		</copy>
-		<jar manifest="META-INF/MANIFEST.MF" jarfile="${lib}/wilma.jar" basedir="${dest}" />
-		<!--
-    -->
+		<jar manifest="META-INF/MANIFEST.MF" jarfile="${lib}/wilma.jar" basedir="tmp_${DSTAMP}"/>
+		<delete dir="tmp_${DSTAMP}"/>
 	</target>
 	<target name="distpackage" depends="dist">
-		<mkdir dir="${dist}/bin" />
-		<copy file="README" todir="${dist}" />
-		<copy file="COPYING" todir="${dist}" />
-		<copy todir="${dist}/${lib}">
+		<mkdir dir="${dist}_${DSTAMP}" />
+		<mkdir dir="${dist}_${DSTAMP}/bin" />
+		<copy file="README.txt" todir="${dist}_${DSTAMP}" />
+		<copy file="COPYING.txt" todir="${dist}_${DSTAMP}" />
+		<copy todir="${dist}_${DSTAMP}/${lib}">
 			<fileset dir="${lib}" />
 		</copy>
-		<copy todir="${dist}/userdoc">
+		<copy todir="${dist}_${DSTAMP}/userdoc">
 			<fileset dir="userdoc" excludes="book/**" />
 		</copy>
-		<copy todir="${dist}/data">
+		<copy todir="${dist}_${DSTAMP}/data">
 			<fileset dir="data" />
 		</copy>
-		<copy todir="${dist}/bin">
+		<copy todir="${dist}_${DSTAMP}/bin">
 			<fileset dir="bin" />
 		</copy>
-		<copy todir="${dist}/classes">
+		<copy todir="${dist}_${DSTAMP}/classes">
 			<fileset dir="classes" />
 		</copy>
 		<mkdir dir="Wilma" />
 		<copy todir="Wilma">
-			<fileset dir="dist" />
+			<fileset dir="${dist}_${DSTAMP}" />
 		</copy>
 		<zip zipfile="Wilma_${DSTAMP}.zip">
 			<zipfileset dir="Wilma" prefix="Wilma" />
@@ -70,6 +74,7 @@
 		<gzip src="Wilma_${DSTAMP}.tar" zipfile="Wilma_${DSTAMP}.tar.gz" />
 		<delete file="Wilma_${DSTAMP}.tar" />
 		<delete dir="Wilma" />
+		<delete dir="${dist}_${DSTAMP}" />
 	</target>
 
 	<target name="all" depends="clean, compile, dist, doc, distpackage">
@@ -104,7 +109,6 @@
 		<delete dir="${dest}" />
 		<delete dir="${dist}" />
 		<delete dir="${src}/org/wilmascope/chat" />
-		<delete dir="${doc}" />
 		<delete file="${lib}/wilma.jar" />
 	</target>
 	<target name="update" depends="clean" description="check source out of cvs">

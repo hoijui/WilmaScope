@@ -26,12 +26,19 @@ import javax.swing.JPanel;
 import org.wilmascope.control.GraphControl.Cluster;
 import org.wilmascope.util.Plugin;
 
-
 /**
- * @author dwyer
+ * A graph analysis plug-in must extend the
+ * org.wilmascope.graphanalysis.GraphAnalysis class, implementing the getName
+ * and analyse methods. As with GraphModifier, getName simply returns a
+ * descriptive string. The analyse method takes no argument. Rather, you must
+ * use getCluster() to operate on the cluster in the analyse method.
  * 
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * There is no need for a getControls method in GraphAnalysis plug-ins. By
+ * default an instance of AnalysisPanel is created by this super class.
+ * AnalysisPanel allows a user to choose visual mappings for the results of the
+ * analysis, and appears in the Graph Analysis window.
+ * 
+ * @author dwyer
  */
 
 public abstract class GraphAnalysis implements Plugin {
@@ -43,11 +50,18 @@ public abstract class GraphAnalysis implements Plugin {
   public JPanel getControls() {
     return new AnalysisPanel(this);
   }
+
   public Cluster getCluster() {
+    if (cluster == null) {
+      throw new Error(
+          "Must call setCluster(c) for GraphAnalysis classes before calling analyse()");
+    }
     return cluster;
   }
+
   public void setCluster(Cluster c) {
-    cluster=c;
+    cluster = c;
   }
+
   Cluster cluster;
 }

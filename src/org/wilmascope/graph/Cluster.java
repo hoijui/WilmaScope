@@ -286,7 +286,7 @@ public class Cluster extends Node {
     for (Node orig : original.getNodes()) {
       Node copy = new Node();
       nodeMap.put(orig, copy);
-      copy.setLayout(orig.getLayout());
+      //copy.setLayout(orig.getLayout());
       copy.storeUserData("Original",orig);
       addNode(copy);
     }
@@ -294,7 +294,7 @@ public class Cluster extends Node {
       Edge copy = new Edge(nodeMap.get(orig.getStart()), nodeMap.get(orig
           .getEnd()));
       copy.storeUserData("Original",orig);
-      copy.setLayout(orig.getLayout());
+      //copy.setLayout(orig.getLayout());
       addEdge(copy);
     }
     storeUserData("Original",original);
@@ -347,6 +347,9 @@ public class Cluster extends Node {
     }
   }
 
+  /**
+   * @return all children (recursive descendants) of this cluster 
+   */
   public NodeList getAllNodes() {
     NodeList allNodes = new NodeList(this.nodes);
     ClusterList clusters = this.nodes.getClusters();

@@ -27,6 +27,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.global.RandomGenerator;
 import org.wilmascope.graph.Cluster;
 import org.wilmascope.graphgen.GraphGenerator;
 import org.wilmascope.gui.SpinnerSlider;
@@ -185,7 +186,7 @@ public class ScaleFreeGraphGenerator extends GraphGenerator implements Runnable 
       }
       //Arrays.sort(nodes);
       for (ProbableNode n : nodes) {
-        if (getRandom().nextFloat() < probabilityModifier * n.probability)
+        if (RandomGenerator.getRandom().nextFloat() < probabilityModifier * n.probability)
           addEdge(root, u, n.node);
       }
     }

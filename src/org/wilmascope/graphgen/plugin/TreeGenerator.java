@@ -27,6 +27,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.global.RandomGenerator;
 import org.wilmascope.graphgen.GraphGenerator;
 import org.wilmascope.gui.SpinnerSlider;
 
@@ -217,7 +218,7 @@ public class TreeGenerator extends GraphGenerator
     {
 
     /* Find insertion point */
-      int parentIndex = getRandom().nextInt(parentList.size());
+      int parentIndex = RandomGenerator.getRandom().nextInt(parentList.size());
       TreeNode parentTreeNode = parentList.get(parentIndex);
 System.out.println("Jump to " + parentIndex);
       while (parentIndex > 0 && parentList.get(parentIndex-1).node == parentTreeNode.node)
@@ -227,7 +228,7 @@ System.out.println("Jump to " + parentIndex);
 System.out.println("Reverse to " + parentIndex);
 
     /* Insert a random number of nodes (up to maxDegree) */
-      int numChildren = ( useBulkInsert ? getRandom().nextInt(maxDegree)+1 : 1 );
+      int numChildren = ( useBulkInsert ? RandomGenerator.getRandom().nextInt(maxDegree)+1 : 1 );
 System.out.println("Insert " + numChildren);
       parentList.ensureCapacity(parentList.size()+numChildren*maxDegree);
       int insertIndex = parentIndex; // needed below

@@ -33,6 +33,7 @@ import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.LayoutObserver;
+import org.wilmascope.global.RandomGenerator;
 import org.wilmascope.graphgen.GraphGenerator;
 import org.wilmascope.graphmodifiers.GraphModifier;
 import org.wilmascope.graphmodifiers.ModifierManager;
@@ -135,9 +136,9 @@ public class ClusteredGraphGenerator extends GraphGenerator {
         allnodes.add(temp);
       }
       for (int i = 0; i < 2 * size; i++) {
-        GraphControl.Node a = (GraphControl.Node) nodevec.get(GraphGenerator
+        GraphControl.Node a = (GraphControl.Node) nodevec.get(RandomGenerator
             .getRandom().nextInt(nodevec.size()));
-        GraphControl.Node b = (GraphControl.Node) nodevec.get(GraphGenerator
+        GraphControl.Node b = (GraphControl.Node) nodevec.get(RandomGenerator
             .getRandom().nextInt(nodevec.size()));
         if (a != b) {
           root.addEdge(a, b, getEdgeView());
@@ -155,9 +156,9 @@ public class ClusteredGraphGenerator extends GraphGenerator {
       }
     }
     for (int i = 0; i < number * (size / 20d); i++) {
-      GraphControl.Node a = (GraphControl.Node) allnodes.get(GraphGenerator
+      GraphControl.Node a = (GraphControl.Node) allnodes.get(RandomGenerator
           .getRandom().nextInt(allnodes.size()));
-      GraphControl.Node b = (GraphControl.Node) allnodes.get(GraphGenerator
+      GraphControl.Node b = (GraphControl.Node) allnodes.get(RandomGenerator
           .getRandom().nextInt(allnodes.size()));
       root.addEdge(a, b, getEdgeView());
     }

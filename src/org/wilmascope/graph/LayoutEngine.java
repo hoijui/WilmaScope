@@ -42,7 +42,7 @@ public abstract class LayoutEngine<N extends NodeLayout,E extends EdgeLayout> {
    * In practice this has not yet been utilised and such
    * decisions are usually made internally to the layout engine.
    */
-  public abstract void calculateLayout();
+  public void calculateLayout() {};
   /**
    * apply the changes calculated by
    * {@link #calculateLayout}

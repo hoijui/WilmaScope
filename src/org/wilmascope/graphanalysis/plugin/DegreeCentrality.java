@@ -24,16 +24,14 @@ import org.wilmascope.graphanalysis.GraphAnalysis;
 import org.wilmascope.graphanalysis.VisualMapping;
 
 /**
+ * Calculate degree centrality for each node, ie for node v in V:
+ * degreecentrality(v) = degree(v)/max(degree(w)|w in V)
+ *
  * @author dwyer
- * 
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class DegreeCentrality extends GraphAnalysis {
 
   /*
-   * (non-Javadoc)
-   * 
    * @see org.wilmascope.graphanalysis.GraphAnalysis#analyse(org.wilmascope.control.GraphControl.Cluster)
    */
   public void analyse() {

@@ -27,6 +27,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.global.RandomGenerator;
 import org.wilmascope.graphgen.GraphGenerator;
 import org.wilmascope.gui.SpinnerSlider;
 
@@ -118,7 +119,7 @@ public class GridGenerator extends GraphGenerator {
       n = root.addNode(getNodeView());
       //n.setColour(rand.nextFloat(),rand.nextFloat(),rand.nextFloat());
       n.setColour(0.5f, 0.5f, 0.5f);
-      n.setPosition(randomPoint(threeD));
+      n.setPosition(RandomGenerator.randomPoint(threeD));
       lookup.put(id, n);
     }
     return n;

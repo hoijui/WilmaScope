@@ -35,6 +35,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.global.RandomGenerator;
 import org.wilmascope.graph.LayoutEngine;
 import org.wilmascope.graphgen.GeneratorManager;
 import org.wilmascope.graphgen.GraphGenerator;
@@ -105,12 +106,12 @@ public class RandomGraphGenerator extends GraphGenerator {
       nodes[i] = addRandomNode(root, threeDimensional);
       if (stratified) {
         nodes[i].setProperty("LevelConstraint", ""
-            + getRandom().nextInt(levels));
+            + RandomGenerator.getRandom().nextInt(levels));
       }
     }
     for (int i = 1; i < edgeCount; i++) {
-      GraphControl.Node a = nodes[getRandom().nextInt(nodeCount)];
-      GraphControl.Node b = nodes[getRandom().nextInt(nodeCount)];
+      GraphControl.Node a = nodes[RandomGenerator.getRandom().nextInt(nodeCount)];
+      GraphControl.Node b = nodes[RandomGenerator.getRandom().nextInt(nodeCount)];
       if (a != b) {
         root.addEdge(a, b, getEdgeView());
       } else {
@@ -121,7 +122,7 @@ public class RandomGraphGenerator extends GraphGenerator {
     for (GraphControl.Node a : nodes) {
       GraphControl.Node b;
       do {
-        b = nodes[GraphGenerator.getRandom().nextInt(nodeCount)];
+        b = nodes[RandomGenerator.getRandom().nextInt(nodeCount)];
       } while (a == b);
       root.addEdge(a, b, getEdgeView());
     }

@@ -116,7 +116,7 @@ public class CopyCluster extends GraphModifier {
         .getCluster()));
     try {
       c1.setView(ViewManager.getInstance().createClusterView(
-          "Ellipsoid Cluster"));
+          "Planar Cluster"));
     } catch (UnknownViewTypeException e1) {
       // TODO Auto-generated catch block
       e1.printStackTrace();
@@ -137,7 +137,7 @@ public class CopyCluster extends GraphModifier {
       }
     }
     for (int i = 1; i <= copyCount; i++) {
-      Cluster c2 = root.addCluster("Ellipsoid Cluster");
+      Cluster c2 = root.addCluster("Planar Cluster");
       for (Node u : c1.getNodes()) {
         Node v = c2.addNode();
         if (linkDuplicates) {

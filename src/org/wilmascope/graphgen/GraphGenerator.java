@@ -19,13 +19,12 @@
  */
 package org.wilmascope.graphgen;
 
-import java.awt.Color;
 import java.util.Random;
 
 import javax.swing.JPanel;
-import javax.vecmath.Point3f;
 
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.global.RandomGenerator;
 import org.wilmascope.util.Plugin;
 
 /**
@@ -68,8 +67,8 @@ public abstract class GraphGenerator implements Plugin {
   protected GraphControl.Node addRandomNode(GraphControl.Cluster root,
       boolean threeD) {
     GraphControl.Node n = root.addNode(getNodeView());
-    n.setColour(GraphGenerator.randomColour());
-    n.setPosition(GraphGenerator.randomPoint(threeD));
+    n.setColour(RandomGenerator.randomColour());
+    n.setPosition(RandomGenerator.randomPoint(threeD));
     return n;
   }
 
@@ -86,34 +85,5 @@ public abstract class GraphGenerator implements Plugin {
     return edgeView;
   }
 
-  /**
-   * @return Returns the random generator so it can be reused by other
-   *         generators.
-   */
-  protected static Random getRandom() {
-    return GraphGenerator.rand;
-  }
-
-  /**
-   * @param threeD
-   *          if this is false then z values are all 0
-   * @return a random point with x,y,z values between 0 and 1
-   */
-  protected static Point3f randomPoint(boolean threeD) {
-    return new Point3f((GraphGenerator.rand.nextFloat() - 0.5f) * 5f,
-        (GraphGenerator.rand.nextFloat() - 0.5f) * 5f,
-        threeD ? (GraphGenerator.rand.nextFloat() - 0.5f) * 5f : 0f);
-  }
-
-  /**
-   * @return a random colour
-   */
-  protected static Color randomColour() {
-    return new Color(GraphGenerator.rand.nextFloat(), GraphGenerator.rand
-        .nextFloat(), GraphGenerator.rand.nextFloat());
-  }
-
   private String nodeView, edgeView;
-
-  private static Random rand = new Random();
 }

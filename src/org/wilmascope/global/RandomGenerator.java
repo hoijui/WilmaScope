@@ -27,8 +27,11 @@ package org.wilmascope.global;
  * @author Tim Dwyer
  * @version 1.0
  */
+import java.awt.Color;
 import java.util.Random;
 import javax.vecmath.*;
+
+import org.wilmascope.graphgen.GraphGenerator;
 /** Random vector generator
  */
 public class RandomGenerator {
@@ -62,6 +65,25 @@ public class RandomGenerator {
     Vector3f vec =  new Vector3f(getRandomFloat(), getRandomFloat(), getRandomFloat());
     vec.scale( length / vec.length() );
     return vec;
+  }
+
+  /**
+   * @param threeD
+   *          if this is false then z values are all 0
+   * @return a random point with x,y,z values between 0 and 1
+   */
+  public static Point3f randomPoint(boolean threeD) {
+    return new Point3f((random.nextFloat() - 0.5f) * 5f,
+        (random.nextFloat() - 0.5f) * 5f,
+        threeD ? (random.nextFloat() - 0.5f) * 5f : 0f);
+  }
+
+  /**
+   * @return a random colour
+   */
+  public static Color randomColour() {
+    return new Color(random.nextFloat(), random
+        .nextFloat(), random.nextFloat());
   }
 
   // The constants
