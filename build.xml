@@ -54,11 +54,6 @@
     <!-- Compile the java code from ${src} into ${classes} -->
     <javac srcdir="${src}" destdir="${dest}" optimize="${optimization}"
        excludes="org/wilmascope/chat/**,org/wilmascope/TestChatClient.java,org/wilmascope/control/TalkingGraph.java,org/wilmascope/control/WilmaChatServCORBA.java">
-      <classpath>
-        <pathelement location="jaxp.jar"/>
-        <pathelement location="xalan.jar"/>
-        <pathelement location="crimson.jar"/>
-      </classpath>
     </javac>
   </target>
 
@@ -114,9 +109,6 @@
     <java classname="org.wilmascope.control.WilmaMain" dir="${lib}" fork="yes">
       <classpath>
         <pathelement location="${dest}"/>
-        <pathelement location="${lib}/jaxp.jar"/>
-        <pathelement location="${lib}/xalan.jar"/>
-        <pathelement location="${lib}/crimson.jar"/>
       </classpath>
     </java>
   </target>
@@ -125,9 +117,6 @@
     <java classname="org.wilmascope.control.WilmaMain" fork="yes">
       <classpath>
         <pathelement location="wilma.jar"/>
-        <pathelement location="jaxp.jar"/>
-        <pathelement location="xalan.jar"/>
-        <pathelement location="crimson.jar"/>
       </classpath>
     </java>
   </target>
@@ -136,7 +125,7 @@
     <mkdir dir="${doc}"/>
     <javadoc sourcepath="${src}" packagenames="org.wilmascope.graph,org.wilmascope.control,org.wilmascope.view,org.wilmascope.patterns,org.wilmascope.gui,org.wilmascope.global,org.wilmascope.forcelayout,org.wilmascope.file,org.wilmascope.dotlayout,org.wilmascope" destdir="${doc}"/>
   </target>
-
+  <target name="none"></target>
   <target name="clean">
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${dest}"/>
