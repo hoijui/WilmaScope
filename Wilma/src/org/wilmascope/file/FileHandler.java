@@ -2,20 +2,18 @@
  * The following source code is part of the WilmaScope 3D Graph Drawing Engine
  * which is distributed under the terms of the GNU Lesser General Public License
  * (LGPL - http://www.gnu.org/copyleft/lesser.html).
- *
+ * 
  * As usual we distribute it with no warranties and anything you chose to do
  * with it you do at your own risk.
- *
- * Copyright for this work is retained by Tim Dwyer and the WilmaScope organisation
- * (www.wilmascope.org) however it may be used or modified to work as part of
- * other software subject to the terms of the LGPL.  I only ask that you cite
- * WilmaScope as an influence and inform us (tgdwyer@yahoo.com)
- * if you do anything really cool with it.
- *
+ * 
+ * Copyright for this work is retained by Tim Dwyer and the WilmaScope
+ * organisation (www.wilmascope.org) however it may be used or modified to work
+ * as part of other software subject to the terms of the LGPL. I only ask that
+ * you cite WilmaScope as an influence and inform us (tgdwyer@yahoo.com) if you
+ * do anything really cool with it.
+ * 
  * The WilmaScope software source repository is hosted by Source Forge:
- * www.sourceforge.net/projects/wilma
- *
- * -- Tim Dwyer, 2001
+ * www.sourceforge.net/projects/wilma -- Tim Dwyer, 2001
  */
 package org.wilmascope.file;
 /**
@@ -29,24 +27,29 @@ import java.util.Hashtable;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
 import javax.swing.filechooser.FileFilter;
 import javax.vecmath.Point3f;
+
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.degreelayout.DegreeLayout;
+import org.wilmascope.fadelayout.FadeLayout;
 import org.wilmascope.forcelayout.ForceLayout;
 import org.wilmascope.gmlparser.GMLLoader;
 import org.wilmascope.graph.LayoutEngine;
+import org.wilmascope.highdimensionlayout.HighDimensionLayout;
 import org.wilmascope.multiscalelayout.MultiScaleLayout;
 import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.ViewManager;
 class GraphFileFilter extends FileFilter {
-  public boolean accept(java.io.File file) {
-    return file.isDirectory() || file.getName().endsWith(".xwg")
-        || file.getName().endsWith(".gml");
-  }
-  public String getDescription() {
-    return "XML Wilma Graph data files (.xwg) or common graph (.gml)";
-  }
+	public boolean accept(java.io.File file) {
+		return file.isDirectory() || file.getName().endsWith(".xwg")
+				|| file.getName().endsWith(".gml");
+	}
+	public String getDescription() {
+		return "XML Wilma Graph data files (.xwg) or common graph (.gml)";
+	}
 }
 class JPEGFileFilter extends FileFilter {
   public boolean accept(java.io.File file) {
@@ -60,7 +63,7 @@ public class FileHandler {
 	GraphControl graphControl;
 	Hashtable nodeLookup;
 	Hashtable idLookup;
-	boolean needsLayout = false;
+	boolean needsLayout = true;
 	public FileHandler(GraphControl graphControl) {
 		this.graphControl = graphControl;
 	}
@@ -76,11 +79,10 @@ public class FileHandler {
 			//graphControl.getRootCluster().removeAllForces();
 			graphControl.freeze();
 			long startTime = System.currentTimeMillis();
-			loadCluster(xmlGraph.getRootCluster(), graphControl.getRootCluster());
+			loadCluster(xmlGraph.getRootCluster(), graphControl
+					.getRootCluster());
 			long endTime = System.currentTimeMillis();
 			long time = endTime - startTime;
-			System.out.println(graphControl.getRootCluster().getCluster().getAllNodes().size()+" nodes");
-			System.out.println(graphControl.getRootCluster().getCluster().getInternalEdges().size()+" edges");
 			System.out.println("Loaded... in milliseconds: " + time);
 			graphControl.getRootCluster().getCluster().draw();
 			if (needsLayout) {
@@ -122,11 +124,13 @@ public class FileHandler {
 			try {
 				NodeView v;
 				if (gn instanceof GraphControl.ClusterFacade) {
-					v = ViewManager.getInstance().createClusterView(viewType.getName());
+					v = ViewManager.getInstance().createClusterView(
+							viewType.getName());
 					gn.setView(ViewManager.getInstance().createClusterView(
 							viewType.getName()));
 				} else {
-					v = ViewManager.getInstance().createNodeView(viewType.getName());
+					v = ViewManager.getInstance().createNodeView(
+							viewType.getName());
 				}
 				gn.setView(v);
 				v.setProperties(viewType.getProperties());
@@ -139,12 +143,17 @@ public class FileHandler {
 			String position = p.getProperty("Position");
 			if (position != null) {
 				StringTokenizer st = new StringTokenizer(position);
-				gn.setPosition(new Point3f(Float.parseFloat(st.nextToken()), Float
-						.parseFloat(st.nextToken()), Float.parseFloat(st.nextToken())));
+				gn.setPosition(new Point3f(Float.parseFloat(st.nextToken()),
+						Float.parseFloat(st.nextToken()), Float.parseFloat(st
+								.nextToken())));
 			}
 			String levelConstraint = p.getProperty("LevelConstraint");
+			String fixedPosition = p.getProperty("FixedPosition");
 			if (levelConstraint != null) {
 				gn.setLevelConstraint(Integer.parseInt(levelConstraint));
+			}
+			if (fixedPosition != null) {
+				gn.setFixedPosition(true);
 			}
 		}
 	}
@@ -155,6 +164,7 @@ public class FileHandler {
 			xv.setProperties(v.getProperties());
 		}
 		Properties p = new Properties();
+		p.setProperty("Weight", "" + ge.getWeight());
 	}
 	private void saveNodeProperties(GraphControl.NodeFacade gn, XMLGraph.Node xn) {
 		NodeView v = (NodeView) gn.getView();
@@ -172,6 +182,9 @@ public class FileHandler {
 		p.setProperty("Position", pos.x + " " + pos.y + " " + pos.z);
 		if (gn.getLevelConstraint() != Integer.MIN_VALUE) {
 			p.setProperty("LevelConstraint", "" + gn.getLevelConstraint());
+		}
+		if (gn.isFixedPosition()) {
+			p.setProperty("FixedPosition", "True");
 		}
 		xn.setProperties(p);
 	}
@@ -196,8 +209,10 @@ public class FileHandler {
 		for (int i = 0; i < edges.size(); i++) {
 			XMLGraph.Edge xmlEdge = (XMLGraph.Edge) edges.get(i);
 			GraphControl.EdgeFacade e = graphRoot.addEdge(
-					(GraphControl.NodeFacade) nodeLookup.get(xmlEdge.getStartID()),
-					(GraphControl.NodeFacade) nodeLookup.get(xmlEdge.getEndID()));
+					(GraphControl.NodeFacade) nodeLookup.get(xmlEdge
+							.getStartID()),
+					(GraphControl.NodeFacade) nodeLookup
+							.get(xmlEdge.getEndID()));
 			loadEdgeProperties(xmlEdge, e);
 		}
 	}
@@ -211,10 +226,16 @@ public class FileHandler {
 			e = new org.wilmascope.dotlayout.DotLayout();
 			needsLayout = true;
 		} else if (type.equals("ColumnLayout")) {
-      e = new org.wilmascope.columnlayout.ColumnLayout();
-    } else if (type.equals("MultiScaleLayout")) {
-      e = new MultiScaleLayout();
-    }
+			e = new org.wilmascope.columnlayout.ColumnLayout();
+		} else if (type.equals("MultiScaleLayout")) {
+			e = new MultiScaleLayout();
+		} else if (type.equals("FadeLayout")) {
+			e = new FadeLayout();
+		} else if (type.equals("HighDimensionLayout")) {
+			e = new HighDimensionLayout();
+		} else if (type.equals("DegreeLayout")) {
+			e = new DegreeLayout();
+		}
 		c.setLayoutEngine(e);
 		e.setProperties(l.getProperties());
 	}
@@ -254,8 +275,9 @@ public class FileHandler {
 		}
 		GraphControl.EdgeFacade[] edges = graphCluster.getEdges();
 		for (int i = 0; i < edges.length; i++) {
-			XMLGraph.Edge xmlEdge = xmlCluster.addEdge((String) idLookup.get(edges[i]
-					.getStartNode()), (String) idLookup.get(edges[i].getEndNode()));
+			XMLGraph.Edge xmlEdge = xmlCluster.addEdge((String) idLookup
+					.get(edges[i].getStartNode()), (String) idLookup
+					.get(edges[i].getEndNode()));
 			saveEdgeProperties(edges[i], xmlEdge);
 		}
 	}
@@ -272,6 +294,12 @@ public class FileHandler {
 			l = xmlCluster.setLayoutEngineType("ColumnLayout");
 		} else if (gl instanceof MultiScaleLayout) {
 			l = xmlCluster.setLayoutEngineType("MultiScaleLayout");
+		} else if (gl instanceof FadeLayout) {
+			l = xmlCluster.setLayoutEngineType("FadeLayout");
+		} else if (gl instanceof HighDimensionLayout) {
+			l = xmlCluster.setLayoutEngineType("HighDimensionLayout");
+		} else if (gl instanceof DegreeLayout) {
+			l = xmlCluster.setLayoutEngineType("DegreeLayout");
 		}
 		l.setProperties(gl.getProperties());
 	}

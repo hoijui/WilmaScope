@@ -320,7 +320,7 @@ public class SliceViewControlFrame extends JFrame {
 	Point3f centroid, bottomLeft, topRight;
 	Cluster r;
 	float strataSeparation = 1.0f;
-	int strataCount=10;
+	int strataCount=12;
 	int selectedStratum = 0;
 	Vector extraSpacing = new Vector();
 	GraphCanvas canvas;
