@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.border.*;
-import java.util.Vector;
-import org.wilmascope.fastlayout.*;
 import org.wilmascope.control.*;
 
 /**
