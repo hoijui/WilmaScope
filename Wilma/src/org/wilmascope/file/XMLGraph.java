@@ -120,8 +120,6 @@ public class XMLGraph {
     } catch (ParserConfigurationException pce) {
       WilmaMain.showErrorDialog("Parser with specified options can't be built",
           pce);
-    } catch (IOException ioe) {
-      WilmaMain.showErrorDialog("I/O Error", ioe);
     }
     root = doc.getDocumentElement();
   }
