@@ -18,7 +18,7 @@
  * -- Tim Dwyer, 2001
  */
 package org.wilmascope.graph;
-import java.util.Vector;
+import java.util.*;
 public abstract class List {
   protected Vector elements = new Vector();
   public int size() {
@@ -61,5 +61,14 @@ public abstract class List {
       ((GraphElement)elements.get(i)).show(graphCanvas);
     }
   }
-
+  public void resetIterator() {
+    iterator = elements.iterator();
+  }
+  public boolean hasNext() {
+    return iterator.hasNext();
+  }
+  protected GraphElement next() {
+    return (GraphElement)iterator.next();
+  }
+  private Iterator iterator;
 }

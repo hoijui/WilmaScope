@@ -38,9 +38,15 @@ public class EdgeList extends List {
   public void addAll(EdgeList edgeList) {
     elements.addAll(edgeList.getElementsVector());
   }
+  public void setEdges(EdgeList edges) {
+    elements.clear();
+    elements.addAll(edges.getElementsVector());
+  }
   public EdgeList() {}
   public void add(Edge e) {
-    elements.add(e);
+    if(!elements.contains(e)) {
+      elements.add(e);
+    }
   }
   public void remove(Edge e) {
     elements.remove(e);
@@ -50,5 +56,8 @@ public class EdgeList extends List {
   }
   public boolean contains(Edge edge) {
     return elements.contains(edge);
+  }
+  public Edge nextEdge() {
+    return (Edge)next();
   }
 }

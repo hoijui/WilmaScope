@@ -71,4 +71,7 @@ public class ClusterList extends List {
       ((Cluster)elements.get(i)).setBalanced(balanced);
     }
   }
+  public Cluster nextCluster() {
+    return (Cluster)next();
+  }
 }

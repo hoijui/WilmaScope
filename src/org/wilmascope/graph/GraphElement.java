@@ -37,6 +37,12 @@ public abstract class GraphElement {
     owner = c;
   }
   /**
+   * get the parent cluster or owner of this graph element
+   */
+  public Cluster getOwner() {
+    return owner;
+  }
+  /**
    * draw the element if it's visible
    */
   public void draw() {

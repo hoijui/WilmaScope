@@ -71,8 +71,9 @@ public class Edge extends GraphElement {
    */
   public void recalculateMultiEdgeOffsets() {
     EdgeList commonEdges = start.getCommonEdges(end);
-    for(int i=0;i<commonEdges.size();i++) {
-      Edge e = commonEdges.get(i);
+    int i=0;
+    for(commonEdges.resetIterator();commonEdges.hasNext();i++) {
+      Edge e = commonEdges.nextEdge();
       int direction = 1;
       if(e.getStart()!=start) {
         direction = -1;
@@ -153,11 +154,31 @@ public class Edge extends GraphElement {
   public float getLength() {
     return length;
   }
+  /**
+   * If node is one of the nodes connected by the edge, this method returns
+   * it's partner.
+   * If node is not a immediately part of the edge, but it is a cluster and
+   * one end of the edge is a child or descendant of the cluster then the other
+   * end is returned.
+   * If all else fails null is returned.
+   * It would not be real useful to call this method if node is a Cluster and
+   * both ends of the edge are members of the cluster, it will simply always
+   * return end in this case.
+   */
   public Node getNeighbour(Node node) {
     if(node==start) {
       return end;
     } else if(node==end) {
       return start;
+    } else if(node instanceof Cluster) {
+      Cluster c = (Cluster)node;
+      if(c.isAncestor(start)) {
+        return end;
+      } else if (c.isAncestor(end)) {
+        return start;
+      } else {
+        return null;
+      }
     } else {
       return null;
     }
@@ -165,14 +186,22 @@ public class Edge extends GraphElement {
 
   /**
    * assuming oldNode is either the start or end of this edge, this method
-   * replaces oldNode with newNode.
+   * replaces oldNode with newNode.  Actually, it's not really a complete
+   * replacement, since this edge is not actually removed from oldNode's
+   * edgeList, since:
+   *   in an edge collapse, oldNode will be part of the cluster that is
+   *     now collapsed, so it won't be rendered anyway
+   *   in an edge expand, oldNode is the re-expanded cluster, don't want to
+   *     remove the edge from the cluster's edgelist
+   *     because it is still an external edge to the cluster.
+   *     Also when expanding, setStart/End will try to add the edge to the
+   *     newNode's edge list (where it will already be) but since these
+   *     days EdgeList does not contain duplicates this doesn't matter.
    */
-  public void swapNode(Node oldNode, Node newNode) {
+  private void swapNode(Node oldNode, Node newNode) {
     if(oldNode==start) {
-      start.removeEdge(this);
       setStart(newNode);
     } else if(oldNode==end) {
-      end.removeEdge(this);
       setEnd(newNode);
     }
   }
