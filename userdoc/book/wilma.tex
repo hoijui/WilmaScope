@@ -87,6 +87,8 @@
 
 \maketitle              % typesets the title of the contribution
 
+
+
 %\begin{abstract}
 %The abstract\index{abstract} should summarize the contents of the paper
 %in at least 70 and at most 150 words; neither too long
@@ -278,15 +280,40 @@ of a custom language requires more overhead.
 
 \paragraph{}
 
-In order to meet these more sophisticated requirements, we have implemented
-a Wilma control interface which sits atop CORBA (the Common Object Request
-Broker Archicture).  Since CORBA provides its own access control mechanisms,
-and good CORBA bindings handle all the marshalling and type requirements
-for a sophisticated API, programmers using languages which support CORBA
-can take advantage of these facilities without writing additional code.
+In order to meet these more sophisticated requirements, we have implemented a
+Wilma control interface which sits atop CORBA (the Common Object Request
+Broker Archicture --- see \url{http://www.corba.org}).  Since CORBA provides
+its own access control mechanisms, and good CORBA bindings handle all the
+marshalling and type requirements for a sophisticated API, programmers using
+languages which support CORBA can take advantage of these facilities without
+writing additional code.
 
 \section{The Importance of being Wilma -- Results}
 \label{sec:results}
+
+\subsection{Applications}
+
+\subsubsection{Web Structure Visualisation}
+
+One early application of Wilma was to the representation of web structure, and
+to visualising clustering algorithms for categorising such
+structure\cite{eckersley2kclassiscope}.
+
+\paragraph{}
+
+An example of web structure visualisation is shown in Figure~\ref{fig-web}.
+This is a dataset collected in 2000 from the website \url{www.linuxlinks.com}.
+The clusters are defined over similarity between pages; also note the set of
+17 pages (linked to every other page) which form site's navigation bar.
+
+\begin{figure}
+\begin{center}
+\scalebox{0.8}{\includegraphics{figures/cluster1.eps}} \\
+\caption{{\sc WilmaScope Visualisation of Web Site Structure}}
+\label{fig-web}
+\end{center}
+\end{figure}
+
 \begin{itemize}
 \item pretty pictures
 \item applications
