@@ -40,7 +40,7 @@ public class LayoutEngineFrame extends JFrame {
     pack();
   }
   private void jbInit() throws Exception {
-    ImageIcon icon = new ImageIcon(getClass().getResource("/images/forces.png"));
+    ImageIcon icon = new ImageIcon("images/forces.png");
     this.setIconImage(icon.getImage());
     box1 = Box.createVerticalBox();
     layoutEngineComboBox.addActionListener(new java.awt.event.ActionListener() {

@@ -51,6 +51,6 @@ public class DirectedEdgeView extends EdgeView {
     addTransformGroupChild(coneTransform);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/directedEdge.png"));
+    return new ImageIcon("images/directedEdge.png");
   }
 }

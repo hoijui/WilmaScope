@@ -86,6 +86,6 @@ public class AggregationEdgeView extends EdgeView {
     addTransformGroupChild(tg);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/aggregation.png"));
+    return new ImageIcon("images/aggregation.png");
   }
 }

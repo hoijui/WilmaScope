@@ -20,38 +20,51 @@
 
 package org.wilmascope.viewplugin;
 
-import org.wilmascope.view.*;
-import org.wilmascope.gui.QueryFrame;
-import org.wilmascope.graph.*;
-
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
 import javax.swing.ImageIcon;
-import javax.media.j3d.*;
-import javax.vecmath.*;
-import com.sun.j3d.utils.geometry.Text2D;
-import java.util.*;
+import javax.vecmath.Color3f;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
 
-public class ColumnClusterView extends ClusterView {
+import org.wilmascope.columnlayout.ColumnLayout;
+import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.Node;
+import org.wilmascope.graph.NodeList;
+import org.wilmascope.view.ClusterView;
+import org.wilmascope.view.Colours;
+import org.wilmascope.view.SizeAdjustableNodeView;
+
+import com.sun.j3d.utils.geometry.Text2D;
+
+public class ColumnClusterView extends ClusterView implements SizeAdjustableNodeView {
   public void draw() {
     try {
       Point3f p = new Point3f();
-      NodeList nodes = ((Cluster)getNode()).getAllNodes();
-      for(nodes.resetIterator();nodes.hasNext();) {
-        org.wilmascope.graph.Node n= nodes.nextNode();
-        Point3f t = n.getPosition();
-        if(t.z>p.z) {
+      Cluster c = (Cluster)getNode();
+      NodeList nodes = c.getAllNodes();
+      float nodeHeight = ((ColumnLayout)c.getLayoutEngine()).getStrataSeparation();
+      for (nodes.resetIterator(); nodes.hasNext();) {
+        org.wilmascope.graph.Node n = nodes.nextNode();
+        Point3f t = n.getPosition();;
+        SizeAdjustableNodeView tnv = (SizeAdjustableNodeView)n.getView();
+        if (t.z > p.z) {
           p.set(t);
-          getNode().setRadius(((TubeNodeView)n.getView()).getTopRadius());
+          c.setRadius(tnv.getTopRadius());
         }
       }
       Vector3f v = new Vector3f(p);
-      //v.z+=columnCluster.getTopNode().getRadius();
-      v.z+=0.11f;
+      // want the label floating just above (0.01f) the top node
+      v.z += nodeHeight/2f+0.01f;
       double r = getNode().getRadius() * 0.5f;
       // center(ish) label
-      v.x-=0.13f*r;
-      v.y-=0.05f*r;
-      setResizeTranslateTransform(new Vector3d(r,r,r),v);
-    } catch(NullPointerException e) {System.out.println("WARNING: Null pointer in ColumnClusterView.draw()");}
+      v.x -= 0.15f * r;
+      v.y -= 0.04f * r;
+      setResizeTranslateTransform(new Vector3d(r, r, r), v);
+    } catch (NullPointerException e) {
+      System.out.println("WARNING: Null pointer in ColumnClusterView.draw()");
+    }
   }
   Point3f position;
   public void setPositionRef(Point3f position) {
@@ -72,17 +85,105 @@ public class ColumnClusterView extends ClusterView {
   public void setLabelColour(Color3f c) {
     this.labelColour = c;
   }
-  Color3f labelColour = new Color3f(0,0,0);
-  public void showLabel(String label) {
-    Text2D text = new Text2D(label,labelColour,"dummy",30,java.awt.Font.PLAIN);
-    makePickable(text);
+  Color3f labelColour = new Color3f(0, 0, 0);
+  String[] labels;
+  public void setLabel(String[] labels) {
+    this.labels = labels;
     TransformGroup textTG = new TransformGroup();
     Transform3D trans = new Transform3D();
+    trans.setTranslation(new Vector3f(0,0.05f*(float)(labels.length-1),0));
     textTG.setTransform(trans);
-    textTG.addChild(text);
+    for (int i = 0; i < labels.length; i++) {
+      Text2D text =
+        new Text2D(labels[i], labelColour, "dummy", 20, java.awt.Font.PLAIN);
+      makePickable(text);
+      TransformGroup textTG2 = new TransformGroup();
+      trans = new Transform3D();
+      trans.setTranslation(new Vector3f(0f, -0.1f * (float)i, 0f));
+      textTG2.setTransform(trans);
+      textTG2.addChild(text);
+      textTG.addChild(textTG2);
+    }
     setLabel(textTG);
   }
-  public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/column.png"));
+  public void setLabel(String label) {
+    setLabel(new String[]{label});
   }
+  public String getLabel() {
+    return labels[0];
+  }
+  public ImageIcon getIcon() {
+    return new ImageIcon("images/column.png");
+  }
+  /** returns the bottom radius of the lowest node
+   * @see org.wilmascope.view.SizeAdjustableNodeView#getBottomRadius()
+   */
+  public float getBottomRadius() {
+    float r = 0;
+    Cluster c = (Cluster)getNode();
+    Node n = c.getAllNodes().get(0);
+    if(n!=null) {
+      SizeAdjustableNodeView tnv = (SizeAdjustableNodeView)n.getView();
+      r = tnv.getBottomRadius();
+    }
+    return r;
+  }
+
+  /** returns maximum depth of the clusters children
+   * @see org.wilmascope.view.SizeAdjustableNodeView#getDepth()
+   */
+  public float getDepth() {
+    Cluster c = (Cluster)getNode();
+    NodeList nodes = c.getAllNodes();
+    float depthMax=0;
+    for (nodes.resetIterator(); nodes.hasNext();) {
+      org.wilmascope.graph.Node n = nodes.nextNode();
+      SizeAdjustableNodeView tnv = (SizeAdjustableNodeView)n.getView();
+      if (tnv.getDepth() > depthMax) {
+        depthMax = tnv.getDepth();
+      }
+    }
+    return depthMax;
+  }
+
+  /** always DISC
+   * @see org.wilmascope.view.SizeAdjustableNodeView#getShape()
+   */
+  public int getShape() {
+    return DISC;
+  }
+
+  /**
+   * @see org.wilmascope.view.SizeAdjustableNodeView#getTopRadius()
+   */
+  public float getTopRadius() {    
+    float r = 0;
+    Cluster c = (Cluster)getNode();
+    Node n = c.getAllNodes().get(c.getAllNodes().size()-1);
+    if(n!=null) {
+      SizeAdjustableNodeView tnv = (SizeAdjustableNodeView)n.getView();
+      r = tnv.getTopRadius();
+    }
+    return r;
+  }
+  public float getMaxRadius() {
+    float rad = 0;
+    NodeList children = ((Cluster)getNode()).getNodes();
+    for (children.resetIterator(); children.hasNext();) {
+      org.wilmascope.graph.Node c = children.nextNode();
+      float r;
+      r = ((SizeAdjustableNodeView)c.getView()).getTopRadius();
+      if (r > rad) {
+        rad = r;
+      }
+    }
+    return rad;
+  }
+
+  /* @see org.wilmascope.view.SizeAdjustableNodeView#setEndRadii(float, float)
+   */
+  public void setEndRadii(float bottomRadius, float topRadius) {
+    throw new Error("setEndRadii does nothing for column clusters");
+  }
+
 }

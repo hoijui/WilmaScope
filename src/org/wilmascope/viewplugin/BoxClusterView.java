@@ -34,11 +34,6 @@ public class BoxClusterView extends ClusterView {
   }
   public void init() {
     setExpandedView();
-    /*
-    LODSphere sphere = new LODSphere(getAppearance());
-    sphere.makePickable(this);
-    sphere.addToTransformGroup(getTransformGroup());
-    */
     Box box = new Box(1f,1f,1f,getAppearance());
     getTransformGroup().addChild(box);
     makePickable(box.getShape(Box.FRONT));
@@ -52,6 +47,6 @@ public class BoxClusterView extends ClusterView {
     return (float)Math.pow(getCluster().getMass()/density,1.0d/3.0d);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/boxcluster.png"));
+    return new ImageIcon("images/boxcluster.png");
   }
 }

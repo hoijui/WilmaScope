@@ -64,6 +64,6 @@ public class LineEdgeView extends EdgeView {
     myLine.setColor(1,c);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/lineEdge.png"));
+    return new ImageIcon("images/lineEdge.png");
   }
 }

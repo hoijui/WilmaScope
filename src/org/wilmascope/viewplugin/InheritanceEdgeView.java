@@ -80,6 +80,6 @@ public class InheritanceEdgeView extends EdgeView {
     addTransformGroupChild(coneTransform);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/inheritance.png"));
+    return new ImageIcon("images/inheritance.png");
   }
 }

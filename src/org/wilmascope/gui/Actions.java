@@ -81,7 +81,7 @@ public class Actions {
 		addNodeAction =
 			new AbstractAction(
 				"Add Node",
-				new ImageIcon(getClass().getResource("/images/node.png"))) {
+				new ImageIcon("images/node.png")) {
 			public void actionPerformed(ActionEvent e) {
 				GraphControl.NodeFacade n = rootCluster.addNode();
 				rootCluster.unfreeze();
@@ -90,7 +90,7 @@ public class Actions {
 		addEdgeAction =
 			new AbstractAction(
 				"Add Edge",
-				new ImageIcon(getClass().getResource("/images/edge.png"))) {
+				new ImageIcon("images/edge.png")) {
 			public void actionPerformed(ActionEvent e) {
 				GraphControl.getPickListener().enableMultiPicking(
 					2,
@@ -102,7 +102,7 @@ public class Actions {
 		addClusterAction =
 			new AbstractAction(
 				"Add Cluster",
-				new ImageIcon(getClass().getResource("/images/cluster.png"))) {
+				new ImageIcon("images/cluster.png")) {
 			public void actionPerformed(ActionEvent e) {
 				controlPanel.add(new ClusterPanel(controlPanel, rootCluster));
 				controlPanel.updateUI();
@@ -114,7 +114,7 @@ public class Actions {
 		pickableClusterAction =
 			new AbstractAction(
 				"Make all clusters pickable",
-				new ImageIcon(getClass().getResource("/images/pickableCluster.png"))) {
+				new ImageIcon("images/pickableCluster.png")) {
 			public void actionPerformed(ActionEvent e) {
 				rootCluster.childrenPickable();
 			}
@@ -122,7 +122,7 @@ public class Actions {
 		showHiddenAction =
 			new AbstractAction(
 				"Make hidden objects visible",
-				new ImageIcon(getClass().getResource("/images/find.png"))) {
+				new ImageIcon("images/find.png")) {
 			public void actionPerformed(ActionEvent e) {
 				rootCluster.showHiddenChildren();
 			}
@@ -130,7 +130,7 @@ public class Actions {
 		adjustForcesAction =
 			new AbstractAction(
 				"Adjust Forces",
-				new ImageIcon(getClass().getResource("/images/forces.png"))) {
+				new ImageIcon("images/forces.png")) {
 			public void actionPerformed(ActionEvent e) {
 				LayoutEngineFrame controls =
 					new LayoutEngineFrame(rootCluster, "Global Layout Engine Controls");
@@ -140,7 +140,7 @@ public class Actions {
 		rotateAction =
 			new AbstractAction(
 				"Auto-Rotate",
-				new ImageIcon(getClass().getResource("/images/rotate.png"))) {
+				new ImageIcon("images/rotate.png")) {
 			public void actionPerformed(ActionEvent e) {
 				graphControl.getGraphCanvas().toggleRotator();
 			}
@@ -148,7 +148,7 @@ public class Actions {
 		lightingAction =
 			new AbstractAction(
 				"Adjust Lights",
-				new ImageIcon(getClass().getResource("/images/lightbulb.png"))) {
+				new ImageIcon("images/lightbulb.png")) {
 			public void actionPerformed(ActionEvent e) {
 				LightFrame lightFrame;
 				controlPanel.hideMouseHelp();
@@ -182,7 +182,7 @@ public class Actions {
 		fileOpenAction =
 			new AbstractAction(
 				"Open",
-				new ImageIcon(getClass().getResource("/images/Open24.gif"))) {
+				new ImageIcon("images/Open24.gif")) {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser =
 					new JFileChooser(
@@ -204,7 +204,7 @@ public class Actions {
 		fileNewAction =
 			new AbstractAction(
 				"New",
-				new ImageIcon(getClass().getResource("/images/New24.gif"))) {
+				new ImageIcon("images/New24.gif")) {
 			public void actionPerformed(ActionEvent e) {
 				rootCluster.deleteAll();
 			}
@@ -218,7 +218,7 @@ public class Actions {
 		fileSaveAsAction =
 			new AbstractAction(
 				"Save As",
-				new ImageIcon(getClass().getResource("/images/SaveAs24.gif"))) {
+				new ImageIcon("images/SaveAs24.gif")) {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser =
 					new JFileChooser(
@@ -240,7 +240,7 @@ public class Actions {
 		fileSaveAction =
 			new AbstractAction(
 				"Save",
-				new ImageIcon(getClass().getResource("/images/Save24.gif"))) {
+				new ImageIcon("images/Save24.gif")) {
 			public void actionPerformed(ActionEvent e) {
 				fileSaveAsAction.actionPerformed(e);
 			}
@@ -271,7 +271,7 @@ public class Actions {
 			new Integer(Character.getNumericValue(mn) + 55));
 		a.putValue(
 			Action.SMALL_ICON,
-			new ImageIcon(getClass().getResource(smallIcon)));
+			new ImageIcon(smallIcon));
 	}
 
 	private JToolBar getToolbar() {

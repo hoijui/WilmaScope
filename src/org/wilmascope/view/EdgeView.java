@@ -110,7 +110,7 @@ implements org.wilmascope.graph.EdgeView {
   }
 
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/edge.png"));
+    return new ImageIcon("images/edge.png");
   }
   protected void showLabel(String text) {
     addLabel(text, 1.0d, new Point3f(0.0f,4.0f,1.0f), Constants.vZero, getAppearance());

@@ -60,6 +60,6 @@ public class LabelNodeView extends NodeView {
     addTransformGroupChild(pickableSphere);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/labelNode.png"));
+    return new ImageIcon("images/labelNode.png");
   }
 }

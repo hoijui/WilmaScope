@@ -101,14 +101,14 @@ public class TaperedEdgeView extends EdgeView {
     setupHighlightAppearance(Colours.yellowMaterial);
   } /**
    * adjust the radius of the top of the tube
-   * @parameter r scale factor, ie the resulting top radius will be r * node radius
+   * @parameter r xScale factor, ie the resulting top radius will be r * node radius
    */
   static public void setTopRadius(float r) {
     topRadius = r;
   }
   /**
    * adjust the radius of the bottom of the tube
-   * @parameter r scale factor, ie the resulting bottom radius will be r * node radius
+   * @parameter r xScale factor, ie the resulting bottom radius will be r * node radius
    */
   static public void setBottomRadius(float r) {
     bottomRadius = r;
@@ -157,6 +157,6 @@ public class TaperedEdgeView extends EdgeView {
     setFullTransform(new Vector3d(getRadius(), l, getRadius()), v, getPositionAngle());
   }
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/taperedEdge.png"));
+    return new ImageIcon("images/taperedEdge.png");
   }
 }

@@ -52,7 +52,7 @@ public class InitFrame extends JFrame implements ActionListener {
   public InitFrame(String title, TestGraph test) {
     try {
       this.title = title;
-      ImageIcon icon = new ImageIcon(getClass().getResource("/images/forces.png"));
+      ImageIcon icon = new ImageIcon("images/forces.png");
       this.setIconImage(icon.getImage());
 
       this.test = test;
