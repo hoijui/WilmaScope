@@ -30,8 +30,6 @@ import java.text.ParseException;
 import java.awt.geom.Point2D;
 import javax.vecmath.Point3f;
 
-import com.sun.corba.se.internal.io.util.Iterator;
-
 /**
  * <p>A layout engine which uses the dot program to find node and edge positions.
  * Dot is part of the AT&T Labs-Research
