@@ -60,7 +60,7 @@ public class Origin extends Force {
     // unclipped 1/r (ie strengthConstant / r * r) forces are chaotic!
     originForce.scale( -strengthConstant, vOrigin );
     // need the force to drop off near the origin or else oscillation ensues
-    if (r < 1) originForce.scale( r );
+    // if (r < 1) originForce.scale( r );
     ((NodeForceLayout)node.getLayout()).addForce(originForce);
     if (originNodeLayout!=null) {
       originNodeLayout.subForce(originForce);

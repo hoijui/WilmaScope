@@ -230,9 +230,17 @@ public class Edge extends GraphElement {
     owner.remove(this);
     start.removeEdge(this);
     end.removeEdge(this);
-    view.delete();
+    if(view != null) {
+      view.delete();
+    } else {
+      System.out.println("hmmm... null view while deleting edge, was it collapsed?");
+    }
     view = null;
-    layout.delete();
+    if(layout != null) {
+      layout.delete();
+    } else {
+      System.out.println("hmmm... null layout while deleting edge, was it collapsed?");
+    }
     layout = null;
     recalculateMultiEdgeOffsets();
   }
