@@ -49,6 +49,7 @@ public class ViewManager {
   private ViewManager() {
     nodeReg = new Registry();
     edgeReg = new Registry();
+    clusterReg = new Registry();
   }
   public class UnknownViewTypeException extends Exception {
     public UnknownViewTypeException(String viewType) {
@@ -140,7 +141,9 @@ public class ViewManager {
     }
   }
   public void addPrototypeView(GraphElementView view) {
-    if(view instanceof NodeView) {
+    if(view instanceof ClusterView) {
+      clusterReg.addPrototypeView(view);
+    } else if(view instanceof NodeView) {
       nodeReg.addPrototypeView(view);
     } else if(view instanceof EdgeView) {
       edgeReg.addPrototypeView(view);
@@ -152,6 +155,13 @@ public class ViewManager {
   public Registry getEdgeViewRegistry() {
     return edgeReg;
   }
+  public Registry getClusterViewRegistry() {
+    return clusterReg;
+  }
+  public ClusterView createClusterView(String type)
+  throws UnknownViewTypeException {
+    return (ClusterView)clusterReg.create(type);
+  }
   public NodeView createNodeView(String type)
   throws UnknownViewTypeException {
     return (NodeView)nodeReg.create(type);
@@ -159,6 +169,10 @@ public class ViewManager {
   public EdgeView createEdgeView(String type)
   throws UnknownViewTypeException {
     return (EdgeView)edgeReg.create(type);
+  }
+  public ClusterView createClusterView()
+  throws UnknownViewTypeException {
+    return (ClusterView)clusterReg.create();
   }
   public NodeView createNodeView()
   throws UnknownViewTypeException {
@@ -184,7 +198,16 @@ public class ViewManager {
       return null;
     }
   }
+  public String getDefaultClusterViewType() {
+    try {
+      return clusterReg.getDefaultViewPrototype().getTypeName();
+    } catch(UnknownViewTypeException e) {
+      System.out.println(e);
+      return null;
+    }
+  }
   private static final ViewManager instance = new ViewManager();
   private Registry nodeReg;
   private Registry edgeReg;
+  private Registry clusterReg;
 }

@@ -49,7 +49,7 @@ public class GraphCanvas extends Canvas3D {
   /** Creates new GraphScene */
   public GraphCanvas(int xsize, int ysize) {    // Create the root of the branch graph
     super(SimpleUniverse.getPreferredConfiguration());
-    constants = new Constants("WILMA_CONSTANTS.properties");
+    constants = Constants.getInstance();
 
     setSize(xsize, ysize);
     setLocation(5, 5);
@@ -86,6 +86,9 @@ public class GraphCanvas extends Canvas3D {
     addLights(bounds);
     addMouseRotators(bounds, transformGroup);
     bg.addChild(transformGroup);
+  }
+  public Bounds getBoundingSphere() {
+    return bounds;
   }
   public void createUniverse() {
     bg.compile();
@@ -145,14 +148,18 @@ public class GraphCanvas extends Canvas3D {
    myMouseRotate.setTransformGroup(transformGroup);
    myMouseRotate.setSchedulingBounds(bounds);
    bg.addChild(myMouseRotate);
-   MouseTranslate myMouseTranslate = new MouseTranslate();
-   myMouseTranslate.setTransformGroup(transformGroup);
-   myMouseTranslate.setSchedulingBounds(bounds);
-   bg.addChild(myMouseTranslate);
+   mouseTranslate = new MouseTranslate();
+   mouseTranslate.setTransformGroup(transformGroup);
+   mouseTranslate.setSchedulingBounds(bounds);
+   bg.addChild(mouseTranslate);
    MouseZoom myMouseZoom = new MouseZoom();
    myMouseZoom.setTransformGroup(transformGroup);
    myMouseZoom.setSchedulingBounds(bounds);
    bg.addChild(myMouseZoom);
+ }
+ MouseTranslate mouseTranslate;
+ public MouseTranslate getMouseTranslate() {
+   return mouseTranslate;
  }
  public void addGraphElementView(GraphElementView view) {
    view.getBranchGroup().compile();
@@ -182,5 +189,8 @@ public class GraphCanvas extends Canvas3D {
   }
   public void setRootPickingClient(PickingClient client) {
     pb.setRootPickingClient(client);
+  }
+  public void setPickingEnabled(boolean enabled) {
+    pb.setEnable(enabled);
   }
 }

@@ -22,9 +22,12 @@ package org.wilmascope.view;
 
 import org.wilmascope.graph.Node;
 
-import javax.vecmath.Vector3f;
-import javax.vecmath.Vector3d;
+import javax.vecmath.*;
 import javax.swing.ImageIcon;
+import javax.media.j3d.*;
+import com.sun.j3d.utils.geometry.Cone;
+import com.sun.j3d.utils.picking.behaviors.PickTranslateBehavior;
+import com.sun.j3d.utils.behaviors.mouse.*;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular WilmaScope software
@@ -39,16 +42,8 @@ implements org.wilmascope.graph.NodeView {
 
   public NodeView() {
   }
-  /*
   public void draw() {
     setTranslation(new Vector3f(node.getPosition()));
-  }
-  */
-  public void draw() {
-    double radius = (double)getNode().getRadius();
-    setResizeTranslateTransform(
-      new Vector3d(radius,radius,radius),
-      new Vector3f(getNode().getPosition()));
   }
   public Node getNode() {
     return node;
@@ -58,6 +53,85 @@ implements org.wilmascope.graph.NodeView {
   }
   public ImageIcon getIcon() {
     return new ImageIcon(getClass().getResource("/images/node.png"));
+  }
+  protected void showLabel(String text) {
+    addLabel(text, 0.04d, new Point3f(0.0f,3.8f,0.0f), Constants.vZero, getAppearance());
+  }
+  BranchGroup anchorBranch;
+  public void showAnchor() {
+    Appearance a = new Appearance();
+    a.setMaterial(Colours.blueMaterial);
+    Cone pin = new Cone(0.05f,0.1f,a);
+    makePickable(pin.getShape(Cone.BODY));
+    makePickable(pin.getShape(Cone.CAP));
+    anchorBranch = new BranchGroup();
+    anchorBranch.setCapability(BranchGroup.ALLOW_DETACH);
+    Transform3D t = new Transform3D();
+    t.set(new Vector3f(0,-node.getRadius(),0));
+    TransformGroup tg = new TransformGroup(t);
+    Transform3D r = new Transform3D();
+    r.setRotation(new AxisAngle4f(-1f,0f,1f,3f*(float)Math.PI/4f));
+    TransformGroup rg = new TransformGroup(r);
+    tg.addChild(pin);
+    rg.addChild(tg);
+    anchorBranch.addChild(rg);
+    addLiveBranch(anchorBranch);
+  }
+  public void hideAnchor() {
+    anchorBranch.detach();
+  }
+
+  /**
+   * Move the node in a plane parallel to the view plate, such that it appears
+   * at the point on the canvas specified in x and y.
+   * The x and y parameters are in AWT coordinates with 0,0 at the top left
+   * of the canvas.
+   * @param c the canvas
+   * @param x the x awt coordinate
+   * @param y the y awt coordinate
+   */
+  public void moveToCanvasPos(GraphCanvas c, int x, int y) {
+    // All transformations are done in VWorld coordinates so set up the
+    // transforms necessary to convert
+    Transform3D localToVworld = new Transform3D();
+    Transform3D imagePlateToVworld = new Transform3D();
+    c.getImagePlateToVworld(imagePlateToVworld);
+    getTransformGroup().getLocalToVworld(localToVworld);
+
+    // get current node position and convert to VWorld
+    Point3f pos = new Point3f(node.getPosition());
+    localToVworld.transform(pos);
+
+    // get eye position
+    Point3d d = new Point3d();
+    c.getCenterEyeInImagePlate(d);
+    imagePlateToVworld.transform(d);
+    Point3f eyePos = new Point3f(d);
+
+    // get mouse position
+    c.getPixelLocationInImagePlate(x,y,d);
+    imagePlateToVworld.transform(d);
+    Point3f mousePos = new Point3f(d);
+
+    // calculate vector from eye to canvas
+    Vector3f eyeToCanvas = new Vector3f();
+    eyeToCanvas.sub(mousePos,eyePos);
+
+    // the target position will be at a point in the same plane parallel to
+    // the view plate.  Calculate the scale factor for eye to canvas in order
+    // to place the node from the known z values.
+    float t = (pos.z - mousePos.z) / eyeToCanvas.z;
+
+    pos.scale(t,eyeToCanvas);
+    pos.add(mousePos);
+
+    // If this method turns out to be too slow we could easily speed it up
+    // by calculating the transforms in advance.
+
+    // move the node
+    localToVworld.invert();
+    localToVworld.transform(pos);
+    node.setPosition(pos);
   }
   private Node node;
 }
