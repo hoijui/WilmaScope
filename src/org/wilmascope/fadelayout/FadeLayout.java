@@ -21,6 +21,7 @@ import org.wilmascope.graph.LayoutEngine;
 import org.wilmascope.graph.Node;
 import org.wilmascope.graph.NodeLayout;
 import org.wilmascope.graph.NodeList;
+import org.wilmascope.viewplugin.TaperedEdgeView;
 
 /**
  * @author cmurray
@@ -95,6 +96,12 @@ public class FadeLayout implements LayoutEngine {
 			    	Edge currentEdge = edges.nextEdge();
 			    	FadeEdgeLayout edgeLayout = (FadeEdgeLayout)currentEdge.getLayout();
 			    	float resilience = VariableForces.edgeResilience;
+			    	
+			    	if (currentEdge.getView() instanceof TaperedEdgeView)
+			    	{
+			    		resilience *= 1000f;
+			    	}
+			    	
 			    	float idealLength = edgeLayout.idealLength;
 			    	
 			    	Node start = currentEdge.getStart();
