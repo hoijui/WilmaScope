@@ -519,7 +519,6 @@ dimension (the {\em z}-axis) is used to capture changes in the graph over time.
 That is, the nodes are rendered as tubes and the edges may appear at different
 levels in the {\em z} dimension.
 
-\subsection{User Interfaces}
 \subsection{Programming Interfaces}
 \label{API}
 
@@ -645,11 +644,25 @@ The clusters are defined over similarity between pages; also note the set of
 \end{center}
 \end{figure}
 
-\begin{itemize}
-\item pretty pictures
-\item applications
-\item self-congratulatory monologues
-\end{itemize}
+\subsubsection{Concept Maps}
+
+A common application of automated graph drawing systems is to visualise
+``concept map'' graphs, in which nodes represent ideas and edges, the
+concections between them.  These models can be useful for recognising
+the important concepts which lie at the heart of expansive ontological
+frameworks, and for explaining these structures quickly.
+
+Wilma's extensive range of features allows it to produce concept maps
+effortlessly, and with a number of visual enhancements over simple
+embeddings.  One example of this is shown in Figure~\ref{fig-concept}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{figures/concepts2.eps} \\
+\caption{{\sc Example of a WilmaScope Concept Map}}
+\label{fig-concept}
+\end{center}
+\end{figure}
 
 \section{Conclusions}
 \label{sec:conclusions}
@@ -667,20 +680,18 @@ experimentation, domain-dependent extensions, and successive layers of
 functionality-transparency for users.
 
 Finally, WilmaScope is released under a free software license --- the Lesser
-GNU General Public License, or LGPL
-(\url{http://www.gnu.org/copyleft/lesser.html}), which maximises benefits for
-the user community, guarantees an open development ecology and thus encourage
-creative hacking all round.
+GNU General Public License (\url{http://www.gnu.org/copyleft/lesser.html}),
+which maximises benefits for the user community, guarantees an open
+development ecology and thus encourage creative hacking all round.
+
+Although WilmaScope is a mature and featureful package, there are no doubt a
+few interesting bugs still to be discovered by enthusiastic users; and, since
+research in 3D graph drawing tecniques is ongoing, we hope that Wilma can
+grow and evolve with the field.  
 
 \paragraph{}
 
-See you at \url{www.wilmascope.org}!
-
-\begin{itemize}
-\item megalomaniacal rants
-\item further work
-\item witty closing line
-\end{itemize}
+So --- see you at \url{www.wilmascope.org}!
 
 %\begin{thebibliography}{7}
 %%
