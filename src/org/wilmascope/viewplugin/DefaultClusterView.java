@@ -20,11 +20,9 @@
 
 package org.wilmascope.viewplugin;
 
-import org.wilmascope.view.*;
-
-import javax.media.j3d.*;
-import javax.vecmath.*;
-import com.sun.j3d.utils.geometry.Sphere;
+import org.wilmascope.view.ClusterView;
+import org.wilmascope.view.Colours;
+import org.wilmascope.view.LODSphere;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular Wilma graph drawing engine
