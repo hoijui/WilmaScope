@@ -244,7 +244,21 @@ of the system described further in \ref{sec:3duml}.
 \end{figure}
 
 \subsection{User Interface Design}
-\ref{fig-controls}
+A screenshot of the main Wilma window, with labels describing the main
+features is shown in Figure \ref{fig-controls}.
+The majority of the space in this window is given over to the 3D
+canvas in which the graph structure is visualised.  Users may ``fly''
+through the virtual space rendered on this canvas by dragging with the
+various mouse buttons.  The possible mouse navigation actions (rotate,
+zoom and translate) are
+shown in the reminder panel at the bottom of the window.
+
+The user may also navigate through the cluster hierarchy through this
+window.  Clusters are generally shown as transparent spheres or other 
+
+Wilma was conceived as an interactive graph editor and therefore there
+are a range of basic actions which a user may perform in editing the
+graph structure.
 \begin{figure}[h]
   \centering
     \label{fig-controls}
@@ -333,6 +347,27 @@ The gravitational force then balances the inter-cluster forces.  This
 achieves a net result similar to the ``dummy node'' approach of Huang
 and Eades\cite{Huang:GD98} however repulsive forces do not need to be
 calculated between nodes inside different clusters.
+
+A novel extension that has been added to our force directed layout
+engine is the ability for the contents of clusters to be constrained
+to a plane.  The orientation of this plane is then able to rotate in
+order to help minimise the spring force of inter cluster edges.  This
+is illustrated in Figure \ref{fig-spincluster}.  By restricting the
+contents of clusters to planes, but then allowing the clusters
+themselves to be arranged in 3-Dimensions allows certain types of
+clustered
+graphs to be more clearly displayed.  For example a graph which is not
+c-planar\cite{Eades:GD96} but which has planar clusters may be best
+shown in this way to show planarity where possible but to avoid
+intersecting edges.
+\begin{figure}[h]
+  \centering
+    \includegraphics[width=0.8\textwidth]{figures/enterprise.eps}
+  \caption{A screenshot showing a clustered graph with planar
+  clusters.  The clusters are rotated to minimise the lengths of the
+  edges between clusters.}
+  \label{fig-spincluster}
+\end{figure}
 
 \subsubsection{Fast Simulated Annealing}
 
@@ -423,7 +458,7 @@ has been embedded.
 The multilevel force-directed algorithm also addresses the $O(n^2)$ cost of
 the calculating the repulsion force (see Equation~\ref{repulsion}).  As with
 the fast simulated annealing strategy, this involves storing information about
-the replusion in a spatial data structure, although the details are different.
+the repulsion in a spatial data structure, although the details are different.
 
 Instead of trying to approximate the potential field of the force, the
 spatial structure simply allows nodes to be addressed by their locality.  A
@@ -503,6 +538,9 @@ writing additional code.
 
 \section{Results: The Importance of being Wilma}
 \label{sec:results}
+Wilma was designed to be as open and extensible as possible and
+evidence for the success of this design is shown in the array of
+domains to which Wilma has been applied.
 
 \subsection{Applications}
 \subsubsection{3D UML Visualisation} \label{sec:3duml}
