@@ -117,7 +117,6 @@ public class ColumnCluster {
     public GraphControl.NodeFacade addNode(float value) {
         float topRadius = initTopRadius * value/initValue;
         topNode = layout.addNode(topRadius);
-        ((ColumnClusterView)column.getCluster().getView()).setPositionRef(topNode.getPosition());
         lastTopRadius = topRadius;
         lastTopNode = topNode;
         lastValue = value;
