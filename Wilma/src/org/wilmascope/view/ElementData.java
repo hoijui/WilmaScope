@@ -1,5 +1,5 @@
 package org.wilmascope.view;
-import javax.swing.JMenuItem;
+import java.awt.event.ActionListener;
 /**
  * Title:
  * Description:
@@ -13,11 +13,18 @@ public class ElementData {
 
   public ElementData() {
   }
-  public JMenuItem getMenuItem() {
-    return menuItem;
+  public ActionListener getActionListener() {
+    return actionListener;
   }
-  public void setMenuItem(JMenuItem menuItem) {
-    this.menuItem = menuItem;
+  public void setActionListener(ActionListener actionListener) {
+    this.actionListener = actionListener;
   }
-  private JMenuItem menuItem;
+  public void setActionDescription(String description) {
+    this.actionDescription = description;
+  }
+  public String getActionDescription() {
+    return actionDescription;
+  }
+  private String actionDescription = "No Action Available";
+  private ActionListener actionListener;
 }

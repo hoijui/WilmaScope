@@ -13,13 +13,12 @@ import org.wilmascope.view.ElementData;
 public class DefaultNodeData extends ElementData {
   public DefaultNodeData() {
     javax.swing.JMenuItem menuItem = new javax.swing.JMenuItem();
-    menuItem.setText("Show Details...");
-    menuItem.addActionListener(new java.awt.event.ActionListener() {
+    setActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent e) {
         menuItemActionPerformed();
       }
     });
-    setMenuItem(menuItem);
+    setActionDescription("Show Details...");
   }
   public void menuItemActionPerformed() {
     DetailFrame details = new DetailFrame(this, "text/html",text);

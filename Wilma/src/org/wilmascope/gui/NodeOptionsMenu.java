@@ -47,16 +47,22 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     this.rootCluster = rootCluster;
     this.controlPanel = controlPanel;
   }
+  ActionListener customListener = null;
   public void callback(java.awt.event.MouseEvent e, GraphControl.GraphElementFacade node) {
     this.node = (GraphControl.NodeFacade)node;
-    JMenuItem detailsMenuItem;
     Object userData;
+    detailsMenuItem.setEnabled(false);
+    detailsMenuItem.setText("Show Details...");
     if((userData = node.getUserData()) != null && userData instanceof ElementData) {
-      detailsMenuItem = ((ElementData)userData).getMenuItem();
-      remove(this.detailsMenuItem);
-      add(detailsMenuItem);
-      this.detailsMenuItem = detailsMenuItem;
-      //pack();
+      if(customListener != null ) {
+        detailsMenuItem.removeActionListener(customListener);
+      }
+      customListener = ((ElementData)userData).getActionListener();
+      if(customListener != null) {
+        detailsMenuItem.addActionListener(customListener);
+        detailsMenuItem.setEnabled(true);
+        detailsMenuItem.setText(((ElementData)userData).getActionDescription());
+      }
     }
     fixedCheckBoxMenuItem.setSelected(this.node.isFixedPosition());
     show(parent, e.getX(), e.getY());
