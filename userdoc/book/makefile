@@ -2,7 +2,7 @@ wilma.ps: wilma.dvi
 	dvips wilma.dvi -o wilma.ps
 	gv wilma.ps &
 
-wilma.dvi: wilma.tex
+wilma.dvi: wilma.tex refs.bib
 	latex wilma || (bibtex wilma && /bin/false) # make sure bibtex is always run
 	bibtex wilma
 	latex wilma

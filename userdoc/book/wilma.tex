@@ -31,6 +31,7 @@
 \newcommand{\eulerbold}[1]{{\usefont{U}{eur}{b}{n}#1}}
 \newcommand{\umu}{\mbox{\euler{\char22}}}
 \newcommand{\umub}{\mbox{\eulerbold{\char22}}}
+\newcommand{\url}[1]{{\small{\tt #1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -115,20 +116,45 @@ conducted elegantly and efficiently.
 \paragraph{}
 
 Force-directed layout algorithms are of course the method of choice for a
-wide range of graph visualisation problems.  One variantion on these
+wide range of graph visualisation problems.  One variation on these
 algorithms, advocated by Fruchtermann \&
-Kawai~\cite{fruchtermann90force-directed}, and Davidson {\em et.
+Rheingold~\cite{fruchtermann90force-directed} and Davidson {\em et.
 al.}~\cite{davidson01noise}, attempts to avoid calculation of repulsion force
-vectors, which is $O(n^2)$ in the number of verticies.  Instead, it is
-possible to approximate scalar energy potential values, caching this
-information at grid points across space.
+vectors, which is $O(n^2)$ in the number of verticies:  
+
+\begin{equation}
+\vec{R}_i \equiv \sum_{j \in G, j \neq i} \vec{r}_{i,j}
+\end{equation}
+
+\noindent Where $\vec{r}_{i,j} = \vec{r}_i - \vec{r}_j$ is the displacement
+of node $i$ relative to $j$.
 
 \paragraph{}
 
-Iterated updates to the potential well then cost only $O(|V|)$ time per
-iteration.  On the downside, the cache array itself takes $O(v \centerdot d)$
-memory, where $v$ is the spatial volume of the embedded graph and $d$ is the
-density of stored potential information.
+To avoid this expense, it is possible to approximate scalar energy potential
+values, caching this information at grid points across space.  Iterated
+updates to the potential well then cost only $O(|V|)$ time per iteration.  On
+the downside, the cache array itself takes $O(v \centerdot d)$ memory, where
+$v$ is the spatial volume of the embedded graph and $d$ is the density of
+stored potential information.
+
+\paragraph{}
+
+Cowling~\cite{cowling02fast} has implemented a fast layout engine for
+WilmaScope which employs simulated annealing with potential energy caching
+to achieve linear-time graph embeddings.  Cowling was able to demonstrate
+that the algorithms of \cite{davidson01noise} do appear to achieve linear
+time results, but that when the grid side $v \centerdot d$ must be adjusted to
+prevent folding in large graphs, space and time complexity are
+no longer linear.
+
+\paragraph{}
+
+Cowling's work serves to demonstrate the utility of Wilma as a platform; with
+the WilmaScope rendering and navigation system, and the availability of
+convenient data structures for input and dataset management, algorithmic
+experiments can be performed at optimal speeds.
+
 
 \paragraph{}
 
