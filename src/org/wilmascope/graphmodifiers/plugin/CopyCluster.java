@@ -20,13 +20,19 @@
 package org.wilmascope.graphmodifiers.plugin;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
+import javax.swing.Box;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.wilmascope.control.GraphControl.Cluster;
 import org.wilmascope.control.GraphControl.Edge;
 import org.wilmascope.control.GraphControl.Node;
+import org.wilmascope.forcelayout.ForceLayout;
 import org.wilmascope.graphmodifiers.GraphModifier;
+import org.wilmascope.gui.SpinnerSlider;
 
 /**
  * Copy the specified cluster and add the copy/ies to the cluster's owner
@@ -34,42 +40,75 @@ import org.wilmascope.graphmodifiers.GraphModifier;
  * @author dwyer
  */
 public class CopyCluster extends GraphModifier {
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.wilmascope.util.Plugin#getName()
-   */
-  public String getName() {
-    return "Copy Cluster";
-  }
+/*
+ * (non-Javadoc)
+ * 
+ * @see org.wilmascope.util.Plugin#getName()
+ */
+	int copyCount = 1;
+	
+	public CopyCluster(){
+		//User Interface
+		final SpinnerSlider numberSlider = new SpinnerSlider("Number of copies", 1,
+				10, copyCount);
+		numberSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				copyCount = numberSlider.getValue();
+			}
+		});
+		controlPanel.add(numberSlider);  	
+	}
+	
+   public String getName() {
+		return "Copy Cluster";
+	}
 
   /*
    * @see org.wilmascope.graphmodifiers.GraphModifier#modify(org.wilmascope.graph.Cluster)
    */
-  public void modify(Cluster cluster) {
-    Cluster root = null;
-    if (cluster.getCluster().getOwner() == null) {
-      root = cluster;
-    } else {
-      root = (Cluster) cluster.getCluster().getOwner().getUserData("Facade");
-    }
-    Hashtable<Node, Node> mapping = new Hashtable<Node, Node>();
-    for (Node n : cluster.getNodes()) {
-      mapping.put(n, root.addNode());
-    }
-    for (Edge e : cluster.getEdges()) {
-      root.addEdge(mapping.get(e.getEdge().getStart().getUserData("Facade")), mapping
-          .get(e.getEdge().getEnd().getUserData("Facade")));
-    }
-    cluster.unfreeze();
-  }
-
-  /**
-   * @see org.wilmascope.util.Plugin#getControls()
-   */
-  public JPanel getControls() {
-    return new JPanel();
-  }
-
+   JPanel controlPanel = new JPanel();
+   
+   public void modify(Cluster cluster) {
+   	Cluster root = null;
+   	Cluster c1 = null;
+   	Hashtable<Node, Node> mapping = new Hashtable<Node, Node>();
+   	if (cluster.getCluster().getOwner() == null) {
+   		root = cluster;
+   		Vector<Node> nodes = new Vector<Node>();
+   		for (Node n : cluster.getNodes()) {
+   			nodes.add(n);
+   		}
+   		c1 = root.addCluster(nodes);
+   	} else {
+   		root = (Cluster)cluster.getCluster().getOwner().getUserData("Facade");
+   		c1 = cluster;
+   	}
+   	for (int i=1;i<=copyCount;i++){
+   		Cluster c2 = root.addCluster();
+   		for (Node n : c1.getNodes()) {
+   			mapping.put(n, c2.addNode());
+   		}
+   		
+   		for (Edge e : c1.getEdges()) {
+   			Node a = (Node)e.getEdge().getStart().getUserData("Facade");
+   			Node b = (Node)e.getEdge().getEnd().getUserData("Facade");
+   			c2.addEdge(mapping.get(a), mapping.get(b));
+   		}
+   		
+   		c1.setLayoutEngine(ForceLayout
+   				.createDefaultClusterForceLayout(c1.getCluster()));
+   		c1.unfreeze();
+   		c2.setLayoutEngine(ForceLayout
+   				.createDefaultClusterForceLayout(c2.getCluster()));
+   		c2.unfreeze();
+   	}
+   }
+   /**
+    * @see org.wilmascope.util.Plugin#getControls()
+    */
+   public JPanel getControls() {
+   	return controlPanel;
+   }
+   
+   
 }
