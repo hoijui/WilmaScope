@@ -34,8 +34,7 @@ package org.wilmascope.view;
  *  
  */
 import java.awt.Dimension;
-import java.awt.GraphicsConfiguration;
-import java.awt.image.BufferedImage;
+
 import javax.media.j3d.Alpha;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Background;
@@ -45,8 +44,6 @@ import javax.media.j3d.Bounds;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.ExponentialFog;
-import javax.media.j3d.ImageComponent;
-import javax.media.j3d.ImageComponent2D;
 import javax.media.j3d.PhysicalBody;
 import javax.media.j3d.Screen3D;
 import javax.media.j3d.Transform3D;
@@ -56,9 +53,11 @@ import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
+
 import org.wilmascope.centernode.CenterNode;
 import org.wilmascope.light.LightManager;
 import org.wilmascope.rotation.RotationBehavior;
+
 import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
 import com.sun.j3d.utils.behaviors.mouse.MouseTranslate;
 import com.sun.j3d.utils.behaviors.mouse.MouseZoom;

@@ -64,14 +64,6 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
     updateUI();
   }
   public EdgeOptionsMenu() {
-    try {
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-  private void jbInit() throws Exception {
     deleteMenuItem.setText("Delete");
     deleteMenuItem.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -165,7 +157,7 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
       try {
         edgeTypeMenuItem.setIcon(reg.getIcon(name));
       } catch(ViewManager.UnknownViewTypeException ex){
-        ex.printStackTrace();
+        WilmaMain.showErrorDialog("Unknown View Type",ex);
       }
       edgeTypeMenuItem.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -173,7 +165,7 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
           try {
             edge.setView(ViewManager.getInstance().createEdgeView(name));
           } catch (ViewManager.UnknownViewTypeException ex) {
-            ex.printStackTrace();
+            WilmaMain.showErrorDialog("Unknown View Type",ex);
           }
         }
       });

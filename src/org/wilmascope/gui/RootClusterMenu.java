@@ -52,14 +52,6 @@ public class RootClusterMenu extends JPopupMenu implements PickingClient {
   JMenuItem adjustForcesMenuItem = new JMenuItem();
 
   public RootClusterMenu() {
-    try {
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-  private void jbInit() throws Exception {
     addNodeMenuItem.setText("Add Node");
     addNodeMenuItem.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {

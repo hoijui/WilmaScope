@@ -36,6 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 
+import org.wilmascope.control.WilmaMain;
 import org.wilmascope.patterns.Prototype;
 import org.wilmascope.view.ViewManager;
 public class DropDownButtonPanel extends JPanel {
@@ -83,7 +84,7 @@ public class DropDownButtonPanel extends JPanel {
       try {
         typeMenuItem.setIcon(reg.getIcon(name));
       } catch(ViewManager.UnknownViewTypeException ex){
-        ex.printStackTrace();
+        WilmaMain.showErrorDialog("Unknown View Type",ex);
       }
       typeMenuItem.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -92,7 +93,7 @@ public class DropDownButtonPanel extends JPanel {
             reg.setDefaultView(name);
             actionButton.setIcon(reg.getIcon());
           } catch (ViewManager.UnknownViewTypeException ex) {
-            ex.printStackTrace();
+            WilmaMain.showErrorDialog("Unknown View Type",ex);
           }
         }
       });

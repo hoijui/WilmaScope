@@ -30,6 +30,8 @@ import javax.swing.event.MenuEvent;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.OptionsClient;
+import org.wilmascope.control.WilmaMain;
+import org.wilmascope.gmlparser.ParseException;
 import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.EdgeList;
 import org.wilmascope.graph.Node;
@@ -68,13 +70,6 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 		updateUI();
 	}
 	public ClusterOptionsMenu() {
-		try {
-			jbInit();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	private void jbInit() throws Exception {
 		deleteMenuItem.setText("Delete");
 		deleteMenuItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -193,8 +188,8 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 					try {
 						cluster.setView(ViewManager.getInstance().createNodeView(name));
 					} catch (ViewManager.UnknownViewTypeException ex) {
-						ex.printStackTrace();
-					}
+            WilmaMain.showErrorDialog("Unknown View Type!",ex);
+          } 
 				}
 			});
 			clusterTypeMenu.add(clusterTypeMenuItem);

@@ -24,6 +24,7 @@ import java.util.Vector;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.PickListener;
+import org.wilmascope.forcelayout.ForceLayout;
 public class ClusterPanel extends MultiPickPanel {
 
   public ClusterPanel(ControlPanel controlPanel, GraphControl.ClusterFacade cluster) {
@@ -41,13 +42,7 @@ public class ClusterPanel extends MultiPickPanel {
       nodes.add(element);
     }
     GraphControl.ClusterFacade newCluster = cluster.addCluster(nodes);
-    try {
-      newCluster.addForce("Repulsion");
-      newCluster.addForce("Spring");
-      newCluster.addForce("Origin").setStrength(10f);
-    } catch(Exception fe) {
-      System.out.println("Couldn't add forces to graph root from WilmaMain, reason: "+fe.getMessage());
-    }
+    newCluster.setLayoutEngine(ForceLayout.createDefaultClusterForceLayout(newCluster.getCluster()));
     cluster.unfreeze();
     cleanup();
   }

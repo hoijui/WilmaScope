@@ -19,15 +19,16 @@
  */
 
 package org.wilmascope.view;
-import javax.media.j3d.*;
+import javax.media.j3d.Appearance;
+import javax.media.j3d.BoundingSphere;
+import javax.media.j3d.DistanceLOD;
+import javax.media.j3d.Switch;
+import javax.media.j3d.TransformGroup;
 import javax.vecmath.Point3d;
+
 import com.sun.j3d.utils.geometry.Sphere;
-import org.wilmascope.view.GraphElementView;
 /**
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular Wilma graph drawing engine
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaOrg
+ * Uses DistanceLOD to define spheres at various levels of detail.  Number of faces that appear depends on distance from viewer.
  * @author Tim Dwyer
  * @version 1.0
  */

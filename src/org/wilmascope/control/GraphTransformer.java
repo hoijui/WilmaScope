@@ -5,11 +5,9 @@ import javax.vecmath.Vector3f;
 import java.util.*;
 
 /**
- * Title:
- * Description:
- * Copyright:    Copyright (c) 2001
- * Company:
- * @author
+ * Methods for restructuring a graph.
+ * At the moment this class just provides a simple kMeans clustering algorithm. 
+ * @author dwyer
  * @version 1.0
  */
 

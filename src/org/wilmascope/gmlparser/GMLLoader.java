@@ -15,6 +15,7 @@ import java.util.Vector;
 import org.wilmascope.columnlayout.ColumnCluster;
 import org.wilmascope.columnlayout.NodeColumnLayout;
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.control.WilmaMain;
 import org.wilmascope.global.GlobalConstants;
 
 /**
@@ -151,9 +152,9 @@ public class GMLLoader {
 			r.setUserData(strataNames);
 			r.unfreeze();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
+      WilmaMain.showErrorDialog("File Not Found",e);
+    } catch (ParseException e) {
+      WilmaMain.showErrorDialog("Parse Error",e);
 		}
 	}
 }

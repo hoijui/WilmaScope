@@ -45,8 +45,8 @@ public abstract class AbstractConstants
 
   public AbstractConstants(Properties defaultProperties, ResourceBundle bundle) {
     super(defaultProperties);
-    for (Enumeration enum = bundle.getKeys(); enum.hasMoreElements(); ) {
-      String key = (String) enum.nextElement();
+    for (Enumeration e = bundle.getKeys(); e.hasMoreElements(); ) {
+      String key = (String) e.nextElement();
       String defaultValue = defaultProperties.getProperty(key);
       String overrideValue = bundle.getString(key);
       if (defaultValue == null || !defaultValue.equals(overrideValue)) {

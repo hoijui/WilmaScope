@@ -44,14 +44,6 @@ public class ControlPanel extends JPanel {
   BorderLayout borderLayout2 = new BorderLayout();
 
   public ControlPanel() {
-    try {
-      jbInit();
-    }
-    catch(Exception ex) {
-      ex.printStackTrace();
-    }
-  }
-  void jbInit() throws Exception {
     this.setLayout(borderLayout1);
     setMessage();
     zoomLabel.setText("Zoom");

@@ -8,14 +8,9 @@ import org.wilmascope.graph.Node;
 import javax.swing.ImageIcon;
 
 /**
- * <p>Description: </p>
- * <p>$Id$ </p>
- * <p>@author </p>
- * <p>@version $Revision$</p>
- *  unascribed
+ * Use with LineEdge... the node itself is invisible but this node type ensures that the line edge colours are set according to the node colour
  *
  */
-
 public class LineNodeView extends NodeView {
 
   public LineNodeView() {

@@ -45,7 +45,7 @@ import com.sun.j3d.utils.geometry.GeometryInfo;
 import com.sun.j3d.utils.geometry.NormalGenerator;
 
 /**
- * Graphical representation of the edge
+ * An attenuated edge is tube that's fat at the ends and thin in the middle.  If my sloppy calculations are correct then the radius should match the radius of spherical nodes at either end.  Colour should also be graded from the start node colour to end node colour.
  *
  * @author Tim Dwyer
  * @version 1.0

@@ -6,10 +6,8 @@ import javax.vecmath.*;
 import javax.swing.ImageIcon;
 import com.sun.j3d.utils.geometry.Box;
 /**
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular Wilma graph drawing engine
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaOrg
+ * Box shaped cluster
+ * 
  * @author Tim Dwyer
  * @version 1.0
  */

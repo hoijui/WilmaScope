@@ -27,14 +27,10 @@ import javax.vecmath.*;
 import javax.swing.ImageIcon;
 import com.sun.j3d.utils.geometry.Sphere;
 /**
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular Wilma graph drawing engine
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaOrg
+ * Only the label is shown as a banner
  * @author Tim Dwyer
  * @version 1.0
  */
-
 public class LabelNodeView extends NodeView {
   public LabelNodeView() {
     setTypeName("LabelOnly");

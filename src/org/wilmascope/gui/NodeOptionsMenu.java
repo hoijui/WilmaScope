@@ -74,14 +74,6 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
   JMenuItem detailsMenuItem = new JMenuItem();
 
   public NodeOptionsMenu() {
-    try {
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-  private void jbInit() throws Exception {
     addEdgeMenuItem.setText("Add Edge...");
     addEdgeMenuItem.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {

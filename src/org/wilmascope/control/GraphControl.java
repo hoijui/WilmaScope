@@ -20,23 +20,18 @@ package org.wilmascope.control;
 
 import java.util.Iterator;
 import java.util.Vector;
+
 import javax.media.j3d.TransparencyAttributes;
 
 import org.wilmascope.degreelayout.DegreeLayout;
 import org.wilmascope.fadelayout.FadeLayout;
 import org.wilmascope.fadelayout.FadeNodeLayout;
-import org.wilmascope.highdimensionlayout.HighDimensionLayout;
 import org.wilmascope.fastlayout.FastLayout;
 import org.wilmascope.forcelayout.BalancedEventClient;
-import org.wilmascope.forcelayout.DirectedField;
 import org.wilmascope.forcelayout.EdgeForceLayout;
 import org.wilmascope.forcelayout.Force;
 import org.wilmascope.forcelayout.ForceLayout;
-import org.wilmascope.forcelayout.ForceManager;
 import org.wilmascope.forcelayout.NodeForceLayout;
-import org.wilmascope.forcelayout.Origin;
-import org.wilmascope.forcelayout.Repulsion;
-import org.wilmascope.forcelayout.Spring;
 import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.Edge;
 import org.wilmascope.graph.EdgeList;
@@ -56,7 +51,6 @@ import org.wilmascope.view.GraphElementView;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.PickingClient;
 import org.wilmascope.view.ViewManager;
-import java.io.*;
 
 /*
  * Title:        WilmaToo
@@ -505,12 +499,12 @@ public class GraphControl {
       this(gc, new Cluster(view));
       initView(view);
       this.gc = gc;
+      String layout = "Force Directed";
       try {
-        cluster.setLayoutEngine(layoutManager.createLayout("Force Directed"));
+        cluster.setLayoutEngine(layoutManager.createLayout(layout));
       }
       catch (UnknownLayoutTypeException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+        WilmaMain.showErrorDialog("Couldn't create '"+layout+"' layout engine",e);
       }
       show();
     }
@@ -522,35 +516,6 @@ public class GraphControl {
 
     ClusterFacade(GraphControl gc) throws ViewManager.UnknownViewTypeException {
       this(gc, ViewManager.getInstance().createClusterView());
-    }
-
-    /**
-     * deprecated use ((ForceLayout)getLayoutEngine).addForce() instead
-     */
-    public ForceFacade addForce(String name) throws ForceManager.
-        UnknownForceTypeException {
-      synchronized (gc) {
-        ForceLayout layout = (ForceLayout) cluster.getLayoutEngine();
-        Force f = forceManager.createForce(name);
-        layout.addForce(f);
-        ForceFacade forceFacade = new ForceFacade(f);
-        return forceFacade;
-      }
-    }
-
-    public ForceFacade[] getForces() {
-      Vector forces = new Vector();
-      ForceLayout layout = (ForceLayout) cluster.getLayoutEngine();
-      Vector fs = layout.getForces();
-      for (int i = 0; i < fs.size(); i++) {
-        forces.add(new ForceFacade( (Force) fs.get(i)));
-      }
-      return (ForceFacade[]) forces.toArray(new ForceFacade[0]);
-    }
-
-    public void removeAllForces() {
-      ForceLayout layout = (ForceLayout) cluster.getLayoutEngine();
-      layout.removeAllForces();
     }
 
     /**
@@ -607,7 +572,7 @@ public class GraphControl {
           return addNode(ViewManager.getInstance().createNodeView());
         }
         catch (ViewManager.UnknownViewTypeException ex) {
-          ex.printStackTrace();
+          WilmaMain.showErrorDialog("Couldn't get default Node View!",ex);
           return null;
         }
       }
@@ -619,7 +584,7 @@ public class GraphControl {
           return addNode(ViewManager.getInstance().createNodeView(nodeType));
         }
         catch (ViewManager.UnknownViewTypeException ex) {
-          ex.printStackTrace();
+          WilmaMain.showErrorDialog("Couldn't get default Node View!",ex);
           return null;
         }
       }
@@ -682,7 +647,7 @@ public class GraphControl {
           return addEdge(start, end, view);
         }
         catch (ViewManager.UnknownViewTypeException ex) {
-          ex.printStackTrace();
+          WilmaMain.showErrorDialog("No view type specified",ex);
           return null;
         }
       }
@@ -700,10 +665,10 @@ public class GraphControl {
           return addEdge(start, end, view);
         }
         catch (ViewManager.UnknownViewTypeException ex) {
-          System.out.println(
+          WilmaMain.showErrorDialog(
               "Warning: view type: "
               + edgeType
-              + " unknown, edge will be invisible.");
+              + " unknown, edge will be invisible.",ex);
           return addEdge(start, end, (EdgeView)null);
         }
       }
@@ -722,7 +687,7 @@ public class GraphControl {
           return addEdge(start, end, view);
         }
         catch (ViewManager.UnknownViewTypeException ex) {
-          ex.printStackTrace();
+          WilmaMain.showErrorDialog("Couldn't get default view",ex);
           return null;
         }
       }
@@ -739,7 +704,10 @@ public class GraphControl {
           return c;
         }
         catch (ViewManager.UnknownViewTypeException e) {
-          throw new Error("No default ClusterView type set!??!?!");
+          String msg = "No default ClusterView type set!??!?!";
+          WilmaMain.showErrorDialog(msg,e);
+          // that's all folks!
+          throw new Error(msg);
         }
       }
     }
@@ -926,21 +894,24 @@ public class GraphControl {
       return edgeFacades;
     }
 
-    public void setBalancedThreshold(float threshold) {
-      ( (ForceLayout) cluster.getLayoutEngine()).setBalancedThreshold(threshold);
-      balancedThreshold = threshold;
-    }
-
-    public float getBalancedThreshold() {
-      return ( (ForceLayout) cluster.getLayoutEngine()).getBalancedThreshold();
-    }
-
+    /**
+     * halts layout for this cluster
+     */
     public void freeze() {
       gc.freeze();
     }
 
+    /**
+     * Triggers the layout engine for this cluster and it's children
+     */
     public void unfreeze() {
       gc.unfreeze();
+    }
+    /**
+     * Cause this cluster and it's children to be redrawn
+     */
+    public void draw() {
+      getCluster().draw();
     }
 
     private Cluster cluster;
@@ -986,7 +957,6 @@ public class GraphControl {
 
   public GraphControl(int xsize, int ysize) {
     viewManager = ViewManager.getInstance();
-    forceManager = ForceManager.getInstance();
     layoutManager = LayoutManager.getInstance();
     layoutManager.addPrototypeLayout(new ForceLayout());
     layoutManager.addPrototypeLayout(new MultiScaleLayout());
@@ -1015,23 +985,18 @@ public class GraphControl {
       viewManager.getClusterViewRegistry().setDefaultView("Spherical Cluster");
     }
     catch (ViewManager.UnknownViewTypeException e) {
-      e.printStackTrace();
-      System.out.println("Fatal Error, stopping.");
+      WilmaMain.showErrorDialog("Unknown ViewType!  Fatal Error, stopping.",e);
       System.exit(1);
     }
-    forceManager.addPrototypeForce(new Repulsion(1.2f, 20f));
-    forceManager.addPrototypeForce(new Spring(5f));
-    forceManager.addPrototypeForce(new Origin(8f));
-    forceManager.addPrototypeForce(new DirectedField(1f));
     graphCanvas = new GraphCanvas(xsize, ysize);
     try {
       setRootCluster(new ClusterFacade(this));
     }
     catch (ViewManager.UnknownViewTypeException ex) {
-      ex.printStackTrace();
+      WilmaMain.showErrorDialog("Unknown ViewType!",ex);
       throw new Error();
     }
-    balancedThreshold = rootCluster.getBalancedThreshold();
+    balancedThreshold = ((ForceLayout)rootCluster.getLayoutEngine()).getBalancedThreshold();
 
     graphBehavior =
         (GraphBehavior) graphCanvas.addPerFrameBehavior(new BehaviorClient() {
@@ -1099,7 +1064,6 @@ public class GraphControl {
   private ClusterFacade rootCluster;
   private GraphCanvas graphCanvas;
   private ViewManager viewManager;
-  private ForceManager forceManager;
 
   // The constants
   private static org.wilmascope.global.GlobalConstants constants =
@@ -1116,11 +1080,4 @@ public class GraphControl {
   static PickListener pickListener = new PickListener();
   private GraphBehavior graphBehavior;
   private LayoutManager layoutManager;
-
-  /**
-   * @return
-   */
-  public LayoutManager getLayoutManager() {
-    return layoutManager;
-  }
 }

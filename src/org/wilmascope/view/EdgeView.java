@@ -34,10 +34,8 @@ import javax.vecmath.Vector3f;
 import org.wilmascope.graph.Edge;
 
 /*
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular WilmaScope software
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaScope.org
+ * Any EdgeView plugin must extend this class
+ * 
  * @author Tim Dwyer
  * @version 1.0
  */

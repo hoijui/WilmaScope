@@ -20,10 +20,14 @@
 package org.wilmascope.control;
 import java.awt.BorderLayout;
 import java.io.File;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import org.wilmascope.file.*;
+
+import org.wilmascope.file.FileHandler;
+import org.wilmascope.forcelayout.ForceLayout;
 import org.wilmascope.gmlparser.ColumnsImporter;
 import org.wilmascope.gui.Actions;
 import org.wilmascope.gui.ClusterOptionsMenu;
@@ -31,7 +35,6 @@ import org.wilmascope.gui.ControlPanel;
 import org.wilmascope.gui.EdgeOptionsMenu;
 import org.wilmascope.gui.MenuBar;
 import org.wilmascope.gui.NodeOptionsMenu;
-import org.wilmascope.gui.SplashWindow;
 /**
  * 
  * Title: WilmaToo
@@ -75,15 +78,7 @@ public class WilmaMain extends JFrame {
 				new ClusterOptionsMenu(graphCanvas, r, controlPanel));
 		GraphControl.getPickListener().setEdgeOptionsClient(
 				new EdgeOptionsMenu(graphCanvas, r));
-		try {
-			r.addForce("Repulsion").setStrength(1f);
-			r.addForce("Spring").setStrength(5f);
-			r.addForce("Origin").setStrength(1f);
-		} catch (Exception e) {
-			System.out
-					.println("Couldn't add forces to graph root from WilmaMain, reason: "
-							+ e.getMessage());
-		}
+		r.setLayoutEngine(ForceLayout.createDefaultForceLayout(r.getCluster()));
 		r.unfreeze();
 	}
 	public static void main(String argv[]) {
@@ -129,4 +124,18 @@ public class WilmaMain extends JFrame {
 		getRootPane().updateUI();
 		validate();
 	}
+  public static void showDefaultErrorDialog(Exception ex) {
+    ex.printStackTrace();
+    JOptionPane.showMessageDialog(null,
+      "See %WILMA_HOME%/bin/error.log or the console... depending on how you ran Wilma",
+      "An error occurred!",
+      JOptionPane.ERROR_MESSAGE);
+  }
+  public static void showErrorDialog(String msg, Exception ex) {
+    ex.printStackTrace();
+    JOptionPane.showMessageDialog(null,
+      msg+"",
+      "An error occurred!",
+      JOptionPane.ERROR_MESSAGE);
+  }
 }

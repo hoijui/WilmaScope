@@ -112,7 +112,7 @@ public class ViewManager {
   public void loadViews() throws IOException,
       ClassNotFoundException, IllegalAccessException, InstantiationException {
     try {
-    String plugins = ViewConstants.getInstance().getProperty("Plugins");
+    String plugins = ViewConstants.getInstance().getProperty("ViewPlugins");
     List classNames = new ArrayList();
     StringTokenizer st = new StringTokenizer(plugins, ",");
     while (st.hasMoreElements()) {

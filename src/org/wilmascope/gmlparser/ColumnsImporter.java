@@ -1,5 +1,5 @@
 package org.wilmascope.gmlparser;
-import java.awt.LayoutManager;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,16 +18,18 @@ import javax.vecmath.Vector3d;
 import org.wilmascope.columnlayout.ColumnCluster;
 import org.wilmascope.columnlayout.NodeColumnLayout;
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.control.WilmaMain;
 import org.wilmascope.dotlayout.DotLayout;
+import org.wilmascope.global.GlobalConstants;
 import org.wilmascope.graph.Edge;
 import org.wilmascope.graph.EdgeList;
 import org.wilmascope.view.GraphElementView;
-import org.wilmascope.global.GlobalConstants;
+
 /**
  * @author dwyer
- *
- * Imports a set of GML files and compiles them into a stratified graph
- * by matching node IDs.
+ * 
+ * Imports a set of GML files and compiles them into a stratified graph by
+ * matching node IDs.
  */
 class ColumnGraphClient implements GraphClient {
   private static String[] toStringArray(ArrayList l) {
@@ -37,29 +39,36 @@ class ColumnGraphClient implements GraphClient {
     }
     return a;
   }
+
   class TransientColumn {
     ColumnCluster c;
+
     GraphControl.NodeFacade n;
+
     int level;
   }
+
   Hashtable edgeColumns;
+
   Hashtable columns;
+
   Hashtable nodes = new Hashtable();
+
   int level, maxLevel;
+
   GraphControl.ClusterFacade r;
+
   GlobalConstants constants = GlobalConstants.getInstance();
-  public ColumnGraphClient(
-    GraphControl.ClusterFacade root,
-    Hashtable columns,
-    Hashtable edgeColumns,
-    int level,
-    int maxLevel) {
+
+  public ColumnGraphClient(GraphControl.ClusterFacade root, Hashtable columns,
+      Hashtable edgeColumns, int level, int maxLevel) {
     this.columns = columns;
     this.edgeColumns = edgeColumns;
     this.level = level;
     this.maxLevel = maxLevel;
     this.r = root;
   }
+
   public void addNode(String id, String label, float x, float y) {
     try {
       TransientColumn c = (TransientColumn) columns.get(id);
@@ -71,23 +80,11 @@ class ColumnGraphClient implements GraphClient {
       if (c == null) {
         c = new TransientColumn();
         if (box) {
-          c.c =
-            new ColumnCluster(
-              r,
-              10f,
-              10f,
-              level,
-              "Box Column Cluster",
+          c.c = new ColumnCluster(r, 10f, 10f, level, "Box Column Cluster",
               "Box Node");
           c.c.setLabel(new String[] { label });
         } else {
-          c.c =
-            new ColumnCluster(
-              r,
-              50f,
-              radius,
-              level,
-              "Column Cluster",
+          c.c = new ColumnCluster(r, 50f, radius, level, "Column Cluster",
               "Tube Node");
           //constants.getProperty("ImportedColumnClusterStyle"),
           //constants.getProperty("ImportedColumnNodeStyle"));
@@ -138,22 +135,20 @@ class ColumnGraphClient implements GraphClient {
         }
       }
     } catch (Exception e) {
-      System.err.println("Error adding node: id=" + id + " label=" + label);
-      e.printStackTrace();
+      WilmaMain.showErrorDialog("Error adding node: id=" + id + " label="
+          + label, e);
     }
   }
-  public void addEdge(
-    String startID,
-    String endID,
-    String label,
-    String arrowPosition) {
-    TransientColumn c =
-      (TransientColumn) edgeColumns.get(label + "," + startID + "," + endID);
+
+  public void addEdge(String startID, String endID, String label,
+      String arrowPosition) {
+    TransientColumn c = (TransientColumn) edgeColumns.get(label + "," + startID
+        + "," + endID);
 
     if (c == null) {
       c = new TransientColumn();
-      c.c =
-        new ColumnCluster(r, 10f, 10f, level, "Box Column Cluster", "Box Node");
+      c.c = new ColumnCluster(r, 10f, 10f, level, "Box Column Cluster",
+          "Box Node");
       c.c.setLabel(new String[] { label });
       edgeColumns.put(label + "," + startID + "," + endID, c);
       c.level = level - 1;
@@ -163,24 +158,24 @@ class ColumnGraphClient implements GraphClient {
       c.level++;
       if (c.level == level) {
         c.n = c.c.addStraightNode(200f);
-        c.n.setColour(
-          0.8f * (float) level / (float) maxLevel,
-          0.8f * (float) level / (float) maxLevel,
-          1f);
+        c.n.setColour(0.8f * (float) level / (float) maxLevel, 0.8f
+            * (float) level / (float) maxLevel, 1f);
       } else {
         c.c.skipLevel();
       }
     }
-    GraphControl.NodeFacade start =
-      (GraphControl.NodeFacade) nodes.get(startID);
+    GraphControl.NodeFacade start = (GraphControl.NodeFacade) nodes
+        .get(startID);
     GraphControl.NodeFacade end = (GraphControl.NodeFacade) nodes.get(endID);
     GraphControl.EdgeFacade e1 = null;
     GraphControl.EdgeFacade e2 = null;
     float radius = 0.04f;
     String edgeType = "SplineTube";
     if (arrowPosition.equals("both")) {
-      // in the following line start and c.n should be swapped for the arrow to be correct...
-      // however that's not really what we want the layout to look like so until I make a splineTube
+      // in the following line start and c.n should be swapped for the arrow to
+      // be correct...
+      // however that's not really what we want the layout to look like so until
+      // I make a splineTube
       // with the arrow at the wrong end ... somehow... it stays
       e1 = r.addEdge(start, c.n, edgeType, radius);
       e2 = r.addEdge(c.n, end, edgeType, radius);
@@ -191,19 +186,15 @@ class ColumnGraphClient implements GraphClient {
     e1.setColour(0.3f, 0.3f, 0.3f);
     e2.setColour(0.3f, 0.3f, 0.3f);
     /*
-    	0.8f * (float) level / (float) maxLevel,
-    	0.8f * (float) level / (float) maxLevel,
-    	1f);
-    e2.setColour(
-    	0.8f * (float) level / (float) maxLevel,
-    	0.8f * (float) level / (float) maxLevel,
-    	1f);
-      */
+     * 0.8f * (float) level / (float) maxLevel, 0.8f * (float) level / (float)
+     * maxLevel, 1f); e2.setColour( 0.8f * (float) level / (float) maxLevel,
+     * 0.8f * (float) level / (float) maxLevel, 1f);
+     */
   }
 
   public void addEdge(String startID, String endID, String arrowPosition) {
-    GraphControl.NodeFacade start =
-      (GraphControl.NodeFacade) nodes.get(startID);
+    GraphControl.NodeFacade start = (GraphControl.NodeFacade) nodes
+        .get(startID);
     GraphControl.NodeFacade end = (GraphControl.NodeFacade) nodes.get(endID);
     if (start == null) {
       throw new Error("ERROR: couldn't find node: " + startID);
@@ -225,8 +216,10 @@ class ColumnGraphClient implements GraphClient {
   }
 
 }
+
 public class ColumnsImporter {
   static GMLParser parser;
+
   public static void load(GraphControl g, String dirName) {
 
     try {
@@ -238,11 +231,9 @@ public class ColumnsImporter {
         }
       });
       if (files.length == 0) {
-        JOptionPane.showMessageDialog(
-          g.getGraphCanvas().getParent(),
-          "No GML files found in chosen directory",
-          "No Input Files Found Error",
-          JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(g.getGraphCanvas().getParent(),
+            "No GML files found in chosen directory",
+            "No Input Files Found Error", JOptionPane.ERROR_MESSAGE);
         return;
       }
       int level = 0;
@@ -273,12 +264,7 @@ public class ColumnsImporter {
           parser.ReInit(f);
         }
 
-        parser.graph(
-          new ColumnGraphClient(
-            r,
-            columns,
-            edgeColumns,
-            level++,
+        parser.graph(new ColumnGraphClient(r, columns, edgeColumns, level++,
             files.length));
       }
       if (columns.size() > 0) {
@@ -291,21 +277,20 @@ public class ColumnsImporter {
       }
       colourEdgeGroups(r, files.length);
     } catch (FileNotFoundException e) {
-      e.printStackTrace();
+      WilmaMain.showErrorDialog("File Not Found",e);
     } catch (ParseException e) {
-      e.printStackTrace();
+      WilmaMain.showErrorDialog("Parse Error",e);
     }
   }
+
   static void colourEdgeGroups(GraphControl.ClusterFacade r, int noStrata) {
     EdgeList edges = r.getCluster().getInternalEdges();
     Hashtable masterEdges = new Hashtable();
     for (edges.resetIterator(); edges.hasNext();) {
       Edge e = edges.nextEdge();
-      Integer s =
-        new Integer(((NodeColumnLayout) e.getStart().getLayout()).getStratum());
-      String key =
-        e.getStart().getOwner().hashCode()
-          + " "
+      Integer s = new Integer(((NodeColumnLayout) e.getStart().getLayout())
+          .getStratum());
+      String key = e.getStart().getOwner().hashCode() + " "
           + e.getEnd().getOwner().hashCode();
       Hashtable edgesByStratum = (Hashtable) masterEdges.get(key);
       if (edgesByStratum == null) {

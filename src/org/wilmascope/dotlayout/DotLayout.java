@@ -40,6 +40,7 @@ import javax.vecmath.Point3f;
 
 import org.wilmascope.columnlayout.ColumnLayout;
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.control.WilmaMain;
 import org.wilmascope.dotparser.DotParser;
 import org.wilmascope.dotparser.EdgeClient;
 import org.wilmascope.dotparser.GraphClient;
@@ -100,10 +101,9 @@ public class DotLayout implements LayoutEngine {
           rad = ((ColumnClusterView) n.getView()).getMaxRadius();
 
         } catch (ClassCastException e) {
-          System.err.println(
+          WilmaMain.showErrorDialog(
             "Not a ColumnClusterView, it's a: "
-              + n.getView().getClass().getName());
-          e.printStackTrace();
+              + n.getView().getClass().getName(),e);
           rad = 1.0f;
         }
         String id = "" + n.hashCode();
@@ -211,7 +211,7 @@ public class DotLayout implements LayoutEngine {
         }
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      WilmaMain.showErrorDialog("IOException occured processing dot file",e);
     }
   }
   /* returns a matching edge from masterEdges for the specified edge.
