@@ -62,12 +62,10 @@ public class MultiScaleLayout implements LayoutEngine {
 			reset = false;
 			NodeList nodes = root.getNodes();
 			EdgeList edges = root.getInternalEdges();
-			for (nodes.resetIterator(); nodes.hasNext();) {
-				Node n = nodes.nextNode();
+			for (Node n:nodes) {
 				n.setLayout(createNodeLayout(n));
 			}
-			for (edges.resetIterator(); edges.hasNext();) {
-				Edge e = edges.nextEdge();
+			for (Edge e:edges) {
 				e.setLayout(createEdgeLayout(e));
 			}
 			qGraph.setNotConverged();
@@ -83,8 +81,7 @@ public class MultiScaleLayout implements LayoutEngine {
 		if (!reset) { // if reset is still true then graph size <= 1
 			done = qGraph.relax();
 			NodeList nodes = root.getNodes();
-			for (nodes.resetIterator(); nodes.hasNext();) {
-				Node n = nodes.nextNode();
+			for (Node n : nodes) {
         Point3f p = new Point3f(((MultiScaleNodeLayout) n.getLayout()).position);
         p.scale(scale);
         p.add(root.getPosition());

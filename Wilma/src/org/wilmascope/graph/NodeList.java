@@ -22,11 +22,11 @@ package org.wilmascope.graph;
 import java.util.*;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Point3f;
-public class NodeList extends List{
+public class NodeList extends List<Node>{
   private ClusterList clusters = new ClusterList();
   public NodeList() {}
   public NodeList(NodeList nodes) {
-    elements = new java.util.Vector(nodes.elements);
+    elements = new java.util.Vector<Node>(nodes.elements);
   }
   public void add(Node node) {
     elements.add(node);
@@ -48,8 +48,12 @@ public class NodeList extends List{
    * clusters then also from the cluster list beneath this NodeList
    */
   public void removeAll(NodeList l) {
-    for(l.resetIterator();l.hasNext();) {
-      remove(l.nextNode());
+    for(Iterator<Node> i=l.iterator();i.hasNext();) {
+      Node n = i.next();
+      if(n instanceof Cluster) {
+        clusters.remove((Cluster)n);
+      }
+      i.remove();
     }
   }
   public Node get(int index) {
@@ -59,31 +63,31 @@ public class NodeList extends List{
     return elements.contains(node);
   }
   public void reposition(Vector3f delta) {
-    for(resetIterator(); hasNext();) {
-      nextNode().reposition(delta);
+    for(Node n:elements) {
+      n.reposition(delta);
     }
   }
   public void setPosition(Point3f position) {
-    for(resetIterator(); hasNext();) {
-      nextNode().setPosition(position);
+    for(Node n:elements) {
+      n.setPosition(position);
     }
   }
   public void hide() {
     super.hide();
-    for(clusters.resetIterator(); clusters.hasNext();) {
-      clusters.nextCluster().hideChildren();
+    for(Cluster c:clusters) {
+      c.hideChildren();
     }
   }
   public void show(org.wilmascope.view.GraphCanvas gc) {
     super.show(gc);
-    for(clusters.resetIterator(); clusters.hasNext();) {
-      clusters.nextCluster().showChildren(gc);
+    for(Cluster c:clusters) {
+      c.showChildren(gc);
     }
   }
   public EdgeList getEdges() {
-    Set edges = new HashSet();
-    for(resetIterator();hasNext();) {
-      edges.addAll(nextNode().getEdges().getElementsVector());
+    Set<Edge> edges = new HashSet<Edge>();
+    for(Node n:elements) {
+      edges.addAll(n.getEdges().getElementsVector());
     }
     return new EdgeList(edges);
   }
@@ -92,16 +96,16 @@ public class NodeList extends List{
    */
   public Point3f getBarycenter() {
     Point3f barycenter = new Point3f();
-    for(resetIterator(); hasNext();) {
-      barycenter.add(nextNode().getPosition());
+    for(Node n:elements) {
+      barycenter.add(n.getPosition());
     }
     barycenter.scale(1f/(float)elements.size());
     return barycenter;
   }
   public float getWidth() {
     float xMin=Float.MAX_VALUE, xMax=Float.MIN_VALUE;
-    for(resetIterator();hasNext();) {
-      Point3f p = nextNode().getPosition();
+    for(Node n:elements) {
+      Point3f p = n.getPosition();
       if(p.x<xMin) { xMin = p.x; }
       if(p.x>xMax) { xMax = p.x; }
     }
@@ -109,8 +113,8 @@ public class NodeList extends List{
   }
   public float getHeight() {
     float yMin=Float.MAX_VALUE, yMax=Float.MIN_VALUE;
-    for(resetIterator();hasNext();) {
-      Point3f p = nextNode().getPosition();
+    for(Node n:elements) {
+      Point3f p = n.getPosition();
       if(p.y<yMin) { yMin = p.y; }
       if(p.y>yMax) { yMax = p.y; }
     }
@@ -129,8 +133,8 @@ public class NodeList extends List{
     topRight.y=Float.MIN_VALUE;
     bottomLeft.z=Float.MAX_VALUE;
     topRight.z=Float.MIN_VALUE;
-    for(resetIterator();hasNext();) {
-      Point3f p = nextNode().getPosition();
+    for(Node n:elements) {
+      Point3f p = n.getPosition();
       if(p.x<bottomLeft.x) { bottomLeft.x = p.x; }
       if(p.x>topRight.x) { topRight.x = p.x; }
       if(p.y<bottomLeft.y) { bottomLeft.y = p.y; }
@@ -142,7 +146,4 @@ public class NodeList extends List{
     centroid.scale(1f/2f);
   }
 
-  public final Node nextNode() {
-    return (Node)next();
-  }
 }

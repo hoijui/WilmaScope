@@ -18,7 +18,6 @@
  */
 package org.wilmascope.control;
 
-import java.util.Iterator;
 import java.util.Vector;
 
 import javax.media.j3d.TransparencyAttributes;
@@ -819,8 +818,8 @@ public class GraphControl {
       setChildrenPickable(true);
       org.wilmascope.graph.ClusterList childClusters = cluster.getNodes()
           .getClusters();
-      for (int i = 0; i < childClusters.size(); i++) {
-        ((GraphElementView) childClusters.get(i).getView()).defaultColour();
+      for (org.wilmascope.graph.Cluster c:childClusters) {
+        ((GraphElementView) c.getView()).defaultColour();
       }
       cluster.getView().setPickable(false);
       setColour(242 / 255f, 200 / 255f, 242 / 255f);
@@ -954,12 +953,6 @@ public class GraphControl {
   public GraphControl(int xsize, int ysize) {
     viewManager = ViewManager.getInstance();
     layoutManager = LayoutManager.getInstance();
-    layoutManager.addPrototypeLayout(new ForceLayout());
-    layoutManager.addPrototypeLayout(new MultiScaleLayout());
-    layoutManager.addPrototypeLayout(new FastLayout());
-    layoutManager.addPrototypeLayout(new FadeLayout());
-    //	layoutManager.addPrototypeLayout(new HighDimensionLayout());
-    layoutManager.addPrototypeLayout(new DegreeLayout());
     try {
       viewManager.loadViews();
     } catch (InstantiationException ex1) {

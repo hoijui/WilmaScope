@@ -196,8 +196,8 @@ public class DensityMatrix {
   }
 
   public void set(NodeList nodes) {
-    for(nodes.resetIterator(); nodes.hasNext();) {
-      set(nodes.nextNode());
+    for(Node n:nodes) {
+      set(n);
     }
   }
 

@@ -107,9 +107,6 @@ public class GeneratorManager {
     return instance;
   }
 
-  private void loadGraphGenerators() {
-  }
-
   public String[] getTypeList() {
     return graphGenerators.keySet().toArray(new String[graphGenerators.size()]);
   }

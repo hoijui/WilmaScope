@@ -39,11 +39,9 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.ToolTipManager;
-import javax.vecmath.Vector3f;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.file.FileHandler;
-import org.wilmascope.graph.NodeList;
 import org.wilmascope.light.LightFrame;
 import org.wilmascope.view.GraphCanvas;
 import org.wilmascope.view.ViewManager;

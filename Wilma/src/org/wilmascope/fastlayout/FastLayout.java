@@ -171,8 +171,7 @@ public class FastLayout implements LayoutEngine {
       barrierRate -= barrierDec;
     }
 
-    for (nodes.resetIterator(); nodes.hasNext();) {
-      Node current = nodes.nextNode();
+    for (Node current : nodes) {
 
       Point3f oldPosition = new Point3f(current.getPosition());
       double newPotential = 0d;
@@ -226,8 +225,7 @@ public class FastLayout implements LayoutEngine {
       // very wasteful in terms of efficiency - used only for visual appeal
       if (eyeCandyFlag) {
         EdgeList edges = current.getEdges();
-        for (edges.resetIterator(); edges.hasNext();) {
-          Edge temp = edges.nextEdge();
+        for (Edge temp : edges) {
           Color colour1 =
             ((GraphControl.Node) temp.getStart().getUserFacade()).getColour();
           Color colour2 =
@@ -270,8 +268,8 @@ public class FastLayout implements LayoutEngine {
   // slow down the layout engine unnecessarily when the energy does not need to be known
   public double systemEnergy() {
     double total = 0;
-    for (nodes.resetIterator(); nodes.hasNext();) {
-      total += getPotential(nodes.nextNode());
+    for (Node n:nodes) {
+      total += getPotential(n);
     }
     return total;
   }
@@ -279,8 +277,8 @@ public class FastLayout implements LayoutEngine {
   private void recentreGraph() {
     Point3f centre = nodes.getBarycenter();
     // subtract current centre vector from all nodes to bring their centre back to the origin
-    for (nodes.resetIterator(); nodes.hasNext();) {
-      nodes.nextNode().getPosition().sub(centre);
+    for (Node n:nodes) {
+      n.getPosition().sub(centre);
     }
 
     // reset density matrix - will be expensive
@@ -304,8 +302,7 @@ public class FastLayout implements LayoutEngine {
     double potential = 0;
     EdgeList edges = node.getEdges();
 
-    for (edges.resetIterator(); edges.hasNext();) {
-      Edge edge = edges.nextEdge();
+    for (Edge edge : edges) {
       edge.recalculate();
       potential += attraction
         * edge.getWeight()
@@ -330,8 +327,7 @@ public class FastLayout implements LayoutEngine {
     float totalWeight = 0f;
 
     EdgeList edges = node.getEdges();
-    for (edges.resetIterator(); edges.hasNext();) {
-      Edge current = edges.nextEdge();
+    for (Edge current : edges) {
       float weight = current.getWeight();
       Point3f scaledPos = new Point3f(current.getNeighbour(node).getPosition());
       scaledPos.scale(weight);
@@ -344,8 +340,8 @@ public class FastLayout implements LayoutEngine {
 
   // flattens the graph in the z-plane
   public void flattenGraph() {
-    for (nodes.resetIterator(); nodes.hasNext();) {
-      nodes.nextNode().getPosition().z = 0f;
+    for (Node n:nodes) {
+      n.getPosition().z = 0f;
     }
   }
 

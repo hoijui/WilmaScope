@@ -19,71 +19,130 @@
  */
 package org.wilmascope.layoutregistry;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import org.wilmascope.control.WilmaMain;
+import org.wilmascope.global.GlobalConstants;
 import org.wilmascope.graph.LayoutEngine;
+import org.wilmascope.graphgen.GraphGenerator;
+import org.wilmascope.graphgen.GeneratorManager.UnknownTypeException;
 
 /*
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular WilmaScope software
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaScope.org
- * @author Tim Dwyer
+ * Title: WilmaToo Description: Sequel to the ever popular WilmaScope software
+ * Copyright: Copyright (c) 2001 Company: WilmaScope.org @author Tim Dwyer
+ * 
  * @version 1.0
  */
 
 /**
- * This class provides a manager or registry of all the available layout 
- * engines.  This class implements
- * the Singleton design pattern (Gamma et al.) such that there can only ever
- * be one instance in the system and a reference to that instance can be
- * obtained by calling the static {link #getInstance()} method from anywhere.
+ * This class provides a manager or registry of all the available layout
+ * engines. This class implements the Singleton design pattern (Gamma et al.)
+ * such that there can only ever be one instance in the system and a reference
+ * to that instance can be obtained by calling the static {link #getInstance()}
+ * method from anywhere.
  */
 public class LayoutManager {
+  LayoutEngine defaultLayout;
+
   public static LayoutManager getInstance() {
     return instance;
   }
+
   private LayoutManager() {
+    layoutEngines = new Hashtable<String, LayoutEngine>();
+    load();
+    try {
+      defaultLayout = createLayout(GlobalConstants.getInstance().getProperty(
+          "DefaultLayout"));
+    } catch (UnknownLayoutTypeException e) {
+      WilmaMain
+          .showErrorDialog(
+              "DefaultLayout specified in WILMA_CONSTANTS.properties file is unknown!",
+              e);
+    }
   }
+
   public class UnknownLayoutTypeException extends Exception {
     public UnknownLayoutTypeException(String layoutType) {
       super("No known layout type: " + layoutType);
     }
   }
+
   public LayoutEngine createLayout(String layoutType)
-    throws UnknownLayoutTypeException {
+      throws UnknownLayoutTypeException {
     LayoutEngine prototype = (LayoutEngine) layoutEngines.get(layoutType);
     if (prototype == null) {
       throw (new UnknownLayoutTypeException(layoutType));
     }
-    return (LayoutEngine)prototype.create();
+    return (LayoutEngine) prototype.create();
   }
+
   public void addPrototypeLayout(LayoutEngine prototype) {
     layoutEngines.put(prototype.getName(), prototype);
   }
+
   public Collection getAvailableLayoutEngines() {
     return layoutEngines.values();
   }
-  private Hashtable layoutEngines = new Hashtable();
+
+  private Hashtable<String, LayoutEngine> layoutEngines;
+
   private static final LayoutManager instance = new LayoutManager();
+
   public LayoutEngine[] getAll() {
-  	LayoutEngine[] all = new LayoutEngine[layoutEngines.size()];
-  	int i=0;
-  	for(Enumeration e = layoutEngines.elements(); e.hasMoreElements();) {
-  		all[i++]=(LayoutEngine)e.nextElement();
-  	}
-  	return all;
+    LayoutEngine[] all = new LayoutEngine[layoutEngines.size()];
+    int i = 0;
+    for (Enumeration e = layoutEngines.elements(); e.hasMoreElements();) {
+      all[i++] = (LayoutEngine) e.nextElement();
+    }
+    return all;
   }
+
+  /**
+   * If you create a layout engine then add the fully qualified class path to
+   * the LayoutPlugins field in WILMA_CONSTANTS.properties
+   */
+  public void load() {
+    try {
+      String plugins = GlobalConstants.getInstance().getProperty(
+          "LayoutPlugins");
+      List<String> classNames = new ArrayList<String>();
+      StringTokenizer st = new StringTokenizer(plugins, ",");
+      while (st.hasMoreElements()) {
+        String el = (String) st.nextElement();
+        classNames.add(el);
+      }
+      String[] list = new String[classNames.size()];
+      list = (String[]) classNames.toArray(list);
+      for (int i = 0; i < list.length; i++) {
+        System.out.println("Loading plugin file: " + list[i]);
+        String name = list[i];
+        Class c = Class.forName(name);
+        LayoutEngine eng = (LayoutEngine) c.newInstance();
+        addPrototypeLayout(eng);
+      }
+    } catch (Exception e) {
+      WilmaMain
+          .showErrorDialog(
+              "WARNING: Couldn't load plugins... check that you've listed the plugin classnames in the properties file",
+              e);
+    }
+  }
+
   /**
    * @return an array of type names
    */
   public String[] getTypeList() {
-  	String[] typeList = new String[layoutEngines.size()];
-  	int i=0;
-  	for(Enumeration e=layoutEngines.keys();e.hasMoreElements();) {
-  		typeList[i++]=(String)e.nextElement();
-  	}
+    String[] typeList = new String[layoutEngines.size()];
+    int i = 0;
+    for (Enumeration e = layoutEngines.keys(); e.hasMoreElements();) {
+      typeList[i++] = (String) e.nextElement();
+    }
     return typeList;
   }
 }

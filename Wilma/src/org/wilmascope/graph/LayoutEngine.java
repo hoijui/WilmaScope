@@ -32,7 +32,7 @@ import javax.swing.JPanel;
  * @version $Id$
  *
  */
-public interface LayoutEngine {
+public interface LayoutEngine<N extends NodeLayout,E extends EdgeLayout> {
   /**
    * calculate the changes required to move the graph to a nicer layout
    */
@@ -52,12 +52,12 @@ public interface LayoutEngine {
    * Factory method to create a new NodeLayout implementation compatible with
    * the layout engine implementing this interface.
    */
-  public NodeLayout createNodeLayout(Node n);
+  public N createNodeLayout(Node n);
   /**
    * Factory method to create a new EdgeLayout implementation compatible with
    * the layout engine implementing this interface.
    */
-  public EdgeLayout createEdgeLayout(Edge e);
+  public E createEdgeLayout(Edge e);
   public Properties getProperties();
   public void setProperties(Properties p);
   public JPanel getControls();

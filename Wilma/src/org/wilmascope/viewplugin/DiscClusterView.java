@@ -41,8 +41,7 @@ public class DiscClusterView extends ClusterView {
     float maxX,maxY,minX,minY,z=0;
     maxX=maxY=Float.MIN_VALUE;
     minX=minY=Float.MAX_VALUE;
-    for (nodes.resetIterator(); nodes.hasNext();) {
-      Node member = nodes.nextNode();
+    for (Node member:nodes) {
       Point3f pos=member.getPosition();
       if(pos.x<minX) minX=pos.x;
       if(pos.x>maxX) maxX=pos.x;

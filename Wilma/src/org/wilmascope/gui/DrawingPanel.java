@@ -27,12 +27,14 @@ import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
+
 import javax.media.j3d.TransparencyAttributes;
 import javax.swing.JPanel;
 import javax.vecmath.Point3f;
+
 import org.wilmascope.columnlayout.NodeColumnLayout;
-import org.wilmascope.forcelayout.NodeForceLayout;
 import org.wilmascope.graph.Cluster;
+import org.wilmascope.graph.Edge;
 import org.wilmascope.graph.EdgeList;
 import org.wilmascope.graph.Node;
 import org.wilmascope.graph.NodeList;
@@ -99,14 +101,11 @@ public class DrawingPanel extends JPanel implements Printable {
 		// Draws and fills the newly positioned rectangle to the buffer.
 		g.setPaint(Color.black);
 		NodeList columns = root.getNodes();
-		for (columns.resetIterator(); columns.hasNext();) {
-			Node tmp = columns.nextNode();
+		for (Node tmp : columns) {
 			if (tmp instanceof Cluster) {
 				Cluster c = (Cluster) tmp;
 				NodeList nodes = new NodeList(c.getNodes());
-				Node n = null;
-				for (nodes.resetIterator(); nodes.hasNext();) {
-					n = nodes.nextNode();
+				for (Node n:nodes) {
 					float distance = Math.abs(n.getPosition().z - (float) stratum);
 					// the following is better because it doesn't rely on column
 					// separation being 1f
@@ -142,8 +141,8 @@ public class DrawingPanel extends JPanel implements Printable {
 		EdgeList outEdges = n.getOutEdges();
 		View2D v = (View2D) n.getView();
 		v.draw2D(new Renderer2D(bottomLeft, topRight, w, h), g, 1f);
-		for (outEdges.resetIterator(); outEdges.hasNext();) {
-			v = (View2D) outEdges.nextEdge().getView();
+		for (Edge e:outEdges) {
+			v = (View2D) e.getView();
 			v.draw2D(new Renderer2D(bottomLeft, topRight, w, h), g, 1f);
 		}
 	}
@@ -155,17 +154,15 @@ public class DrawingPanel extends JPanel implements Printable {
 		// Draws and fills the newly positioned rectangle to the buffer.
 		g.setPaint(Color.black);
 		NodeList columns = root.getNodes();
-		for (columns.resetIterator(); columns.hasNext();) {
-			Cluster c = (Cluster) columns.nextNode();
+		for (Node col:columns) {
+			Cluster c = (Cluster)col;
 			NodeList nodes = new NodeList(c.getNodes());
-			Node n = null;
-			for (nodes.resetIterator(); nodes.hasNext();) {
-				n = nodes.nextNode();
+			for (Node n:nodes) {
 				EdgeList outEdges = n.getOutEdges();
 				View2D v = (View2D) n.getView();
 				v.draw2D(new Renderer2D(bottomLeft, topRight, w, h), g, 0.2f);
-				for (outEdges.resetIterator(); outEdges.hasNext();) {
-					v = (View2D) outEdges.nextEdge().getView();
+				for (Edge e:outEdges) {
+					v = (View2D)e.getView();
 					v.draw2D(new Renderer2D(bottomLeft, topRight, w, h), g, 0.2f);
 				}
 				//setViewTransparency((float)distance/5f, (GraphElementView)

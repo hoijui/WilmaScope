@@ -42,7 +42,7 @@ import org.wilmascope.graph.NodeList;
  * incrementally.
  */
 
-public class ForceLayout implements LayoutEngine {
+public class ForceLayout implements LayoutEngine<NodeForceLayout,EdgeForceLayout> {
 
   /*
    * (non-Javadoc)
@@ -79,8 +79,8 @@ public class ForceLayout implements LayoutEngine {
     float currentNetForce = 0;
     NodeList nodes = root.getNodes();
     EdgeList edges = root.getInternalEdges();
-    for (nodes.resetIterator(); nodes.hasNext();) {
-      nodeLayout = (NodeForceLayout) (nodes.nextNode().getLayout());
+    for (Node n : nodes) {
+      nodeLayout = (NodeForceLayout) (n.getLayout());
       nodeLayout.getNetForce().scale(cool);
       //cool*=0.99;
       currentNetForce = nodeLayout.getNetForce().length();
@@ -166,23 +166,21 @@ public class ForceLayout implements LayoutEngine {
 
   public void createElementLayouts() {
     NodeList nodes = root.getNodes();
-    for (nodes.resetIterator(); nodes.hasNext();) {
-      Node n = nodes.nextNode();
+    for (Node n : nodes) {
       n.setLayout(createNodeLayout(n));
     }
     EdgeList edges = root.getInternalEdges();
-    for (edges.resetIterator(); edges.hasNext();) {
-      Edge e = edges.nextEdge();
+    for (Edge e : edges) {
       e.setLayout(createEdgeLayout(e));
     }
   }
 
-  public org.wilmascope.graph.NodeLayout createNodeLayout(
+  public NodeForceLayout createNodeLayout(
       org.wilmascope.graph.Node n) {
     return new NodeForceLayout();
   }
 
-  public org.wilmascope.graph.EdgeLayout createEdgeLayout(
+  public EdgeForceLayout createEdgeLayout(
       org.wilmascope.graph.Edge e) {
     return new EdgeForceLayout();
   }
@@ -212,8 +210,7 @@ public class ForceLayout implements LayoutEngine {
    * @see org.wilmascope.graph.LayoutEngine#getControls()
    */
   public JPanel getControls() {
-    return new ForceControlsPanel((GraphControl.Cluster) root
-        .getUserFacade());
+    return new ForceControlsPanel((GraphControl.Cluster) root.getUserFacade());
   }
 
   /*
@@ -271,7 +268,8 @@ public class ForceLayout implements LayoutEngine {
       WilmaMain.showErrorDialog("Problems creating default ForceLayout", e);
     }
     return fl;
-  }  
+  }
+
   public static ForceLayout createDefaultClusterForceLayout(Cluster root) {
     ForceLayout fl = createDefaultForceLayout(root);
     fl.getForce("Origin").setStrengthConstant(10f);

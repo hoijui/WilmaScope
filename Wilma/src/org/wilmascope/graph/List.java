@@ -19,8 +19,8 @@
  */
 package org.wilmascope.graph;
 import java.util.*;
-public abstract class List {
-  protected Vector elements = new Vector();
+public abstract class List<T extends GraphElement> implements Iterable<T> {
+  protected Vector<T> elements = new Vector<T>();
   public int size() {
     return elements.size();
   }
@@ -32,43 +32,36 @@ public abstract class List {
     // delete will remove the element from the owner clusters member list
     // therefore we use a temporary vector in case delete is being called
     // directly on the cluster's member lists (node or edge).
-    Vector tmpElements = new Vector(elements);
+    Vector<T> tmpElements = new Vector<T>(elements);
     for(int i = 0; i<tmpElements.size(); i++) {
-      ((GraphElement)tmpElements.get(i)).delete();
+      tmpElements.get(i).delete();
     }
   }
   public void draw() {
     for(int i = 0; i<elements.size(); i++) {
-      ((GraphElement)elements.get(i)).draw();
+      elements.get(i).draw();
     }
   }
-  protected Vector getElementsVector() {
+  protected Vector<T> getElementsVector() {
     return elements;
   }
-  public void removeAll(List l) {
+  public void removeAll(List<T> l) {
     elements.removeAll(l.getElementsVector());
   }
-  public void addAll(List l) {
+  public void addAll(List<T> l) {
     elements.addAll(l.getElementsVector());
   }
   public void hide() {
     for(int i = 0; i<elements.size(); i++) {
-      ((GraphElement)elements.get(i)).hide();
+      elements.get(i).hide();
     }
   }
   public void show(org.wilmascope.view.GraphCanvas graphCanvas) {
     for(int i = 0; i<elements.size(); i++) {
-      ((GraphElement)elements.get(i)).show(graphCanvas);
+      elements.get(i).show(graphCanvas);
     }
   }
-  public void resetIterator() {
-    iterator = elements.iterator();
+  public Iterator<T> iterator() {
+    return elements.iterator();
   }
-  public boolean hasNext() {
-    return iterator.hasNext();
-  }
-  protected GraphElement next() {
-    return (GraphElement)iterator.next();
-  }
-  private Iterator iterator;
 }

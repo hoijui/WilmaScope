@@ -19,11 +19,11 @@
  */
 package org.wilmascope.graph;
 
-public class EdgeList extends List {
+public class EdgeList extends List<Edge> {
   public EdgeList(EdgeList edgeList) {
     addAll(edgeList);
   }
-  public EdgeList(java.util.Set edgeSet) {
+  public EdgeList(java.util.Set<Edge> edgeSet) {
     elements.addAll(edgeSet);
   }
   public void addAll(EdgeList edgeList) {
@@ -47,8 +47,5 @@ public class EdgeList extends List {
   }
   public boolean contains(Edge edge) {
     return elements.contains(edge);
-  }
-  public Edge nextEdge() {
-    return (Edge)next();
   }
 }

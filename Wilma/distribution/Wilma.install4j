@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="3.0.3">
-  <directoryPresets config="../lib/org/wilmascope/images" />
+  <directoryPresets config="../../../../../Program Files/Java/jre1.5.0" />
   <application name="WilmaScope 3D Graph Visualisation System" distributionSourceDir="" mediaDir="." mediaFilePattern="%SHORT_NAME%_%PLATFORM%_%VERSION%" compression="6" shortName="Wilma" publisher="WilmaScope.org" publisherWeb="www.wilmascope.org" version="3.0.1" allPathsRelative="true" backupOnSave="false" autoSave="false" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="true">
     <searchSequence>
       <registry />
@@ -16,10 +16,34 @@
     <entries>
       <dirEntry mountPoint="1" file=".." overwrite="4" shared="false" mode="644" dontUninstall="false" excludeSuffixes="" dirMode="755">
         <exclude>
+          <entry location=".classpath" launcher="false" />
+          <entry location=".cvsignore" launcher="false" />
+          <entry location=".project" launcher="false" />
+          <entry location="bin/CVS" launcher="false" />
+          <entry location="bin/makejar.bat" launcher="false" />
+          <entry location="bin/makejar.bat~" launcher="false" />
+          <entry location="bin/nameserver" launcher="false" />
+          <entry location="bin/runTestChatClient" launcher="false" />
+          <entry location="bin/wilma" launcher="false" />
+          <entry location="bin/wilmaserver" launcher="false" />
+          <entry location="build" launcher="false" />
+          <entry location="build.bat" launcher="false" />
+          <entry location="build.xml" launcher="false" />
+          <entry location="classes" launcher="false" />
           <entry location="CVS" launcher="false" />
           <entry location="distribution" launcher="false" />
-          <entry location="README~" launcher="false" />
-          <entry location="Wilma_20040903.tar.gz" launcher="false" />
+          <entry location="doc.tgz" launcher="false" />
+          <entry location="javadoc.xml" launcher="false" />
+          <entry location="lib/.cvsignore" launcher="false" />
+          <entry location="lib/ant.jar" launcher="false" />
+          <entry location="lib/CVS" launcher="false" />
+          <entry location="lib/in.dot" launcher="false" />
+          <entry location="lib/org" launcher="false" />
+          <entry location="lib/out.dot" launcher="false" />
+          <entry location="META-INF" launcher="false" />
+          <entry location="userdoc/.cvsignore" launcher="false" />
+          <entry location="userdoc/book" launcher="false" />
+          <entry location="userdoc/CVS" launcher="false" />
         </exclude>
       </dirEntry>
     </entries>
@@ -43,8 +67,8 @@
           <envVar name="JDK_HOME" />
         </searchSequence>
         <classPath>
-          <directory location="classes" failOnError="false" />
           <archive location="lib/Jama-1.0.1.jar" failOnError="false" />
+          <archive location="lib/wilma.jar" failOnError="false" />
         </classPath>
         <nativeLibraryDirectories />
       </java>
@@ -71,7 +95,7 @@
       <screen id="additionalTasks" enabled="true" customTasksPlacement="1">
         <customTasks />
       </screen>
-      <screen id="preInfo" enabled="true" file="../distribution/WilmaInstallWarning.html" />
+      <screen id="preInfo" enabled="false" file="../distribution/WilmaInstallWarning.html" />
       <screen id="install" enabled="true" />
       <screen id="postInfo" enabled="false" file="" />
       <screen id="finished" enabled="true" useCustomBanner="false" bannerImageFile="" background="255,255,255" />
@@ -79,7 +103,7 @@
     <customScreens />
   </installerGui>
   <mediaSets>
-    <win32 name="Windows" id="4" mediaFileName="" installDir="Wilma" allLaunchers="true" bundleType="2" includedJRE="" jreURL="" jreFtpURL="" languageID="en" customScriptMode="1" customScriptFile="" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" jreShared="false" adminRequired="false" programGroup="WilmaScope 3D Graph Visualisation System" allowUserDisableStartMenuCreation="false" reboot="false" modeDesktopIcon="1" modeQuickLaunchIon="1" desktopLauncherId="">
+    <win32 name="Windows" id="4" mediaFileName="" installDir="Wilma" allLaunchers="true" bundleType="1" includedJRE="windows-x86-1.5_j2re 1.5 with java3d 1.3.1 opengl" jreURL="" jreFtpURL="" languageID="en" customScriptMode="1" customScriptFile="" customInstallBaseDir="" allowUserStartAfterFinish="false" launchExecutableId="" createUninstallIcon="true" overrideLicenseFile="false" licenseFile="" overridePreInformationFile="false" preInformationFile="" overridePostInformationFile="false" postInformationFile="" jreShared="false" adminRequired="false" programGroup="WilmaScope 3D Graph Visualisation System" allowUserDisableStartMenuCreation="false" reboot="false" modeDesktopIcon="1" modeQuickLaunchIon="1" desktopLauncherId="">
       <selectedLaunchers />
       <messageSet language="English" />
       <exclude>

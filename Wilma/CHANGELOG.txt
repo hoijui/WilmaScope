@@ -21,7 +21,7 @@ Changes Since 3.0
   = cleaned up GUI
   = now supports plugins similar to views
 - centre graph action to centre the graph around its barycentre added (button on toolbar and filemenu)
-- Use of J2SE 1.5 generics added in various places
+- Fearless, widespread adoption of J2SE 1.5 generics throughout Wilma
   
 Changes Since 1.1
 -----------------
