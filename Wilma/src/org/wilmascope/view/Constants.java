@@ -33,7 +33,18 @@ import javax.vecmath.Vector3f;
  */
 
 public class Constants extends org.wilmascope.global.AbstractConstants {
-  public Constants(String fileName) {
+  public final static String defaultFileName = new String("WILMA_CONSTANTS.properties");
+
+  private static final Constants instance = new Constants();
+  public static Constants getInstance() {
+    return instance;
+  }
+
+  private Constants() {
+    super(defaultFileName);
+  }
+
+  private Constants(String fileName) {
     super(fileName);
   }
   protected Properties getDefaultProperties() {
@@ -54,6 +65,7 @@ public class Constants extends org.wilmascope.global.AbstractConstants {
     d.setProperty("DirectionalLightColourR","1");
     d.setProperty("DirectionalLightColourG","1");
     d.setProperty("DirectionalLightColourB","1");
+    d.setProperty("SharedGeometry","0");
     /*
     d.setProperty("PointLight1ColourR","0");
     d.setProperty("PointLight1ColourG","0");

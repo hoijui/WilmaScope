@@ -50,6 +50,8 @@ implements org.wilmascope.graph.Viewable {
     tg = new TransformGroup();
     // All graph elements will need to be moved around at runtime
     tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+    tg.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+    tg.setCapability(TransformGroup.ALLOW_LOCAL_TO_VWORLD_READ);
     // Allow the graph element to be deleted
     bg = new BranchGroup();
     bg.setCapability(BranchGroup.ALLOW_DETACH);
@@ -86,14 +88,23 @@ implements org.wilmascope.graph.Viewable {
   public void delete() {
     bg.detach();
   }
-  public void addTransformGroupChild(Node node) {
+  /**
+   * add a scene graph node to this graph element's transform group
+   */
+  public void addTransformGroupChild(javax.media.j3d.Node node) {
     tg.addChild(node);
   }
 
+  /**
+   * set the transform for this graph element's transform group
+   */
   protected void setTransformGroupTransform(Transform3D transform) {
     tg.setTransform(transform);
   }
 
+  /**
+   * @return the transform group for this graph element
+   */
   public TransformGroup getTransformGroup() {
     return tg;
   }
@@ -126,7 +137,21 @@ implements org.wilmascope.graph.Viewable {
     t3d.setRotation(rotation);
     setTransformGroupTransform(t3d);
   }
-
+  /** set up for a full transform with scale,
+   * translation and rotation components
+   */
+  protected void setFullTransform(
+      Vector3d scale,
+      Vector3f translation,
+      Quat4f orientation) {
+    t3d.setScale(scale);
+    t3d.setTranslation(translation);
+    t3d.setRotation(orientation);
+    setTransformGroupTransform(t3d);
+  }
+  public void transform(Vector3f v) {
+    t3d.transform(v);
+  }
   public boolean picked(java.awt.event.MouseEvent e) {
     if(!pickable) {
       return false;
@@ -200,19 +225,20 @@ implements org.wilmascope.graph.Viewable {
   }
   public void setLabel(String text) {
     this.labelText = text;
-    addLabel(text, new Point3f(0.0f,4.0f,1.0f), constants.vZero, getAppearance());
+    showLabel(text);
   }
   public String getLabel() {
     return labelText;
   }
   /** add a label to the element
    * @param String the text of the label
+   * @param scale factor to resize the text
    * @param Point3f origin position of the centre of the label relative to the axis of the edge
    * @param Vector3f Translation vector to position the label origin relative to centre of the edge
    * @param Appearance for the label
    */
   static Font3D f3d = new Font3D(new Font("Japanese", Font.PLAIN, 4),new FontExtrusion());
-  protected void addLabel(String text, Point3f originPosition, Vector3f vTranslation, Appearance apText) {
+  protected void addLabel(String text, double scale, Point3f originPosition, Vector3f vTranslation, Appearance apText) {
     if(text != null && !text.equals("null") && text.length()>0) {
       Point3f centredOriginPosition = new Point3f(originPosition);
       centredOriginPosition.x += -text.length()/2;
@@ -222,9 +248,9 @@ implements org.wilmascope.graph.Viewable {
       textShape.setRotationPoint(new Point3f(0,0,0));
       textShape.setGeometry(txt);
       textShape.setAppearance(apText);
-      Transform3D scale = new Transform3D();
-      scale.setScale(new Vector3d(0.3d,0.3d,0.3d));
-      TransformGroup textTG = new TransformGroup(scale);
+      Transform3D scaleTransform = new Transform3D();
+      scaleTransform.setScale(new Vector3d(scale,scale,scale));
+      TransformGroup textTG = new TransformGroup(scaleTransform);
       textTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
       textTG.addChild(textShape);
 
@@ -318,6 +344,10 @@ implements org.wilmascope.graph.Viewable {
   public String getData() {
     return null;
   }
+  protected void addLiveBranch(BranchGroup b) {
+    labelBranch.addChild(b);
+  }
+  protected abstract void showLabel(String text);
   // the branch group for the whole GraphElement
   private BranchGroup bg;
   // labelBranch is a BranchGroup below bg's TransformGroup with CHILDREN write

@@ -37,13 +37,19 @@ import javax.swing.*;
  */
 public abstract class EdgeView extends GraphElementView
 implements org.wilmascope.graph.EdgeView {
+  /**
+   * draw the edge correctly between the start and end nodes
+   */
   public void draw() {
     edge.recalculate();
     double l = edge.getLength();
+    // avoids non-affine transformations, by making sure edge always has
+    // non-zero length
     if(l==0) {
       edge.setVector(Constants.gc.getVector3f("MinVector"));
       l=edge.getVector().length();
     }
+    // length of the edge should not include the radii of the nodes
     l-=edge.getStart().getRadius()+edge.getEnd().getRadius();
     setFullTransform(
       new Vector3d(1d,l,1d),
@@ -97,9 +103,14 @@ implements org.wilmascope.graph.EdgeView {
   public ImageIcon getIcon() {
     return new ImageIcon(getClass().getResource("/images/edge.png"));
   }
+  protected void showLabel(String text) {
+    addLabel(text, 1.0d, new Point3f(0.0f,4.0f,1.0f), Constants.vZero, getAppearance());
+  }
   private Edge edge;
   // A vector giving the default orientation of the edgeCylinder
   private static Vector3f initVector = Constants.vY;
   // offset to allow viewing of multiple edges between the same nodes
   private float multiEdgeOffset=0f;
+  // default edge radius
+  private static float radius = 0.02f;
 }
