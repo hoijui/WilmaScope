@@ -35,9 +35,9 @@ public class ConeClusterView extends ClusterView {
   public void init() {
     setExpandedView();
 
-    LODSphere sphere = new LODSphere(1f,getAppearance());
-    sphere.makePickable(this);
-    sphere.addToTransformGroup(getTransformGroup());
+    //LODSphere sphere = new LODSphere(1f,getAppearance());
+    //sphere.makePickable(this);
+    //sphere.addToTransformGroup(getTransformGroup());
 
     Cone cone = new Cone(1f,0.2f,getAppearance());
     getTransformGroup().addChild(cone);

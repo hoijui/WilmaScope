@@ -57,9 +57,13 @@ public class WilmaApplet extends JApplet {
     graphControl.getPickListener().setNodeOptionsClient(new NodeOptionsMenu(graphCanvas, graphControl, r, controlPanel));
     graphControl.getPickListener().setClusterOptionsClient(new ClusterOptionsMenu(graphCanvas, r, controlPanel));
     graphControl.getPickListener().setEdgeOptionsClient(new EdgeOptionsMenu(graphCanvas, r));
-    r.addForce("Repulsion").setStrength(1f);
-    r.addForce("Spring").setStrength(5f);
-    r.addForce("Origin").setStrength(1f);
+    try {
+      r.addForce("Repulsion").setStrength(1f);
+      r.addForce("Spring").setStrength(5f);
+      r.addForce("Origin").setStrength(1f);
+    } catch(Exception e) {
+      System.out.println("Couldn't add forces to graph root while initing applet, reason: "+e.getMessage());
+    }
     r.setIterations(1);
     //r.setBalancedThreshold(0);
     /*

@@ -27,6 +27,7 @@ import javax.media.j3d.*;
 import javax.vecmath.Point3d;
 import java.awt.Font;
 import javax.swing.ImageIcon;
+import com.sun.j3d.utils.geometry.Sphere;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular Wilma graph drawing engine
@@ -49,14 +50,27 @@ public class BoxNodeView extends NodeView {
     setupHighlightAppearance(Colours.yellowMaterial);
   }
   protected void init() {
-    box = new LabelCube(getAppearance(), getNode().getRadius(), 1.0f);
-    Appearance app = new Appearance();
-    app.setMaterial(getAppearance().getMaterial());
-    border = new NoLabelCube(app, getNode().getRadius(), 1.0f);
-    makePickable(border);
-    addTransformGroupChild(border);
+    float radius = getNode().getRadius();
+    // make the main box that will carry the texture mapped label
+    box = new OrientedLabelCube(getAppearance(), radius, 1.0f);
     makePickable(box);
     addTransformGroupChild(box);
+    // add a border without the label texture... just to make it look more
+    // 3D.
+    Appearance app = new Appearance();
+    app.setMaterial(getAppearance().getMaterial());
+    border = new OrientedNoLabelCube(app, radius, 1.0f);
+    makePickable(border);
+    addTransformGroupChild(border);
+    // now create a fully transparent pickable sphere to encompass the box.
+    // This is because Oriented shapes don't seem to work at all well
+    // with geometry picking.  This expensive cludge simulates bounds picking.
+    Appearance transApp = new Appearance();
+    transApp.setTransparencyAttributes(
+      new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.99f));
+    pickableSphere = new Sphere(2*radius, Sphere.GENERATE_NORMALS, 5, transApp);
+    makePickable(pickableSphere.getShape(Sphere.BODY));
+    addTransformGroupChild(pickableSphere);
   }
   public void setLabel(String label) {
     Appearance appearance = getAppearance();
@@ -93,7 +107,7 @@ public class BoxNodeView extends NodeView {
   public ImageIcon getIcon() {
     return new ImageIcon(getClass().getResource("/images/cube.png"));
   }
-  LabelCube box;
-  NoLabelCube border;
-
+  OrientedLabelCube box;
+  OrientedNoLabelCube border;
+  Sphere pickableSphere;
 }

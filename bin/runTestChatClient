@@ -5,7 +5,7 @@ then
 fi
 if [ x$WILMAPORT = x ]
 then
-  WILMAPORT=58317
+  WILMAPORT=8088
 fi
 echo starting an example Wilma CORBA client with:
 echo "  InitialHost = $WILMAHOST"

@@ -48,11 +48,12 @@ public class ClusterPanel extends MultiPickPanel {
       nodes.add(element);
     }
     GraphControl.ClusterFacade newCluster = cluster.addCluster(nodes);
-    newCluster.addForce("Repulsion");
-    newCluster.addForce("Spring");
-    newCluster.addForce("Origin").setStrength(10f);
-    if(newCluster.getViewType().equals("Planar Cluster")) {
-      newCluster.addForce("Planar");
+    try {
+      newCluster.addForce("Repulsion");
+      newCluster.addForce("Spring");
+      newCluster.addForce("Origin").setStrength(10f);
+    } catch(Exception fe) {
+      System.out.println("Couldn't add forces to graph root from WilmaMain, reason: "+fe.getMessage());
     }
     cluster.unfreeze();
     cleanup();

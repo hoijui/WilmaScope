@@ -75,6 +75,12 @@ public class ControlPanel extends JPanel {
     this.add(dialogPanel, BorderLayout.NORTH);
     dialogPanel.add(messageLabel, BorderLayout.WEST);
   }
+  public void hideMouseHelp() {
+    mouseHelpPanel.setVisible(false);
+  }
+  public void showMouseHelp() {
+    mouseHelpPanel.setVisible(true);
+  }
   public void setMessage() {
     messageLabel.setText(defaultMessage);
   }

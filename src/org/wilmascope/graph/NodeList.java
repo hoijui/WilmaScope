@@ -101,6 +101,9 @@ public class NodeList extends List{
     }
     return new EdgeList(edges);
   }
+  /**
+   * @return the barycenter of all the nodes in the NodeList
+   */
   public Point3f getBarycenter() {
     Point3f barycenter = new Point3f();
     for(resetIterator(); hasNext();) {

@@ -24,9 +24,11 @@ import java.awt.Component;
 import java.awt.Cursor;
 import org.wilmascope.control.*;
 import org.wilmascope.view.PickingClient;
+import org.wilmascope.view.NodeView;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.event.*;
+import javax.vecmath.Vector3f;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular Wilma graph drawing engine
@@ -57,6 +59,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     show(parent, e.getX(), e.getY());
   }
   JMenuItem addEdgeMenuItem = new JMenuItem();
+  JMenuItem centerNodeMenuItem = new JMenuItem();
   JMenuItem deleteMenuItem = new JMenuItem();
   JMenuItem detailsMenuItem = new JMenuItem();
 
@@ -73,6 +76,12 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     addEdgeMenuItem.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
         addEdgeMenuItem_actionPerformed(e);
+      }
+    });
+    centerNodeMenuItem.setText("Center Node");
+    centerNodeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        centerNodeMenuItem_actionPerformed(e);
       }
     });
     deleteMenuItem.setText("Delete");
@@ -122,6 +131,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     });
     this.add(addNodeMenuItem);
     this.add(addEdgeMenuItem);
+    this.add(centerNodeMenuItem);
     this.add(deleteMenuItem);
     this.add(dragMenuItem);
     this.add(fixedCheckBoxMenuItem);
@@ -161,6 +171,17 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     newNode.setPosition(node.getPosition());
     rootCluster.addEdge(node,newNode);
     rootCluster.unfreeze();
+  }
+
+  void centerNodeMenuItem_actionPerformed(ActionEvent e) {
+    Vector3f position = new Vector3f(node.getPosition());
+    javax.media.j3d.Transform3D localToVworld = new javax.media.j3d.Transform3D();
+    ((NodeView)node.getView()).getTransformGroup().getLocalToVworld(localToVworld);
+    Vector3f realpos = new Vector3f(position);
+    System.out.println("Node pos: "+position);
+    localToVworld.transform(position);
+    System.out.println("Real pos: "+position);
+    graphControl.getGraphCanvas().reorient(position);
   }
 
   void deleteMenuItem_actionPerformed(ActionEvent e) {

@@ -32,7 +32,6 @@ import org.wilmascope.forcelayout.Spring;
 import org.wilmascope.forcelayout.Origin;
 import org.wilmascope.forcelayout.DirectedField;
 import org.wilmascope.forcelayout.Force;
-import org.wilmascope.forcelayout.Planar;
 import org.wilmascope.forcelayout.BalancedEventClient;
 import org.wilmascope.graph.GraphElement;
 import org.wilmascope.graph.Cluster;
@@ -197,6 +196,9 @@ public class GraphControl {
     public String getViewType() {
       return graphElementView.getTypeName();
     }
+    public GraphElementView getView() {
+      return graphElementView;
+    }
     /**
      * delete the element, removing all references to it... forever!
      */
@@ -260,6 +262,7 @@ public class GraphControl {
     public void setRelaxedLength(float length) {
       ((EdgeForceLayout)edge.getLayout()).setRelaxedLength(length);
     }
+
     public void reverseDirection() {
       edge.reverseDirection();
       NodeFacade n = start;
@@ -322,6 +325,9 @@ public class GraphControl {
     public void setRadius(float radius) {
       node.setRadius(radius);
     }
+    public float getRadius() {
+      return node.getRadius();
+    }
     public void setFixedPosition(boolean fixed) {
       node.setFixedPosition(fixed);
       if(fixed){
@@ -368,6 +374,9 @@ public class GraphControl {
       this.gc = gc;
       ForceLayout layoutEngine = new ForceLayout(cluster);
       layoutEngine.setIterations(1);
+      if(view.getTypeName().equals("Planar Cluster")) {
+        layoutEngine.setConstrained();
+      }
       cluster.setLayoutEngine(layoutEngine);
       NodeForceLayout layout = (NodeForceLayout)forceManager.createNodeLayout();
       cluster.setLayout(layout);
@@ -394,13 +403,14 @@ public class GraphControl {
     /**
      * deprecated use ((ForceLayout)getLayoutEngine).addForce() instead
      */
-    public ForceFacade addForce(String name) {
+    public ForceFacade addForce(String name)
+    throws ForceManager.UnknownForceTypeException {
       synchronized(gc) {
-      ForceLayout layout = (ForceLayout)cluster.getLayoutEngine();
-      Force f = forceManager.createForce(name);
-      layout.addForce(f);
-      ForceFacade forceFacade = new ForceFacade(f);
-      return forceFacade;
+        ForceLayout layout = (ForceLayout)cluster.getLayoutEngine();
+        Force f = forceManager.createForce(name);
+        layout.addForce(f);
+        ForceFacade forceFacade = new ForceFacade(f);
+        return forceFacade;
       }
     }
     public ForceFacade[] getForces() {
@@ -521,6 +531,23 @@ public class GraphControl {
       synchronized(gc) {
       try {
         EdgeView view = ViewManager.getInstance().createEdgeView(edgeType);
+        return addEdge(start, end, view);
+      } catch(ViewManager.UnknownViewTypeException ex) {
+        ex.printStackTrace();
+        return null;
+      }
+      }
+    }
+    public EdgeFacade addEdge(
+      NodeFacade start,
+      NodeFacade end,
+      String edgeType,
+      float radius)
+    {
+      synchronized(gc) {
+      try {
+        EdgeView view = ViewManager.getInstance().createEdgeView(edgeType);
+        view.setRadius(radius);
         return addEdge(start, end, view);
       } catch(ViewManager.UnknownViewTypeException ex) {
         ex.printStackTrace();
@@ -717,6 +744,7 @@ public class GraphControl {
      */
     public void unfreeze() {
       startTime=System.currentTimeMillis();
+      layoutIterationsCounter = 0;
       balanced = false;
     }
     public void showHiddenChildren() {
@@ -798,6 +826,7 @@ public class GraphControl {
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.DefaultEdgeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.DefaultNodeView());
       viewManager.addPrototypeView(new org.wilmascope.viewplugin.BoxNodeView());
+      viewManager.addPrototypeView(new org.wilmascope.viewplugin.LabelNodeView());
       /*
     try {
       viewManager.loadViews(new java.io.File("plugin"),"plugin");
@@ -818,7 +847,6 @@ public class GraphControl {
     forceManager.addPrototypeForce(new Spring(5f));
     forceManager.addPrototypeForce(new Origin(8f));
     forceManager.addPrototypeForce(new DirectedField(1f));
-    forceManager.addPrototypeForce(new Planar(1f));
     graphCanvas = new GraphCanvas(xsize, ysize);
     try {
       setRootCluster(new ClusterFacade(this));
@@ -838,12 +866,13 @@ public class GraphControl {
   protected synchronized void iterate() {
         if(!balanced&&!stalled) {
           for(int i=0;i<1;i++) {
-            float energy = rootCluster.getCluster().layout();
-            energy = ((ForceLayout)rootCluster.getCluster().getLayoutEngine()).applyForces(allNodes,allEdges);
-            if(energy < balancedThreshold && i!=0) {
+            rootCluster.getCluster().calculateLayout();
+            float energy = rootCluster.getCluster().applyLayout();
+            layoutIterationsCounter++;
+            if(energy < balancedThreshold) {
               balanced = true;
               System.out.println("Balanced after: "+(float)(System.currentTimeMillis()-startTime)/1000f);
-              System.out.println("iterations: "+i);
+              System.out.println("iterations: "+layoutIterationsCounter);
               break;
             }
           }
@@ -866,7 +895,7 @@ public class GraphControl {
   }
   private boolean stalled = false;
   private boolean balanced = true;
-  private float balancedThreshold = 0;
+  private float balancedThreshold = 0.002f;
   private ClusterFacade rootCluster;
   private GraphCanvas graphCanvas;
   private ViewManager viewManager;
@@ -876,6 +905,7 @@ public class GraphControl {
   private NodeList allNodes = new NodeList();
   private EdgeList allEdges = new EdgeList();
   private long startTime = 0;
+  private int layoutIterationsCounter = 0;
   public static PickListener getPickListener() {
     return pickListener;
   }

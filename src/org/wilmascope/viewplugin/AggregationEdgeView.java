@@ -37,9 +37,6 @@ import com.sun.j3d.utils.picking.PickTool;
  */
 
 public class AggregationEdgeView extends EdgeView {
-  /** radius of the edgeCylinder
-   */
-  float radius = 0.02f;
   public AggregationEdgeView() {
     setTypeName("Aggregation");
   }
@@ -59,7 +56,7 @@ public class AggregationEdgeView extends EdgeView {
 
     cylinder.makePickable(this);
     Transform3D transform = new Transform3D();
-    transform.setTranslation(new Vector3f(0f,-0.1f,0f));
+    transform.setTranslation(new Vector3f(0f,0.1f,0f));
     TransformGroup tg = new TransformGroup(transform);
     cylinder.addToTransformGroup(tg);
     addTransformGroupChild(tg);
@@ -82,7 +79,7 @@ public class AggregationEdgeView extends EdgeView {
     rotationTG.addChild(diamond);
     Transform3D transform = new Transform3D();
     transform.setTranslation(new Vector3f(0f,
-      0.35f, 0f));
+      -0.35f, 0f));
     transform.setScale(new Vector3d(1d,3d,1d));
     TransformGroup tg = new TransformGroup(transform);
     tg.addChild(rotationTG);

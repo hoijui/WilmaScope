@@ -55,7 +55,7 @@ implements org.wilmascope.graph.NodeView {
     return new ImageIcon(getClass().getResource("/images/node.png"));
   }
   protected void showLabel(String text) {
-    addLabel(text, 0.04d, new Point3f(0.0f,3.8f,0.0f), Constants.vZero, getAppearance());
+    addLabel(text, 0.04d, new Point3f(0.0f,0f,0.0f), new Vector3f(0.0f,0.1f,0.0f), getAppearance());
   }
   BranchGroup anchorBranch;
   public void showAnchor() {

@@ -37,9 +37,6 @@ import com.sun.j3d.utils.picking.PickTool;
  */
 
 public class ArrowEdgeView extends EdgeView {
-  /** radius of the edgeCylinder
-   */
-  float radius = 0.02f;
   public ArrowEdgeView() {
     setTypeName("Arrow");
   }
@@ -54,26 +51,24 @@ public class ArrowEdgeView extends EdgeView {
     setupHighlightAppearance(Colours.yellowMaterial);
   }
   public void init() {
-    LODCylinder cylinder = new LODCylinder(radius,0.8f,getAppearance());
+    LODCylinder cylinder = new LODCylinder(radius,0.9f,getAppearance());
     //addShape(new Shape3D(edgeCylinder.getShape(Cylinder.BODY).getGeometry()));
 
     cylinder.makePickable(this);
     Transform3D transform = new Transform3D();
-    transform.setTranslation(new Vector3f(0f,-0.1f,0f));
+    transform.setTranslation(new Vector3f(0f,-0.05f,0f));
     TransformGroup tg = new TransformGroup(transform);
     cylinder.addToTransformGroup(tg);
     addTransformGroupChild(tg);
     showDirectionIndicator();
   }
   public void showDirectionIndicator() {
-    Appearance appearance = new Appearance();
-    appearance.setMaterial(org.wilmascope.view.Colours.blueMaterial);
-    Cone cone=new Cone(0.05f, 0.2f, Cone.GENERATE_NORMALS, appearance);
+    Cone cone=new Cone(0.025f, 0.1f, Cone.GENERATE_NORMALS, getAppearance());
     makePickable(cone.getShape(Cone.BODY));
     makePickable(cone.getShape(Cone.CAP));
     Transform3D transform = new Transform3D();
     transform.setTranslation(new Vector3f(0f,
-      0.4f, 0f));
+      0.45f, 0f));
     TransformGroup coneTransform = new TransformGroup(transform);
     coneTransform.addChild(cone);
     addTransformGroupChild(coneTransform);

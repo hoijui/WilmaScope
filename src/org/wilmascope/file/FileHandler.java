@@ -58,7 +58,11 @@ public class FileHandler {
     nodeLookup = new Hashtable();
     graphControl.getRootCluster().removeAllForces();
     graphControl.stall();
+    long startTime = System.currentTimeMillis();
     expandXMLCluster(xmlGraph.getRootCluster(),graphControl.getRootCluster());
+    long endTime = System.currentTimeMillis();
+    long time = endTime - startTime;
+    System.out.println("Loaded... in milliseconds: "+time);
     graphControl.unstall();
   }
   public FileFilter getFileFilter() {
@@ -72,6 +76,10 @@ public class FileHandler {
     XMLGraph.Colour c = xn.getColour();
     if(c != null) {
       gn.setColour(c.getAWTColour());
+    }
+    XMLGraph.Position pos = xn.getPosition();
+    if(pos != null) {
+      gn.setPosition(new javax.vecmath.Point3f(pos.getX(),pos.getY(), pos.getZ()));
     }
     String data;
     if((data = xn.getData())!=null && data.length()!=0) {
@@ -90,6 +98,8 @@ public class FileHandler {
     if(!graphNode.isDefaultColour()) {
       xmlNode.setColour(graphNode.getColour());
     }
+    javax.vecmath.Point3f pos = graphNode.getPosition();
+    xmlNode.setPosition(pos.x,pos.y,pos.z);
   }
   private void expandXMLCluster(
     XMLGraph.Cluster xmlRoot,
@@ -112,7 +122,11 @@ public class FileHandler {
     }
     for(int i=0;i<forces.size();i++) {
       XMLGraph.Force xmlForce = (XMLGraph.Force)forces.get(i);
-      graphRoot.addForce(xmlForce.getType()).setStrength(xmlForce.getStrength());
+      try {
+        graphRoot.addForce(xmlForce.getType()).setStrength(xmlForce.getStrength());
+      } catch(Exception e) {
+        System.out.println("Couldn't add force while loading file because: "+e.getMessage());
+      }
     }
     for(int i=0;i<clusters.size(); i++) {
       XMLGraph.Cluster xc = (XMLGraph.Cluster)clusters.get(i);
@@ -124,6 +138,7 @@ public class FileHandler {
         gc = graphRoot.addCluster();
       }
       setGraphNodeData(xc, gc);
+      gc.setRadius(xc.getRadius());
       expandXMLCluster(xc, gc);
     }
     for(int i=0;i<edges.size();i++) {
@@ -157,6 +172,10 @@ public class FileHandler {
     XMLGraph.Cluster xmlCluster
   ) {
     GraphControl.ForceFacade[] forces = graphCluster.getForces();
+    float radius = graphCluster.getRadius();
+    if(radius > 0) {
+      xmlCluster.setRadius(radius);
+    }
     for(int i=0; i<forces.length; i++) {
       XMLGraph.Force xmlForce = xmlCluster.addForce(
         forces[i].getType(), forces[i].getStrength());

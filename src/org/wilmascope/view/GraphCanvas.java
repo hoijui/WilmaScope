@@ -40,6 +40,7 @@ import com.sun.j3d.utils.picking.PickCanvas;
 public class GraphCanvas extends Canvas3D {
   protected GraphPickBehavior pb;
   protected TransformGroup transformGroup;
+  protected TransformGroup rotationTransformGroup;
   private BranchGroup bg;
   private Background background;
   private ExponentialFog fog;
@@ -64,6 +65,15 @@ public class GraphCanvas extends Canvas3D {
     transformGroup.setCapability(TransformGroup.ALLOW_CHILDREN_WRITE);
     transformGroup.setCapability(TransformGroup.ALLOW_CHILDREN_READ);
     transformGroup.setCapability(TransformGroup.ENABLE_PICK_REPORTING);
+    transformGroup.setCapability(TransformGroup.ALLOW_LOCAL_TO_VWORLD_READ);
+    rotationTransformGroup = new TransformGroup();
+    rotationTransformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+    rotationTransformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+    rotationTransformGroup.setCapability(TransformGroup.ALLOW_CHILDREN_EXTEND);
+    rotationTransformGroup.setCapability(TransformGroup.ALLOW_CHILDREN_WRITE);
+    rotationTransformGroup.setCapability(TransformGroup.ALLOW_CHILDREN_READ);
+    rotationTransformGroup.setCapability(TransformGroup.ENABLE_PICK_REPORTING);
+    rotationTransformGroup.setCapability(TransformGroup.ALLOW_LOCAL_TO_VWORLD_READ);
 
 
     // Set up the background
@@ -85,7 +95,8 @@ public class GraphCanvas extends Canvas3D {
     pb.setSchedulingBounds(bounds);
     transformGroup.addChild(pb);
     addLights(bounds);
-    addMouseRotators(bounds, transformGroup);
+    addMouseRotators(bounds);
+    transformGroup.addChild(rotationTransformGroup);
     bg.addChild(transformGroup);
   }
   public Bounds getBoundingSphere() {
@@ -144,9 +155,9 @@ public class GraphCanvas extends Canvas3D {
      bg.addChild(pl);
    }
  }
- private void addMouseRotators(Bounds bounds, TransformGroup transformGroup) {
+ private void addMouseRotators(Bounds bounds) {
    MouseRotate myMouseRotate = new MouseRotate();
-   myMouseRotate.setTransformGroup(transformGroup);
+   myMouseRotate.setTransformGroup(rotationTransformGroup);
    myMouseRotate.setSchedulingBounds(bounds);
    bg.addChild(myMouseRotate);
    mouseTranslate = new MouseTranslate();
@@ -164,10 +175,10 @@ public class GraphCanvas extends Canvas3D {
  }
  public void addGraphElementView(GraphElementView view) {
    view.getBranchGroup().compile();
-   transformGroup.addChild(view.getBranchGroup());
+   rotationTransformGroup.addChild(view.getBranchGroup());
  }
  public TransformGroup getTransformGroup() {
-   return transformGroup;
+   return rotationTransformGroup;
  }
   public void behaviorWakeup() {
   }
@@ -176,8 +187,18 @@ public class GraphCanvas extends Canvas3D {
    return bg;
  }
   public void reorient() {
-    javax.media.j3d.Transform3D rotate = new javax.media.j3d.Transform3D();
-    transformGroup.setTransform(rotate);
+    javax.media.j3d.Transform3D reorient = new javax.media.j3d.Transform3D();
+    transformGroup.setTransform(reorient);
+  }
+  public void reorient(Vector3f position) {
+    javax.media.j3d.Transform3D reorient = new javax.media.j3d.Transform3D();
+    Vector3f delta = new Vector3f();
+    delta.sub(position);
+    transformGroup.getTransform(reorient);
+    reorient.get(position);
+    delta.z = position.z;
+    reorient.setTranslation(delta);
+    transformGroup.setTransform(reorient);
   }
   public void setBackgroundColor(Color3f c) {
     background.setColor(c);

@@ -26,6 +26,7 @@ import java.awt.Font;
 import java.util.Vector;
 import com.sun.j3d.utils.picking.PickTool;
 import javax.swing.ImageIcon;
+import com.sun.j3d.utils.geometry.Text2D;
 
 /*
  * Title:        WilmaToo
@@ -237,9 +238,10 @@ implements org.wilmascope.graph.Viewable {
    * @param Vector3f Translation vector to position the label origin relative to centre of the edge
    * @param Appearance for the label
    */
-  static Font3D f3d = new Font3D(new Font("Japanese", Font.PLAIN, 4),new FontExtrusion());
+  //static Font3D f3d = new Font3D(new Font("Dummy", Font.PLAIN, 4),new FontExtrusion());
   protected void addLabel(String text, double scale, Point3f originPosition, Vector3f vTranslation, Appearance apText) {
     if(text != null && !text.equals("null") && text.length()>0) {
+      /*
       Point3f centredOriginPosition = new Point3f(originPosition);
       centredOriginPosition.x += -text.length()/2;
       Text3D txt = new Text3D(f3d, text, centredOriginPosition);
@@ -248,19 +250,22 @@ implements org.wilmascope.graph.Viewable {
       textShape.setRotationPoint(new Point3f(0,0,0));
       textShape.setGeometry(txt);
       textShape.setAppearance(apText);
-      Transform3D scaleTransform = new Transform3D();
-      scaleTransform.setScale(new Vector3d(scale,scale,scale));
-      TransformGroup textTG = new TransformGroup(scaleTransform);
+      */
+      Color3f c = new Color3f(1f,1f,1f);
+      //defaultMaterial.getDiffuseColor(c);
+      Text2D text2D = new Text2D(text, c, "Dummy", 20, Font.PLAIN);
+      TransformGroup textTG = new TransformGroup();
       textTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-      textTG.addChild(textShape);
+      textTG.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+      textTG.addChild(text2D);
 
-      textShape.setCapability(Shape3D.ENABLE_PICK_REPORTING);
-      try {
-        PickTool.setCapabilities(textShape, PickTool.INTERSECT_FULL);
-        txt.setCapability(Text3D.ALLOW_INTERSECT);
-      } catch(javax.media.j3d.RestrictedAccessException e) {
-        //System.err.println("Not setting bits on already setup shared geometry");
-      }
+      BoundingSphere bounds = new BoundingSphere(new Point3d(0.0,0.0,0.0), 100.0);
+      Billboard billboard = new Billboard(textTG,Billboard.ROTATE_ABOUT_POINT,originPosition);
+      billboard.setSchedulingBounds( bounds );
+
+      TransformGroup l = new TransformGroup();
+      l.addChild(billboard);
+      l.addChild(textTG);
 
       if(labelSubBranch != null) {
         labelSubBranch.detach();
@@ -271,12 +276,11 @@ implements org.wilmascope.graph.Viewable {
         Transform3D translation = new Transform3D();
         translation.setTranslation(vTranslation);
         TransformGroup translateTG = new TransformGroup(translation);
-        translateTG.addChild(textTG);
+        translateTG.addChild(l);
         labelSubBranch.addChild(translateTG);
       } else {
         try {
-          labelSubBranch.addChild(textTG);
-          //tg.addChild(textTG);
+          labelSubBranch.addChild(l);
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -305,7 +309,7 @@ implements org.wilmascope.graph.Viewable {
     try {
       PickTool.setCapabilities(shape, PickTool.INTERSECT_FULL);
     } catch(javax.media.j3d.RestrictedAccessException e) {
-      //System.out.println("Not setting bits on already setup shared geometry");
+      System.out.println("Not setting bits on already setup shared geometry");
     }
   }
 

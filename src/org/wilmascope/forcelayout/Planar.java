@@ -42,22 +42,22 @@ public class Planar extends Force {
     Vector3f netTorque = new Vector3f();
     Vector3f f = new Vector3f();
     for(int i=0; i<nodes.size(); i++) {
-      // calculate the force on the node back towards the plane and a force
-      // on the cluster in the opposite direction
+      // find f: force on the node back towards the plane and an equal and
+      // opposite force back on the plane
       Node n = nodes.get(i);
       f.sub(n.getPosition(), centroid);
       float d = f.dot(normal);
       f.set(normal);
       f.scale(d);
 
-      // calculate closest point on the plane to the node
+      // find p: the closest point on the plane to the node
       Point3f p = new Point3f();
       p.add(n.getPosition(),f);
 
       f.scale(6 * strengthConstant);
       NodeForceLayout l = (NodeForceLayout)n.getLayout();
-      l.subForce(f);
-      ((NodeForceLayout)root.getLayout()).addForce(f);
+      //l.subForce(f);
+      //((NodeForceLayout)root.getLayout()).addForce(f);
 
       // calculate a torque on the plane due to the force
       //   torque = r X F
@@ -68,18 +68,20 @@ public class Planar extends Force {
       torque.cross(r,f);
       netTorque.add(torque);
     }
-
     /*
     Vector3f norm = new Vector3f();
     norm.cross(vY,normal);
     root.rotate(new AxisAngle4f(norm.x,norm.y,norm.z,vY.angle(norm)));
     */
-    float angleDelta = strengthConstant* netTorque.length()/(10 * root.getMass());
+
+    /*
+    float angleDelta = strengthConstant * netTorque.length()/(10);
     netTorque.normalize();
     if(angleDelta > 0.00001) {
       root.rotate(new AxisAngle4f(netTorque, angleDelta));
     }
     rotate();
+    */
   }
   private void rotate() {
     Transform3D t = new Transform3D();

@@ -106,11 +106,15 @@ implements org.wilmascope.graph.EdgeView {
   protected void showLabel(String text) {
     addLabel(text, 1.0d, new Point3f(0.0f,4.0f,1.0f), Constants.vZero, getAppearance());
   }
+  public void setRadius(float radius) {
+    this.radius = radius;
+  }
+	 
   private Edge edge;
   // A vector giving the default orientation of the edgeCylinder
   private static Vector3f initVector = Constants.vY;
   // offset to allow viewing of multiple edges between the same nodes
   private float multiEdgeOffset=0f;
   // default edge radius
-  private static float radius = 0.02f;
+  protected float radius = 0.02f;
 }

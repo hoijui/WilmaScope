@@ -55,8 +55,6 @@ public class Cluster extends Node {
    * @param node the Node to add
    */
   public void addNode(Node node) {
-    System.out.println("Cluster id="+id+": addNode()  before: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
-
     nodes.add(node);
     node.setOwner(this);
     // get this node's edges.  Edges between the node to be added and nodes
@@ -72,7 +70,6 @@ public class Cluster extends Node {
       addEdge(edge);
     }
     calcMass();
-    System.out.println("Cluster id="+id+": addNode()  after: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
   }
   public EdgeList getInternalEdges() {
     return internalEdges;
@@ -96,7 +93,6 @@ public class Cluster extends Node {
    * @param node which Node to remove
    */
   public void removeNode(Node n) {
-//    System.out.println("Cluster id="+id+": removeNode()  before: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
     nodes.remove(n);
     // remove all the node's edges
     EdgeList edges = n.getEdges();
@@ -120,8 +116,6 @@ public class Cluster extends Node {
         // promoted then our reference to the edge will be null... nothing
         // needs to occur as the edge will be deleted from the owner
     }
-
-//    System.out.println("Cluster id="+id+": removeNode()  after: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
   }
 
   /**
@@ -132,14 +126,12 @@ public class Cluster extends Node {
    * @param e the edge to add
    */
   public void addEdge(Edge e) {
-//    System.out.println("Cluster id="+id+": addEdge()  before: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
     Cluster cluster;
     if((cluster = e.getStart().getCommonAncestor(e.getEnd()))!=null) {
       cluster.addInternalEdgeHere(e);
     } else {
       throw new Error("No root cluster!  Edge not added!");
     }
-//    System.out.println("Cluster id="+id+": addEdge()  after: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
   }
   /**
    * Add a reference to an external edge, an edge that has one end in the
@@ -227,7 +219,6 @@ public class Cluster extends Node {
   public Cluster(NodeView view) {
     super(view);
     id = idcounter++;
-//    System.out.println("New cluster: ID="+id);
     normal = new Vector3f(0f,1f,0f);
     orientation.set(new AxisAngle4f(normal,0f));
   }
@@ -344,21 +335,28 @@ public class Cluster extends Node {
   /**
    * Lay out the nodes according to the current graph and layout engine
    */
-  public float layout() {
+  public void calculateLayout() {
     if(expanded) {
-      float maxVelocity = nodes.getClusters().layout();
-      float velocity = layoutEngine.layout();
-      if(velocity > maxVelocity) {
-        maxVelocity = velocity;
-      }
-      return maxVelocity;
+      nodes.getClusters().calculateLayout();
+      layoutEngine.calculateLayout();
 
       // Let's postpone calculating the radius until just before we draw since
       // at the moment there's nothing in Layout that needs it...
       // calcRadius();
     }
+  }
+  public float applyLayout() {
+    if(expanded) {
+      float maxVelocity = nodes.getClusters().applyLayout();
+      float velocity = layoutEngine.applyLayout();
+      if(velocity > maxVelocity) {
+        maxVelocity = velocity;
+      }
+      return maxVelocity;
+    }
     return 0;
   }
+
   // The radius at any given time should be the distance from the centre of the
   // cluster to the farthest node + that node's radius and a bit
   private void calcRadius() {
@@ -371,7 +369,8 @@ public class Cluster extends Node {
         newRadius = tmpRadius;
       }
     }
-    newRadius += 0.01;
+    // add a little bit extra to the radius to make sure it covers all nodes
+    newRadius += 0.1;
     setRadius(newRadius);
   }
 
@@ -403,12 +402,12 @@ public class Cluster extends Node {
    * Moves this cluster to the new position, and repositions all of its
    * member nodes appropriately.
    * @param newPosition the position to which everything will be moved
-   */
   public void setPosition(Point3f newPosition) {
     Vector3f delta = new Vector3f();
     delta.sub(getPosition(), newPosition);
     reposition(delta);
   }
+   */
 
   public AxisAngle4f getRotationAngle() {
     return rotationAngle;

@@ -5,7 +5,7 @@ then
 fi
 if [ x$WILMAPORT = x ]
 then
-  WILMAPORT=58317
+  WILMAPORT=8088
 fi
 echo starting the Wilma graph CORBA Service with:
 echo "  InitialHost = $WILMAHOST"

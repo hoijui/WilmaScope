@@ -35,11 +35,16 @@ public class ClusterList extends List {
   public void remove(Cluster c) {
     elements.remove(c);
   }
-  public float layout() {
+  public void calculateLayout() {
+    for(int i = 0; i<elements.size(); i++) {
+      ((Cluster)elements.get(i)).calculateLayout();
+    }
+  }
+  public float applyLayout() {
     float maxVelocity=0;
     float velocity;
     for(int i = 0; i<elements.size(); i++) {
-      velocity = ((Cluster)elements.get(i)).layout();
+      velocity = ((Cluster)elements.get(i)).applyLayout();
       if(velocity>maxVelocity) {
         maxVelocity=velocity;
       }

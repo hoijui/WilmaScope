@@ -41,6 +41,8 @@ public class Constants {
     = gc.getFloatValue("TerminalVelocity");
   public final static float frictionCoefficient
     = gc.getFloatValue("FrictionCoefficient");
+  public final static float angularInertia
+    = gc.getFloatValue("AngularInertia");
   public final static Vector3f minVector
     = gc.getVector3f("MinVector");
   public final static Vector3f vZero

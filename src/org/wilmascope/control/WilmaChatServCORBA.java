@@ -218,7 +218,12 @@ import org.omg.CORBA.*;
       cluster.setIterations(iterations);
     }
     public Force addForce(String name) {
-      return new ForceServant(cluster.addForce(name));
+      try {
+        return new ForceServant(cluster.addForce(name));
+      } catch(Exception e) {
+        System.out.println("Couldn't addForce because: "+e.getMessage());
+        return null;
+      }
     }
 
     GraphControl.ClusterFacade getCluster() {

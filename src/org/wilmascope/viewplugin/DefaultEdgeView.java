@@ -37,9 +37,6 @@ import com.sun.j3d.utils.picking.PickTool;
  */
 
 public class DefaultEdgeView extends EdgeView {
-  /** radius of the edgeCylinder
-   */
-  float radius = 0.02f;
   float length = 1.0f;
   public DefaultEdgeView() {
     setTypeName("Plain Edge");

@@ -46,7 +46,7 @@ public class DefaultClusterView extends ClusterView {
   }
   public void init() {
     setExpandedView();
-    LODSphere sphere = new LODSphere(1.0f, getAppearance());
+    LODSphere sphere = new LODSphere(1.0f, getAppearance(),new float[] {3f, 6f, 20f});
     sphere.makePickable(this);
     sphere.addToTransformGroup(getTransformGroup());
   }

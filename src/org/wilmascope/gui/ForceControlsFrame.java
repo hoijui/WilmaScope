@@ -45,6 +45,7 @@ public class ForceControlsFrame extends JFrame {
 
   // Variables declaration
   JSlider velocityAttenuationSlider = new JSlider();
+  JSlider angularInertiaSlider = new JSlider();
   JScrollPane jScrollPane1 = new JScrollPane();
   JScrollPane jScrollPane2 = new JScrollPane();
 
@@ -96,6 +97,18 @@ public class ForceControlsFrame extends JFrame {
       }
     });
     forceLayoutControlsBox.add(velocityAttenuationSlider);
+    angularInertiaSlider.setBorder (new javax.swing.border.TitledBorder("Angular Inertia"));
+    angularInertiaSlider.setMinorTickSpacing (10);
+    angularInertiaSlider.setPaintLabels (true);
+    angularInertiaSlider.setPaintTicks (true);
+    angularInertiaSlider.setMajorTickSpacing (50);
+    angularInertiaSlider.setValue ((int)((float)forceLayout.getAngularInertia())-1);
+    angularInertiaSlider.addChangeListener (new javax.swing.event.ChangeListener () {
+      public void stateChanged (javax.swing.event.ChangeEvent evt) {
+        forceLayout.setAngularInertia((float)angularInertiaSlider.getValue()+1);
+      }
+    });
+    forceLayoutControlsBox.add(angularInertiaSlider);
 
     balancedThresholdSlider.setBorder (new javax.swing.border.TitledBorder("Balanced Threshold"));
     balancedThresholdSlider.setMinorTickSpacing (10);
