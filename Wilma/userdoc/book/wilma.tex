@@ -10,6 +10,7 @@
 \usepackage{cropmark} % cropmarks for pages without
                       % pagenumbers
 \usepackage{math}     % placeholder for figures
+\usepackage{amssymb}     % placeholder for figures
 \usepackage{subfigure} % subfigures in one figure
 
 %\usepackage{algorithm2e}
@@ -90,7 +91,12 @@
 %\end{abstract}
 
 \section{Introduction}\label{sec:intro}
+
+\subsection{Witty Survey Subsection}
 \em{survey previous stuff.}
+
+\subsection{Debonair aims for the sultry Wilma}
+\label{motivation}
 
 \em{motivation for wilma.}
 %
@@ -99,8 +105,33 @@
 \subsection{Layout Algorithms}
 \subsubsection{Force Directed}
 \subsubsection{Multiscale Force Directed}
+
 \subsubsection{Fast Simulated Annealing}
-Citation to Davidson {\em et. al.} \cite{davidson01noise}.
+
+As we stated in Section~\ref{motivation}, a major design goal for Wilma
+was to provide a platform within which algorithmic experimentation could be
+conducted elegantly and efficiently.
+
+\paragraph{}
+
+Force-directed layout algorithms are of course the method of choice for a
+wide range of graph visualisation problems.  One variantion on these
+algorithms, advocated by Fruchtermann \&
+Kawai~\cite{fruchtermann90force-directed}, and Davidson {\em et.
+al.}~\cite{davidson01noise}, attempts to avoid calculation of repulsion force
+vectors, which is $O(n^2)$ in the number of verticies.  Instead, it is
+possible to approximate scalar energy potential values, caching this
+information at grid points across space.
+
+\paragraph{}
+
+Iterated updates to the potential well then cost only $O(|V|)$ time per
+iteration.  On the downside, the cache array itself takes $O(v \centerdot d)$
+memory, where $v$ is the spatial volume of the embedded graph and $d$ is the
+density of stored potential information.
+
+\paragraph{}
+
 \subsubsection{DOT: heirarchical layout}
 \subsection{User Interfaces}
 \subsection{Programming Interfaces}
