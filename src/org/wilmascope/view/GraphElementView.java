@@ -18,10 +18,12 @@
  * -- Tim Dwyer, 2001
  */
 package org.wilmascope.view;
+import java.awt.Color;
 import java.awt.Font;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Billboard;
 import javax.media.j3d.BoundingSphere;
@@ -41,6 +43,7 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
+
 import com.sun.j3d.utils.geometry.Text2D;
 import com.sun.j3d.utils.picking.PickTool;
 /*
@@ -228,7 +231,11 @@ public abstract class GraphElementView
 		Color3f colour = new Color3f();
 		if (diffuseColour == null) { // no user colour set, get it from the
 																 // appearance
-			appearance.getMaterial().getDiffuseColor(colour);
+      if(appearance != null && appearance.getMaterial()!=null) {
+        appearance.getMaterial().getDiffuseColor(colour);
+      } else {
+        colour = new Color3f(Color.gray);
+      }
 		} else {
 			colour = diffuseColour;
 		}

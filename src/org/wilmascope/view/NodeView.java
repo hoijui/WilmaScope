@@ -20,7 +20,9 @@
 
 package org.wilmascope.view;
 
+import java.awt.Component;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.Properties;
@@ -33,6 +35,7 @@ import javax.media.j3d.TransformGroup;
 import javax.swing.ImageIcon;
 import javax.vecmath.AxisAngle4f;
 import javax.vecmath.Color3f;
+import javax.vecmath.Point2d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
@@ -151,6 +154,28 @@ public abstract class NodeView extends GraphElementView implements
     anchorBranch.detach();
   }
 
+  public Point3f getVWorldPosition() {
+    Transform3D localToVworld = new Transform3D();
+    getTransformGroup().getLocalToVworld(localToVworld);
+    // get current node position and convert to VWorld
+    Point3f pos = new Point3f(node.getPosition());
+    localToVworld.transform(pos);
+    return pos;
+  }
+  public Point getCanvasPosition(Component canvas) {
+    GraphCanvas c = (GraphCanvas)canvas;
+    Transform3D localToVworld = new Transform3D();
+    Transform3D vWorldToImagePlate = new Transform3D();
+    getTransformGroup().getLocalToVworld(localToVworld);
+    c.getVworldToImagePlate(vWorldToImagePlate);
+    // get current node position and convert to VWorld
+    Point3d pos = new Point3d(node.getPosition());
+    localToVworld.transform(pos);
+    vWorldToImagePlate.transform(pos);
+    Point2d pos2d = new Point2d();
+    c.getPixelLocationFromImagePlate(pos,pos2d);
+    return new Point((int)(pos2d.x),(int)(pos2d.y));
+  }
   /**
    * Move the node in a plane parallel to the view plate, such that it appears
    * at the point on the canvas specified in x and y. The x and y parameters are
@@ -171,10 +196,6 @@ public abstract class NodeView extends GraphElementView implements
     c.getImagePlateToVworld(imagePlateToVworld);
     getTransformGroup().getLocalToVworld(localToVworld);
 
-    // get current node position and convert to VWorld
-    Point3f pos = new Point3f(node.getPosition());
-    localToVworld.transform(pos);
-
     // get eye position
     Point3d d = new Point3d();
     c.getCenterEyeInImagePlate(d);
@@ -190,6 +211,7 @@ public abstract class NodeView extends GraphElementView implements
     Vector3f eyeToCanvas = new Vector3f();
     eyeToCanvas.sub(mousePos, eyePos);
 
+    Point3f pos = getVWorldPosition();
     // the target position will be at a point in the same plane parallel to
     // the view plate. Calculate the scale factor for eye to canvas in order
     // to place the node from the known z values.

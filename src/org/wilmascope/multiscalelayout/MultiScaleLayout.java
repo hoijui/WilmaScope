@@ -40,9 +40,8 @@ public class MultiScaleLayout extends LayoutEngine {
 	}
 	public void init(Cluster root) {
 		super.init(root);
-		qGraph = new QuickGraph();
 	}
-	QuickGraph qGraph;
+	QuickGraph qGraph = new QuickGraph();
 	boolean reset = true;
 	/**
 	 * calculate the changes required to move the graph to a nicer layout

@@ -32,7 +32,7 @@ public class LayoutEngineFrame extends JFrame implements BalancedEventListener {
   private Box box1;
   private JPanel generalControls = new JPanel();
   private JComboBox layoutEngineComboBox;
-  private SpinnerSlider animationGranularitySlider = new SpinnerSlider("Iterations per Frame",0,100,1);
+  private SpinnerSlider iterationsPerFrameSlider = new SpinnerSlider("Iterations per Frame",0,100,1);
   private JButton startStopButton = new JButton();
   private JPanel controlsPanel;
   GraphControl.Cluster cluster;
@@ -69,18 +69,33 @@ public class LayoutEngineFrame extends JFrame implements BalancedEventListener {
   }
   public LayoutEngineFrame(final GraphControl graphControl, String title) {
     this(graphControl.getRootCluster(),title);
-    animationGranularitySlider.addChangeListener(new ChangeListener() {
+    iterationsPerFrameSlider.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
-        graphControl.setIterationsPerFrame(animationGranularitySlider.getValue());
+        graphControl.setIterationsPerFrame(iterationsPerFrameSlider.getValue());
       }
     });
-    generalControls.add(animationGranularitySlider);
+    enableIterationsPerFrameSlider();
+    generalControls.add(iterationsPerFrameSlider);
     pack();
+  }
+  /* 
+   * the iterationsPerFrameSlider should be enabled for
+   * iterative layouts (like force directed) and disabled
+   * for layouts that complete in a single step (sugiyama)
+   */
+  private void enableIterationsPerFrameSlider() {
+    if(cluster.getLayoutEngine().isIterative()) {
+      iterationsPerFrameSlider.setEnabled(true);
+    } else {
+      iterationsPerFrameSlider.setEnabled(false);
+    }
   }
   void startStopButton_actionPerformed(ActionEvent e) {
     if(startStopButton.getText().equals("Start")) {
       cluster.unfreeze();
+      startStopButton.setText("Stop");
     } else {
+      startStopButton.setText("Start");
       cluster.freeze();
     }
   }
@@ -99,6 +114,7 @@ public class LayoutEngineFrame extends JFrame implements BalancedEventListener {
       cluster.setLayoutEngine(LayoutManager.getInstance().createLayout(s));
       controlsPanel = cluster.getLayoutEngine().getControls();
       box1.add(controlsPanel);
+      enableIterationsPerFrameSlider();
     } catch (UnknownLayoutTypeException e1) {
       WilmaMain.showErrorDialog("Unknown Layout Type",e1);
     }

@@ -19,9 +19,16 @@
  */
 package org.wilmascope.graph;
 
-import java.util.*;
-import javax.vecmath.Vector3f;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Vector;
+
 import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
+
+import org.wilmascope.view.GraphCanvas;
+import org.wilmascope.view.NodeView;
 public class NodeList extends List<Node>{
   private ClusterList clusters = new ClusterList();
   public NodeList() {}
@@ -102,33 +109,11 @@ public class NodeList extends List<Node>{
     barycenter.scale(1f/(float)elements.size());
     return barycenter;
   }
-  /**
-   * @return maximum X value - minimum X value
-   */
-  public float getWidth() {
-    float xMin=Float.MAX_VALUE, xMax=Float.MIN_VALUE;
-    for(Node n:elements) {
-      Point3f p = n.getPosition();
-      if(p.x<xMin) { xMin = p.x; }
-      if(p.x>xMax) { xMax = p.x; }
-    }
-    return xMax - xMin;
-  }
+
   public Plane getBestFitPlane() {
     return new Plane(this);
   }
-  /**
-   * @return maximum Y value - minimum Y value
-   */
-  public float getHeight() {
-    float yMin=Float.MAX_VALUE, yMax=Float.MIN_VALUE;
-    for(Node n:elements) {
-      Point3f p = n.getPosition();
-      if(p.y<yMin) { yMin = p.y; }
-      if(p.y>yMax) { yMax = p.y; }
-    }
-    return yMax - yMin;
-  }
+
   /**
    * Finds the extreme corners of the bounding box around these nodes
    * @param bottomLeft bottom left corner of the bounding box
@@ -152,8 +137,35 @@ public class NodeList extends List<Node>{
       if(p.z>topRight.z) { topRight.z = p.z; }
     }
     centroid.add(bottomLeft,topRight);
-    centroid.scale(1f/2f);
+    centroid.scale(0.5f);
   }
+
+  /**
+   * Finds the extreme corners of the bounding box around these nodes in VWorld coordinates
+   * @param bottomLeft bottom left corner of the bounding box
+   * @param topRight top right corner of the bounding box
+   * @param centroid midway between bottomLeft and topRight
+   */
+  public void getVWorldBoundingBoxCorners(Point3f bottomLeft, Point3f topRight, Point3f centroid) {
+    bottomLeft.x=Float.MAX_VALUE;
+    topRight.x=Float.MIN_VALUE;
+    bottomLeft.y=Float.MAX_VALUE;
+    topRight.y=Float.MIN_VALUE;
+    bottomLeft.z=Float.MAX_VALUE;
+    topRight.z=Float.MIN_VALUE;
+    for(Node n:elements) {
+      Point3f p = ((NodeView)n.getView()).getVWorldPosition();
+      if(p.x<bottomLeft.x) { bottomLeft.x = p.x; }
+      if(p.x>topRight.x) { topRight.x = p.x; }
+      if(p.y<bottomLeft.y) { bottomLeft.y = p.y; }
+      if(p.y>topRight.y) { topRight.y = p.y; }
+      if(p.z<bottomLeft.z) { bottomLeft.z = p.z; }
+      if(p.z>topRight.z) { topRight.z = p.z; }
+    }
+    centroid.add(bottomLeft,topRight);
+    centroid.scale(0.5f);
+  }
+
   public NodeList getSinks() {
     NodeList sinks = new NodeList();
     for (Node v : elements) {
@@ -180,6 +192,14 @@ public class NodeList extends List<Node>{
       }
     }
     return sources;
+  }
+  /**
+   * @return
+   */
+  public Point3f getMidPoint() {
+    Point3f centroid = new Point3f();
+    getBoundingBoxCorners(new Point3f(),new Point3f(), centroid);
+    return centroid;
   }
 
 }

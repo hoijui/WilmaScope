@@ -17,39 +17,31 @@
  *
  * -- Tim Dwyer, 2001
  */
-package org.wilmascope.graphanalysis.plugin;
+package org.wilmascope.graphanalysis;
 
+import java.awt.Color;
+
+import javax.swing.JPanel;
+
+import org.wilmascope.control.GraphControl.Cluster;
 import org.wilmascope.control.GraphControl.Node;
-import org.wilmascope.graphanalysis.GraphAnalysis;
-import org.wilmascope.graphanalysis.VisualMapping;
+import org.wilmascope.gui.HueSettingsPanel;
 
 /**
+ * A mapping for node properties to colour
  * @author dwyer
  */
-public class EigenvectorCentrality extends GraphAnalysis {
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.wilmascope.graphanalysis.GraphAnalysis#analyse(org.wilmascope.control.GraphControl.Cluster)
-   */
-  public void analyse() {
-    int maxDegree = 0;
-    for (Node n : getCluster().getNodes()) {
-      int degree = n.getDegree();
-      if (degree > maxDegree) {
-        maxDegree = degree;
-      }
-    }
-    if (maxDegree > 0) {
-      for (Node n : getCluster().getNodes()) {
-        float degreeCentrality = (float)n.getDegree()/(float)maxDegree;
-        n.getProperties().setProperty(getName(),""+degreeCentrality);
-      }
-    }
+public class NoVisualMapping extends VisualMapping {
+  public NoVisualMapping() {
+    super("No Visual Mapping");
   }
 
-  public String getName() {
-    return "Degree Centrality";
+  JPanel controls = new JPanel();
+
+  public void apply(Cluster c, String analysisType) {
+  }
+
+  public JPanel getControls() {
+    return controls;
   }
 }

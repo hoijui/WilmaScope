@@ -19,35 +19,34 @@
  */
 package org.wilmascope.graphanalysis;
 
-import java.util.Hashtable;
+import java.awt.Color;
 
 import javax.swing.JPanel;
 
 import org.wilmascope.control.GraphControl.Cluster;
-import org.wilmascope.util.Plugin;
-
+import org.wilmascope.control.GraphControl.Node;
+import org.wilmascope.gui.HueSettingsPanel;
 
 /**
+ * A mapping for node properties to colour
  * @author dwyer
- * 
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
  */
+public class NodeSizeMapping extends VisualMapping {
+  public NodeSizeMapping() {
+    super("Node Size");
+  }
 
-public abstract class GraphAnalysis implements Plugin {
-  public abstract void analyse();
+  JPanel controls = new JPanel();
+  public void apply(Cluster c, String analysisType) {
+    for (Node n : c.getNodes()) {
+      float attr = Float.parseFloat(n.getProperties().getProperty(
+          analysisType));
+      n.setRadius(attr / 5f);
+    }
+    c.draw();
+  }
 
-  /*
-   * @see org.wilmascope.util.Plugin#getControls()
-   */
   public JPanel getControls() {
-    return new AnalysisPanel(this);
+    return controls;
   }
-  public Cluster getCluster() {
-    return cluster;
-  }
-  public void setCluster(Cluster c) {
-    cluster=c;
-  }
-  Cluster cluster;
 }

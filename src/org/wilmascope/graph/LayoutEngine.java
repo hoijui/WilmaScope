@@ -110,4 +110,15 @@ public abstract class LayoutEngine<N extends NodeLayout,E extends EdgeLayout> {
     return root;
   }
   private Cluster root;
+  /** 
+   * The iterationsPerFrameSlider should be enabled for
+   * iterative layouts (like force directed) and disabled
+   * for layouts that complete in a single step (sugiyama)
+   * 
+   * @return false by default.  Override to return true if
+   * layout engine is iterative.
+   */
+  public boolean isIterative() {
+    return false;
+  }
 }

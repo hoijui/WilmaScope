@@ -252,6 +252,10 @@ public class Actions {
             org.wilmascope.global.GlobalConstants.getInstance().getProperty(
                 "DefaultDataPath"));
         chooser.setFileFilter(fileHandler.getFileFilter());
+        File lastSelected = fileHandler.getLastFile();
+        if (lastSelected != null) {
+          chooser.setSelectedFile(lastSelected);
+        }
         int returnVal = chooser.showSaveDialog(parent);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
           fileHandler.save(chooser.getSelectedFile().getAbsolutePath());

@@ -110,13 +110,13 @@ public class EdgeOptionsMenu extends JPopupMenu implements OptionsClient {
         radiusMenuItem_actionPerformed(e);
       }
     });
+    this.add(edgeTypeMenu);
     this.add(deleteMenuItem);
     this.add(hideMenuItem);
     this.add(radiusMenuItem);
     this.add(weightMenuItem);
     this.add(setColourMenuItem);
     this.add(reverseMenuItem);
-    this.add(edgeTypeMenu);
     this.add(detailsMenuItem);
   }
 

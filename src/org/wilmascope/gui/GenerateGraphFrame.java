@@ -61,11 +61,6 @@ public class GenerateGraphFrame extends JFrame implements ActionListener {
     ImageIcon icon = new ImageIcon(org.wilmascope.images.Images.class
         .getResource("WilmaW24.png"));
     this.setIconImage(icon.getImage());
-    jbInit();
-    pack();
-  }
-
-  private void jbInit() {
     setTitle(title);
     boxLayout = Box.createVerticalBox();
     this.getContentPane().add(boxLayout, null);
@@ -97,6 +92,7 @@ public class GenerateGraphFrame extends JFrame implements ActionListener {
         generatorsComboBox_actionPerformed(e);
       }
     });
+    pack();
   }
 
   public void generatorsComboBox_actionPerformed(ActionEvent e) {

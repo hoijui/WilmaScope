@@ -288,4 +288,7 @@ public class ForceLayout extends
     fl.getForce("Origin").setStrengthConstant(10f);
     return fl;
   }
+  public boolean isIterative() {
+    return true;
+  }
 }

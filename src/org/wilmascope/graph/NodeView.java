@@ -19,6 +19,9 @@
  */
 package org.wilmascope.graph;
 
+import java.awt.Component;
+import java.awt.Point;
+
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular WilmaScope software
@@ -34,4 +37,8 @@ package org.wilmascope.graph;
 public interface NodeView extends Viewable, NodeAbility {
   public void setRadius(float radius);
   public float getRadius();
+  /**
+   * @return position of node on 2D canvas, removing all local transforms
+   */
+  public Point getCanvasPosition(Component canvas);
 }

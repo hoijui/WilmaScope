@@ -52,23 +52,15 @@ public class AnalysisPanel extends JPanel {
   final JComboBox mappingComboBox;
   JButton applyButton = new JButton("Apply Mapping");
   Hashtable<String,VisualMapping> mappings=new Hashtable<String,VisualMapping>();
-
-  public AnalysisPanel(final GraphAnalysis analysis, final String analysisType) {
+  public AnalysisPanel(GraphAnalysis analysis) {
+    this(analysis,"No Visual Mapping");
+  }
+  public AnalysisPanel(final GraphAnalysis analysis, String defaultMapping) {
     this.analysis = analysis;
-    addMapping(new VisualMapping("None") {
-      public void apply(Cluster c, String analysisType) {
-      }
-    });
-    addMapping(new VisualMapping("Node Size") {
-      public void apply(Cluster c, String analysisType) {
-        for (Node n : c.getNodes()) {
-          float attr = Float.parseFloat(n.getProperties().getProperty(
-              analysisType));
-          n.setRadius(attr / 5f);
-        }
-        c.draw();
-      }
-    });
+    final String analysisType = analysis.getName();
+
+    addMapping(new NoVisualMapping());
+    addMapping(new NodeSizeMapping());
     addMapping(new NodeColourMapping());
     addMapping(new NodeLabelMapping());
     addMapping(new LevelConstraintMapping());
@@ -94,6 +86,7 @@ public class AnalysisPanel extends JPanel {
             .getSelectedItem());
         analysis.analyse();
         m.apply(analysis.getCluster(),analysisType);
+        m.storeMapping(analysis.getCluster(),analysisType);
         observableChanged.changed();
       }
     });
@@ -103,8 +96,12 @@ public class AnalysisPanel extends JPanel {
     b.add(mappingPanel);
     b.add(removeButton);
     add(b);
+    setDefaultMapping(defaultMapping);
   }
-  public void addMapping(VisualMapping m) {
+  public void setDefaultMapping(String defaultMapping) {
+    mappingComboBox.setSelectedItem(defaultMapping);
+  }
+  private void addMapping(VisualMapping m) {
     mappings.put(m.getAttributeName(),m);
   }
   public void addRemoveListener(ActionListener l) {

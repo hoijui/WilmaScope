@@ -24,6 +24,7 @@ import java.util.Properties;
 import java.util.Vector;
 
 import javax.media.j3d.TransparencyAttributes;
+import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
 import org.wilmascope.forcelayout.BalancedEventClient;
@@ -988,14 +989,17 @@ public class GraphControl extends ObservableLayout {
     NodeList nodes = getRootCluster().getCluster().getAllNodes();
     int canvasHeight = graphCanvas.getHeight();
     int canvasWidth = graphCanvas.getWidth();
+    Point3f bottomLeft = new Point3f(), topRight=new Point3f(), centre = new Point3f();
+    nodes.getVWorldBoundingBoxCorners(bottomLeft,topRight,centre);
+    
+    float sceneWidth=topRight.x-bottomLeft.x;
+    float sceneHeight=topRight.y-bottomLeft.y;
     float aspectRatio = (float)canvasWidth/(float)canvasHeight;
-    float sceneHeight = nodes.getHeight();
-    float sceneWidth = nodes.getWidth();
-    float diameter = nodes.getWidth()*aspectRatio;
-    if (nodes.getHeight()/aspectRatio > diameter) {
-      diameter = nodes.getHeight()/aspectRatio;
+    float diameter = sceneWidth/aspectRatio;
+    if (sceneHeight*aspectRatio > diameter) {
+      diameter = sceneHeight*aspectRatio;
     }
-    getGraphCanvas().reorient(new Vector3f(nodes.getBarycenter()),
+    getGraphCanvas().reorient(new Vector3f(nodes.getMidPoint()),
         diameter);
   }
 
@@ -1027,7 +1031,7 @@ public class GraphControl extends ObservableLayout {
   /**
    * Net effect is to unfreeze the layout animation
    */
-  public void unfreeze() {
+  public synchronized void unfreeze() {
     startTime = System.currentTimeMillis();
     layoutIterationsCounter = 0;
     graphBehavior.setEnable(true);

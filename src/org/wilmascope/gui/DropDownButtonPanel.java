@@ -49,11 +49,15 @@ public class DropDownButtonPanel extends JPanel {
     initTypeMenu(r);
     setLayout(layout);
     actionButton = new JButton(action);
-    actionButton.setMinimumSize(new Dimension(28,28));
-    actionButton.setPreferredSize(new Dimension(28,28));
+    actionButton.setMinimumSize(new Dimension(35,28));
+    actionButton.setMaximumSize(new Dimension(35,28));
+    actionButton.setPreferredSize(new Dimension(35,28));
     actionButton.setBorder(null);
     actionButton.setText("");
     typeButton.setBorder(null);
+    typeButton.setMinimumSize(new Dimension(28,28));
+    typeButton.setMaximumSize(new Dimension(28,28));
+    typeButton.setPreferredSize(new Dimension(28,28));
     final JRootPane rootPane = this.getRootPane();
     typeButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -62,7 +66,7 @@ public class DropDownButtonPanel extends JPanel {
     });
     this.setBorder(BorderFactory.createEtchedBorder());
     this.setPreferredSize(new Dimension(45,32));
-    this.setMaximumSize(new Dimension(56,32));
+    this.setMaximumSize(new Dimension(70,32));
     typeButton.setIcon(new ImageIcon(org.wilmascope.images.Images.class.getResource("dropArrow.png")));
     this.add(actionButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0
             ,GridBagConstraints.WEST, GridBagConstraints.RELATIVE, new Insets(0, 0, 0, 0), 0, 0));

@@ -100,7 +100,10 @@ public class FileHandler {
         graphControl.reset();
         graphControl.freeze();
         long startTime = System.currentTimeMillis();
-        loadCluster(xmlGraph.getRootCluster(), graphControl.getRootCluster());
+        GraphControl.Cluster gr = graphControl.getRootCluster();
+        XMLGraph.Cluster xr = xmlGraph.getRootCluster();
+        loadCluster(xr, gr);
+        loadNodeProperties(xr,gr);
         long endTime = System.currentTimeMillis();
         long time = endTime - startTime;
         System.out.println("Loaded... in milliseconds: " + time);
@@ -240,7 +243,10 @@ public class FileHandler {
     XMLGraph xmlGraph = new XMLGraph(fileName);
     xmlGraph.create();
     idLookup = new Hashtable();
-    saveCluster(graphControl.getRootCluster(), xmlGraph.getRootCluster());
+    GraphControl.Cluster gr = graphControl.getRootCluster();
+    XMLGraph.Cluster xr = xmlGraph.getRootCluster();
+    saveCluster(gr,xr);
+    saveNodeProperties(gr,xr);
     xmlGraph.save();
     lastFile = xmlGraph.getFile();
   }
