@@ -1,5 +1,6 @@
 Changes Since 3.0.1
 -------------------
+- Add interface for copying multiple clusters
 - FADE Repulsive force added as force in ForceLayout
 - SpinnerSlider used in place of regular sliders in Generator and
   force control panels
