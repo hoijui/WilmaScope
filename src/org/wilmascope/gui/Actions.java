@@ -43,6 +43,7 @@ import javax.vecmath.Vector3f;
 
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.file.FileHandler;
+import org.wilmascope.graph.NodeList;
 import org.wilmascope.light.LightFrame;
 import org.wilmascope.view.GraphCanvas;
 import org.wilmascope.view.ViewManager;
@@ -141,8 +142,8 @@ public class Actions {
     centreAction =
       new AbstractAction("Center Graph", new ImageIcon(org.wilmascope.images.Images.class.getResource("centre.png"))) {
       public void actionPerformed(ActionEvent e) {
-        Vector3f centre = new Vector3f(graphControl.getRootCluster().getCluster().getAllNodes().getBarycenter());
-        graphControl.getGraphCanvas().reorient(centre);
+        NodeList nodes = graphControl.getRootCluster().getCluster().getAllNodes();
+        graphControl.getGraphCanvas().reorient(new Vector3f(nodes.getBarycenter()),nodes.getWidth());
       }
     };
     lightingAction =

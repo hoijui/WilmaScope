@@ -67,15 +67,25 @@ public class CenterNode extends Interpolator {
 			wakeupOn(criterion);
 
 	}
-	/** Sets the origin position to the specified position
-	 */
-	public void setOriginPosition(Vector3f position) {
-		target.getTransform(targetMatrix);
-		targetMatrix.get(trans);
-		dx = - (position.x + trans.x) * elapsedTime / durationX;
-		dy = - (position.y + trans.y) * elapsedTime / durationX;
-		dz = - ((position.z + trans.z) - 1f) * elapsedTime / durationZ;
-
-	}
+  /** Sets the origin position to the specified position
+   */
+  public void setOriginPosition(Vector3f position) {
+    target.getTransform(targetMatrix);
+    targetMatrix.get(trans);
+    dx = - (position.x + trans.x) * elapsedTime / durationX;
+    dy = - (position.y + trans.y) * elapsedTime / durationX;
+    dz = - ((position.z + trans.z) - 1f) * elapsedTime / durationZ;
+  }
+  /** Sets the origin position to the specified position
+   * @param position target origin
+   * @param width of the object that needs to fit in the viewport
+   */
+  public void setOriginPosition(Vector3f position,float width) {
+    target.getTransform(targetMatrix);
+    targetMatrix.get(trans);
+    dx = - (position.x + trans.x) * elapsedTime / durationX;
+    dy = - (position.y + trans.y) * elapsedTime / durationX;
+    dz = - ((position.z + trans.z) + 2*width) * elapsedTime / durationZ;
+  }
 
 }

@@ -1,5 +1,11 @@
 Changes Since 3.0
 -----------------
+- "Extending Wilmascope" html doc now used as javadoc overview page
+- Install4j windows dist now bundled with J2SE 1.5 and Java3D
+- "Mouse Rotate" toggle button now has an initial rotation
+- New "Centre Graph" button added to toolbar centres the
+  view to the graph barycentre and zooms out to fit it in the
+  whole graph in the window. 
 - Parser for LEDA (".lgr") files.
 - "ScaleFree" graphs now available in random graph generator
 - reworked test graph generation frame work...

@@ -118,7 +118,10 @@ public class GraphControl {
       element.setUserFacade(this);
     }
 
-    void initView(GraphElementView view) {
+    /**
+     * A view is inited after it is attached to an element
+     */
+    protected void initView(GraphElementView view) {
       graphElementView = view;
       graphElementView.initGraphElement();
       if (label != null) {

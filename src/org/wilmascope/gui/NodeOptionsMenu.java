@@ -72,6 +72,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
   JMenuItem centerNodeMenuItem = new JMenuItem();
   JMenuItem deleteMenuItem = new JMenuItem();
   JMenuItem detailsMenuItem = new JMenuItem();
+  JMenuItem radiusMenuItem = new JMenuItem();
 
   public NodeOptionsMenu() {
     addEdgeMenuItem.setText("Add Edge...");
@@ -90,6 +91,12 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     deleteMenuItem.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
         deleteMenuItem_actionPerformed(e);
+      }
+    });
+    radiusMenuItem.setText("Set radius...");
+    radiusMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        radiusMenuItem_actionPerformed(e);
       }
     });
 
@@ -139,6 +146,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     this.add(fixedCheckBoxMenuItem);
     this.add(setLabelMenuItem);
     this.add(setColourMenuItem);
+    this.add(radiusMenuItem);
     this.add(hideMenuItem);
     this.add(detailsMenuItem);
   }
@@ -183,7 +191,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     System.out.println("Node pos: "+position);
     localToVworld.transform(position);
     System.out.println("Real pos: "+position);
-    graphControl.getGraphCanvas().reorient(position);
+    graphControl.getGraphCanvas().reorient(position,node.getRadius()*2f);
   }
 
   void deleteMenuItem_actionPerformed(ActionEvent e) {
@@ -216,6 +224,19 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
     if(colour!=null) {
       node.setColour(colour);
     }
+  }
+  void radiusMenuItem_actionPerformed(ActionEvent e) {
+    controlPanel.setMessage("Opening dialog...");
+    String radius = (String)JOptionPane.showInputDialog(parent,
+      "Enter a float radius...",
+      (String)"Node Radius", JOptionPane.QUESTION_MESSAGE,null,null,""+node.getRadius());
+    try {
+      node.setRadius(Float.parseFloat(radius));
+    } catch (NumberFormatException e1) {
+      WilmaMain.showErrorDialog("You must enter a float value for radius",e1);
+    }
+    controlPanel.setMessage();
+    node.getView().draw();
   }
 
   GraphControl graphControl;

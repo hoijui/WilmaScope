@@ -320,6 +320,16 @@ public class GraphCanvas extends Canvas3D {
     centerNode.setOriginPosition(position);
     centerNode.setEnable(true);
   }
+  /**
+   * Moves the graph (animated movement) such that position is centred and an object
+   * of the specified width fits into the view.
+   * @param position new origin
+   * @param width of object at position to fit into view frustum
+   */
+  public void reorient(Vector3f position,float width) {
+    centerNode.setOriginPosition(position, width);
+    centerNode.setEnable(true);
+  }
 
   public void reorient(javax.media.j3d.Transform3D reorientTransform) {
     transformGroup.setTransform(reorientTransform);
