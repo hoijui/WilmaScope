@@ -5,6 +5,7 @@ import javax.vecmath.Color3f;
 import org.wilmascope.graph.EdgeList;
 import org.wilmascope.graph.Edge;
 import org.wilmascope.graph.Node;
+import javax.swing.ImageIcon;
 
 /**
  * <p>Description: </p>
@@ -48,4 +49,7 @@ public class LineNodeView extends NodeView {
     return colour;
   }
   Color3f colour = Colours.white;
+  public ImageIcon getIcon() {
+    return new ImageIcon(getClass().getResource("/images/dot.png"));
+  }
 }

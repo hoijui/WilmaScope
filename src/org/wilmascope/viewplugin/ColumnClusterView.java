@@ -24,6 +24,7 @@ import org.wilmascope.view.*;
 import org.wilmascope.gui.QueryFrame;
 import org.wilmascope.graph.*;
 
+import javax.swing.ImageIcon;
 import javax.media.j3d.*;
 import javax.vecmath.*;
 import com.sun.j3d.utils.geometry.Text2D;
@@ -80,5 +81,8 @@ public class ColumnClusterView extends ClusterView {
     textTG.setTransform(trans);
     textTG.addChild(text);
     setLabel(textTG);
+  }
+  public ImageIcon getIcon() {
+    return new ImageIcon(getClass().getResource("/images/column.png"));
   }
 }

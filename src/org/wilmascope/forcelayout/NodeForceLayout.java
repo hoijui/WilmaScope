@@ -77,7 +77,7 @@ public class NodeForceLayout extends NodeLayout {
     }
     // Calculate friction based on current velocity
     Vector3f friction = new Vector3f(velocity);
-    friction.scale(Constants.frictionCoefficient * node.getRadius());
+    friction.scale(Constants.frictionCoefficient /* * node.getRadius()/node.getMass()*/);
     netForce.sub(friction);
     // Acceleration (change in velocity) = F/m
     float sf = attenuation / node.getMass();
