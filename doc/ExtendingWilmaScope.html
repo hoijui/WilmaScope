@@ -18,7 +18,8 @@ visualisation system</h2>
     <li><a href="#Graph_Model">Graph Model</a> </li>
     <li><a href="#GraphControl_Bridge">GraphControl Bridge</a></li>
   </ul>
-  <li><a href="#Creating_Test_Graphs">Creating Test Graphs</a></li>
+  <li><a href="#Creating_Test_Graphs">Generating Graphs<br>
+    </a></li>
   <ul>
     <li><a href="#User_Interface">User Interface</a></li>
     <li><a href="#The_Graph_Generator_Framework">The Graph Generator
@@ -160,11 +161,13 @@ procedure for
 constructing a graph by implementing the GraphGenerator framework (see <a
  href="ExtendingWilmaScope.html#Creating_Test_Graphs">Creating Test
 Graphs</a>).</li>
-  <li><>New layout algorithms can also be added as plugins by extending
-the WilmaScope </><a
+  <li>&lt;&gt;New layout algorithms can also be added as plugins by
+extending
+the WilmaScope <a
  href="ExtendingWilmaScope.html#Creating_New_Layout_Engines">LayoutEngine
-framework</a><>. Such layout algorithms can use the WilmaScope graph
-data structures or they can use external graph datastructure</>
+framework</a>&lt;&gt;. Such layout algorithms can use the WilmaScope
+graph
+data structures or they can use external graph datastructure
 libraries such as Leda or yFiles. They can also potentially use other
 programs such as DOT (see Section 4). Developers can add plugins for
 new graphical representations for graph elements (glyphs). <br>
@@ -174,7 +177,7 @@ WilmaScope GraphCanvas and API in a custom GUI (see <a
  href="ExtendingWilmaScope.html#Creating_Applications_Based_on">Creating
 Applications Based on GraphCanvas</a> and
 also the <a href="index.html">WilmaScope Javadoc</a>).</li>
-  <></><li>A user can interact with the WilmaScope GUI to add or edit
+&lt;&gt;<li>A user can interact with the WilmaScope GUI to add or edit
 graph
 components (see the user help documentation).</li>
 </ul>
@@ -236,22 +239,34 @@ and
 When a GraphControl object is
 instantiated a root cluster is created upon which a graph may be
 built.&nbsp; As a basic example consider the following code fragment:<br>
-<br>
-<div style="margin-left: 40px;"><span style="font-style: italic;">//
+<span style="font-style: italic;"><br>
+</span>
+<div style="margin-left: 40px;"><span style="font-style: italic;">import
+org.wilmascope.control.GraphControl.Cluster;</span><span
+ style="font-style: italic;"></span><br>
+<span style="font-style: italic;">import
+org.wilmascope.control.GraphControl.Node;</span><span
+ style="font-style: italic;"></span><br>
+<span style="font-style: italic;">import
+org.wilmascope.control.GraphControl.Edge;</span><span
+ style="font-style: italic;"></span><br>
+<span style="font-style: italic;"></span><span
+ style="font-style: italic;">...<br>
+//
 add elements to an existing instance of graphControl</span><br
  style="font-style: italic;">
-<span style="font-style: italic;">GraphControl.Cluster root =
+<span style="font-style: italic;">Cluster root =
 graphControl.getRootCluster();</span><br style="font-style: italic;">
-<span style="font-style: italic;">GraphControl.Node a =
+<span style="font-style: italic;">Node a =
 root.addNode();</span><br style="font-style: italic;">
-<span style="font-style: italic;">GraphControl.Node b =
+<span style="font-style: italic;">Node b =
 root.addNode();</span><br style="font-style: italic;">
 <span style="font-style: italic;">root.addEdge(a,b);</span><br>
 </div>
 <br>
 We give more detailed examples of use of the API provided by the
 GraphControl class later.<br>
-<h2><a name="Creating_Test_Graphs"></a>Creating Test Graphs</h2>
+<h2><a name="Creating_Test_Graphs"></a>Plug-ins for Generating Graphs</h2>
 Wilma comes with a number of graph generators which create random or
 regular graphs for testing purposes.&nbsp; Creating a new graph
 generator is probably the easiest way to begin experimenting with the
@@ -266,7 +281,7 @@ Generator Window&#8221; which is accessed by the user from the
 <div style="text-align: center;"><img
  alt="Opening Graph Generator Window"
  src="ExtendingWilmaScope_files/image007.png"
- style="width: 511px; height: 354px;"><br>
+ style="width: 600px; height: 271px;"><br>
 Figure 4: Accessing the graph generator window.<br>
 </div>
 <br>
@@ -352,8 +367,58 @@ trigger automatic layout using the root cluster&#8217;s unfreeze method which
 would also handle the redraw. </li>
   </ul>
 </ul>
-<h2><a name="Creating_Applications_Based_on"></a>Creating Applications
-Based on GraphCanvas</h2>
+<h2><a name="Creating_Applications_Based_on"></a>Plug-ins for Modifying
+Existing Graphs and Clusters</h2>
+Often it is useful to procedurally modify the structure of an existing
+graph or cluster.&nbsp; Plug-ins for effecting this functionality are
+made possible by the GraphModifier framework.&nbsp; A GraphModifier
+plug-in extends the org.wilmascope.graphmodifier.GraphModifier abstract
+class and must implement three methods:<br>
+<ul>
+  <li>getName - you should simply return a string constant that is a
+unique
+identifier.&nbsp; This string will appear in the Graph Modifier Window
+list so give it a capital letter and spaces where necessary. </li>
+  <li>modify &#8211; this method will do the work of actually modifying the
+specified cluster.<br>
+  </li>
+  <li>getControls &#8211; the best way to use this is to create a JPanel with
+controls for setting parameters for your graph generator in your
+constructor and ensure that the getControls method returns a reference
+to it.</li>
+</ul>
+The user can invoke one of these plugins either:<br>
+<ul>
+  <li>for the graph (root cluster) - by selecting "Modify Graph" from
+the tools menu; or</li>
+  <li>for a particular cluster - by right clicking the cluster and
+selecting "Modify Cluster" from the resultant cluster options menu</li>
+</ul>
+<div style="text-align: center;"><img alt="Modifying a cluster"
+ src="ExtendingWilmaScope_files/modifycluster.png"
+ style="width: 600px; height: 490px;"><br>
+<br>
+<div style="text-align: left;">As of writing this document WilmaScope
+includes the following graph modifier plug-ins:<br>
+<br>
+<ul>
+  <li>ChangeViews - replace the GraphElementViews of nodes and/or edges
+with the current default settings from the toolbar.</li>
+  <li>CopyCluster - copy either the root graph or a particular cluster</li>
+  <li>DirectedCycleRemoval - reverse the direction of edges such that
+the graph is acyclic.</li>
+  <li>InsertDummyNodes - if LevelConstraints are defined, this inserts
+dummy nodes into edges that span multiple levels</li>
+  <li>KMeansClustering - creates clusters around nodes that are close
+together in the current layout</li>
+  <li>LongestPathLayering - assigns nodes to LevelConstraints such that
+edges are monotonically directed (uses DirectedCycleRemoval).<br>
+  </li>
+</ul>
+<br>
+<br>
+</div>
+</div>
 <h2><a name="File_Formats"></a>File Formats</h2>
 The easiest way to visualise graphs from other data sources is to
 convert them into a file format that WilmaScope understands and then
