@@ -1,5 +1,6 @@
 Changes Since 3.0
 -----------------
+- LayoutEngines now loaded as plugins
 - GraphControl.NodeFacade/EdgeFacade/ClusterFacade renamed to
   GraphControl.Node/Edge/Cluster
 - graph.Cluster now allows BalancedEventListeners to register and
