@@ -40,6 +40,7 @@ public class DefaultEdgeView extends EdgeView {
   /** radius of the edgeCylinder
    */
   float radius = 0.02f;
+  float length = 1.0f;
   public DefaultEdgeView() {
     setTypeName("Plain Edge");
   }
@@ -60,46 +61,9 @@ public class DefaultEdgeView extends EdgeView {
     makePickable(edgeCylinder.getShape(Cylinder.BOTTOM));
 	addTransformGroupChild(edgeCylinder);
         */
-    	Switch sw = new Switch(0);
-	sw.setCapability(javax.media.j3d.Switch.ALLOW_SWITCH_READ);
-	sw.setCapability(javax.media.j3d.Switch.ALLOW_SWITCH_WRITE);
 
-
-	// Create several levels for the switch, with less detailed
-	// spheres for the ones which will be used when the sphere is
-	// further away
-        Cylinder one = new Cylinder(radius, 1, Cylinder.GENERATE_NORMALS, 10, 1, getAppearance());
-        Cylinder two = new Cylinder(radius, 1, Cylinder.GENERATE_NORMALS, 6, 1, getAppearance());
-        Cylinder three = new Cylinder(radius, 1, Cylinder.GENERATE_NORMALS, 3, 1, getAppearance());
-        // Bizarrely when you only have 1 segment along the height of the
-        // cylinder you have to set the picking capability bits for top, bottom
-        // and body just to pick it from the side
-        makePickable(one.getShape(Cylinder.BOTTOM));
-        makePickable(two.getShape(Cylinder.BOTTOM));
-        makePickable(three.getShape(Cylinder.BOTTOM));
-        makePickable(one.getShape(Cylinder.TOP));
-        makePickable(two.getShape(Cylinder.TOP));
-        makePickable(three.getShape(Cylinder.TOP));
-        makePickable(one.getShape(Cylinder.BODY));
-        makePickable(two.getShape(Cylinder.BODY));
-        makePickable(three.getShape(Cylinder.BODY));
-	sw.addChild(one);
-	sw.addChild(two);
-	sw.addChild(three);
-
-	// Add the switch to the main group
-	addTransformGroupChild(sw);
-
-	BoundingSphere bounds =
-	    new BoundingSphere(new Point3d(0.0,0.0,0.0), 100.0);
-
-	// set up the DistanceLOD behavior
-	float[] distances = new float[2];
-	distances[0] = 5.0f;
-	distances[1] = 10.0f;
-	DistanceLOD lod = new DistanceLOD(distances);
-	lod.addSwitch(sw);
-	lod.setSchedulingBounds(bounds);
-	addTransformGroupChild(lod);
+    LODCylinder cylinder = new LODCylinder(radius, length, getAppearance());
+    cylinder.makePickable(this);
+    cylinder.addToTransformGroup(getTransformGroup());
   }
 }

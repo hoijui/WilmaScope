@@ -24,7 +24,8 @@ import org.wilmascope.view.*;
 
 import javax.media.j3d.*;
 import javax.vecmath.Point3d;
-import com.sun.j3d.utils.geometry.Sphere;
+import com.sun.j3d.utils.picking.behaviors.PickTranslateBehavior;
+import com.sun.j3d.utils.geometry.Box;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular Wilma graph drawing engine
@@ -70,7 +71,7 @@ public class DefaultNodeView extends NodeView {
     makePickable(sphere.getShape());
     addTransformGroupChild(sphere);
     */
-    LODSphere sphere = new LODSphere(getAppearance());
+    LODSphere sphere = new LODSphere(getNode().getRadius(),getAppearance());
     sphere.makePickable(this);
     sphere.addToTransformGroup(getTransformGroup());
   }
