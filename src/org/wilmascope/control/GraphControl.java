@@ -376,13 +376,18 @@ public class GraphControl {
             inverse_alpha));
     } // setTransparency
 
-    public void setLevelConstraint(int level) {
-      if (node.getLayout() instanceof NodeForceLayout) {
-        ((NodeForceLayout) node.getLayout()).setConstraint(
-          new org.wilmascope.forcelayout.LevelConstraint(level, 0.5f));
-        ((ForceLayout) node.getOwner().getLayoutEngine()).setConstrained();
-      }
-    }
+	public void setLevelConstraint(int level) {
+		if (node.getLayout() instanceof NodeForceLayout) {
+			((NodeForceLayout) node.getLayout())
+					.setConstraint(new org.wilmascope.forcelayout.LevelConstraint(
+							level, 0.5f));
+			((ForceLayout) node.getOwner().getLayoutEngine())
+					.setConstrained();
+		} else if (node.getLayout() instanceof FadeNodeLayout) {
+			((FadeNodeLayout) node.getLayout()).setLevelConstraint(level);
+		}
+	}
+
     public int getLevelConstraint() {
       if (node.getLayout() instanceof NodeForceLayout) {
         org.wilmascope.forcelayout.LevelConstraint c =
@@ -862,6 +867,9 @@ public class GraphControl {
     layoutManager.addPrototypeLayout(new ForceLayout());
     layoutManager.addPrototypeLayout(new MultiScaleLayout());
     layoutManager.addPrototypeLayout(new FastLayout());
+	layoutManager.addPrototypeLayout(new FadeLayout());
+	layoutManager.addPrototypeLayout(new HighDimensionLayout());
+	layoutManager.addPrototypeLayout(new DegreeLayout());
     try {
       viewManager.loadViews(
         new java.io.File("../classes/org/wilmascope/viewplugin"),
