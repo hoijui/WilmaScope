@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.StringTokenizer;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -40,7 +39,7 @@ import org.wilmascope.graphanalysis.AnalysisManager;
 import org.wilmascope.graphanalysis.AnalysisPanel;
 import org.wilmascope.graphanalysis.GraphAnalysis;
 import org.wilmascope.graphanalysis.VisualMapping;
-import org.wilmascope.util.Registry.UnknownTypeException;
+import org.wilmascope.util.UnknownTypeException;
 
 /**
  * Controls for analysis plugins and determining their mappings to visual

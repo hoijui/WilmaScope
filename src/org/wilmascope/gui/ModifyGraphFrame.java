@@ -11,15 +11,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.border.TitledBorder;
 
-import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.WilmaMain;
-import org.wilmascope.graphgen.GeneratorManager;
+import org.wilmascope.control.GraphControl.Cluster;
 import org.wilmascope.graphmodifiers.GraphModifier;
 import org.wilmascope.graphmodifiers.ModifierManager;
-import org.wilmascope.util.Registry.UnknownTypeException;
+import org.wilmascope.util.UnknownTypeException;
 
 /**
  * @author dwyer
@@ -44,13 +41,13 @@ public class ModifyGraphFrame extends JFrame {
 
   JButton okButton = new JButton("Modify Graph");
 
-  GraphControl gc;
+  Cluster cluster;
 
   GraphModifier modifier;
 
-  public ModifyGraphFrame(String title, final GraphControl gc) {
+  public ModifyGraphFrame(String title, final Cluster cluster) {
     this.title = title;
-    this.gc = gc;
+    this.cluster = cluster;
     modifier = ModifierManager.getInstance().getDefault();
     ImageIcon icon = new ImageIcon(org.wilmascope.images.Images.class
         .getResource("WilmaW24.png"));
@@ -67,7 +64,7 @@ public class ModifyGraphFrame extends JFrame {
     okButton.addActionListener(new ActionListener() {
 
       public void actionPerformed(ActionEvent e) {
-        modifier.modify(gc.getRootCluster());
+        modifier.modify(cluster);
       }
       
     });

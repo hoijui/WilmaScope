@@ -33,7 +33,7 @@ import org.wilmascope.graph.Edge;
 import org.wilmascope.graph.Node;
 import org.wilmascope.graphmodifiers.GraphModifier;
 import org.wilmascope.graphmodifiers.ModifierManager;
-import org.wilmascope.util.Registry.UnknownTypeException;
+import org.wilmascope.util.UnknownTypeException;
 
 /**
  * Assigns nodes to levels according to Nikola Nikolov's

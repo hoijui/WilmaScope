@@ -18,7 +18,7 @@ import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.WilmaMain;
 import org.wilmascope.graphgen.GeneratorManager;
 import org.wilmascope.graphgen.GraphGenerator;
-import org.wilmascope.util.Registry.UnknownTypeException;
+import org.wilmascope.util.UnknownTypeException;
 import org.wilmascope.view.ViewManager;
 
 /**

@@ -201,7 +201,7 @@ public class Actions {
     graphModifiersAction = new AbstractAction("Modify Graph") {
       public void actionPerformed(ActionEvent e) {
         ModifyGraphFrame graphOps = new ModifyGraphFrame("Modify Graph",
-            graphControl);
+            graphControl.getRootCluster());
         graphOps.show();
         openFrames.add(graphOps);
       }

@@ -35,12 +35,6 @@ import org.wilmascope.global.GlobalConstants;
  *  
  */
 public class Registry<T extends Plugin> {
-  public class UnknownTypeException extends Exception {
-    public UnknownTypeException(String viewType) {
-      super("No known Plugin type: " + viewType);
-    }
-  }
-
   /**
    * Builds up the table of available generators and sets the default based on
    * the "DefaultGenerator" field in the WILMA_CONSTANTS.properties file.
@@ -97,7 +91,8 @@ public class Registry<T extends Plugin> {
     return plugins.keySet().toArray(new String[plugins.size()]);
   }
 
-  public T getPlugin(String type) throws UnknownTypeException {
+  public T getPlugin(String type) 
+  throws UnknownTypeException {
     T g = plugins.get(type);
     if (g == null) {
       throw new UnknownTypeException(type);

@@ -38,7 +38,6 @@ import org.wilmascope.graphmodifiers.GraphModifier;
 import org.wilmascope.graphmodifiers.ModifierManager;
 import org.wilmascope.graphmodifiers.plugin.ClusterisePanel;
 import org.wilmascope.gui.SpinnerSlider;
-import org.wilmascope.util.Registry.UnknownTypeException;
 
 /**
  * Generates a random clustered graph with a specified number of nodes and edges

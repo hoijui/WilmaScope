@@ -255,6 +255,7 @@ public class Node extends GraphElement {
 		}
 		Point3f pos = getPosition();
 		properties.setProperty("Position", pos.x + " " + pos.y + " " + pos.z);
+    properties.setProperty("Mass",""+getMass());
 		return properties;
 	}
 
@@ -267,6 +268,10 @@ public class Node extends GraphElement {
 					.parseFloat(st.nextToken()), Float.parseFloat(st
 					.nextToken())));
 		}
+    String mass = p.getProperty("Mass");
+    if (mass != null) {
+      setMass(Float.parseFloat(mass));
+    }
 	}
 
 	private Properties properties;

@@ -51,6 +51,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
   JMenuItem centreMenuItem = new JMenuItem();
 
   JMenuItem analyseMenuItem = new JMenuItem();
+  JMenuItem modifyMenuItem = new JMenuItem();
 
   GraphControl graphControl;
 
@@ -127,6 +128,13 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
         analyseMenuItem_actionPerformed(e);
       }
     });
+    modifyMenuItem.setText("Modify Cluster...");
+    modifyMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        modifyMenuItem_actionPerformed(e);
+      }
+
+    });
     addToMenuItem.setText("Add to Cluster...");
     addToMenuItem.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -177,6 +185,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
     this.addSeparator();
     this.add(adjustForcesMenuItem);
     this.add(analyseMenuItem);
+    this.add(modifyMenuItem);
   }
 
   void deleteMenuItem_actionPerformed(ActionEvent e) {
@@ -246,14 +255,18 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
   void adjustForcesMenuItem_actionPerformed(ActionEvent e) {
     LayoutEngineFrame forceControls = new LayoutEngineFrame(cluster,
         "Cluster Layout");
-    forceControls.show();
+    forceControls.setVisible(true);
   }
 
   void analyseMenuItem_actionPerformed(ActionEvent e) {
     AnalysisFrame analysisFrame = new AnalysisFrame("Analyse Cluster", cluster);
-    analysisFrame.show();
+    analysisFrame.setVisible(true);
   }
 
+  private void modifyMenuItem_actionPerformed(ActionEvent e) {
+    ModifyGraphFrame modifyFrame = new ModifyGraphFrame("Modify Cluster", cluster);
+    modifyFrame.setVisible(true);
+  }
   void addToMenuItem_actionPerformed(ActionEvent e) {
     controlPanel.add(new AddToClusterPanel(controlPanel, cluster));
     controlPanel.updateUI();
