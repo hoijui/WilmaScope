@@ -55,7 +55,7 @@ public class Cluster extends Node {
    * @param node the Node to add
    */
   public void addNode(Node node) {
-//    System.out.println("Cluster id="+id+": addNode()  before: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
+    System.out.println("Cluster id="+id+": addNode()  before: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
 
     nodes.add(node);
     node.setOwner(this);
@@ -72,7 +72,7 @@ public class Cluster extends Node {
       addEdge(edge);
     }
     calcMass();
-//    System.out.println("Cluster id="+id+": addNode()  after: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
+    System.out.println("Cluster id="+id+": addNode()  after: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
   }
   public EdgeList getInternalEdges() {
     return internalEdges;
@@ -98,18 +98,27 @@ public class Cluster extends Node {
   public void removeNode(Node n) {
 //    System.out.println("Cluster id="+id+": removeNode()  before: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
     nodes.remove(n);
-    // remove all the nodes edges
+    // remove all the node's edges
     EdgeList edges = n.getEdges();
     for(edges.resetIterator(); edges.hasNext();) {
       Edge e = edges.nextEdge();
       // if edge is already an external edge then remove it altogether
       if(super.getEdges().contains(e)) {
         super.removeEdge(e);
-      } else {
+      } else if(e != null) {
         // otherwise it was an internal edge that should now be made external
         internalEdges.remove(e);
-        addExternalEdge(e, e.getNeighbour(n));
-      }
+        Node neighbour = e.getNeighbour(n);
+        if(neighbour==null) {
+          System.out.println("Warning... null neighbour while making internal"
+            +" edge external during node delete");
+          // this may occur when cluster is collapsed
+        } else {
+          addExternalEdge(e, e.getNeighbour(n));
+        }
+      } // if e was external but the cluster was collapsed so that e has been
+        // promoted then our reference to the edge will be null... nothing
+        // needs to occur as the edge will be deleted from the owner
     }
 
 //    System.out.println("Cluster id="+id+": removeNode()  after: internalEdges="+internalEdges.size()+" externalEdges="+getEdges().size());
@@ -138,6 +147,7 @@ public class Cluster extends Node {
    * @param edge the external edge to add
    * @param portalNode the connection point of the edge inside the cluster
    */
+
   private void addExternalEdge(Edge edge, Node portalNode) {
     // the EdgeList we inherited from Node is our external node list
     super.addEdge(edge);
@@ -273,7 +283,17 @@ public class Cluster extends Node {
   }
 
   public void collapse() {
+    userCollapsed = true;
+    subCollapse();
+  }
+
+  private void subCollapse() {
     this.expanded = false;
+    ClusterList childClusters = nodes.getClusters();
+    for(childClusters.resetIterator(); childClusters.hasNext();) {
+      childClusters.nextCluster().subCollapse();
+    }
+
     hideChildren();
     EdgeList externalEdges = super.getEdges();
     for(externalEdges.resetIterator(); externalEdges.hasNext();) {
@@ -298,7 +318,15 @@ public class Cluster extends Node {
     }
     return leafNodes;
   }
+
   public void expand(org.wilmascope.view.GraphCanvas graphCanvas) {
+    userCollapsed = false;
+    subExpand(graphCanvas);
+  }
+  private void subExpand(org.wilmascope.view.GraphCanvas graphCanvas) {
+    if(userCollapsed) {
+      return;
+    }
     expanded = true;
     nodes.setPosition(getPosition());
     nodes.show(graphCanvas);
@@ -306,6 +334,10 @@ public class Cluster extends Node {
     EdgeList externalEdges = super.getEdges();
     for(externalEdges.resetIterator(); externalEdges.hasNext();) {
       externalEdges.nextEdge().expand(this);
+    }
+    ClusterList cs = nodes.getClusters();
+    for(cs.resetIterator(); cs.hasNext();) {
+      cs.nextCluster().subExpand(graphCanvas);
     }
   }
 
@@ -426,6 +458,7 @@ public class Cluster extends Node {
   private Hashtable portalNodes = new Hashtable();
   private Vector3f normal = new Vector3f();
   private AxisAngle4f rotationAngle = new AxisAngle4f();
+  private boolean userCollapsed = false;
 }
 
 
