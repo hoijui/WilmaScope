@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE WilmaGraph SYSTEM "WilmaGraph.dtd">
+<WilmaGraph>
+<Cluster>
+<LayoutEngineType Name="ForceLayout">
+<Property Key="Spring" Value="4.1"/>
+<Property Key="Origin" Value="1.0"/>
+<Property Key="Repulsion" Value="4.8"/>
+<Property Key="VelocityAttenuation" Value="0.02"/>
+</LayoutEngineType>
+<Node ID="N0">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="3.5722113 -2.2286598E-5 -2.4123927E-5"/>
+</Node>
+<Cluster>
+<ViewType Name="Spherical Cluster">
+<Property Key="Radius" Value="5.4346676"/>
+</ViewType>
+<Property Key="Position" Value="-4.46873 2.8137261E-5 3.0456873E-5"/>
+<LayoutEngineType Name="MultiScaleLayout"/>
+<Node ID="N2">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="-1.0340619 8.010864E-7 9.137062E-7"/>
+</Node>
+<Node ID="N3">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="0.76593804 8.010864E-7 9.137062E-7"/>
+</Node>
+<Edge EndID="N2" StartID="N3">
+<ViewType Name="Plain Edge">
+<Property Key="Radius" Value="0.02"/>
+</ViewType>
+</Edge>
+</Cluster>
+<Node ID="N1">
+<ViewType Name="DefaultNodeView">
+<Property Key="Radius" Value="0.1"/>
+</ViewType>
+<Property Key="Position" Value="0.89002746 -5.8147616E-6 -6.2940926E-6"/>
+</Node>
+</Cluster>
+</WilmaGraph>
