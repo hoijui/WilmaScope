@@ -75,7 +75,9 @@ public class GraphCanvas extends Canvas3D {
     rotationTransformGroup.setCapability(TransformGroup.ENABLE_PICK_REPORTING);
     rotationTransformGroup.setCapability(TransformGroup.ALLOW_LOCAL_TO_VWORLD_READ);
 
-
+    //Transform3D stretch = new Transform3D();
+    //stretch.setScale(new Vector3d(1,1,2));
+    //transformGroup.setTransform(stretch);
     // Set up the background
     background = new Background(constants.getColor3f("BackgroundColour"));
     background.setApplicationBounds(bounds);
@@ -118,6 +120,19 @@ public class GraphCanvas extends Canvas3D {
     if(getSceneAntialiasingAvailable()) {
       universe.getViewer().getView().setSceneAntialiasingEnable(enabled);
     }
+  }
+  public void setParallelProjection(boolean enabled) {
+    View v = getView();
+    if(enabled == true) {
+      v.setProjectionPolicy(View.PARALLEL_PROJECTION);
+      v.setScreenScalePolicy(View.SCALE_EXPLICIT);
+      v.setScreenScale(0.1d);
+    } else {
+      v.setProjectionPolicy(View.PERSPECTIVE_PROJECTION);
+    }
+  }
+  public void setScale(double scale) {
+    getView().setScreenScale(scale);
   }
   public Behavior addPerFrameBehavior(BehaviorClient client) {
     GraphBehavior gb = new GraphBehavior(client);

@@ -58,14 +58,14 @@ implements org.wilmascope.graph.EdgeView {
   }
   // Returns the angle between the initVector and the target vector
   // used by redraw.
-  private AxisAngle4f getPositionAngle() {
+  public AxisAngle4f getPositionAngle() {
     Vector3f norm = new Vector3f();
     Vector3f v = edge.getVector();
     norm.cross(initVector,v);
     return new AxisAngle4f(norm.x,norm.y,norm.z,initVector.angle(v));
   }
   // return the current position, mid-point, of the edge
-  private Vector3f getPositionVector() {
+  public Vector3f getPositionVector() {
     Vector3f v = new Vector3f(edge.getVector());
     v.scaleAdd(0.5f,edge.getStart().getPosition());
     if(edge.getEnd().getRadius()!=edge.getStart().getRadius()) {
@@ -117,7 +117,7 @@ implements org.wilmascope.graph.EdgeView {
   public void setRadius(float radius) {
     this.radius = radius;
   }
-	 
+
   private Edge edge;
   // A vector giving the default orientation of the edgeCylinder
   private static Vector3f initVector = Constants.vY;

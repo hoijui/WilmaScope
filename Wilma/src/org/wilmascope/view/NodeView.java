@@ -42,8 +42,17 @@ implements org.wilmascope.graph.NodeView {
 
   public NodeView() {
   }
+  /*
   public void draw() {
     setTranslation(new Vector3f(node.getPosition()));
+  }
+  */
+  public void draw() {
+    Node n = getNode();
+    double radius = (double)n.getRadius();
+    setResizeTranslateTransform(
+      new Vector3d(radius,radius,radius),
+      new Vector3f(n.getPosition()));
   }
   public Node getNode() {
     return node;
@@ -55,7 +64,9 @@ implements org.wilmascope.graph.NodeView {
     return new ImageIcon(getClass().getResource("/images/node.png"));
   }
   protected void showLabel(String text) {
-    addLabel(text, 0.04d, new Point3f(0.0f,0f,0.0f), new Vector3f(0.0f,0.1f,0.0f), getAppearance());
+    double r = (double)node.getRadius();
+    System.out.println("scale is "+Math.log(r * 10 * Math.E));
+    addLabel(text, 10d / Math.log(r * 10 * Math.E), new Point3f(0.0f,0.05f,-0.07f), new Vector3f(-0.1f * (float)text.length(),1.3f,0.0f), getAppearance());
   }
   BranchGroup anchorBranch;
   public void showAnchor() {
