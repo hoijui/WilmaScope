@@ -72,8 +72,7 @@ public class Edge extends GraphElement {
   public void recalculateMultiEdgeOffsets() {
     EdgeList commonEdges = start.getCommonEdges(end);
     int i=0;
-    for(commonEdges.resetIterator();commonEdges.hasNext();i++) {
-      Edge e = commonEdges.nextEdge();
+    for(Edge e:commonEdges) {
       int direction = 1;
       if(e.getStart()!=start) {
         direction = -1;
@@ -268,7 +267,7 @@ public class Edge extends GraphElement {
   private float length;
   // Vector along the length of the edge
   private Vector3f vector = new Vector3f();
-  private Hashtable collapseHistoryTable = new Hashtable();
+  private Hashtable<Cluster,Node> collapseHistoryTable = new Hashtable<Cluster,Node>();
   private boolean directed = true;
   // A user assigned weighting for the edge between 0 and 1
   private float weight = 0.5f;

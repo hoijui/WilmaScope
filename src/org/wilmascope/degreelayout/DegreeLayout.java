@@ -119,10 +119,8 @@ public class DegreeLayout implements LayoutEngine {
 	    
 	    // Calculate Bounding Box for nodes
 	    double max = 1.0;
-	    for (nodes.resetIterator(); nodes.hasNext();)
+	    for (Node n:nodes)
 	    {
-	    	Node n = nodes.nextNode();
-	    	
 	    	double coord = (double)Math.abs(n.getPosition().x);
 	    	if (coord > max)
 	    		max = coord;
@@ -140,9 +138,9 @@ public class DegreeLayout implements LayoutEngine {
 	    
 	    OctTree tree = new OctTree(bBox);
 	    //System.out.println(iterations);
-	    for (nodes.resetIterator(); nodes.hasNext();)
+	    for (Node n:nodes)
 	    {
-	    	tree.addNode(nodes.nextNode(), tree.root());
+	    	tree.addNode(n, tree.root());
 	    	//System.out.println();
 	    }
 		
@@ -151,9 +149,8 @@ public class DegreeLayout implements LayoutEngine {
 			// Compute edge forces
 		    EdgeList edges = EL;
 		    float damping = 2.0f; // damping >= 2
-		    for (edges.resetIterator(); edges.hasNext();)
+		    for (Edge currentEdge:edges)
 		    {
-		    	Edge currentEdge = edges.nextEdge();
 		    	DegreeEdgeLayout edgeLayout = (DegreeEdgeLayout)currentEdge.getLayout();
 		    	float resilience = VariableForces.edgeResilience;
 		    	float idealLength = edgeLayout.idealLength;
@@ -302,9 +299,8 @@ public class DegreeLayout implements LayoutEngine {
 		}
 		
 		
-		for (nodes.resetIterator(); nodes.hasNext();)
+		for (Node n:nodes)
 	    {
-	    	Node n = nodes.nextNode();
 	    	n.setFixedPosition(false);
 	    	
 	    	int degree = n.getEdges().size();
@@ -344,10 +340,8 @@ public class DegreeLayout implements LayoutEngine {
 		EL3 = new EdgeList();
 		
 		EdgeList edges = root.getInternalEdges();
-		for (edges.resetIterator(); edges.hasNext();)
+		for (Edge currentEdge:edges)
 		{
-		    Edge currentEdge = edges.nextEdge();
-		    
 		    Node start = currentEdge.getStart();
 	    	Node end = currentEdge.getEnd();
 	    	
@@ -465,9 +459,9 @@ public class DegreeLayout implements LayoutEngine {
 	    
 	    NodeList nodes = root.getNodes();
 	    EdgeList edges = root.getInternalEdges();
-	    for (nodes.resetIterator(); nodes.hasNext();)
+	    for (Node n:nodes)
 	    {
-	      nodeLayout = (DegreeNodeLayout) (nodes.nextNode().getLayout());
+	      nodeLayout = (DegreeNodeLayout) (n.getLayout());
 	      float forceSize = nodeLayout.getForce().length();
 	      if (forceSize > maxForce)
 	      {
@@ -544,14 +538,12 @@ public class DegreeLayout implements LayoutEngine {
 	public void createElementLayouts() {
 	    NodeList nodes = root.getNodes();
 	    //Random rand = new Random(System.currentTimeMillis());
-	    for (nodes.resetIterator(); nodes.hasNext();) {
-	      Node n = nodes.nextNode();
+	    for (Node n : nodes) {
 	      n.setLayout(createNodeLayout(n));
 	      //n.setPosition(new Point3f(rand.nextFloat()*20.0f-10.0f, rand.nextFloat()*20.0f-10.0f, rand.nextFloat()*20.0f-10.0f));
 	    }
 	    EdgeList edges = root.getInternalEdges();
-	    for (edges.resetIterator(); edges.hasNext();) {
-	      Edge e = edges.nextEdge();
+	    for (Edge e:edges) {
 	      e.setLayout(createEdgeLayout(e));
 	      //e.recalculate();
 	    }

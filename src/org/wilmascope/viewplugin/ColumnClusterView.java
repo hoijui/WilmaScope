@@ -47,8 +47,7 @@ public class ColumnClusterView
 			Cluster c = (Cluster) getNode();
 			NodeList nodes = c.getAllNodes();
 			float nodeHeight=0;
-			for (nodes.resetIterator(); nodes.hasNext();) {
-				org.wilmascope.graph.Node n = nodes.nextNode();
+			for (org.wilmascope.graph.Node n:nodes) {
 				Point3f t = n.getPosition();
 				SizeAdjustableNodeView tnv = (SizeAdjustableNodeView) n.getView();
 				if (t.z > p.z) {
@@ -145,8 +144,7 @@ public class ColumnClusterView
 		Cluster c = (Cluster) getNode();
 		NodeList nodes = c.getAllNodes();
 		float depthMax = 0;
-		for (nodes.resetIterator(); nodes.hasNext();) {
-			org.wilmascope.graph.Node n = nodes.nextNode();
+		for (org.wilmascope.graph.Node n : nodes) {
 			SizeAdjustableNodeView tnv = (SizeAdjustableNodeView) n.getView();
 			if (tnv.getDepth() > depthMax) {
 				depthMax = tnv.getDepth();
@@ -178,8 +176,7 @@ public class ColumnClusterView
 	public float getMaxRadius() {
 		float rad = 0;
 		NodeList children = ((Cluster) getNode()).getNodes();
-		for (children.resetIterator(); children.hasNext();) {
-			org.wilmascope.graph.Node c = children.nextNode();
+		for (org.wilmascope.graph.Node c : children) {
 			float r;
 			r = ((SizeAdjustableNodeView) c.getView()).getTopRadius();
 			if (r > rad) {

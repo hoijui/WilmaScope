@@ -283,28 +283,25 @@ public class ColumnsImporter {
 
   static void colourEdgeGroups(GraphControl.Cluster r, int noStrata) {
     EdgeList edges = r.getCluster().getInternalEdges();
-    Hashtable masterEdges = new Hashtable();
-    for (edges.resetIterator(); edges.hasNext();) {
-      Edge e = edges.nextEdge();
+    Hashtable<String,Hashtable<Integer,Edge>> masterEdges = new Hashtable<String,Hashtable<Integer,Edge>>();
+    for (Edge e : edges) {
       Integer s = new Integer(((NodeColumnLayout) e.getStart().getLayout())
           .getStratum());
       String key = e.getStart().getOwner().hashCode() + " "
           + e.getEnd().getOwner().hashCode();
-      Hashtable edgesByStratum = (Hashtable) masterEdges.get(key);
+      Hashtable<Integer,Edge> edgesByStratum = masterEdges.get(key);
       if (edgesByStratum == null) {
-        edgesByStratum = new Hashtable();
+        edgesByStratum = new Hashtable<Integer,Edge>();
         masterEdges.put(key, edgesByStratum);
       }
       if (!edgesByStratum.containsKey(s)) {
         edgesByStratum.put(s, e);
       }
     }
-    for (Enumeration keys = masterEdges.keys(); keys.hasMoreElements();) {
-      String key = (String) keys.nextElement();
-      System.out.println(key);
+    for (String key:masterEdges.keySet()) {
       Hashtable edgesByStratum = (Hashtable) masterEdges.get(key);
       String s = new String();
-      TreeSet sortedStrata = new TreeSet(edgesByStratum.keySet());
+      TreeSet<Integer> sortedStrata = new TreeSet<Integer>(edgesByStratum.keySet());
       int lastStratum = Integer.MIN_VALUE;
       for (Iterator strata = sortedStrata.iterator(); strata.hasNext();) {
         int stratum = ((Integer) strata.next()).intValue();

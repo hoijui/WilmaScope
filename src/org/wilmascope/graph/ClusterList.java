@@ -28,7 +28,7 @@ package org.wilmascope.graph;
  * @version 1.0
  */
 
-public class ClusterList extends List {
+public class ClusterList extends List<Cluster> {
   public void add(Cluster c) {
     elements.add(c);
   }
@@ -36,8 +36,8 @@ public class ClusterList extends List {
     elements.remove(c);
   }
   public void calculateLayout() {
-    for(int i = 0; i<elements.size(); i++) {
-      ((Cluster)elements.get(i)).calculateLayout();
+    for(Cluster c:elements) {
+      c.calculateLayout();
     }
   }
   /**
@@ -47,14 +47,14 @@ public class ClusterList extends List {
    */
   public boolean applyLayout() {
     boolean balanced = true;
-    for(int i = 0; i<elements.size(); i++) {
-      balanced = ((Cluster)elements.get(i)).applyLayout() && balanced;
+    for(Cluster c:elements) {
+      balanced = c.applyLayout() && balanced;
     }
     return balanced;
   }
   public boolean isAncestor(Cluster c) {
-    for(int i=0; i<elements.size(); i++) {
-      if(((Cluster)elements.get(i)).isAncestor(c)) {
+    for(Cluster d:elements) {
+      if(d.isAncestor(c)) {
         return true;
       }
     }
@@ -65,14 +65,8 @@ public class ClusterList extends List {
    * @param e the GraphElement to remove
    */
   public void removeFromAll(GraphElement e) {
-    for(int i = 0; i<elements.size(); i++) {
-      ((Cluster)elements.get(i)).remove(e);
+    for(Cluster c:elements) {
+      c.remove(e);
     }
-  }
-  public Cluster get(int index) {
-    return (Cluster)elements.get(index);
-  }
-  public Cluster nextCluster() {
-    return (Cluster)next();
   }
 }

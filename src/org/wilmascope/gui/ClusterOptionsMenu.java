@@ -31,9 +31,8 @@ import javax.swing.event.MenuEvent;
 import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.OptionsClient;
 import org.wilmascope.control.WilmaMain;
-import org.wilmascope.gmlparser.ParseException;
 import org.wilmascope.graph.Cluster;
-import org.wilmascope.graph.EdgeList;
+import org.wilmascope.graph.Edge;
 import org.wilmascope.graph.Node;
 import org.wilmascope.graph.NodeList;
 import org.wilmascope.view.ViewManager;
@@ -257,9 +256,8 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 	private void traceNeighbours(NodeList neighbours, Cluster c, int depth) {
 		if (depth == 0)
 			return;
-		EdgeList edges = c.getEdges();
-		for (edges.resetIterator(); edges.hasNext();) {
-			Cluster neighbour = edges.nextEdge().getNeighbour(c).getOwner();
+		for (Edge e:c.getEdges()) {
+			Cluster neighbour = e.getNeighbour(c).getOwner();
       if(!neighbours.contains(neighbour)) neighbours.add(neighbour);
 			traceNeighbours(neighbours, neighbour, depth - 1);
 		}
@@ -276,8 +274,7 @@ public class ClusterOptionsMenu extends JPopupMenu implements OptionsClient {
 		NodeList neighbours = new NodeList();
 		traceNeighbours(neighbours, c, depth);
 		NodeList allNodes = new NodeList(rootCluster.getCluster().getNodes());
-		for (allNodes.resetIterator(); allNodes.hasNext();) {
-			Node n = allNodes.nextNode();
+		for (Node n:allNodes) {
 			if (n != c && !neighbours.contains(n)) {
 				n.delete();
 			}

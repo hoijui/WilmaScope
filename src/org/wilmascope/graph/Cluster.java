@@ -68,8 +68,7 @@ public class Cluster extends Node {
     // adds the edge to the common ancestor of the two ends -- see the notes
     // on additional witchcraft in addEdge
     EdgeList newNodeEdges = node.getEdges();
-    for(newNodeEdges.resetIterator(); newNodeEdges.hasNext();){
-      Edge edge = newNodeEdges.nextEdge();
+    for(Edge edge:newNodeEdges){
       Node neighbour = edge.getNeighbour(node);
       // add the edge at the appropriate level in the cluster hierarchy
       addEdge(edge);
@@ -97,8 +96,8 @@ public class Cluster extends Node {
       return true;
     }
     ClusterList clusters = nodes.getClusters();
-    for(clusters.resetIterator();clusters.hasNext();) {
-      if(clusters.nextCluster().isAncestor(node)) {
+    for(Cluster c:clusters) {
+      if(c.isAncestor(node)) {
         return true;
       }
     }
@@ -113,8 +112,7 @@ public class Cluster extends Node {
     nodes.remove(n);
     // remove all the node's edges
     EdgeList edges = n.getEdges();
-    for(edges.resetIterator(); edges.hasNext();) {
-      Edge e = edges.nextEdge();
+    for(Edge e:edges) {
       // if edge is already an external edge then remove it altogether
       if(super.getEdges().contains(e)) {
         super.removeEdge(e);
@@ -296,8 +294,8 @@ public class Cluster extends Node {
   public NodeList getAllNodes() {
     NodeList allNodes = new NodeList(this.nodes);
     ClusterList clusters = this.nodes.getClusters();
-    for(clusters.resetIterator();clusters.hasNext();) {
-      allNodes.addAll(clusters.nextCluster().getAllNodes());
+    for(Cluster c:clusters) {
+      allNodes.addAll(c.getAllNodes());
     }
     return allNodes;
   }
@@ -310,21 +308,19 @@ public class Cluster extends Node {
   private void subCollapse() {
     this.expanded = false;
     ClusterList childClusters = nodes.getClusters();
-    for(childClusters.resetIterator(); childClusters.hasNext();) {
-      childClusters.nextCluster().subCollapse();
+    for(Cluster c:childClusters) {
+      c.subCollapse();
     }
 
     hideChildren();
     EdgeList externalEdges = super.getEdges();
-    for(externalEdges.resetIterator(); externalEdges.hasNext();) {
-      Edge e = externalEdges.nextEdge();
+    for(Edge e:externalEdges) {
       e.collapse(this, (Node)portalNodes.get(e));
     }
   }
   private NodeList getLeafNodes() {
     NodeList leafNodes = new NodeList();
-    for(nodes.resetIterator(); nodes.hasNext();) {
-      Node node = nodes.nextNode();
+    for(Node node:nodes) {
       if(node instanceof Cluster) {
         Cluster cluster = (Cluster)node;
         if(cluster.isExpanded()) {
@@ -352,12 +348,11 @@ public class Cluster extends Node {
     nodes.show(graphCanvas);
     internalEdges.show(graphCanvas);
     EdgeList externalEdges = super.getEdges();
-    for(externalEdges.resetIterator(); externalEdges.hasNext();) {
-      externalEdges.nextEdge().expand(this);
+    for(Edge e:externalEdges) {
+      e.expand(this);
     }
-    ClusterList cs = nodes.getClusters();
-    for(cs.resetIterator(); cs.hasNext();) {
-      cs.nextCluster().subExpand(graphCanvas);
+    for(Cluster c:nodes.getClusters()) {
+      c.subExpand(graphCanvas);
     }
   }
 
@@ -403,8 +398,7 @@ public class Cluster extends Node {
   private void calcRadius() {
     float newRadius = 0;
     float tmpRadius;
-    for (nodes.resetIterator(); nodes.hasNext();) {
-      Node member = nodes.nextNode();
+    for (Node member:nodes) {
       tmpRadius = getPosition().distance(member.getPosition()) + member.getView().getRadius();
       if(tmpRadius > newRadius) {
         newRadius = tmpRadius;
@@ -435,8 +429,8 @@ public class Cluster extends Node {
    */
   public void delete() {
     NodeList tmplist = new NodeList(nodes);
-    for(tmplist.resetIterator(); tmplist.hasNext();) {
-      tmplist.nextNode().delete();
+    for(Node n:tmplist) {
+      n.delete();
     }
     super.delete();
   }
@@ -472,8 +466,8 @@ public class Cluster extends Node {
    * Add the specified nodes to this cluster
    */
   public void addNodes(NodeList startNodes) {
-    for(startNodes.resetIterator();startNodes.hasNext();) {
-      addNode(startNodes.nextNode());
+    for(Node n:startNodes) {
+      addNode(n);
     }
     Vector3f delta = new Vector3f(nodes.getBarycenter());
     delta.sub(getPosition());

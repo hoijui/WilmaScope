@@ -113,8 +113,7 @@ public class SliceViewControlFrame extends JFrame {
     root = gc.getRootCluster();
     getContentPane().removeAll();
     NodeList l = root.getCluster().getAllNodes();
-    for (l.resetIterator(); l.hasNext();) {
-      Node n = l.nextNode();
+    for (Node n:l) {
       if (n instanceof Cluster) {
         if (((Cluster) n).getLayoutEngine() instanceof ColumnLayout) {
           ColumnLayout c = (ColumnLayout) ((Cluster) n).getLayoutEngine();

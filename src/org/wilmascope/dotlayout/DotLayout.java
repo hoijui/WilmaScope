@@ -94,8 +94,7 @@ public class DotLayout implements LayoutEngine {
       }
       layersString = layersString + "\"\n";
       in.write(layersString.getBytes());
-      for (nodes.resetIterator(); nodes.hasNext();) {
-        Node n = nodes.nextNode();
+      for (Node n:nodes) {
         float rad;
         try {
           rad = ((ColumnClusterView) n.getView()).getMaxRadius();
@@ -140,8 +139,7 @@ public class DotLayout implements LayoutEngine {
       //     add edge to masterEdgeList
       //     write edge to dot file
 
-      for (edges.resetIterator(); edges.hasNext();) {
-        Edge e = edges.nextEdge();
+      for (Edge e:edges) {
         ((DotEdgeLayout) e.getLayout()).setZLevel(
           ((org.wilmascope.columnlayout.NodeColumnLayout) e
             .getStart()
@@ -361,9 +359,9 @@ public class DotLayout implements LayoutEngine {
   }
   public void setStrataSeparation(float sep) {
     NodeList l = root.getNodes();
-    for (l.resetIterator(); l.hasNext();) {
+    for (Node n:l) {
       (
-        (ColumnLayout) ((Cluster) l.nextNode())
+        (ColumnLayout) ((Cluster) n)
           .getLayoutEngine())
           .setStrataSeparation(
         sep);
@@ -372,10 +370,9 @@ public class DotLayout implements LayoutEngine {
   public float getStrataSeparation() {
     NodeList l = root.getNodes();
     float s = 0;
-    l.resetIterator();
-    if (l.hasNext()) {
+    if (l.size()>0) {
       s =
-        ((ColumnLayout) ((Cluster) l.nextNode()).getLayoutEngine())
+        ((ColumnLayout) ((Cluster) l.get(0)).getLayoutEngine())
           .getStrataSeparation();
     }
     return s;

@@ -37,8 +37,7 @@ public class ColumnLayout implements LayoutEngine {
     Point3f rootPosition = root.getPosition();
     NodeList nodes = root.getNodes();
     root.setMass(1f);
-    for (nodes.resetIterator(); nodes.hasNext();) {
-      Node node = nodes.nextNode();
+    for (Node node : nodes) {
       Point3f position = node.getPosition();
       NodeColumnLayout nodeLayout = (NodeColumnLayout) node.getLayout();
       position.x = rootPosition.x;
@@ -88,8 +87,7 @@ public class ColumnLayout implements LayoutEngine {
   public float getHeight() {
     NodeList nodes = root.getAllNodes();
     float zMax = Float.MIN_VALUE, zMin = Float.MAX_VALUE;
-    for (nodes.resetIterator(); nodes.hasNext();) {
-      org.wilmascope.graph.Node n = nodes.nextNode();
+    for (org.wilmascope.graph.Node n : nodes) {
       Point3f t = n.getPosition();
       if (t.z > zMax) {
         zMax = t.z;
