@@ -95,7 +95,6 @@ module wilmascope {
       //ForceLayout getLayoutEngine();
       void addNode(in Node n);
       Node addNewNode();
-      void addEdge(in Edge e);
       Edge addNewEdge(in Node start, in Node end);
       Cluster addNewCluster();
       void removeNode(in Node n);
