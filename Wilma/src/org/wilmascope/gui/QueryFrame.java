@@ -1025,8 +1025,8 @@ public class QueryFrame extends JFrame {
   private JTextField scaleField = new JTextField();
 
   void scaleButton_actionPerformed(ActionEvent e) {
-    ColumnSizeControlsFrame f = new ColumnSizeControlsFrame(graphRoot);
-    f.pack();
-    f.show();
+    //ColumnSizeControlsFrame f = new ColumnSizeControlsFrame(graphRoot);
+    //f.pack();
+    //f.show();
   }
 }
