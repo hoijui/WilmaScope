@@ -33,7 +33,11 @@ public class AxisPlaneControlFrame extends JFrame {
     this();
     canvas = gc.getGraphCanvas();
     root = gc.getRootCluster();
-    Point3f c = root.getCluster().getNodes().getBarycenter();
+    org.wilmascope.graph.NodeList l = root.getCluster().getAllNodes();
+    Point3f c = l.getBarycenter();
+    float width = l.getWidth();
+    float height = l.getHeight();
+    System.out.println("width="+width+",height="+height);
     axisPlaneBG = new BranchGroup();
     axisPlaneBG.setCapability(BranchGroup.ALLOW_DETACH);
     axisPlaneTG = new TransformGroup();
@@ -44,7 +48,7 @@ public class AxisPlaneControlFrame extends JFrame {
     Material m = org.wilmascope.view.Colours.greyBlueMaterial;
     ap.setMaterial(m);
     ap.setTransparencyAttributes(transparencyAttributes);
-    com.sun.j3d.utils.geometry.Box plane = new com.sun.j3d.utils.geometry.Box(3f,3f,0.01f,ap);
+    com.sun.j3d.utils.geometry.Box plane = new com.sun.j3d.utils.geometry.Box(width/1.9f,height/1.9f,0.01f,ap);
     for(int i=0;i<6;i++) {
       Shape3D shape = plane.getShape(i);
       shape.setCapability(Shape3D.ENABLE_PICK_REPORTING);

@@ -11,5 +11,6 @@ package org.wilmascope.dotlayout;
 import java.util.Vector;
 
 public interface Spline {
+  public void setScale(float scale);
   public void setCurves(float scale, int x0, int y0, int x1, int y1, Vector curves, Vector arrowPositions);
 }

@@ -78,7 +78,7 @@ public class GraphCanvas extends Canvas3D {
     rotationTransformGroup.setCapability(TransformGroup.ALLOW_LOCAL_TO_VWORLD_READ);
 
     Transform3D yAxis = new Transform3D();
-    Alpha rotationAlpha = new Alpha(-1, 10000);
+    rotationAlpha = new Alpha(-1, 10000);
 
     rotator =
         new RotationInterpolator(rotationAlpha, rotationTransformGroup, yAxis,
@@ -117,8 +117,17 @@ public class GraphCanvas extends Canvas3D {
   public Bounds getBoundingSphere() {
     return bounds;
   }
+  Alpha rotationAlpha;
+  boolean rotatorOn = false;
   public void toggleRotator() {
     boolean enabled = rotator.getEnable();
+    if(rotatorOn) {
+	    if(rotationAlpha.isPaused()) {
+		    rotationAlpha.resume();
+	    } else {
+		    rotationAlpha.pause();
+	    }
+    } else {
     Transform3D t = new Transform3D();
     Vector3f m = new Vector3f();
     transformGroup.getTransform(t);
@@ -127,6 +136,8 @@ public class GraphCanvas extends Canvas3D {
     t.setTranslation(m);
     rotator.setTransformAxis(t);
     rotator.setEnable(!rotator.getEnable());
+    rotatorOn = true;
+    }
   }
   public void createUniverse() {
     bg.compile();

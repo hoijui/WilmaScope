@@ -256,7 +256,7 @@ public class DotLayout implements LayoutEngine {
 
   public int bbXMin, bbXMax, bbYMin, bbYMax;
   public float width, height;
-  public float scale = 4.0f;
+  public float scale = 2.0f;
 
   public boolean applyLayout() {
     return true;

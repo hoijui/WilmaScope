@@ -43,7 +43,7 @@ public class SplineTubeEdgeView extends EdgeView implements org.wilmascope.dotla
   final static float yStep = 1f/(float)ySize;
   static NormalGenerator normalGenerator = new NormalGenerator();
   {
-    Cylinder c = new Cylinder(0.02f, 1f,0,xSize,ySize,null);
+    Cylinder c = new Cylinder(1f, 1f,0,xSize,ySize,null);
     GeometryStripArray tubeGeometry = getGeometry(c, Cylinder.BODY);
     tubePoints = new Point3f[tubeGeometry.getVertexCount()];
     tubeStripCounts = new int[tubeGeometry.getNumStrips()];
@@ -84,6 +84,9 @@ public class SplineTubeEdgeView extends EdgeView implements org.wilmascope.dotla
   Vector curves, arrowPositions = new Vector();
   float width, height, scale;
   int x0, y0;
+  public void setScale(float scale) {
+    this.scale = scale;
+  }
   public void setCurves(float scale, int x0, int y0, int x1, int y1, Vector curves, Vector arrowPositions) {
     this.curves = new Vector();
     this.arrowPositions = arrowPositions;
@@ -105,9 +108,9 @@ public class SplineTubeEdgeView extends EdgeView implements org.wilmascope.dotla
     }
   }
   /** This method and the next together implement The de-Casteljau Algorithm.
-   *  I've shamelessly stolen them from the example code at
+   *  I've modelled them on the example code at:
    * <a href="http://www.cs.huji.ac.il/~arik/java/ex2/">this site</a>
-   *
+   * Thanks!
    * @return the linear interpolation of two points
    */
   Point2D.Float interpolate(Point2D.Float p0, Point2D.Float p1,float t) {
@@ -132,7 +135,7 @@ public class SplineTubeEdgeView extends EdgeView implements org.wilmascope.dotla
 
   void splineTube(Point2D.Float[] controlPoints,BranchGroup b) {
     Point2D.Float[] t2pnts = new Point2D.Float[4];
-    float thisX, thisY;
+    float radius = getRadius();
     int steps = 10;
     int numCurves = controlPoints.length / 3;
     int i = 0;
@@ -177,9 +180,9 @@ public class SplineTubeEdgeView extends EdgeView implements org.wilmascope.dotla
           }
           Point3f newPnt = new Point3f();
           Point3f oldPnt = tubePoints[segment*segmentSize+j];
-          newPnt.x = -oldPnt.x*cosTheta + t2pnts[0].x;
-          newPnt.y = t2pnts[0].y+oldPnt.x * sinTheta;
-          newPnt.z = oldPnt.z + zLevel;
+          newPnt.x = -oldPnt.x*cosTheta*radius + t2pnts[0].x;
+          newPnt.y = t2pnts[0].y+oldPnt.x * radius * sinTheta;
+          newPnt.z = oldPnt.z*radius + zLevel;
           taperedTubePoints[segment*segmentSize+j]=newPnt;
         }
       }
@@ -220,7 +223,7 @@ public class SplineTubeEdgeView extends EdgeView implements org.wilmascope.dotla
       //arrowCoords[j++] = start;
       //arrowCoords[j++] = end;
 
-      Cone cone=new Cone(scale*0.01f, 1.0f, Cone.GENERATE_NORMALS, getAppearance());
+      Cone cone=new Cone(2f*getRadius(), 1.0f, Cone.GENERATE_NORMALS, getAppearance());
       makePickable(cone.getShape(Cone.BODY));
       makePickable(cone.getShape(Cone.CAP));
       Transform3D transform = new Transform3D();

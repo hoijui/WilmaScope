@@ -65,19 +65,19 @@ public class TubeNodeView extends NodeView {
         return (GeometryStripArray)c.getShape(section).getGeometry();
     }
     private static void loadGeometry(GeometryStripArray geometry,
-        int[] stripCounts, Point3f[] points
-    ) {
-        for(int i=0;i<points.length; i++) {
-            points[i]=new Point3f();
-        }
-        geometry.getCoordinates(0,points);
-        geometry.getStripVertexCounts(stripCounts);
-        // rotate so that cylinder stands lengthwise in the z-dimension
-        Transform3D rotateTransform = new Transform3D();
-        rotateTransform.rotX(Math.PI/2);
-        for(int i=0;i<points.length; i++) {
-            rotateTransform.transform(points[i]);
-        }
+                                     int[] stripCounts, Point3f[] points
+                                     ) {
+      for(int i=0;i<points.length; i++) {
+        points[i]=new Point3f();
+      }
+      geometry.getCoordinates(0,points);
+      geometry.getStripVertexCounts(stripCounts);
+      // rotate so that cylinder stands lengthwise in the z-dimension
+      Transform3D rotateTransform = new Transform3D();
+      rotateTransform.rotX(Math.PI/2);
+      for(int i=0;i<points.length; i++) {
+        rotateTransform.transform(points[i]);
+      }
     }
   public void draw() {
     setTranslation(new Vector3f(getNode().getPosition()));
@@ -93,89 +93,89 @@ public class TubeNodeView extends NodeView {
   protected void setupHighlightMaterial() {
     setupHighlightAppearance(Colours.yellowMaterial);
   }
-    protected void init() {
-        float radius = getNode().getRadius();
-        taperedTubePoints = new Point3f[tubePoints.length];
-        scaledTopPoints = new Point3f[topPoints.length];
-        for(int i=0;i<topPoints.length;i++) {
-            scaledTopPoints[i] = new Point3f(
-                topPoints[i].x * radius,
-                topPoints[i].y * radius,
-                topPoints[i].z * radius);
-        }
-
-        scaledBottomPoints = new Point3f[bottomPoints.length];
-        for(int i=0;i<bottomPoints.length;i++) {
-            scaledBottomPoints[i] = new Point3f(
-                bottomPoints[i].x * radius,
-                bottomPoints[i].y * radius,
-                bottomPoints[i].z * radius);
-        }
-        for(int i=0;i<tubePoints.length;i++) {
-            if(i%2==0) {
-                taperedTubePoints[i]=new Point3f(
-                    tubePoints[i].x*radius,
-                    tubePoints[i].y*radius,
-                    tubePoints[i].z*radius
-                );
-            } else {
-                taperedTubePoints[i]=new Point3f(
-                    tubePoints[i].x*radius,
-                    tubePoints[i].y*radius,
-                    tubePoints[i].z*radius
-                );
-            }
-        }
-        GeometryInfo gi = new GeometryInfo(GeometryInfo.TRIANGLE_STRIP_ARRAY);
-        gi.setCoordinates(taperedTubePoints);
-        gi.setStripCounts(tubeStripCounts);
-        normalGenerator.generateNormals(gi);
-        tubeGeometryArray = new TriangleStripArray(
-          taperedTubePoints.length,
-          GeometryArray.COORDINATES|GeometryArray.BY_REFERENCE|GeometryArray.NORMALS,
-          tubeStripCounts);
-        tubeGeometryArray.setCapability(GeometryArray.ALLOW_REF_DATA_WRITE);
-        tubeGeometryArray.setCoordRef3f(gi.getCoordinates());
-        tubeGeometryArray.setNormalRef3f(gi.getNormals());
-        Shape3D tubeShape = new Shape3D(tubeGeometryArray,getAppearance());
-        makePickable(tubeShape);
-        addTransformGroupChild(tubeShape);
-        // cap on the tube
-        gi = new GeometryInfo(GeometryInfo.TRIANGLE_FAN_ARRAY);
-        gi.setCoordinates(scaledTopPoints);
-        gi.setStripCounts(topStripCounts);
-        normalGenerator.generateNormals(gi);
-        topGeometryArray = new TriangleFanArray(
-          scaledTopPoints.length,
-          GeometryArray.COORDINATES|GeometryArray.BY_REFERENCE|GeometryArray.NORMALS,
-          topStripCounts);
-        topGeometryArray.setCapability(GeometryArray.ALLOW_REF_DATA_WRITE);
-        topGeometryArray.setCoordRef3f(gi.getCoordinates());
-        topGeometryArray.setNormalRef3f(gi.getNormals());
-        Shape3D topShape = new Shape3D(topGeometryArray,getAppearance());
-        makePickable(topShape);
-        addTransformGroupChild(topShape);
-
-        // cap on the tube
-        gi = new GeometryInfo(GeometryInfo.TRIANGLE_FAN_ARRAY);
-        gi.setCoordinates(scaledBottomPoints);
-        gi.setStripCounts(bottomStripCounts);
-        normalGenerator.generateNormals(gi);
-        bottomGeometryArray = new TriangleFanArray(
-          scaledBottomPoints.length,
-          GeometryArray.COORDINATES|GeometryArray.BY_REFERENCE|GeometryArray.NORMALS,
-          bottomStripCounts);
-        bottomGeometryArray.setCapability(GeometryArray.ALLOW_REF_DATA_WRITE);
-        bottomGeometryArray.setCoordRef3f(gi.getCoordinates());
-        bottomGeometryArray.setNormalRef3f(gi.getNormals());
-        Shape3D bottomShape = new Shape3D(bottomGeometryArray,getAppearance());
-        makePickable(bottomShape);
-        addTransformGroupChild(bottomShape);
+  protected void init() {
+    float radius = getNode().getRadius();
+    taperedTubePoints = new Point3f[tubePoints.length];
+    scaledTopPoints = new Point3f[topPoints.length];
+    for(int i=0;i<topPoints.length;i++) {
+      scaledTopPoints[i] = new Point3f(
+      topPoints[i].x * radius,
+      topPoints[i].y * radius,
+      topPoints[i].z * radius);
     }
 
-    public ImageIcon getIcon() {
-      return new ImageIcon(getClass().getResource("/images/edge.png"));
+    scaledBottomPoints = new Point3f[bottomPoints.length];
+    for(int i=0;i<bottomPoints.length;i++) {
+      scaledBottomPoints[i] = new Point3f(
+      bottomPoints[i].x * radius,
+      bottomPoints[i].y * radius,
+      bottomPoints[i].z * radius);
     }
+    for(int i=0;i<tubePoints.length;i++) {
+      if(i%2==0) {
+        taperedTubePoints[i]=new Point3f(
+        tubePoints[i].x*radius,
+        tubePoints[i].y*radius,
+        tubePoints[i].z*radius
+        );
+      } else {
+        taperedTubePoints[i]=new Point3f(
+            tubePoints[i].x*radius,
+            tubePoints[i].y*radius,
+            tubePoints[i].z*radius
+            );
+      }
+    }
+    GeometryInfo gi = new GeometryInfo(GeometryInfo.TRIANGLE_STRIP_ARRAY);
+    gi.setCoordinates(taperedTubePoints);
+    gi.setStripCounts(tubeStripCounts);
+    normalGenerator.generateNormals(gi);
+    tubeGeometryArray = new TriangleStripArray(
+        taperedTubePoints.length,
+        GeometryArray.COORDINATES|GeometryArray.BY_REFERENCE|GeometryArray.NORMALS,
+        tubeStripCounts);
+    tubeGeometryArray.setCapability(GeometryArray.ALLOW_REF_DATA_WRITE);
+    tubeGeometryArray.setCoordRef3f(gi.getCoordinates());
+    tubeGeometryArray.setNormalRef3f(gi.getNormals());
+    Shape3D tubeShape = new Shape3D(tubeGeometryArray,getAppearance());
+    makePickable(tubeShape);
+    addTransformGroupChild(tubeShape);
+    // cap on the tube
+    gi = new GeometryInfo(GeometryInfo.TRIANGLE_FAN_ARRAY);
+    gi.setCoordinates(scaledTopPoints);
+    gi.setStripCounts(topStripCounts);
+    normalGenerator.generateNormals(gi);
+    topGeometryArray = new TriangleFanArray(
+        scaledTopPoints.length,
+        GeometryArray.COORDINATES|GeometryArray.BY_REFERENCE|GeometryArray.NORMALS,
+        topStripCounts);
+    topGeometryArray.setCapability(GeometryArray.ALLOW_REF_DATA_WRITE);
+    topGeometryArray.setCoordRef3f(gi.getCoordinates());
+    topGeometryArray.setNormalRef3f(gi.getNormals());
+    Shape3D topShape = new Shape3D(topGeometryArray,getAppearance());
+    makePickable(topShape);
+    addTransformGroupChild(topShape);
+
+    // cap on the tube
+    gi = new GeometryInfo(GeometryInfo.TRIANGLE_FAN_ARRAY);
+    gi.setCoordinates(scaledBottomPoints);
+    gi.setStripCounts(bottomStripCounts);
+    normalGenerator.generateNormals(gi);
+    bottomGeometryArray = new TriangleFanArray(
+        scaledBottomPoints.length,
+        GeometryArray.COORDINATES|GeometryArray.BY_REFERENCE|GeometryArray.NORMALS,
+        bottomStripCounts);
+    bottomGeometryArray.setCapability(GeometryArray.ALLOW_REF_DATA_WRITE);
+    bottomGeometryArray.setCoordRef3f(gi.getCoordinates());
+    bottomGeometryArray.setNormalRef3f(gi.getNormals());
+    Shape3D bottomShape = new Shape3D(bottomGeometryArray,getAppearance());
+    makePickable(bottomShape);
+    addTransformGroupChild(bottomShape);
+  }
+
+  public ImageIcon getIcon() {
+    return new ImageIcon(getClass().getResource("/images/edge.png"));
+  }
   /**
    * adjust the radius of the top and bottom of the tube
    * each argument is a scale factor, ie the resulting radius will be
