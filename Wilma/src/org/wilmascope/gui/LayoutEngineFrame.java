@@ -63,6 +63,7 @@ public class LayoutEngineFrame extends JFrame {
   void layoutEngineComboBox_actionPerformed(ActionEvent e) {
     String s = (String)layoutEngineComboBox.getSelectedItem();
     box1.remove(controlsPanel);
+    cluster.freeze();
     Cluster c = cluster.getCluster();
     LayoutEngine layoutEngine=null;
     try {

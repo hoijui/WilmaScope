@@ -178,7 +178,8 @@ public abstract class NodeView extends GraphElementView implements org.wilmascop
     Color3f c = new Color3f();
     getAppearance().getMaterial().getDiffuseColor(c);
 //    g.setColor(new Color(c.x,c.y,c.z,transparency));
-    g.setColor(new Color(0,0,0,transparency));
+    
+    g.setColor(c.get());
     r.fillCircle(g,getNode().getPosition(),getNode().getRadius());
 	}
 }

@@ -14,7 +14,11 @@ import java.util.Vector;
 
 import javax.vecmath.Point3f;
 
-import org.wilmascope.columnlayout.*;
+import org.wilmascope.columnlayout.ColumnCluster;
+import org.wilmascope.forcelayout.ForceLayout;
+import org.wilmascope.forcelayout.Origin;
+import org.wilmascope.forcelayout.Repulsion;
+import org.wilmascope.forcelayout.Spring;
 import org.wilmascope.graph.Cluster;
 
 public class TestGraph {
@@ -28,10 +32,15 @@ public class TestGraph {
   }
   public void genStratified(int colCount, int edgeCount) {
     GraphControl.ClusterFacade r = gc.getRootCluster();
-/*    r = r.addCluster();
-    r.setLayoutEngine(new org.wilmascope.dotlayout.DotLayout());
-    r.hide();
-*/
+//    r = r.addCluster();
+    /*ForceLayout f = new ForceLayout();
+    r.setLayoutEngine(f);
+    f.setVelocityAttenuation(0.001f);
+    f.setFrictionCoefficient(90f);
+    f.addForce(new Spring(0.1f));
+    f.addForce(new Repulsion(5f, 100f));
+    f.addForce(new Origin(2f));*/
+
     ColumnCluster.setColumnStyle(ColumnCluster.WORMS);
     //String edgeStyle = "SplineTube";
     String nodeStyle = "Tube Node";

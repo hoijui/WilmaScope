@@ -175,6 +175,8 @@ public abstract class GraphElementView
 		return true;
 	}
 	protected void setupDefaultAppearance(Material defaultMaterial) {
+
+    if(!defaultMaterial.isLive()) defaultMaterial.setCapability(Material.ALLOW_COMPONENT_READ);
 		appearance = new Appearance();
 		appearance.setCapability(Appearance.ALLOW_MATERIAL_WRITE);
 		appearance.setCapability(Appearance.ALLOW_MATERIAL_READ);
@@ -213,7 +215,7 @@ public abstract class GraphElementView
 			Color3f ambient = new Color3f(diffuse);
 			ambient.scale(0.5f);
 			Material material = new Material();
-			material.setCapability(Material.ALLOW_COMPONENT_READ);
+      material.setCapability(Material.ALLOW_COMPONENT_READ);
 			material.setDiffuseColor(diffuse);
 			material.setAmbientColor(ambient);
 			appearance.setMaterial(material);

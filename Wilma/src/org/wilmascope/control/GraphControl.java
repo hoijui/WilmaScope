@@ -492,6 +492,7 @@ public class GraphControl {
       ((ForceLayout) cluster.getLayoutEngine()).setBalancedEventClient(client);
     }
     public void deleteAll() {
+      freeze();  // stop layout 
       NodeList condemned = new NodeList(cluster.getNodes());
       for (int i = 0; i < condemned.size(); i++) {
         NodeFacade n = (NodeFacade) condemned.get(i).getUserFacade();

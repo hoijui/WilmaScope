@@ -93,8 +93,6 @@ public class ColumnCluster {
 			n.setRadius(n.getRadius() * radius);
 			n.setColour(211f / 255f, 199f / 255f, 182f / 255f);
 			if (lastTopNode != null) {
-				TaperedEdgeView.setBottomRadius(lastTopRadius);
-				TaperedEdgeView.setTopRadius(radius);
 				GraphControl.EdgeFacade e = column.addEdge(lastTopNode, n,
 						"Tapered Edge");
 				e.setColour(211f / 255f, 199f / 255f, 182f / 255f);
@@ -119,8 +117,6 @@ public class ColumnCluster {
 			//n.setColour(211f/255f, 199f/255f, 182f/255f);
 			n.setColour(102f / 255f, 255f / 255f, 51f / 255f);
 			if (lastTopNode != null) {
-				TaperedEdgeView.setBottomRadius(lastTopRadius);
-				TaperedEdgeView.setTopRadius(radius);
 				GraphControl.EdgeFacade e = column.addEdge(lastTopNode, n,
 						"Tapered Edge");
 				e.setRelaxedLength(0.001f);

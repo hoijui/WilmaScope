@@ -126,21 +126,67 @@ public class Renderer2D {
     Point2f p2 = getScreenPoint(end);
     g.drawLine((int)p1.x,(int)p1.y,(int)p2.x,(int)p2.y);
   }
+  /**
+   * Draws an arrow head (a triangle) with the base at start and the head at end 
+   * @param g
+   * @param width
+   * @param start 
+   * @param end
+   */
   public void arrowPath(Graphics2D g, float width, Point3f start, Point3f end) {
-    float r = width/2f;
+    // v is vector from start to end
     Vector3f v = new Vector3f();
     v.sub(end,start);
+    // w is perpendicular to v
     Vector3f w = new Vector3f(v.y,-v.x,0);
     w.normalize();
-    w.scale(r);
+    w.scale(width/2f);
+    // a and b are corners of arrow head
     Point3f a = new Point3f();
     Point3f b = new Point3f();
     a.sub(start,w);
     b.add(start,w);
-    Point2f p1 = getScreenPoint(start);
-    Point2f p2 = getScreenPoint(a);
+    Point2f p1 = getScreenPoint(a);
+    Point2f p2 = getScreenPoint(b);
     Point2f p3 = getScreenPoint(end);
-    Point2f p4 = getScreenPoint(b);
+    GeneralPath path = new GeneralPath(GeneralPath.WIND_EVEN_ODD,5);
+    path.moveTo(p1.x,p1.y);
+    path.lineTo(p2.x,p2.y);
+    path.lineTo(p3.x,p3.y);
+    path.lineTo(p1.x,p1.y);
+    path.closePath();
+    g.fill(path);
+  }
+  /**
+   * Draws a tapered line from start to end with end widths as specified
+   * @param g
+   * @param startWidth
+   * @param endWidth
+   * @param start 
+   * @param end
+   */
+  public void taperedLinePath(Graphics2D g, float startWidth, float endWidth, Point3f start, Point3f end) {
+    // v is vector from start to end
+    Vector3f v = new Vector3f();
+    v.sub(end,start);
+    // w is perpendicular to v
+    Vector3f wS = new Vector3f(-v.y,v.x,0);
+    wS.normalize();
+    Vector3f wE = new Vector3f(wS);
+    wS.scale(startWidth/2f);
+    wE.scale(endWidth/2f);
+    Point3f a = new Point3f();
+    Point3f b = new Point3f();
+    Point3f c = new Point3f();
+    Point3f d = new Point3f();
+    a.sub(start,wS);
+    b.add(start,wS);
+    c.add(end,wE);
+    d.sub(end,wE);
+    Point2f p1 = getScreenPoint(a);
+    Point2f p2 = getScreenPoint(b);
+    Point2f p3 = getScreenPoint(c);
+    Point2f p4 = getScreenPoint(d);
     GeneralPath path = new GeneralPath(GeneralPath.WIND_EVEN_ODD,5);
     path.moveTo(p1.x,p1.y);
     path.lineTo(p2.x,p2.y);
