@@ -52,14 +52,14 @@ public class BoxNodeView extends NodeView {
   protected void init() {
     float radius = getNode().getRadius();
     // make the main box that will carry the texture mapped label
-    box = new OrientedLabelCube(getAppearance(), radius, 1.0f);
+    box = new OrientedLabelCube(getAppearance(), 1.0f, 1.0f);
     makePickable(box);
     addTransformGroupChild(box);
     // add a border without the label texture... just to make it look more
     // 3D.
     Appearance app = new Appearance();
     app.setMaterial(getAppearance().getMaterial());
-    border = new OrientedNoLabelCube(app, radius, 1.0f);
+    border = new OrientedNoLabelCube(app, 1.0f, 1.0f);
     makePickable(border);
     addTransformGroupChild(border);
     // now create a fully transparent pickable sphere to encompass the box.
@@ -91,7 +91,7 @@ public class BoxNodeView extends NodeView {
     // First coordinate in the GeometryArray of the textObject should
     // be the top right corner so use its x value to determine the width
     qa.getCoordinate(0,coord);
-    float width = getNode().getRadius(), widthScale;
+    float widthScale;
     // 3.0 is the maximum scaling factor, 1.0 is the minimum
     if(coord.x>2.1d) {
       widthScale = 3.0f;
@@ -101,8 +101,8 @@ public class BoxNodeView extends NodeView {
       widthScale = (float)coord.x;
     }
     //getNode().setRadius(width);
-    box.generateGeometry(width, widthScale);
-    border.generateGeometry(width, widthScale);
+    box.generateGeometry(1f, widthScale);
+    border.generateGeometry(1f, widthScale);
   }
   public ImageIcon getIcon() {
     return new ImageIcon(getClass().getResource("/images/cube.png"));

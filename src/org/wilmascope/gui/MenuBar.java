@@ -21,6 +21,7 @@
 package org.wilmascope.gui;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.MenuItem;
 
 import org.wilmascope.control.GraphControl;
@@ -43,10 +44,15 @@ public class MenuBar extends JMenuBar {
   JMenu editMenu;
   JMenuItem exitMenuItem = new JMenuItem();
   JMenuItem queryMenuItem = new JMenuItem();
+  JMenuItem testMenuItem = new JMenuItem();
   JMenu viewMenu = new JMenu();
   JCheckBoxMenuItem antialiasingCheckBoxMenuItem = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem parallelCheckBoxMenuItem = new JCheckBoxMenuItem();
   JCheckBoxMenuItem showMouseHelpCheckBoxMenuItem = new JCheckBoxMenuItem();
+  JMenuItem stretchMenuItem = new JMenuItem();
+  JMenuItem animationGranularityMenuItem = new JMenuItem();
   JMenuItem backgroundColourMenuItem = new JMenuItem();
+  JMenuItem axisPlaneMenuItem = new JMenuItem();
   JMenuItem helpMenuItem = new JMenuItem();
   JMenuItem licenseMenuItem = new JMenuItem();
   JMenuItem aboutMenuItem = new JMenuItem();
@@ -71,6 +77,12 @@ public class MenuBar extends JMenuBar {
         queryMenuItem_actionPerformed(e);
       }
     });
+    testMenuItem.setText("Create test graph...");
+    testMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        testMenuItem_actionPerformed(e);
+      }
+    });
     exitMenuItem.setText("Exit");
     exitMenuItem.setMnemonic('x');
     exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -93,6 +105,34 @@ public class MenuBar extends JMenuBar {
     antialiasingCheckBoxMenuItem.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
         antialiasingCheckBoxMenuItem_actionPerformed(e);
+      }
+    });
+    parallelCheckBoxMenuItem.setText("Parallel Projection");
+    parallelCheckBoxMenuItem.setMnemonic('P');
+    parallelCheckBoxMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        parallelCheckBoxMenuItem_actionPerformed(e);
+      }
+    });
+    stretchMenuItem.setText("Stretch Vertical Axis...");
+    stretchMenuItem.setMnemonic('S');
+    stretchMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        stretchMenuItem_actionPerformed(e);
+      }
+    });
+    animationGranularityMenuItem.setText("Animation Granularity...");
+    animationGranularityMenuItem.setMnemonic('G');
+    animationGranularityMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        animationGranularityMenuItem_actionPerformed(e);
+      }
+    });
+    axisPlaneMenuItem.setText("Show axis plane...");
+    axisPlaneMenuItem.setMnemonic('x');
+    axisPlaneMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        axisPlaneMenuItem_actionPerformed(e);
       }
     });
     backgroundColourMenuItem.setText("Set Background Colour...");
@@ -135,9 +175,14 @@ public class MenuBar extends JMenuBar {
     this.add(viewMenu);
     this.add(helpMenu);
     fileMenu.add(queryMenuItem);
+    fileMenu.add(testMenuItem);
     fileMenu.add(exitMenuItem);
     viewMenu.add(showMouseHelpCheckBoxMenuItem);
     viewMenu.add(antialiasingCheckBoxMenuItem);
+    viewMenu.add(parallelCheckBoxMenuItem);
+    viewMenu.add(stretchMenuItem);
+    viewMenu.add(animationGranularityMenuItem);
+    viewMenu.add(axisPlaneMenuItem);
     viewMenu.add(backgroundColourMenuItem);
     viewMenu.add(edgeViewMenuItem);
     helpMenu.add(helpMenuItem);
@@ -156,6 +201,57 @@ public class MenuBar extends JMenuBar {
       graphControl.getGraphCanvas().setAntialiasingEnabled(false);
     }
   }
+  JFrame parallelScaleControlFrame = null;
+  JFrame stretchControlFrame = null;
+  JFrame animationGranularityControlFrame = null;
+  void parallelCheckBoxMenuItem_actionPerformed(ActionEvent e) {
+    if(parallelCheckBoxMenuItem.isSelected()) {
+      graphControl.getGraphCanvas().setParallelProjection(true);
+      parallelScaleControlFrame = new JFrame();
+      JSlider scaleSlider = new JSlider(JSlider.HORIZONTAL,1,100,10);
+      scaleSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          JSlider source = (JSlider)e.getSource();
+          graphControl.getGraphCanvas().setScale(0.01 * source.getValue());
+        }
+      });
+      parallelScaleControlFrame.getContentPane().add(scaleSlider);
+      parallelScaleControlFrame.setTitle("Adjust Scale...");
+      parallelScaleControlFrame.pack();
+      parallelScaleControlFrame.show();
+    } else {
+      graphControl.getGraphCanvas().setParallelProjection(false);
+      parallelScaleControlFrame.dispose();
+    }
+  }
+  void stretchMenuItem_actionPerformed(ActionEvent e) {
+    stretchControlFrame = new JFrame();
+    JSlider scaleSlider = new JSlider(JSlider.HORIZONTAL,1,100,10);
+    scaleSlider.addChangeListener(new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        JSlider source = (JSlider)e.getSource();
+        graphControl.getGraphCanvas().setScale(new javax.vecmath.Vector3d(1,0.1 * source.getValue(),1));
+      }
+    });
+    stretchControlFrame.getContentPane().add(scaleSlider);
+    stretchControlFrame.setTitle("Adjust Vertical Scale...");
+    stretchControlFrame.pack();
+    stretchControlFrame.show();
+  }
+  void animationGranularityMenuItem_actionPerformed(ActionEvent e) {
+    animationGranularityControlFrame = new JFrame();
+    JSlider scaleSlider = new JSlider(JSlider.HORIZONTAL,1,100,1);
+    scaleSlider.addChangeListener(new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        JSlider source = (JSlider)e.getSource();
+        graphControl.setIterationsPerFrame(source.getValue());
+      }
+    });
+    animationGranularityControlFrame.getContentPane().add(scaleSlider);
+    animationGranularityControlFrame.setTitle("Adjust iterations per frame...");
+    animationGranularityControlFrame.pack();
+    animationGranularityControlFrame.show();
+  }
   void showMouseHelpCheckBoxMenuItem_actionPerformed(ActionEvent e) {
     if(showMouseHelpCheckBoxMenuItem.isSelected()) {
       controlPanel.showMouseHelp();
@@ -169,6 +265,9 @@ public class MenuBar extends JMenuBar {
   void queryMenuItem_actionPerformed(ActionEvent e) {
     QueryFrame q = new QueryFrame(graphControl);
     q.show();
+  }
+  void testMenuItem_actionPerformed(ActionEvent e) {
+    new org.wilmascope.control.TestGraph(graphControl);
   }
   void helpMenuItem_actionPerformed(ActionEvent e) {
     HelpFrame h = new HelpFrame("../userdoc/index.html");
@@ -192,4 +291,12 @@ public class MenuBar extends JMenuBar {
       graphControl.getGraphCanvas().setBackgroundColor(colour);
     }
   }
+  void axisPlaneMenuItem_actionPerformed(ActionEvent e) {
+    if(axisPlaneControlFrame == null) {
+      axisPlaneControlFrame = new AxisPlaneControlFrame(graphControl);
+      axisPlaneControlFrame.pack();
+    }
+    axisPlaneControlFrame.show();
+  }
+  AxisPlaneControlFrame axisPlaneControlFrame;
 }

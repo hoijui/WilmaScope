@@ -76,11 +76,12 @@ public class Constants extends AbstractConstants {
     d.setProperty("FrictionCoefficient", "200");
     d.setProperty("AngularInertia", "10");
     d.setProperty("BalancedThreshold", "0.03");
-    d.setProperty("VelocityAttenuation", "0.02");
+    d.setProperty("VelocityAttenuation", "0.01");
 
   // default data path
     d.setProperty("DefaultDataPath", "../data");
-
+  // default path to the DOT program
+    d.setProperty("DotPath","dot");
     return d;
   }
   // the following are fairly definitive, I don't think we need to load them

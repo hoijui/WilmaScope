@@ -49,10 +49,6 @@ public class ForceLayout implements LayoutEngine {
   float cool = 1f;
   public void reset() {
     cool = 1f;
-    ClusterList l = root.getNodes().getClusters();
-    for(l.resetIterator(); l.hasNext();) {
-        l.nextCluster().getLayoutEngine().reset();
-    }
   }
   public boolean applyLayout() {
     NodeForceLayout nodeLayout;

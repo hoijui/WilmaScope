@@ -23,7 +23,7 @@ package org.wilmascope.view;
 import javax.media.j3d.*;
 import javax.vecmath.*;
 import java.awt.Font;
-import java.util.Vector;
+import java.util.*;
 import com.sun.j3d.utils.picking.PickTool;
 import javax.swing.ImageIcon;
 import com.sun.j3d.utils.geometry.Text2D;
@@ -192,6 +192,7 @@ implements org.wilmascope.graph.Viewable {
     setColour(new Color3f(red, green, blue));
   }
   public void setColour(Color3f diffuse) {
+    defaultColourSet = false;
     Color3f ambient = new Color3f(diffuse);
     ambient.scale(0.5f);
     Material material = new Material();
@@ -201,14 +202,23 @@ implements org.wilmascope.graph.Viewable {
     appearance.setMaterial(material);
   }
   public void setColour(java.awt.Color colour) {
-    defaultColourSet = false;
     setColour(new Color3f(colour));
   }
 
+  public Color3f getColor3f() {
+    Color3f colour = new Color3f();
+    appearance.getMaterial().getDiffuseColor(colour);
+    return colour;
+  }
   public java.awt.Color getColour() {
     Color3f colour = new Color3f();
     appearance.getMaterial().getDiffuseColor(colour);
-    return colour.get();
+    try{
+      return colour.get();
+    } catch(IllegalArgumentException e) {
+      System.err.println("ERROR: Invalid colour:"+colour);
+    }
+    return null;
   }
   public java.awt.Color getDefaultColour() {
     Color3f colour = new Color3f();
@@ -254,8 +264,14 @@ implements org.wilmascope.graph.Viewable {
       textShape.setAppearance(apText);
       */
       // Using text2D and a billboard
-      Color3f c = new Color3f(1f,1f,1f);
-      //defaultMaterial.getDiffuseColor(c);
+      
+      Color3f c = null;
+      if(constants.getProperty("LabelUseViewColour").equals("true")) {
+        c = new Color3f();
+        appearance.getMaterial().getDiffuseColor(c);
+      } else {
+        c = constants.getColor3f("LabelColour");
+      }
       Text2D text2D = new Text2D(text, c, "Dummy", 20, Font.PLAIN);
       TransformGroup textTG = new TransformGroup();
       textTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -318,10 +334,12 @@ implements org.wilmascope.graph.Viewable {
     }
   }
   public void hide() {
+    visible = false;
     bg.detach();
   }
   public void show(GraphCanvas graphCanvas) {
     graphCanvas.addGraphElementView(this);
+    visible = true;
   }
 
   /**
@@ -350,6 +368,38 @@ implements org.wilmascope.graph.Viewable {
   protected void addLiveBranch(BranchGroup b) {
     labelBranch.addChild(b);
   }
+  public Properties getProperties() {
+    Properties p = new Properties();
+    if(labelText!=null) {
+      p.setProperty("Label",labelText);
+    }
+    if(!visible) {
+      p.setProperty("Visible","false");
+    }
+    if(!defaultColourSet) {
+      float[] rgb = getColour().getRGBColorComponents(null);
+      p.setProperty("Colour",rgb[0]+" "+rgb[1]+" "+rgb[2]);
+    }
+    return p;
+  }
+  public void setProperties(Properties p) {
+    String label = p.getProperty("Label");
+    if(label != null) {
+      showLabel(label);
+    }
+    String visible = p.getProperty("Visible");
+    if(visible!=null&&visible.equals("false")) {
+      hide();
+    }
+    String colour = p.getProperty("Colour");
+    if(colour != null) {
+      StringTokenizer st = new StringTokenizer(colour);
+      setColour(
+        Float.parseFloat(st.nextToken()),
+        Float.parseFloat(st.nextToken()),
+        Float.parseFloat(st.nextToken()));
+    }
+  }
   protected abstract void showLabel(String text);
   // the branch group for the whole GraphElement
   private BranchGroup bg;
@@ -374,4 +424,5 @@ implements org.wilmascope.graph.Viewable {
   private Material highlightMaterial;
   private boolean pickable = true;
   private Object userData;
+  private boolean visible = false;
 }

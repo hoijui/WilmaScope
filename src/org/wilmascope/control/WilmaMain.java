@@ -24,6 +24,7 @@ import com.sun.j3d.utils.applet.JMainFrame;
 import org.wilmascope.view.PickingClient;
 import javax.swing.*;
 import org.wilmascope.gui.*;
+import org.wilmascope.file.FileHandler;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular Wilma graph drawing engine
@@ -65,7 +66,6 @@ public class WilmaMain extends JFrame {
     } catch(Exception e) {
       System.out.println("Couldn't add forces to graph root from WilmaMain, reason: "+e.getMessage());
     }
-    r.setIterations(1);
     //r.setBalancedThreshold(0);
     /*
     GraphControl.ClusterFacade c1 = r.addCluster();
@@ -104,6 +104,12 @@ public class WilmaMain extends JFrame {
     JPopupMenu.setDefaultLightWeightPopupEnabled(false);
     WilmaMain main = new WilmaMain();
     main.createJMainFrame();
+    System.out.println("In WilmaMain.main");
+    if(argv.length != 0) {
+      System.out.println("Loading "+argv[0]);
+      FileHandler fileHandler = new FileHandler(main.graphControl);
+      fileHandler.load(argv[0]);
+    }
   }
   public void createJMainFrame() {
     //JMainFrame mf = new JMainFrame(this, 400, 400);

@@ -20,10 +20,10 @@
 package org.wilmascope.graph;
 
 /**
- * @author Tim Dwyer
- *
  * Every GraphElement that expects to be placed by an automatic layout engine
  * will have a reference to an object implementing this interface
+ *
+ * @author Tim Dwyer
  */
 
 public interface Layable {

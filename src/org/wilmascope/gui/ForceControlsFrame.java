@@ -25,7 +25,7 @@ import java.awt.*;
 import javax.swing.border.*;
 import java.util.Vector;
 import org.wilmascope.forcelayout.*;
-import org.wilmascope.control        .GraphControl;
+import org.wilmascope.control.GraphControl;
 /**
  * Title:        WilmaToo
  * Description:  Sequel to the ever popular Wilma graph drawing engine
@@ -46,6 +46,7 @@ public class ForceControlsFrame extends JFrame {
   // Variables declaration
   JSlider velocityAttenuationSlider = new JSlider();
   JSlider angularInertiaSlider = new JSlider();
+  JSlider iterationsPerFrameSlider = new JSlider();
   JScrollPane jScrollPane1 = new JScrollPane();
   JScrollPane jScrollPane2 = new JScrollPane();
 
@@ -54,9 +55,6 @@ public class ForceControlsFrame extends JFrame {
   Box forceControlsBox;
   JPanel jPanel1 = new JPanel();
   JSlider balancedThresholdSlider = new JSlider();
-  JSlider iterationsPerFrameSlider = new JSlider();
-  Border border1;
-  TitledBorder titledBorder1;
 
   public ForceControlsFrame(GraphControl.ClusterFacade cluster,String title) {
     try {
@@ -73,8 +71,6 @@ public class ForceControlsFrame extends JFrame {
     }
   }
   private void jbInit() throws Exception {
-    border1 = BorderFactory.createLineBorder(new Color(153, 153, 153),2);
-    titledBorder1 = new TitledBorder(border1,"Iterations Per Frame");
     setTitle (title);
     boxLayout = Box.createVerticalBox();
     forceControlsBox = Box.createVerticalBox();
@@ -124,18 +120,6 @@ public class ForceControlsFrame extends JFrame {
     });
     forceLayoutControlsBox.add(balancedThresholdSlider);
 
-    iterationsPerFrameSlider.setBorder (titledBorder1);
-    iterationsPerFrameSlider.setMinorTickSpacing (10);
-    iterationsPerFrameSlider.setPaintLabels (true);
-    iterationsPerFrameSlider.setPaintTicks (true);
-    iterationsPerFrameSlider.setMajorTickSpacing (50);
-    iterationsPerFrameSlider.setValue (forceLayout.getIterations());
-    iterationsPerFrameSlider.addChangeListener (new javax.swing.event.ChangeListener () {
-      public void stateChanged (javax.swing.event.ChangeEvent evt) {
-        forceLayout.setIterations(iterationsPerFrameSlider.getValue());
-      }
-    });
-    forceLayoutControlsBox.add(iterationsPerFrameSlider);
     java.util.Vector forces = new Vector(ForceManager.getInstance().getAvailableForces());
     for(int i=0; i<forces.size(); i++) {
       forceControlsBox.add(new ForceControlPanel(cluster,(Force)forces.elementAt(i)));

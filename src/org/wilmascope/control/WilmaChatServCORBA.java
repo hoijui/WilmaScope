@@ -217,9 +217,6 @@ import org.omg.CORBA.*;
     public void setBalancedThreshold(float threshold) {
       cluster.setBalancedThreshold(threshold);
     }
-    public void setIterations(int iterations) {
-      cluster.setIterations(iterations);
-    }
     public Force addForce(String name) {
       try {
         return new ForceServant(cluster.addForce(name));

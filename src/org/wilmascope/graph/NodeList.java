@@ -68,16 +68,6 @@ public class NodeList extends List{
       nextNode().setPosition(position);
     }
   }
-  public float calcMass() {
-    for(clusters.resetIterator(); clusters.hasNext();) {
-      clusters.nextCluster().calcMass();
-    }
-    float netMass = 0f;
-    for(resetIterator(); hasNext();) {
-      netMass += nextNode().getMass();
-    }
-    return netMass;
-  }
   public void hide() {
     super.hide();
     for(clusters.resetIterator(); clusters.hasNext();) {

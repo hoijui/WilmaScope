@@ -45,8 +45,8 @@ public class LabelNodeView extends NodeView {
     setupHighlightAppearance(Colours.yellowMaterial);
   }
   public void setLabel(String label) {
-    float leftShift = -0.02f * (float)label.length();
-    addLabel(label, 0.04d, new Point3f(-leftShift,0.03f,0.0f), new Vector3f(leftShift,-0.03f,0.0f), getAppearance());
+    float leftShift = -0.5f * (float)label.length();
+    addLabel(label, 10d, new Point3f(0.0f,0.0f,0.0f), new Vector3f(0.0f,0.0f,0.0f), getAppearance());
   }
   protected void init() {
     // now create a fully transparent pickable sphere to encompass the label

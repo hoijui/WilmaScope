@@ -21,15 +21,11 @@
 package org.wilmascope.graph;
 
 /**
- * An interface which a class which determines a layout for a cluster must
- * implement
- * $Id$
- * $Log$
- * Revision 1.6  2002/03/27 07:28:14  tgdwyer
- * Documentation changes
+ * Classes which determine layout for a particular cluster must implement this
+ * interface.
  *
- * Revision 1.5  2002/03/27 07:20:50  tgdwyer
- * Minor changes
+ * @author Tim Dwyer
+ * @version $Id$
  *
  */
 public interface LayoutEngine {
@@ -39,7 +35,7 @@ public interface LayoutEngine {
   public void calculateLayout();
   /**
    * apply the changes calculated by
-   * {@link org.wilmascope.graph.LayoutEngine#calculateLayout}
+   * {@link #calculateLayout}
    * @return true when a stable state is reached
    */
   public boolean applyLayout();

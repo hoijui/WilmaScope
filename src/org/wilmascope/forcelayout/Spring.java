@@ -63,7 +63,7 @@ public class Spring extends Force {
       edgeLength = edge.getLength();
       if(edgeLength != 0) {
         springForce = (edgeLength - edgeLayout.getRelaxedLength())
-          * strengthConstant / edgeLength;
+          * strengthConstant * edgeLayout.getStiffness()/ edgeLength;
         v.set(edge.getVector());
         v.scale(springForce);
       } else {

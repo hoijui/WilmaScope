@@ -64,7 +64,6 @@ public class WilmaApplet extends JApplet {
     } catch(Exception e) {
       System.out.println("Couldn't add forces to graph root while initing applet, reason: "+e.getMessage());
     }
-    r.setIterations(1);
     //r.setBalancedThreshold(0);
     /*
     GraphControl.ClusterFacade c1 = r.addCluster();

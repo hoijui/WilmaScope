@@ -43,6 +43,9 @@ public class EdgeForceLayout extends EdgeLayout {
   public void setStiffness(float stiffness) {
     this.stiffness = stiffness;
   }
+  public float getStiffness() {
+    return stiffness;
+  }
   private float relaxedLength = Constants.defaultEdgeLength;
   private float stiffness = 1f;
 }

@@ -163,7 +163,7 @@ public class Node extends GraphElement {
   }
 
   /**
-   * sets the radius of the nodes boundary sphere
+   * sets the radius of the node's boundary sphere
    * @param radius the radius of the node, (0.25 is a good size)
    */
   public void setRadius(float radius) {
@@ -178,7 +178,7 @@ public class Node extends GraphElement {
   /**
    * set the Mass of this node
    */
-  public final void setMass(float mass) {
+  public void setMass(float mass) {
     this.mass = mass;
   }
   /**

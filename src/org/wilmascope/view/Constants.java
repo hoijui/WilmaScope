@@ -66,6 +66,10 @@ public class Constants extends org.wilmascope.global.AbstractConstants {
     d.setProperty("DirectionalLightColourG","1");
     d.setProperty("DirectionalLightColourB","1");
     d.setProperty("SharedGeometry","0");
+    d.setProperty("LabelUseViewColour","false");
+    d.setProperty("LabelColourR","1");
+    d.setProperty("LabelColourG","0.5");
+    d.setProperty("LabelColourB","0.5");
     /*
     d.setProperty("PointLight1ColourR","0");
     d.setProperty("PointLight1ColourG","0");

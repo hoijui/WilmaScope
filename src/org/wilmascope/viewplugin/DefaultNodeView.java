@@ -50,7 +50,7 @@ public class DefaultNodeView extends NodeView {
     makePickable(sphere.getShape());
     addTransformGroupChild(sphere);
     */
-    LODSphere sphere = new LODSphere(getNode().getRadius(),getAppearance());
+    LODSphere sphere = new LODSphere(1f,getAppearance());
     sphere.makePickable(this);
     sphere.addToTransformGroup(getTransformGroup());
     setUserData(new DefaultNodeData());
