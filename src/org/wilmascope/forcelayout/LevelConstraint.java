@@ -24,6 +24,9 @@ public class LevelConstraint extends Constraint {
     position.z = clusterCentroid.z + (float)level * separation;
   }
 
+  public int getLevel() {
+    return level;
+  }
   int level;
   float separation;
 }

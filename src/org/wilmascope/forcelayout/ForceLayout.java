@@ -22,18 +22,15 @@ package org.wilmascope.forcelayout;
 import org.wilmascope.graph.LayoutEngine;
 import org.wilmascope.graph.NodeList;
 import org.wilmascope.graph.EdgeList;
+import org.wilmascope.graph.ClusterList;
 import org.wilmascope.graph.Node;
 import org.wilmascope.graph.Cluster;
 import java.util.Vector;
 import javax.vecmath.*;
 import javax.media.j3d.Transform3D;
 /**
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular WilmaScope software
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaScope.org
- * @author Tim Dwyer
- * @version 1.0
+ * Main class force for calculating forces on all nodes
+ * and moving them incrementally.
  */
 
 public class ForceLayout implements LayoutEngine {
@@ -43,31 +40,31 @@ public class ForceLayout implements LayoutEngine {
     root.setLayoutEngine(this);
   }
   public void calculateLayout() {
-    balanced = false;
-
-    for(int i = 0; i < iterations; i++) {
-      if(balanced) {
-        // If graph is already balanced then we don't need to calculate
-        // new positions
-        break;
-      }
-
-      // Calculate the force on each node for each of our forces
-      for(int j = 0; j < forces.size(); j++) {
-        Force f = (Force)forces.get(j);
-        f.calculate();
-      }
+    // Calculate the force on each node for each of our forces
+    for(int j = 0; j < forces.size(); j++) {
+      Force f = (Force)forces.get(j);
+      f.calculate();
     }
   }
-  public float applyLayout() {
+  float cool = 1f;
+  public void reset() {
+    cool = 1f;
+    ClusterList l = root.getNodes().getClusters();
+    for(l.resetIterator(); l.hasNext();) {
+        l.nextCluster().getLayoutEngine().reset();
+    }
+  }
+  public boolean applyLayout() {
     NodeForceLayout nodeLayout;
     // reposition nodes, calculating maxNetForce as you go
     float maxNetForce=0;
     float currentNetForce=0;
     NodeList nodes = root.getNodes();
-    EdgeList edges = root.getEdges();
+    EdgeList edges = root.getInternalEdges();
     for(nodes.resetIterator(); nodes.hasNext();) {
       nodeLayout = (NodeForceLayout)(nodes.nextNode().getLayout());
+      nodeLayout.getNetForce().scale(cool);
+      //cool*=0.99;
       currentNetForce = nodeLayout.getNetForce().length();
       if(currentNetForce > maxNetForce) {
         maxNetForce = currentNetForce;
@@ -80,17 +77,12 @@ public class ForceLayout implements LayoutEngine {
     for(int i=0; i < edges.size(); i++) {
       edges.get(i).recalculate();
     }
-    return maxNetForce;
-  }
-  /**
-   * Set the number of iterations of the algorithm per call to
-   * {@link #layout(org.wilmascope.graph.NodeList, org.wilmascope.graph.EdgeList)}
-   */
-  public void setIterations(int iterations) {
-    this.iterations = iterations;
-  }
-  public int getIterations() {
-    return iterations;
+    if(maxNetForce<balancedThreshold) {
+      if(balancedEventClient!=null) balancedEventClient.callback();
+      reset();
+      return true;
+    }
+    return false;
   }
   /**
    * Add a force to ForceLayout's list of forces to apply
@@ -125,9 +117,6 @@ public class ForceLayout implements LayoutEngine {
   public void setBalancedEventClient(BalancedEventClient c) {
     balancedEventClient = c;
   }
-  public void setBalanced(boolean balanced) {
-    this.balanced = balanced;
-  }
   public void setBalancedThreshold(float threshold) {
     this.balancedThreshold = threshold;
   }
@@ -139,20 +128,23 @@ public class ForceLayout implements LayoutEngine {
   }
   public void setVelocityAttenuation(float va) {
     velocityAttenuation = va;
+    System.out.println("VA="+va);
   }
   public void setConstrained() {
     constrained = true;
   }
-  BalancedEventClient balancedEventClient;
-  // the number of iterations of the algorithm per call to layout
-  int iterations;
-  // balanced is true when the graph has reached a stable state
-  boolean balanced;
+  public org.wilmascope.graph.NodeLayout createNodeLayout() {
+    return new NodeForceLayout();
+  }
+  public org.wilmascope.graph.EdgeLayout createEdgeLayout() {
+    return new EdgeForceLayout();
+  }
   // an array of the forces to apply
   Vector forces = new Vector();
-  float balancedThreshold = Constants.balancedThreshold;
   float velocityAttenuation = Constants.velocityAttenuation;
   Cluster root;
   Vector3f vY = new Vector3f(0,1f,0);
   boolean constrained = false;
+  private float balancedThreshold = 0.01f;
+  private BalancedEventClient balancedEventClient = null;
 }
