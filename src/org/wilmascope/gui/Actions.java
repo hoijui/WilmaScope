@@ -193,7 +193,7 @@ public class Actions {
     };
     graphAnalysisAction = new AbstractAction("Analyse Graph") {
       public void actionPerformed(ActionEvent e) {
-        new AnalysisFrame("Modify Graph",graphControl.getRootCluster()).show();
+        new AnalysisFrame("Analyse Graph",graphControl.getRootCluster()).show();
       }
     };
     graphModifiersAction = new AbstractAction("Modify Graph") {

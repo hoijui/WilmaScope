@@ -191,7 +191,7 @@ public class ForceLayout extends
    * @see org.wilmascope.graph.LayoutEngine#getControls()
    */
   public JPanel getControls() {
-    return new ForceControlsPanel((GraphControl.Cluster) getRoot().getUserFacade());
+    return new ForceControlsPanel((GraphControl.Cluster) getRoot().getUserData("Facade"));
   }
 
   public String getName() {

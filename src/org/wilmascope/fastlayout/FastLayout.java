@@ -213,10 +213,10 @@ public class FastLayout extends LayoutEngine {
       // scale the current colour by newPotential
       if (colourFlag) {
         if (newPotential < RED_LIMIT)
-          ((GraphControl.Node) (current.getUserFacade())).setColour(
+          ((GraphControl.Node) (current.getUserData("Facade"))).setColour(
             (Color) colours.get((int) ((newPotential / RED_LIMIT) * 100d)));
         else
-           ((GraphControl.Node) (current.getUserFacade())).setColour(Color.red);
+           ((GraphControl.Node) (current.getUserData("Facade"))).setColour(Color.red);
       }
 
       // very wasteful in terms of efficiency - used only for visual appeal
@@ -224,17 +224,17 @@ public class FastLayout extends LayoutEngine {
         EdgeList edges = current.getEdges();
         for (Edge temp : edges) {
           Color colour1 =
-            ((GraphControl.Node) temp.getStart().getUserFacade()).getColour();
+            ((GraphControl.Node) temp.getStart().getUserData("Facade")).getColour();
           Color colour2 =
-            ((GraphControl.Node) temp.getEnd().getUserFacade()).getColour();
+            ((GraphControl.Node) temp.getEnd().getUserData("Facade")).getColour();
           Color3f edgeColour = new Color3f();
           edgeColour.interpolate(
             new Color3f(colour1),
             new Color3f(colour2),
             0.5f);
-          ((GraphControl.Edge) temp.getUserFacade()).setColour(edgeColour.get());
+          ((GraphControl.Edge) temp.getUserData("Facade")).setColour(edgeColour.get());
         }
-        ((GraphControl.Node)current.getUserFacade()).setRadius((float) (newPotential / POTENTIAL_SCALE));
+        ((GraphControl.Node)current.getUserData("Facade")).setRadius((float) (newPotential / POTENTIAL_SCALE));
       }
 
     }
@@ -494,7 +494,7 @@ public class FastLayout extends LayoutEngine {
     return new EdgeLayout() {};
   }
   public JPanel getControls() {
-    return new ParamsPanel((GraphControl.Cluster) getRoot().getUserFacade());
+    return new ParamsPanel((GraphControl.Cluster) getRoot().getUserData("Facade"));
   }
   public String getName() {
     return "Simulated Annealing";

@@ -224,7 +224,19 @@ public class Edge extends GraphElement {
     Node node = (Node)collapseHistoryTable.remove(cluster);
     swapNode(cluster, node);
   }
-
+  /**
+   * Undirected comparison of the ends of this edge
+   * against the specified nodes
+   * @param u either the start or end vertex
+   * @param v if u=start then v=end else u=end v=start 
+   * @return true if above conditions are met
+   */
+  public boolean hasVertices(Node u, Node v) {
+    if(start==u && end==v || start==v && end==u) {
+      return true;
+    }
+    return false;
+  }
   /**
   * Delete all references to this edge... make it go away... forever!
   */

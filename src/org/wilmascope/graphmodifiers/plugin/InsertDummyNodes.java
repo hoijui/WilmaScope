@@ -17,24 +17,24 @@
  *
  * -- Tim Dwyer, 2001
  */
-package org.wilmascope.graphgen.plugin;
+package org.wilmascope.graphmodifiers.plugin;
 
 import java.util.Properties;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.GraphControl.Cluster;
 import org.wilmascope.control.GraphControl.Edge;
 import org.wilmascope.control.GraphControl.Node;
 import org.wilmascope.forcelayout.EdgeForceLayout;
-import org.wilmascope.graphgen.GraphGenerator;
+import org.wilmascope.graphmodifiers.GraphModifier;
 
 /**
  * @author dwyer
  *  
  */
-public class InsertDummyNodes extends GraphGenerator {
+public class InsertDummyNodes extends GraphModifier {
   JPanel controls;
 
   /**
@@ -42,27 +42,25 @@ public class InsertDummyNodes extends GraphGenerator {
    */
   public InsertDummyNodes() {
     controls = new JPanel();
+    controls.add(new JLabel("Insert dummy nodes in edges that span levels."));
   }
 
   public String getName() {
     return "Insert Dummy Nodes";
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.wilmascope.graphgen.GraphGenerator#generate(org.wilmascope.control.GraphControl)
+  /* (non-Javadoc)
+   * @see org.wilmascope.graphmodifiers.GraphModifier#modify(org.wilmascope.control.GraphControl.Cluster)
    */
-  public void generate(GraphControl gc) {
-    Cluster r = gc.getRootCluster();
+  public void modify(Cluster r) {
     Properties prop = r.getLayoutEngine().getProperties();
     String levelsString = prop.getProperty("Levels");
     if (levelsString != null) {
       int numLevels = Integer.parseInt(levelsString);
       if (numLevels > 0) {
         for (Edge e : r.getEdges()) {
-          Node start = (Node) e.getEdge().getStart().getUserFacade();
-          Node end = (Node) e.getEdge().getEnd().getUserFacade();
+          Node start = (Node) e.getEdge().getStart().getUserData("Facade");
+          Node end = (Node) e.getEdge().getEnd().getUserData("Facade");
           String startLevelString = start.getProperties().getProperty(
               "LevelConstraint");
           String endLevelString = end.getProperties().getProperty(
@@ -112,5 +110,6 @@ public class InsertDummyNodes extends GraphGenerator {
   public JPanel getControls() {
     return controls;
   }
+
 
 }

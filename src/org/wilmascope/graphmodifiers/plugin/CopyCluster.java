@@ -52,15 +52,15 @@ public class CopyCluster extends GraphModifier {
     if (cluster.getCluster().getOwner() == null) {
       root = cluster;
     } else {
-      root = (Cluster) cluster.getCluster().getOwner().getUserFacade();
+      root = (Cluster) cluster.getCluster().getOwner().getUserData("Facade");
     }
     Hashtable<Node, Node> mapping = new Hashtable<Node, Node>();
     for (Node n : cluster.getNodes()) {
       mapping.put(n, root.addNode());
     }
     for (Edge e : cluster.getEdges()) {
-      root.addEdge(mapping.get(e.getEdge().getStart().getUserFacade()), mapping
-          .get(e.getEdge().getEnd().getUserFacade()));
+      root.addEdge(mapping.get(e.getEdge().getStart().getUserData("Facade")), mapping
+          .get(e.getEdge().getEnd().getUserData("Facade")));
     }
     cluster.unfreeze();
   }

@@ -287,17 +287,17 @@ public class Cluster extends Node {
       Node copy = new Node();
       nodeMap.put(orig, copy);
       copy.setLayout(orig.getLayout());
-      copy.setUserFacade(orig);
+      copy.storeUserData("Original",orig);
       addNode(copy);
     }
     for (Edge orig : original.getInternalEdges()) {
       Edge copy = new Edge(nodeMap.get(orig.getStart()), nodeMap.get(orig
           .getEnd()));
-      copy.setUserFacade(orig);
+      copy.storeUserData("Original",orig);
       copy.setLayout(orig.getLayout());
       addEdge(copy);
     }
-    setUserFacade(original);
+    storeUserData("Original",original);
   }
 
   /**
@@ -603,7 +603,7 @@ public class Cluster extends Node {
     }
     EdgeList originalAcyclicEdges = new EdgeList();
     for(Edge e:acyclicEdges) {
-      originalAcyclicEdges.add((Edge)e.getUserFacade());
+      originalAcyclicEdges.add((Edge)e.getUserData("Original"));
     }
     return originalAcyclicEdges;
   }
@@ -650,7 +650,7 @@ public class Cluster extends Node {
     }
     EdgeList originalAcyclicEdges = new EdgeList();
     for(Edge e:acyclicEdges) {
-      originalAcyclicEdges.add((Edge)e.getUserFacade());
+      originalAcyclicEdges.add((Edge)e.getUserData("Original"));
     }
     return originalAcyclicEdges;
   }

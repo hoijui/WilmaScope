@@ -122,7 +122,7 @@ public class GraphControl extends ObservableLayout {
 
     GraphElementFacade(GraphElement element) {
       this.element = element;
-      element.setUserFacade(this);
+      element.storeUserData("Facade",this);
     }
 
     /**
@@ -530,7 +530,7 @@ public class GraphControl extends ObservableLayout {
       freeze(); // stop layout
       NodeList condemned = new NodeList(cluster.getNodes());
       for (int i = 0; i < condemned.size(); i++) {
-        Node n = (Node) condemned.get(i).getUserFacade();
+        Node n = (Node) condemned.get(i).getUserData("Facade");
         n.delete();
       }
     }
@@ -851,7 +851,7 @@ public class GraphControl extends ObservableLayout {
       NodeList nodes = cluster.getNodes();
       Node[] nodeFacades = new Node[nodes.size()];
       for (int i = 0; i < nodes.size(); i++) {
-        nodeFacades[i] = (Node) nodes.get(i).getUserFacade();
+        nodeFacades[i] = (Node) nodes.get(i).getUserData("Facade");
       }
       return nodeFacades;
     }
@@ -860,7 +860,7 @@ public class GraphControl extends ObservableLayout {
       EdgeList edges = cluster.getInternalEdges();
       Edge[] edgeFacades = new Edge[edges.size()];
       for (int i = 0; i < edges.size(); i++) {
-        edgeFacades[i] = (Edge) edges.get(i).getUserFacade();
+        edgeFacades[i] = (Edge) edges.get(i).getUserData("Facade");
       }
       return edgeFacades;
     }

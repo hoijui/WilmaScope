@@ -21,6 +21,8 @@
 package org.wilmascope.viewplugin;
 
 import java.util.ArrayList;
+import java.util.Properties;
+import java.util.StringTokenizer;
 
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Transform3D;
@@ -38,7 +40,8 @@ import org.wilmascope.view.ViewConstants;
 import com.sun.j3d.utils.geometry.Cylinder;
 
 /**
- * Graphical representation of the edge
+ * An edge view that has bends at the specified positions.
+ * The bends must be assigned by the layout engine.
  *
  * @author Tim Dwyer
  * @version 1.0
@@ -58,7 +61,8 @@ public class BendyEdgeView extends EdgeView implements CompoundEdgeView {
   public void init() {
     bends = new ArrayList<Point3f>();
   }
-  /* (non-Javadoc)
+  /**
+   * A bend point, should be specified by the layout engine
    * @see org.wilmascope.view.CompoundEdgeView#addBend(javax.vecmath.Point3f)
    */
   public void addBend(Point3f bendPosition) {
@@ -95,6 +99,32 @@ public class BendyEdgeView extends EdgeView implements CompoundEdgeView {
   }
   public ImageIcon getIcon() {
     return new ImageIcon(org.wilmascope.images.Images.class.getResource("bendyedge.png"));
+  }  
+  public void setProperties(Properties p) {
+    super.setProperties(p);
+    String bendsProperty = p.getProperty("Bends");
+    if(bendsProperty!=null) {
+      StringTokenizer bendsStr = new StringTokenizer(bendsProperty, ",");
+      do {
+        float x = Float.parseFloat(bendsStr.nextToken());
+        float y = Float.parseFloat(bendsStr.nextToken());
+        float z = Float.parseFloat(bendsStr.nextToken());
+        Point3f point = new Point3f(x,y,z);
+        bends.add(point);
+      }while(bendsStr.hasMoreTokens());
+    }
+  }
+  
+  public Properties getProperties() {
+    Properties p = super.getProperties();
+    if (bends.size() > 0) {
+      String bendStr = bends.get(0).x+","+bends.get(0).y+","+bends.get(0).z;
+      for(int i = 1; i < bends.size(); i++) {
+        bendStr=bendStr+","+bends.get(i).x+","+bends.get(i).y+","+bends.get(i).z;
+      }
+      p.setProperty("Bends",bendStr);
+    }
+    return p;
   }
   ArrayList<Point3f> bends;
   BranchGroup bg = null;

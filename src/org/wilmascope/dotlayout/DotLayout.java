@@ -327,7 +327,7 @@ public class DotLayout extends LayoutEngine {
     return new DotEdgeLayout();
   }
   public JPanel getControls() {
-    return new ControlPanel((GraphControl.Cluster) getRoot().getUserFacade());
+    return new ControlPanel((GraphControl.Cluster) getRoot().getUserData("Facade"));
   }
   /**
    * @return the horizontal scale for the layout
