@@ -18,6 +18,7 @@
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${dest}"/>
     <mkdir dir="${doc}"/>
+    <mkdir dir="${src}/org/wilmascope/chat"/>
   </target>
 
   <target name="idlcheck"
@@ -62,7 +63,7 @@
     </javac>
   </target>
 
-  <target name="compileplugin" depends="compile">
+  <target name="compileplugin" >
     <!-- Compile the java code from ${src} into ${plugin} -->
     <javac srcdir="${src}/${plugin}" destdir="${lib}" 
       optimize="${optimization}">
@@ -80,6 +81,7 @@
       <fileset dir="${lib}/images"/>
     </copy>
     <jar manifest="META-INF/MANIFEST.MF" jarfile="${lib}/wilma.jar" basedir="${dest}"/>
+    <!--
     <mkdir dir="${dist}/bin"/>
     <copy file="README" todir="${dist}"/>
     <copy file="COPYING" todir="${dist}"/>
@@ -95,6 +97,7 @@
       <zipfileset dir="tmp" prefix="Wilma"/>
     </zip>
     <delete dir="tmp"/>
+    -->
   </target>
 
   <target name="all" depends="clean, compile, chat, dist, doc">
