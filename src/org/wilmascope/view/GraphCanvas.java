@@ -68,7 +68,7 @@ public class GraphCanvas extends Canvas3D {
 	private BranchGroup bg;
 	private Background background;
 	private ExponentialFog fog;
-	private Constants constants;
+	private ViewConstants constants;
 	private Bounds bounds;
 	private SimpleUniverse universe;
 	private LightManager lightManager;
@@ -83,7 +83,7 @@ public class GraphCanvas extends Canvas3D {
 	public GraphCanvas(int xsize, int ysize) { // Create the root of the branch
 		// graph
 		super(SimpleUniverse.getPreferredConfiguration());
-		constants = Constants.getInstance();
+		constants = ViewConstants.getInstance();
 		setSize(xsize, ysize);
 		setLocation(5, 5);
 		bg = new BranchGroup();

@@ -76,6 +76,6 @@ public class DiscClusterView extends ClusterView {
     makePickable(cyl.getShape(Cylinder.BOTTOM));
   }
   public ImageIcon getIcon() {
-    return new ImageIcon("images/planarcluster.png");
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("planarcluster.png"));
   }
 }

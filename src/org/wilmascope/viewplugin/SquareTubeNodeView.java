@@ -215,7 +215,7 @@ public class SquareTubeNodeView extends NodeView implements SizeAdjustableNodeVi
 	}
 
 	public ImageIcon getIcon() {
-		return new ImageIcon("images/column.png");
+		return new ImageIcon(org.wilmascope.images.Images.class.getResource("column.png"));
 	}
 	/**
 	 * adjust the radius of the top and bottom of the tube

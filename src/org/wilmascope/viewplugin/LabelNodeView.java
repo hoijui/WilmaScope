@@ -60,6 +60,6 @@ public class LabelNodeView extends NodeView {
     addTransformGroupChild(pickableSphere);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon("images/labelNode.png");
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("labelNode.png"));
   }
 }

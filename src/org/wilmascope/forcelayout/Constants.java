@@ -34,7 +34,7 @@ import javax.vecmath.*;
   * in the belief that this may speed things up a bit
   */
 public class Constants {
-  private static org.wilmascope.global.Constants gc = org.wilmascope.global.Constants.getInstance();
+  private static org.wilmascope.global.GlobalConstants gc = org.wilmascope.global.GlobalConstants.getInstance();
   public final static float maxAcceleration
     = gc.getFloatValue("MaximumAcceleration");
   public final static float terminalVelocity

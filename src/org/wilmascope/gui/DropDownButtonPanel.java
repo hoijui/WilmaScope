@@ -62,7 +62,7 @@ public class DropDownButtonPanel extends JPanel {
     this.setBorder(BorderFactory.createEtchedBorder());
     this.setPreferredSize(new Dimension(45,32));
     this.setMaximumSize(new Dimension(56,32));
-    typeButton.setIcon(new ImageIcon("images/dropArrow.png"));
+    typeButton.setIcon(new ImageIcon(org.wilmascope.images.Images.class.getResource("dropArrow.png")));
     this.add(actionButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0
             ,GridBagConstraints.WEST, GridBagConstraints.RELATIVE, new Insets(0, 0, 0, 0), 0, 0));
     this.add(typeButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0

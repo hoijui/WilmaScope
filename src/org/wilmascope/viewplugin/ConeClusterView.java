@@ -47,6 +47,6 @@ public class ConeClusterView extends ClusterView {
     makePickable(cone.getShape(Cone.CAP));
   }
   public ImageIcon getIcon() {
-    return new ImageIcon("images/planarcluster.png");
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("planarcluster.png"));
   }
 }

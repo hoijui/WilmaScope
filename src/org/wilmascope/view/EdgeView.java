@@ -52,7 +52,7 @@ implements org.wilmascope.graph.EdgeView, View2D  {
     // avoids non-affine transformations, by making sure edge always has
     // non-zero length
     if(l==0) {
-      edge.setVector(Constants.gc.getVector3f("MinVector"));
+      edge.setVector(ViewConstants.gc.getVector3f("MinVector"));
       l=edge.getVector().length();
     }
     // length of the edge should not include the radii of the nodes
@@ -85,9 +85,9 @@ implements org.wilmascope.graph.EdgeView, View2D  {
     if(multiEdgeOffset!=0f) {
       Vector3f vMultiEdgeOffset = new Vector3f();
       if(direction > 0) {
-        vMultiEdgeOffset.cross(edge.getVector(), Constants.vZ);
+        vMultiEdgeOffset.cross(edge.getVector(), ViewConstants.vZ);
       } else {
-        vMultiEdgeOffset.cross(Constants.vZ, edge.getVector());
+        vMultiEdgeOffset.cross(ViewConstants.vZ, edge.getVector());
       }
       vMultiEdgeOffset.normalize();
       vMultiEdgeOffset.scale(multiEdgeOffset);
@@ -115,10 +115,10 @@ implements org.wilmascope.graph.EdgeView, View2D  {
   }
 
   public ImageIcon getIcon() {
-    return new ImageIcon("images/edge.png");
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("edge.png"));
   }
   protected void showLabel(String text) {
-    addLabel(text, 1.0d, new Point3f(0.0f,4.0f,1.0f), Constants.vZero, getAppearance());
+    addLabel(text, 1.0d, new Point3f(0.0f,4.0f,1.0f), ViewConstants.vZero, getAppearance());
   }
   public void setRadius(float radius) {
     this.radius = radius;
@@ -141,7 +141,7 @@ implements org.wilmascope.graph.EdgeView, View2D  {
   public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
     float thickness = r.scaleX(getRadius());
     g.setStroke(new BasicStroke(thickness));
-    
+
     Color3f c = new Color3f();
     getAppearance().getMaterial().getDiffuseColor(c);
     g.setColor(c.get());
@@ -157,7 +157,7 @@ implements org.wilmascope.graph.EdgeView, View2D  {
   }
   private Edge edge;
   // A vector giving the default orientation of the edgeCylinder
-  private static Vector3f initVector = Constants.vY;
+  private static Vector3f initVector = ViewConstants.vY;
   // offset to allow viewing of multiple edges between the same nodes
   private float multiEdgeOffset=0f;
   // default edge radius

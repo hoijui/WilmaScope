@@ -55,7 +55,7 @@ public class LineEdgeView extends EdgeView {
   public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
     float thickness = r.scaleX(getRadius());
     g.setStroke(new BasicStroke(thickness));
-    
+
     Point3f start = getEdge().getStart().getPosition();
     Point3f end = getEdge().getEnd().getPosition();
     Vector3f v = new Vector3f();
@@ -75,6 +75,6 @@ public class LineEdgeView extends EdgeView {
     myLine.setColor(1,c);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon("images/lineEdge.png");
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("lineEdge.png"));
   }
 }

@@ -45,7 +45,7 @@ import org.wilmascope.dotparser.EdgeClient;
 import org.wilmascope.dotparser.GraphClient;
 import org.wilmascope.dotparser.LineBreakFilter;
 import org.wilmascope.dotparser.NodeClient;
-import org.wilmascope.global.Constants;
+import org.wilmascope.global.GlobalConstants;
 import org.wilmascope.graph.Cluster;
 import org.wilmascope.graph.Edge;
 import org.wilmascope.graph.EdgeLayout;
@@ -78,7 +78,7 @@ public class DotLayout implements LayoutEngine {
     NodeList nodes = root.getNodes();
 
     try {
-      String dotPath = Constants.getInstance().getProperty("DotPath");
+      String dotPath = GlobalConstants.getInstance().getProperty("DotPath");
       FileOutputStream in = new FileOutputStream(new File("in.dot"));
       in.write("digraph d { graph [concentrate=false]; node [ ".getBytes());
       in.write("fixedsize=true ".getBytes());

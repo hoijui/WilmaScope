@@ -79,14 +79,14 @@ public class Actions {
       graphControl.getRootCluster();
     fileHandler = new FileHandler(graphControl);
     addNodeAction =
-      new AbstractAction("Add Node", new ImageIcon("images/node.png")) {
+      new AbstractAction("Add Node", new ImageIcon(org.wilmascope.images.Images.class.getResource("node.png"))) {
       public void actionPerformed(ActionEvent e) {
         GraphControl.NodeFacade n = rootCluster.addNode();
         rootCluster.unfreeze();
       }
     };
     addEdgeAction =
-      new AbstractAction("Add Edge", new ImageIcon("images/edge.png")) {
+      new AbstractAction("Add Edge", new ImageIcon(org.wilmascope.images.Images.class.getResource("edge.png"))) {
       public void actionPerformed(ActionEvent e) {
         GraphControl.getPickListener().enableMultiPicking(
           2,
@@ -96,7 +96,7 @@ public class Actions {
       }
     };
     addClusterAction =
-      new AbstractAction("Add Cluster", new ImageIcon("images/cluster.png")) {
+      new AbstractAction("Add Cluster", new ImageIcon(org.wilmascope.images.Images.class.getResource("cluster.png"))) {
       public void actionPerformed(ActionEvent e) {
         controlPanel.add(new ClusterPanel(controlPanel, rootCluster));
         controlPanel.updateUI();
@@ -108,7 +108,7 @@ public class Actions {
     pickableClusterAction =
       new AbstractAction(
         "Make all clusters pickable",
-        new ImageIcon("images/pickableCluster.png")) {
+        new ImageIcon(org.wilmascope.images.Images.class.getResource("pickableCluster.png"))) {
       public void actionPerformed(ActionEvent e) {
         rootCluster.childrenPickable();
       }
@@ -116,13 +116,13 @@ public class Actions {
     showHiddenAction =
       new AbstractAction(
         "Make hidden objects visible",
-        new ImageIcon("images/find.png")) {
+        new ImageIcon(org.wilmascope.images.Images.class.getResource("find.png"))) {
       public void actionPerformed(ActionEvent e) {
         rootCluster.showHiddenChildren();
       }
     };
     adjustForcesAction =
-      new AbstractAction("Adjust Forces", new ImageIcon("images/forces.png")) {
+      new AbstractAction("Adjust Forces", new ImageIcon(org.wilmascope.images.Images.class.getResource("forces.png"))) {
       public void actionPerformed(ActionEvent e) {
         LayoutEngineFrame controls =
           new LayoutEngineFrame(rootCluster, "Global Layout Engine Controls");
@@ -130,7 +130,7 @@ public class Actions {
       }
     };
     rotateAction =
-      new AbstractAction("Auto-Rotate", new ImageIcon("images/rotate.png")) {
+      new AbstractAction("Auto-Rotate", new ImageIcon(org.wilmascope.images.Images.class.getResource("rotate.png"))) {
       public void actionPerformed(ActionEvent e) {
         graphControl.getGraphCanvas().toggleRotator();
       }
@@ -138,7 +138,7 @@ public class Actions {
     lightingAction =
       new AbstractAction(
         "Adjust Lights",
-        new ImageIcon("images/lightbulb.png")) {
+        new ImageIcon(org.wilmascope.images.Images.class.getResource("lightbulb.png"))) {
       public void actionPerformed(ActionEvent e) {
         LightFrame lightFrame;
         controlPanel.hideMouseHelp();
@@ -170,11 +170,11 @@ public class Actions {
       }
     };
     fileOpenAction =
-      new AbstractAction("Open", new ImageIcon("images/Open24.gif")) {
+      new AbstractAction("Open", new ImageIcon(org.wilmascope.images.Images.class.getResource("Open24.gif"))) {
       public void actionPerformed(ActionEvent e) {
         JFileChooser chooser =
           new JFileChooser(
-            org.wilmascope.global.Constants.getInstance().getProperty(
+            org.wilmascope.global.GlobalConstants.getInstance().getProperty(
               "DefaultDataPath"));
         chooser.setFileFilter(fileHandler.getFileFilter());
         int returnVal = chooser.showOpenDialog(parent);
@@ -188,9 +188,9 @@ public class Actions {
       "Open a previously saved graph.",
       "control O",
       'O',
-      "images/Open16.gif");
+      new ImageIcon(org.wilmascope.images.Images.class.getResource("Open16.gif")));
     fileNewAction =
-      new AbstractAction("New", new ImageIcon("images/New24.gif")) {
+      new AbstractAction("New", new ImageIcon(org.wilmascope.images.Images.class.getResource("New24.gif"))) {
       public void actionPerformed(ActionEvent e) {
         rootCluster.deleteAll();
       }
@@ -200,13 +200,13 @@ public class Actions {
       "Create a new graph.",
       "control N",
       'N',
-      "images/New16.gif");
+      new ImageIcon(org.wilmascope.images.Images.class.getResource("New16.gif")));
     fileSaveAsAction =
-      new AbstractAction("Save As", new ImageIcon("images/SaveAs24.gif")) {
+      new AbstractAction("Save As", new ImageIcon(org.wilmascope.images.Images.class.getResource("SaveAs24.gif"))) {
       public void actionPerformed(ActionEvent e) {
         JFileChooser chooser =
           new JFileChooser(
-            org.wilmascope.global.Constants.getInstance().getProperty(
+            org.wilmascope.global.GlobalConstants.getInstance().getProperty(
               "DefaultDataPath"));
         chooser.setFileFilter(fileHandler.getFileFilter());
         int returnVal = chooser.showSaveDialog(parent);
@@ -220,9 +220,9 @@ public class Actions {
       "Select a file name and save the graph.",
       "control A",
       'A',
-      "images/SaveAs16.gif");
+      new ImageIcon(org.wilmascope.images.Images.class.getResource("SaveAs16.gif")));
     fileSaveAction =
-      new AbstractAction("Save", new ImageIcon("images/Save24.gif")) {
+      new AbstractAction("Save", new ImageIcon(org.wilmascope.images.Images.class.getResource("Save24.gif")) ){
       public void actionPerformed(ActionEvent e) {
         fileSaveAsAction.actionPerformed(e);
       }
@@ -232,7 +232,7 @@ public class Actions {
       "Save the graph.",
       "control S",
       'S',
-      "images/Save16.gif");
+      new ImageIcon(org.wilmascope.images.Images.class.getResource("Save16.gif")));
   }
   public JToolBar getToolPanel() {
     JToolBar p = new JToolBar();
@@ -245,13 +245,13 @@ public class Actions {
     String desc,
     String acc,
     char mn,
-    String smallIcon) {
+    ImageIcon smallIcon) {
     a.putValue(Action.SHORT_DESCRIPTION, desc);
     a.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(acc));
     a.putValue(
       Action.MNEMONIC_KEY,
       new Integer(Character.getNumericValue(mn) + 55));
-    a.putValue(Action.SMALL_ICON, new ImageIcon(smallIcon));
+    a.putValue(Action.SMALL_ICON,smallIcon);
   }
 
   private JToolBar getToolbar() {

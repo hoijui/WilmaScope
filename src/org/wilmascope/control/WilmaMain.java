@@ -18,14 +18,11 @@
  * -- Tim Dwyer, 2001
  */
 package org.wilmascope.control;
-
 import java.awt.BorderLayout;
 import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPopupMenu;
-
 import org.wilmascope.file.*;
 import org.wilmascope.gmlparser.ColumnsImporter;
 import org.wilmascope.gui.Actions;
@@ -36,12 +33,19 @@ import org.wilmascope.gui.MenuBar;
 import org.wilmascope.gui.NodeOptionsMenu;
 import org.wilmascope.gui.SplashWindow;
 /**
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular Wilma graph drawing engine
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaOrg
+ * 
+ * Title: WilmaToo
+ * 
+ * Description: Sequel to the ever popular Wilma graph drawing engine
+ * 
+ * Copyright: Copyright (c) 2001
+ * 
+ * Company: WilmaOrg
+ * 
  * @author Tim Dwyer
+ * 
  * @version 1.0
+ *  
  */
 public class WilmaMain extends JFrame {
 	{
@@ -61,29 +65,27 @@ public class WilmaMain extends JFrame {
 		Actions actions = Actions.getInstance();
 		actions.init(this, graphControl, controlPanel);
 		getContentPane().add("North", actions.getToolPanel());
-
-		MenuBar menuBar = new MenuBar(this,actions, graphControl, controlPanel);
+		MenuBar menuBar = new MenuBar(this, actions, graphControl, controlPanel);
 		setJMenuBar(menuBar);
 		//graphControl.setRootPickingClient(rootMenu);
 		GraphControl.ClusterFacade r = graphControl.getRootCluster();
 		GraphControl.getPickListener().setNodeOptionsClient(
-			new NodeOptionsMenu(graphCanvas, graphControl, r, controlPanel));
+				new NodeOptionsMenu(graphCanvas, graphControl, r, controlPanel));
 		GraphControl.getPickListener().setClusterOptionsClient(
-			new ClusterOptionsMenu(graphCanvas, r, controlPanel));
+				new ClusterOptionsMenu(graphCanvas, r, controlPanel));
 		GraphControl.getPickListener().setEdgeOptionsClient(
-			new EdgeOptionsMenu(graphCanvas, r));
+				new EdgeOptionsMenu(graphCanvas, r));
 		try {
 			r.addForce("Repulsion").setStrength(1f);
 			r.addForce("Spring").setStrength(5f);
 			r.addForce("Origin").setStrength(1f);
 		} catch (Exception e) {
-			System.out.println(
-				"Couldn't add forces to graph root from WilmaMain, reason: "
-					+ e.getMessage());
+			System.out
+					.println("Couldn't add forces to graph root from WilmaMain, reason: "
+							+ e.getMessage());
 		}
 		r.unfreeze();
 	}
-
 	public static void main(String argv[]) {
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 		WilmaMain main = new WilmaMain();
@@ -102,13 +104,15 @@ public class WilmaMain extends JFrame {
 		}
 	}
 	public void createJMainFrame() {
-		new SplashWindow(
-			"images" + java.io.File.separator + "WilmaSplash.png",
-			this,
-			5000);
+		//new SplashWindow(
+		//  org.wilmascope.images.Images.class.getResource("WilmaSplash.png").getPath(),
+		//
+		//	this,
+		//
+		//	5000);
 		init();
-		ImageIcon icon =
-			new ImageIcon("images/WilmaW24.png");
+		ImageIcon icon = new ImageIcon(org.wilmascope.images.Images.class
+				.getResource("WilmaW24.png"));
 		setIconImage(icon.getImage());
 		setTitle("Welcome to Wilma!");
 		setSize(600, 600);

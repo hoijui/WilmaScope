@@ -46,7 +46,7 @@ import javax.vecmath.Vector3f;
 
 import org.wilmascope.dotparser.EdgeClient;
 import org.wilmascope.graph.Edge;
-import org.wilmascope.view.Constants;
+import org.wilmascope.view.ViewConstants;
 import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.Renderer2D;
 import org.wilmascope.view.SplineMethods;
@@ -379,7 +379,7 @@ public class SplineTubeEdgeView
 		// avoids non-affine transformations, by making sure edge always has
 		// non-zero length
 		if (e.getLength() == 0) {
-			e.setVector(Constants.gc.getVector3f("MinVector"));
+			e.setVector(ViewConstants.gc.getVector3f("MinVector"));
 			l = e.getVector().length();
 		}
 		Vector3f v = new Vector3f(e.getVector());
@@ -393,7 +393,7 @@ public class SplineTubeEdgeView
 	GeometryArray tubeGeometryArray;
 	Point3f[] taperedTubePoints;
 	public ImageIcon getIcon() {
-		return new ImageIcon(getClass().getResource("/images/splineTubeEdge.png"));
+		return new ImageIcon(org.wilmascope.images.Images.class.getResource("splineTubeEdge.png"));
 	}
 	BranchGroup b = null;
 }

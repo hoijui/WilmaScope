@@ -15,7 +15,7 @@ import java.util.Vector;
 import org.wilmascope.columnlayout.ColumnCluster;
 import org.wilmascope.columnlayout.NodeColumnLayout;
 import org.wilmascope.control.GraphControl;
-import org.wilmascope.global.Constants;
+import org.wilmascope.global.GlobalConstants;
 
 /**
  * @author dwyer
@@ -27,7 +27,7 @@ class AugmentedGMLClient implements AugmentedGraphClient {
 	Hashtable nodes = new Hashtable();
 	GraphControl.ClusterFacade root;
 	Vector seriesKeys;
-	boolean fixedColumnWidthMode = Constants.getInstance().getBooleanValue("FixedColumnWidthMode");
+	boolean fixedColumnWidthMode = GlobalConstants.getInstance().getBooleanValue("FixedColumnWidthMode");
 	public void setSeriesKeys(Vector keys) {
 		if (keys == null || keys.size() == 0) {
 			throw new Error("No series keys found!");
@@ -63,7 +63,7 @@ class AugmentedGMLClient implements AugmentedGraphClient {
 		}
 	}
 	public void addNode(String id, String label) {
-		Constants constants = Constants.getInstance();
+		GlobalConstants constants = GlobalConstants.getInstance();
 		ColumnCluster c =
 			new ColumnCluster(root, 100f, 1f, 0, "Column Cluster", "Tube Node");
 		if (label == null)
@@ -78,7 +78,7 @@ class AugmentedGMLClient implements AugmentedGraphClient {
 		nodes.put(id, c);
 	}
 	public void addNode(String id, String label, Hashtable series) {
-		Constants constants = Constants.getInstance();
+		GlobalConstants constants = GlobalConstants.getInstance();
 		ColumnCluster c =
 			new ColumnCluster(
 				root,

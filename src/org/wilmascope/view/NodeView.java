@@ -71,7 +71,7 @@ public abstract class NodeView extends GraphElementView implements org.wilmascop
     this.node = node;
   }
   public ImageIcon getIcon() {
-    return new ImageIcon("images/node.png");
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("node.png"));
   }
   protected void showLabel(String text) {
     double r = (double)node.getRadius();
@@ -178,7 +178,7 @@ public abstract class NodeView extends GraphElementView implements org.wilmascop
     Color3f c = new Color3f();
     getAppearance().getMaterial().getDiffuseColor(c);
 //    g.setColor(new Color(c.x,c.y,c.z,transparency));
-    
+
     g.setColor(c.get());
     r.fillCircle(g,getNode().getPosition(),getNode().getRadius());
 	}

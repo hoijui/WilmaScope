@@ -51,6 +51,6 @@ public class LineNodeView extends NodeView {
   }
   Color3f colour = Colours.white;
   public ImageIcon getIcon() {
-    return new ImageIcon("images/dot.png");
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("dot.png"));
   }
 }

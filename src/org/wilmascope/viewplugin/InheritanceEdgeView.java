@@ -84,6 +84,6 @@ public class InheritanceEdgeView extends EdgeView {
     addTransformGroupChild(coneTransform);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon("images/inheritance.png");
+    return new ImageIcon(org.wilmascope.images.Images.class.getResource("inheritance.png"));
   }
 }

@@ -39,7 +39,7 @@ public class LODSphere {
   static int sharedGeometry;
   {
     sharedGeometry =
-      Constants.getInstance().getIntValue("SharedGeometry") != 0
+      ViewConstants.getInstance().getIntValue("SharedGeometry") != 0
         ?0
         :Sphere.GEOMETRY_NOT_SHARED;
   }

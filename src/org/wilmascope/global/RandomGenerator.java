@@ -65,5 +65,5 @@ public class RandomGenerator {
   }
 
   // The constants
-  private static org.wilmascope.global.Constants constants = org.wilmascope.global.Constants.getInstance();
+  private static org.wilmascope.global.GlobalConstants constants = org.wilmascope.global.GlobalConstants.getInstance();
 }

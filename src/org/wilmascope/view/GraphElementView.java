@@ -456,7 +456,7 @@ public abstract class GraphElementView
 	protected Transform3D t3d;
 	// Called to render the element at a new position
 	private TransformGroup tg;
-	private static org.wilmascope.global.Constants constants = org.wilmascope.global.Constants
+	private static org.wilmascope.global.GlobalConstants constants = org.wilmascope.global.GlobalConstants
 			.getInstance();
 	// The shape representing this element
 	private Shape3D shape;

@@ -3,7 +3,7 @@ package org.wilmascope.columnlayout;
 import javax.vecmath.Vector3f;
 
 import org.wilmascope.forcelayout.NodeForceLayout;
-import org.wilmascope.global.Constants;
+import org.wilmascope.global.GlobalConstants;
 
 /**
  * <p>Title: </p>
@@ -17,7 +17,7 @@ import org.wilmascope.global.Constants;
 public class NodeColumnLayout extends NodeForceLayout {
     public NodeColumnLayout(int level) {
         setLevel(level);
-        setHeight(Constants.getInstance().getFloatValue("ImportedColumnNodeHeight"));
+        setHeight(GlobalConstants.getInstance().getFloatValue("ImportedColumnNodeHeight"));
     }
     public void setLevel(int level) {
         this.level = level;

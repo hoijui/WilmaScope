@@ -19,7 +19,7 @@ import javax.media.j3d.Transform3D;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
-import org.wilmascope.global.Constants;
+import org.wilmascope.global.GlobalConstants;
 /**
  * LightManager is the main class to control the light sources.
  * <br>
@@ -51,7 +51,7 @@ graphControl.getGraphCanvas().getMouseTranslate().setEnable(false);
 graphControl.getGraphCanvas().getMouseZoom().setEnable(false);
 
 lightFrame=graphCanvas.getLightManager().getLightFrame();
-       
+
 lightFrame.addWindowListener(new WindowAdapter() {
 public void windowClosing(WindowEvent e) {
 graphControl.getGraphCanvas().setPickingEnabled(true);
@@ -60,7 +60,7 @@ graphControl.getGraphCanvas().getMouseTranslate().setEnable(true);
 graphControl.getGraphCanvas().getMouseZoom().setEnable(true);
 }
     });
-lightFrame.setVisible(true);   
+lightFrame.setVisible(true);
 </pre>
  */
 public class LightManager {
@@ -68,36 +68,36 @@ public class LightManager {
   private Vector ambLightVector=new Vector();
   private Vector dirLightVector=new Vector();
   private Vector pointLightVector=new Vector();
-  private Vector spotLightVector=new Vector();	
-  private Constants constants;
+  private Vector spotLightVector=new Vector();
+  private GlobalConstants constants;
   private BranchGroup bg;
   private Bounds bounds;
   private LightFrame lightFrame;
   private String propertyFileName;
   private LightPropertiesSaver  Saver;
- 
-  
+
+
   public LightManager(BranchGroup bg,Bounds bounds,String propertyFileName)
-  { 
-  	
+  {
+
   	this.bg=bg;
   	this.bounds=bounds;
-  	constants = Constants.getInstance(propertyFileName);
+  	constants = GlobalConstants.getInstance();
   	this.propertyFileName=propertyFileName;
-     //read in the light properties  	
+     //read in the light properties
   	addLights();
-  	 	
+
     Saver=new LightPropertiesSaver(this);
-    
+
   }
- //read the light configuration from .properties file and attach lights to the scene graph 
+ //read the light configuration from .properties file and attach lights to the scene graph
   private void addLights() {
    // Set up ambient light source
-  
+
    for(int i =0;; i++) {
    if(constants.getProperty("Light"+i+"AmbientColourR") == null)
        break;
-    System.err.println("Adding Ambient Light " + i);    
+    System.err.println("Adding Ambient Light " + i);
    AmbientLight ambientLight = new AmbientLight();
    ambientLight.setCapability(AmbientLight.ALLOW_COLOR_READ);
    ambientLight.setCapability(AmbientLight.ALLOW_COLOR_WRITE);
@@ -109,7 +109,7 @@ public class LightManager {
         ambientLight.setEnable(false);
    BranchGroup lightGroup1=new BranchGroup();
    lightGroup1.setCapability(BranchGroup.ALLOW_DETACH);
-   
+
    lightGroup1.addChild(ambientLight);
    bg.addChild(lightGroup1);
    WilmaLight w1=new WilmaLight();
@@ -124,7 +124,7 @@ for(int i = 0;; i++) {
        {
           break;
        }
-    System.err.println("Adding Directional Light " + i);    
+    System.err.println("Adding Directional Light " + i);
    DirectionalLight dirLight = new DirectionalLight();
    dirLight.setInfluencingBounds(bounds);
    dirLight.setCapability(DirectionalLight.ALLOW_DIRECTION_READ);
@@ -167,7 +167,7 @@ for(int i = 0;; i++) {
              constants.getFloatValue("Light"+i+"PointAttenuationLinear"),
              constants.getFloatValue("Light"+i+"PointAttenuationQuadratic")));
      if(constants.getProperty("Light"+i+"PointEnable").equals("false"))
-        pl.setEnable(false);        
+        pl.setEnable(false);
      pl.setInfluencingBounds(bounds);
      pl.setCapability(PointLight.ALLOW_POSITION_READ);
      pl.setCapability(PointLight.ALLOW_POSITION_WRITE);
@@ -177,8 +177,8 @@ for(int i = 0;; i++) {
      pl.setCapability(PointLight.ALLOW_ATTENUATION_WRITE);
      pl.setCapability(PointLight.ALLOW_STATE_WRITE);
      pl.setCapability(PointLight.ALLOW_STATE_READ);
-    
-    
+
+
      BranchGroup lightGroup3=new BranchGroup();
      lightGroup3.setCapability(BranchGroup.ALLOW_DETACH);
      lightGroup3.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
@@ -200,15 +200,15 @@ for(int i = 0;; i++) {
      sl.setAttenuation(new Point3f( constants.getFloatValue("Light"+i+"SpotAttenuationConstant"),
                                    constants.getFloatValue("Light"+i+"SpotAttenuationLinear"),
                                    constants.getFloatValue("Light"+i+"SpotAttenuationQuadratic")));
-     
+
      sl.setSpreadAngle(constants.getFloatValue("Light"+i+"SpotSpreadAngle"));
      sl.setConcentration(constants.getFloatValue("Light"+i+"SpotConcentration"));
      sl.setDirection(constants.getVector3f("Light"+i+"SpotDirectionVector"));
      if(constants.getProperty("Light"+i+"SpotEnable").equals("false"))
         sl.setEnable(false);
-      
+
      sl.setInfluencingBounds(bounds);
-     
+
      sl.setCapability(SpotLight.ALLOW_POSITION_READ);
      sl.setCapability(SpotLight.ALLOW_POSITION_WRITE);
      sl.setCapability(SpotLight.ALLOW_COLOR_READ);
@@ -223,8 +223,8 @@ for(int i = 0;; i++) {
      sl.setCapability(SpotLight.ALLOW_CONCENTRATION_WRITE );
      sl.setCapability(SpotLight.ALLOW_DIRECTION_READ);
      sl.setCapability(SpotLight.ALLOW_DIRECTION_WRITE);
-    
-    
+
+
      BranchGroup lightGroup4=new BranchGroup();
      lightGroup4.setCapability(BranchGroup.ALLOW_DETACH);
      lightGroup4.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
@@ -239,7 +239,7 @@ for(int i = 0;; i++) {
    }
  }
 /** @return A LightFrame instance
- */ 
+ */
  public LightFrame getLightFrame()
   {
         lightFrame = new LightFrame(this);
@@ -255,54 +255,54 @@ for(int i = 0;; i++) {
  	Saver.saveToWilmaCons();
  }
  /** @return The AmbientLight Vector
-  */     
+  */
  public Vector getAmbLightVector()
   {
   	return ambLightVector;
   }
   /** @return The DirectionalLight Vector
-  */ 
+  */
  public Vector getDirLightVector()
   {
   	return dirLightVector;
-  } 
+  }
   /** @return The PointLight Vector
-  */ 
+  */
  public Vector getPointLightVector()
   {
   	return pointLightVector;
   }
   /** @return The SpotLight Vector
-  */ 
+  */
  public Vector getSpotLightVector()
   {
   	return spotLightVector;
   }
   /**@return  The branch group that the lights attach
-   */ 
+   */
  public BranchGroup getBranchGroup() {
       return bg;
    }
   /**@return  The scheduling bounds of the lights
-   */ 
+   */
    public Bounds getBoundingSphere() {
     return bounds;
   }
-  /**  @return The file name of light configuration file 
+  /**  @return The file name of light configuration file
    */
   public String getPropertyFileName()
   {
   	return propertyFileName;
   }
  /** creates an ambient light with default values and attach it to the scene graph
-  */ 
+  */
   public void createAmbLight()
   {
   	BranchGroup lightGroup=new BranchGroup();
     lightGroup.setCapability(BranchGroup.ALLOW_DETACH);
     lightGroup.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
-    WilmaLight w=new WilmaLight();          
-  	
+    WilmaLight w=new WilmaLight();
+
   	AmbientLight newAmbLight=new AmbientLight();
     newAmbLight.setCapability(AmbientLight.ALLOW_COLOR_READ);
     newAmbLight.setCapability(AmbientLight.ALLOW_COLOR_WRITE);
@@ -318,15 +318,15 @@ for(int i = 0;; i++) {
      ambLightVector.add(w);
   }
   /** creates a directional light with default values and attach it to the scene graph
-  */  
+  */
   public void createDirLight()
   {
   	BranchGroup lightGroup=new BranchGroup();
     lightGroup.setCapability(BranchGroup.ALLOW_DETACH);
     lightGroup.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
      lightGroup.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
-    WilmaLight w=new WilmaLight();        
-    
+    WilmaLight w=new WilmaLight();
+
     DirectionalLight newDirLight=new DirectionalLight();
     newDirLight.setCapability(DirectionalLight.ALLOW_DIRECTION_READ);
     newDirLight.setCapability(DirectionalLight.ALLOW_DIRECTION_WRITE);
@@ -336,7 +336,7 @@ for(int i = 0;; i++) {
     newDirLight.setCapability(DirectionalLight.ALLOW_STATE_READ);
     newDirLight.setCapability(DirectionalLight.ALLOW_PICKABLE_READ);
     newDirLight.setInfluencingBounds(bounds);
-    	          
+
     //add to the branch group
     lightGroup.addChild(newDirLight);
     bg.addChild(lightGroup);
@@ -345,14 +345,14 @@ for(int i = 0;; i++) {
     dirLightVector.add(w);
   }
   /** creates a point light with default values and attach it to the scene graph
-  */  
+  */
   public void createPointLight()
    {
    	BranchGroup lightGroup=new BranchGroup();
     lightGroup.setCapability(BranchGroup.ALLOW_DETACH);
     lightGroup.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
-    WilmaLight w=new WilmaLight();   
-    
+    WilmaLight w=new WilmaLight();
+
     PointLight newPointLight=new PointLight();
     newPointLight.setCapability(PointLight.ALLOW_POSITION_READ);
     newPointLight.setCapability(PointLight.ALLOW_POSITION_WRITE);
@@ -363,23 +363,23 @@ for(int i = 0;; i++) {
     newPointLight.setCapability(PointLight.ALLOW_STATE_WRITE);
     newPointLight.setCapability(PointLight.ALLOW_STATE_READ);
     newPointLight.setInfluencingBounds(bounds);
-    	         
+
     //add to the branch group
     lightGroup.addChild(newPointLight);
     bg.addChild(lightGroup);
     w.setLight(newPointLight);
     w.setBranchGroup(lightGroup);
     pointLightVector.add(w);
-   }  
+   }
   /** creates a  spot light with default values and attach it to the scene graph
-  */       
+  */
    public void createSpotLight()
    {
    	BranchGroup lightGroup=new BranchGroup();
     lightGroup.setCapability(BranchGroup.ALLOW_DETACH);
     lightGroup.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
-    WilmaLight w=new WilmaLight(); 
-    
+    WilmaLight w=new WilmaLight();
+
     SpotLight newSpotLight=new SpotLight();
     newSpotLight.setSpreadAngle((float)Math.PI/6);
                  //set up the capability
@@ -398,62 +398,62 @@ for(int i = 0;; i++) {
     newSpotLight.setCapability(SpotLight.ALLOW_STATE_WRITE);
     newSpotLight.setCapability(SpotLight.ALLOW_STATE_READ);
     newSpotLight.setInfluencingBounds(bounds);
-             
+
     //add to the branch group
     lightGroup.addChild(newSpotLight);
     bg.addChild(lightGroup);
     w.setLight(newSpotLight);
     w.setBranchGroup(lightGroup);
     spotLightVector.add(w);
-   } 
+   }
   /**deletes the ambient light from the scene graph
    * @param index: index in the ambient light vector(ambLightVector)
-   */            
+   */
    public void deleteAmbLight(int index)
    {
-   	 
-   	 //get the selected light       	    
+
+   	 //get the selected light
      WilmaLight w=(WilmaLight)ambLightVector.get(index);
     //remove it from the light vector
      ambLightVector.remove(index);
      //detach the light from the scene graph
-     w.getBranchGroup().detach();    
+     w.getBranchGroup().detach();
    }
   /**deletes the directional light from the scene graph
    * @param index: index in the directional light vector(dirLightVector)
-   */   
+   */
    public void deleteDirLight(int index)
    {
    	 WilmaLight w=(WilmaLight)dirLightVector.get(index);
      dirLightVector.remove(index);
-     w.getBranchGroup().detach(); 
+     w.getBranchGroup().detach();
    }
   /**deletes the point light from the scene graph
    * @param index: index in the point light vector(pointLightVector)
-   */   
+   */
    public void deletePointLight(int index)
    {
    	WilmaLight w=(WilmaLight)pointLightVector.get(index);
     pointLightVector.remove(index);
-    w.getBranchGroup().detach(); 
+    w.getBranchGroup().detach();
    }
    /**deletes the spot light from the scene graph
    * @param index: index in the spot light vector(spotLightVector)
-   */        
+   */
    public void deleteSpotLight(int index)
    {
    	WilmaLight w=(WilmaLight)spotLightVector.get(index);
     spotLightVector.remove(index);
-    w.getBranchGroup().detach();  
-   } 
+    w.getBranchGroup().detach();
+   }
    /** loads the light configuration from the specified property file
-    */   
+    */
    public void loadFile(String propertyFileName)
    {
    	int i;
    	WilmaLight w;
    	this.propertyFileName=propertyFileName;
-   	constants = Constants.getInstance(propertyFileName);
+   	constants = GlobalConstants.getInstance();
    	//detach all the lights
    	for(i=0;i<ambLightVector.size();i++){
    	       w=(WilmaLight)ambLightVector.get(i);
@@ -461,25 +461,25 @@ for(int i = 0;; i++) {
    	for(i=0;i<dirLightVector.size();i++){
    	       w=(WilmaLight)dirLightVector.get(i);
    	       w.getBranchGroup().detach();
-   	       }       
+   	       }
    	for(i=0;i<pointLightVector.size();i++){
    	       w=(WilmaLight)pointLightVector.get(i);
-   	       w.getBranchGroup().detach();}             
+   	       w.getBranchGroup().detach();}
    	for(i=0;i<spotLightVector.size();i++){
    	       w=(WilmaLight)spotLightVector.get(i);
-   	       w.getBranchGroup().detach();}      
+   	       w.getBranchGroup().detach();}
    	//clear the light vectors
    	ambLightVector.clear();
    	dirLightVector.clear();
    	pointLightVector.clear();
    	spotLightVector.clear();
-   	//read the light configuration from the specified file 
-   	addLights();   
-   	    
+   	//read the light configuration from the specified file
+   	addLights();
+
    }
-   
+
   /** Saves the light configuration to a new file
-   */ 
+   */
    public void saveToNewFile(String name)
    {
    	   Saver.saveToNewFile(name);

@@ -34,7 +34,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 
 public class Colours {
-  private static org.wilmascope.global.Constants constants = org.wilmascope.global.Constants.getInstance();
+  private static org.wilmascope.global.GlobalConstants constants = org.wilmascope.global.GlobalConstants.getInstance();
   public static class Material extends javax.media.j3d.Material {
     String name;
     Color awtColor;

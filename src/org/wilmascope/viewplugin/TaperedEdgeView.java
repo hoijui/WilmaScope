@@ -32,7 +32,7 @@ import javax.vecmath.Vector3f;
 
 import org.wilmascope.graph.Edge;
 import org.wilmascope.view.Colours;
-import org.wilmascope.view.Constants;
+import org.wilmascope.view.ViewConstants;
 import org.wilmascope.view.EdgeView;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.Renderer2D;
@@ -42,7 +42,7 @@ import com.sun.j3d.utils.geometry.GeometryInfo;
 import com.sun.j3d.utils.geometry.NormalGenerator;
 /**
  * Graphical representation of the edge
- * 
+ *
  * @author Tim Dwyer
  * @version 1.0
  */
@@ -145,16 +145,16 @@ public class TaperedEdgeView extends EdgeView {
 		// avoids non-affine transformations, by making sure edge always has
 		// non-zero length
 		if (e.getLength() == 0) {
-			e.setVector(Constants.gc.getVector3f("MinVector"));
+			e.setVector(ViewConstants.gc.getVector3f("MinVector"));
 			l = e.getVector().length();
 		}
 		Vector3f v = new Vector3f(e.getVector());
 		v.scaleAdd(0.5f, e.getStart().getPosition());
 		setFullTransform(new Vector3d(getRadius(), l, getRadius()), v,
 				getPositionAngle());
-	} 
+	}
   /**
-   * 2D version of tapered edge is just a two colour solid line 
+   * 2D version of tapered edge is just a two colour solid line
    *   of width tapering from startWidth to endWidth.
    *   First half line is coloured same as start node
    *   Second half is coloured as for end node
@@ -162,7 +162,7 @@ public class TaperedEdgeView extends EdgeView {
   public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
     float thickness = r.scaleX(getRadius());
     g.setStroke(new BasicStroke(thickness));
-    
+
     Point3f start = getEdge().getStart().getPosition();
     Point3f end = getEdge().getEnd().getPosition();
     Vector3f v = new Vector3f();
@@ -180,6 +180,6 @@ public class TaperedEdgeView extends EdgeView {
     r.taperedLinePath(g,mW,eW,mid,end);
   }
 	public ImageIcon getIcon() {
-		return new ImageIcon("images/taperedEdge.png");
+		return new ImageIcon(org.wilmascope.images.Images.class.getResource("taperedEdge.png"));
 	}
 }
