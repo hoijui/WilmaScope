@@ -19,13 +19,19 @@
  */
 package org.wilmascope.view;
 /*
+ * 
  * GraphCanvas.java
  * 
+ * 
+ * 
  * Created on 16 April 2000, 17:06
+ *  
  */
 /**
  * @author $Author$
+ * 
  * @version $Version:$
+ *  
  */
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
@@ -306,30 +312,27 @@ public class GraphCanvas extends Canvas3D {
 		return rotationBehavior;
 	}
 	public void writeJPEG(String path, float scale) {
-    OffScreenCanvas3D offScreenCanvas = new OffScreenCanvas3D(SimpleUniverse.getPreferredConfiguration());
-
-    // set the offscreen to match the onscreen
-    Screen3D sOn = getScreen3D();
-    Screen3D sOff = offScreenCanvas.getScreen3D();
-    sOff.setSize(sOn.getSize());
-    sOff.setPhysicalScreenWidth(sOn.getPhysicalScreenWidth());
-    sOff.setPhysicalScreenHeight(sOn.getPhysicalScreenHeight());
-
-    //setAntialiasingEnabled(true);
-    Dimension dim = getSize();
-    dim.width *= scale;
-    dim.height *= scale;
-
-    // attach the same view to the offscreen canvas and render an extra frame to make sure it's ready    
-    View  view = universe.getViewer().getView();
-    view.addCanvas3D( offScreenCanvas );
-    view.stopView();
-    view.renderOnce();
-    view.startView();
-
-    offScreenCanvas.print(path, dim, true);
-    
-    //setAntialiasingEnabled(false);
-    view.removeCanvas3D( offScreenCanvas ); 
-  }
+		OffScreenCanvas3D offScreenCanvas = new OffScreenCanvas3D(SimpleUniverse
+				.getPreferredConfiguration());
+		// set the offscreen to match the onscreen
+		Screen3D sOn = getScreen3D();
+		Screen3D sOff = offScreenCanvas.getScreen3D();
+		sOff.setSize(sOn.getSize());
+		sOff.setPhysicalScreenWidth(sOn.getPhysicalScreenWidth());
+		sOff.setPhysicalScreenHeight(sOn.getPhysicalScreenHeight());
+		//setAntialiasingEnabled(true);
+		Dimension dim = getSize();
+		dim.width *= scale;
+		dim.height *= scale;
+		// attach the same view to the offscreen canvas and render an extra frame
+		// to make sure it's ready
+		View view = universe.getViewer().getView();
+		view.addCanvas3D(offScreenCanvas);
+		view.stopView();
+		view.renderOnce();
+		view.startView();
+		offScreenCanvas.print(path, dim, true);
+		//setAntialiasingEnabled(false);
+		view.removeCanvas3D(offScreenCanvas);
+	}
 }
