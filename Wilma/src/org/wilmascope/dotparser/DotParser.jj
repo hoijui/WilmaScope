@@ -1,0 +1,195 @@
+options {
+  LOOKAHEAD = 1;
+  CHOICE_AMBIGUITY_CHECK = 2;
+  OTHER_AMBIGUITY_CHECK = 1;
+  STATIC = true;
+  DEBUG_PARSER = false;
+  DEBUG_LOOKAHEAD = false;
+  DEBUG_TOKEN_MANAGER = false;
+  ERROR_REPORTING = true;
+  JAVA_UNICODE_ESCAPE = false;
+  UNICODE_INPUT = false;
+  IGNORE_CASE = false;
+  USER_TOKEN_MANAGER = false;
+  USER_CHAR_STREAM = false;
+  BUILD_PARSER = true;
+  BUILD_TOKEN_MANAGER = true;
+  SANITY_CHECK = true;
+  FORCE_LA_CHECK = false;
+}
+
+PARSER_BEGIN(DotParser)
+package org.wilmascope.dotparser;
+import java.util.Vector;
+import java.io.*;
+import java.awt.Point;
+
+public class DotParser {
+}
+
+PARSER_END(DotParser)
+
+// Lexical definitions
+<DEFAULT>
+SKIP :
+{
+  " " | "\t" | "\n" | "\r" | "\\"
+}
+SPECIAL_TOKEN : /* COMMENTS */
+{
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+}
+
+TOKEN:
+{
+  < GRAPH: "graph" >
+| < DIGRAPH: "digraph" >
+| < NODE: "node" > : NODEPARAMETERS
+| < LABEL: "label" >
+| < POS: "pos" >
+| < SHAPE: "shape" >
+| < BB: "bb" >
+| < WIDTH: "width" >
+| < WEIGHT: "weight" >
+| < HEIGHT: "height" >
+| < CONCENTRATE: "concentrate" >
+| < LAYER: "layer" >
+| < MINLEN: "minlen" >
+}
+TOKEN :
+{
+  < ID: ["a"-"z","A"-"Z","_"] ( ["a"-"z","A"-"Z","_","0"-"9"] )* >
+| < NUM: ( ["0"-"9"] )+ >
+| < DEC: "." <NUM> | <NUM> ( "." <NUM> )?  >
+} 
+
+<NODEPARAMETERS>
+SKIP :
+{
+  " " | "\t" |
+  <IGNOREPARAMETERS: "[" (~["]"])* "]"> : DEFAULT
+}
+
+// end lexical definitions, parser start
+void graph(GraphClient g) : {}
+{
+  <DIGRAPH> <ID> "{" stmtList(g) "}"
+  <EOF> 
+}
+
+void stmtList(GraphClient g) : {String s;}
+{
+	{
+	  System.out.println("Parsing the graph...");
+	}
+  ( stmt(g) [";"] )*
+}
+
+void stmt(GraphClient g) : { NodeClient n; EdgeClient e; }
+{
+  <GRAPH> graphAtts(g)
+| <NODE>
+| n = node(g) ( e = edgeRHS(g,n) [ edgeAtts(e)] | [ nodeAtts(n)] )
+}
+
+void graphAtts(GraphClient g) : {}
+{
+  "[" (
+    <CONCENTRATE> "=true"
+  | <BB> "=" "\"" bounds(g) "\"" )*
+  "]"
+}
+
+void bounds(GraphClient g) : {Token t1,t2,t3,t4;}
+{
+  t1 = <NUM> "," t2 = <NUM> "," t3 = <NUM> "," t4 = <NUM> {
+    g.setBoundingBox(
+      Integer.parseInt(t1.image),
+      Integer.parseInt(t2.image),
+      Integer.parseInt(t3.image),
+      Integer.parseInt(t4.image)
+    );
+  }
+}
+
+void nodeAtts(NodeClient n) : {Token t1,t2;}
+{
+  "[" (( 
+    <LABEL> "=" [ "\"" ] <ID> ["."][ "\"" ]
+  | <SHAPE> "=" <ID>
+  | <POS> "=" "\"" t1 = <NUM> "," t2 = <NUM> "\"" {
+      n.setPosition(Integer.parseInt(t1.image),Integer.parseInt(t2.image));
+    }
+  | <WIDTH> "=" "\"" <DEC> "\""
+  | <HEIGHT> "=" "\"" <DEC> "\"")[","])*
+  "]"
+}
+
+EdgeClient edgeRHS(GraphClient g, NodeClient start) : { 
+  NodeClient end;
+  EdgeClient e;
+} {
+  "->" end = node(g) {  e = g.addEdge(start,end); }
+  [ e = edgeRHS(g,end) ]
+  { return e; }
+}
+
+void edgeAtts(EdgeClient e) : {
+  Vector curves = new Vector();
+  Token t;
+} {
+  "[" ((
+      <MINLEN> "=" <NUM>
+    | <LAYER> "=" ("\"")? t = <NUM> ("\"")? { e.setLayer(t.image); }
+    | <WEIGHT> "=" ("\"")? <NUM> ("\"")?
+    | <POS> "=" "\"" 
+      curve(e,curves) (";" curve(e,curves))*
+      "\"" )[","])*
+  "]"
+  {
+    e.setCurves(curves);
+  }
+}
+
+void curve(EdgeClient e, Vector curves) : {
+  Vector pnts = new Vector();
+  Token t1, t2;
+  boolean arrowAtStart = false;
+}
+{
+  ( ("e," {arrowAtStart = false; } |"s," { arrowAtStart = true; })
+    t1 = <NUM> "," t2 = <NUM>
+    {
+      e.addArrow(curves.size(),arrowAtStart,new Point(
+        Integer.parseInt(t1.image), Integer.parseInt(t2.image)));
+    }  
+  )* (bezierPnt(pnts))+
+  {
+    curves.add(pnts);
+  }
+}
+
+void bezierPnt(Vector pnts) : {
+  Token t; 
+  int a,b;
+}
+{
+  t = <NUM> {
+    a = Integer.parseInt(t.image);
+  } "," t = <NUM> {
+    b = Integer.parseInt(t.image);
+    pnts.add(new Point(a,b));
+  }
+}
+
+NodeClient node(GraphClient g) : {
+  Token t;
+  String id;
+}
+{
+  ( t=<NUM> |
+    t=<ID> ) 
+  { return g.addNode(t.image); }
+}
