@@ -33,7 +33,7 @@ import org.omg.CORBA.*;
  * @version 1.0
  */
 
-  class GraphElementServant extends _GraphElementImplBase {
+  class GraphElementServant extends _GraphElementStub {
     GraphElementServant(GraphControl.GraphElementFacade element) {
       this.element = element;
     }
@@ -141,7 +141,7 @@ import org.omg.CORBA.*;
   class ClusterServant extends NodeServant implements ClusterOperations {
     // if only there were a getImpl() method in the _Tie classes I wouldn't
     // need the following!
-    class NodeTie extends Node_Tie {
+    class NodeTie extends NodePOATie {
       NodeServant servant;
       NodeTie(NodeServant n) {
         super(n);
@@ -163,14 +163,14 @@ import org.omg.CORBA.*;
     }
     public Cluster addNewCluster() {
       ClusterServant servant = new ClusterServant(cluster.addNewCluster());
-      return new Cluster_Tie(servant);
+      return (Cluster)new ClusterPOATie(servant);
     }
     /**
      * create a new node and add it to the cluster
      */
     public Node addNewNode() {
       NodeServant servant = new NodeServant(cluster.addNode());
-      return new NodeTie(servant);
+      return (Node)new NodeTie(servant);
     }
     /**
      * Create a new adge between two nodes and add it to the cluster
@@ -180,14 +180,14 @@ import org.omg.CORBA.*;
         cluster.addEdge(
           ((NodeTie)start).getServant().getNode(),
           ((NodeTie)end).getServant().getNode()));
-      return new Edge_Tie(servant);
+      return (Edge)new EdgePOATie(servant);
     }
     /**
      * Create a new cluster and add it as a member of this cluster
      */
     public Cluster addCluster() {
       ClusterServant servant = new ClusterServant(cluster.addCluster());
-      return new Cluster_Tie(servant);
+      return (Cluster)new ClusterPOATie(servant);
     }
     /**
      * remove a node from the cluster
@@ -231,7 +231,7 @@ import org.omg.CORBA.*;
     }
     private GraphControl.ClusterFacade cluster;
   }
-  class ForceServant extends _ForceImplBase {
+  class ForceServant extends _ForceStub {
     ForceServant(GraphControl.ForceFacade f) {
       this.force = f;
     }
@@ -241,7 +241,7 @@ import org.omg.CORBA.*;
     private GraphControl.ForceFacade force;
   }
 
-class GraphControlServant extends _GraphControlImplBase {
+class GraphControlServant extends _GraphControlStub {
   GraphControlServant(GraphControl gc) {
     this.gc = gc;
   }
@@ -250,7 +250,7 @@ class GraphControlServant extends _GraphControlImplBase {
    */
   public Cluster getRootCluster() {
     ClusterServant servant = new ClusterServant(gc.getRootCluster());
-    return new Cluster_Tie(servant);
+    return (Cluster)new ClusterPOATie(servant);
   }
   public void setRootCluster(Cluster rootCluster) {
     gc.setRootCluster(((ClusterServant)rootCluster).getCluster());
