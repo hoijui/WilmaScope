@@ -96,9 +96,8 @@
 %nor too short but to the point!
 %\end{abstract}
 
-\section{Introduction: The Motivation for Wilmascope}
+\section{Introduction}
 \label{sec:intro}
-\label{motivation}
 
 Despite, or perhaps because of, the extensive research literature on graph
 drawing techniques, there is a lack of state-of-the-art, general purpose
@@ -110,6 +109,31 @@ fields; a key motivation for creating a general purpose 3D visualisation
 system is to provide easy-to-use components which can be employed by future
 software across these application domains.
 
+Within the graph drawing community itself a system may also aspire to 
+streamline, elucidate and beautify the work of algorithm design, comparison
+and optimisation.  Achieving these benefits requires software that is
+flexible, interactive and easily extensible.
+
+In order to provide these benefits as widely as possible and to guarantee
+an enthusiastic culture of user participation, a serious graph visualisation
+system should also be {\em Free Software}\cite{stallman92why}.
+
+In this chapter we describe WilmaScope (or ``Wilma'' for short), a
+sophisticated graph visualisation infrastructure, which attempts to meet
+these goals.  In Section~\ref{sec:applications} we describe the
+motivation for WilmaScope with reference to the types of applications
+to which it is suited.  Section~\ref{sec:algorithms} covers the
+main Graph Drawing algorithms which are available in the Wilma system.
+Section~\ref{sec:implementation} goes into some of the implementation
+details including
+architecture, modular subsystems, and facilities for control by human users
+and other software.  Section~\ref{sec:examples} gives a gallery of
+domain specific applications.  In Section~\ref{sec:software} we
+describe the specific software platform used.  Finally,
+Section~\ref{sec:conclusions} reviews Wilma's contribution and
+identifies directions for future development.
+
+\section{Applications} \label{sec:applications}
 3D graph visualisation has not yet found the degree of acceptance that
 graph drawing in 2D has found.  Probably since 2D graph drawing's
 ``killer app'' is the printed page or poster\footnote{Certainly the
@@ -125,31 +149,300 @@ acceptance.  However, clever research into this embryonic area will
 hopefully produce examples which demonstrate some benefits of 3D
 visualisation even using current hardware.  In any case, it will
 at least aid in the rapid adoption of the paradigm should today's
-science fiction becomes tomorrow's reality.
+science fiction become tomorrow's reality.
+
 It was with the hope of supporting such research that Wilma was conceived
 and offered as open
 source to researchers and experimenters under the Lesser GNU Public
 License (LGPL).
+Its extensibility and broad base of
+features make it ideal for rapid prototyping of novel 3D graph
+visualisations.
 
-Within the graph drawing community itself a system may also aspire to 
-streamline, elucidate and beautify the work of algorithm design, comparison
-and optimisation.  Achieving these benefits requires software that is
-flexible, interactive and easily extensible.
+This flexibility and potential is demonstrated by the 
+number of different applications that have already been explored using
+Wilma including: 
+\begin{itemize}
+\item software visualisation using a 3D interpretation of
+the Unified Modelling Language
+\item a novel visual metaphor for visualising
+fund manager movement in financial markets
+\item visualisation of
+clustering in web structure
+\item general concept map visualisation
+\end{itemize}
 
-In order to provide these benefits as widely as possible and to guarantee
-an enthusiastic culture of user participation, a serious graph visualisation
-system should also be {\em Free Software}\cite{stallman92why}.
+In
+Section~\ref{sec:examples} we describe these domain specific
+applications more fully with examples of graphical results.
 
-In this chapter we describe WilmaScope (or ``Wilma'' for short), a
-sophisticated graph visualisation infrastructure, which attempts to meet
-these goals.  In Section~\ref{sec:design} we describe the Wilma
-architecture, modular subsystems, and facilities for control by human users
-and other software.  Section~\ref{sec:results} demonstrates Wilma in action
-with examples of graphical results and domain specific applications.
-Finally, Section~\ref{sec:conclusions} reviews Wilma's contribution and
-identifies directions for future development.
 
-\section{Design}\label{sec:design}
+\section{Algorithms} \label{sec:algorithms}
+\subsection{Force Directed} \label{sec:forcedirectedlayout}
+The first layout algorithm implemented in Wilma was force-directed
+layout the basic principles of which are described in Chapter
+1.  There were several factors that motivated us to
+implement this algorithm first, notably:
+\begin{itemize}
+\item it is relatively easy to obtain good results for most types of
+graphs by application of the basic attractive spring force and
+repulsive inter-node force.
+\item it is easy to animate the layout process in a dynamic
+graph visualisation to preserve a user's ``mental map''\cite{Misue:VLC95}
+between changes in the graph structure.  We can animate simply by
+redrawing the graph between each iteration of the algorithm.
+\item since the algorithm is iterative and does not require any
+special pre- or post-processing it is easy to use in a dynamic graph
+editor where the graph structure may be changed by the user even
+before the layout has stabilised.
+\item different layout
+aesthetics can be enhanced by adding extra forces such as the Sugiyama and Misue\cite{Sugiyama:VLC95}
+directed field force for aligning directed edges to emphasise flow.
+\item the force-directed approach can be easily extended to support
+clustered graphs\cite{Huang:GD98}.
+\item the approach works just as well in three dimensions as in two.
+\end{itemize}
+The Wilma implementation of the force-directed algorithm attempts to make the most
+of these assorted advantages.  Firstly it offers a user interface which
+allows the user to control all the parameters of the layout algorithm
+even while the layout is still in progress.  The user can control the
+number of iterations of the algorithm that are executed between frames
+of animation, choosing to run the algorithm to
+convergence as fast as possible or to watch the layout unfold, and if
+necessary tweak the controls to adjust the embedding or to help it
+converge.
+
+Different forces, such as the directed field force or a gravitational force
+which keeps the graph centred, may be added or removed at any time to achieve
+different aesthetic effects.  Since each of the different forces implements a
+common interface (as the UML Class Diagram in Figure~\ref{fig-wilmaclasses}
+illustrates), new forces can be added or removed at any time.
+
+The force-directed layout engine fits well into Wilma's object
+oriented clustered graph model described in Section~\ref{sec:implementation}.
+Our design allows for each cluster to be arranged by
+its own layout engine but, when the force directed engine is used,
+edges connecting nodes in different clusters exert a force on
+the nodes inside these clusters.  The nodes inside a cluster are
+attracted to the centroid of the cluster by a ``gravitational force''.
+The gravitational force then balances the inter-cluster forces.  This
+achieves a net result similar to the ``dummy node'' approach of Huang
+and Eades\cite{Huang:GD98}, however, repulsive forces do not need to be
+calculated between nodes inside different clusters.
+
+All nodes and clusters are assigned a mass.  By default nodes have
+unit mass though a user may specify a different mass if necessary.
+A cluster's mass is the sum of the masses of all its children.
+The repulsive force used varies with the mass of nodes so
+that nodes with large mass, such as clusters with many descendents,
+will exert a strong repulsive force on their neighbours, ie.
+
+\[
+\mathit{repulsiveforce}(p_u,p_v) \equiv \frac{m_u m_v}{\|\avec{p_u}-\avec{p_v}\|}
+\centerdot \avec{p_u p_v}
+\]
+
+This ensures
+that clusters have plenty of space and avoids overlaps.  It also helps
+to give the user a feeling for the size of collapsed clusters.  That is, even
+though their contents are elided, the space around them gives an
+indication as to their complexity.
+
+A novel extension that has been added to our force-directed layout
+engine is the ability for the contents of clusters to be constrained
+to a plane.  The orientation of this plane can then be rotated in
+order to help minimise the spring force of inter-cluster edges.  This
+is illustrated in Figure \ref{fig-spincluster}.  Restricting the
+contents of clusters to planes, but then allowing the clusters
+themselves to be arranged in three dimensions, allows certain types of
+clustered
+graphs to be more clearly displayed.  For example, a graph which is not
+{\em c-planar}\cite{Eades:GD96} but which has planar clusters may be best
+displayed in this way, showing planarity where possible but avoiding
+intersecting edges.
+\begin{figure}[h]
+  \centering
+    \includegraphics[width=0.8\textwidth]{figures/enterprise.eps}
+  \caption{A screen-shot showing a clustered graph with planar
+  clusters.  The clusters are rotated to minimise the lengths of the
+  edges between clusters.}
+  \label{fig-spincluster}
+\end{figure}
+
+\subsection{Fast Simulated Annealing}
+
+As stated in Section~\ref{sec:intro}, a major design goal for Wilma
+was to provide a platform upon which algorithmic experimentation could be
+conducted elegantly and efficiently.
+
+As we have argued, force-directed layout algorithms are the method of
+choice for a wide range of graph visualisation problems.  One
+variation on these algorithms, advocated by Fruchtermann \&
+Rheingold~\cite{fruchtermann90force-directed} and Davidson {\em et
+al.}~\cite{davidson01noise}, attempts to avoid calculation of
+repulsion force vectors, which is $O(n)$ in the number of vertices for
+each node $i$, and $O(n^2)$ for the whole graph:
+
+\begin{equation}
+\label{repulsion}
+\avec{R_i} \equiv \sum_{j \in V \setminus \{i\}} \avec{p_{ij}}
+\end{equation}
+
+\noindent Where $\avec{p_{ij}} = \avec{p_i} - \avec{p_j}$ is the displacement
+of node $i$ relative to $j$.
+
+To avoid this expense it is possible to approximate scalar energy potential
+values, caching this information at grid points throughout space.  Iterated
+updates to the potential well then cost only $O(|V|)$ time per iteration.  On
+the downside, the cache array itself takes $O(v \centerdot \rho)$ memory,
+where $v$ is the $n$-dimensional volume (or area) of the embedded graph and
+$\rho$ is the density of stored potential data points.
+
+Cowling~\cite{cowling02fast} has implemented a fast layout engine for
+WilmaScope which employs simulated annealing with potential energy caching to
+achieve linear-time graph embeddings.  Cowling was able to demonstrate that
+the algorithms of \cite{davidson01noise} do appear to achieve linear time
+results.  However, when the grid size $v \centerdot \rho$ must be adjusted to
+prevent folding in large graphs, space and time complexity are no longer
+linear.  Figure \ref{fig-fastlayout} shows before and after screen-shots of
+the algorithm's effects.
+
+Cowling's work serves to demonstrate the utility of Wilma as an empirical
+platform; with the WilmaScope rendering and navigation system, and the
+availability of convenient data structures for input and dataset management,
+algorithmic experiments can be performed at optimal speeds.
+
+\begin{figure}[h]
+  \centering
+  \subfigure[After only a few iterations.]{
+    \label{fig-fastlayout1}
+    \includegraphics[width=0.4\textwidth]{figures/fastlayout1.eps}}
+  \subfigure[After a complete run of the algorithm.]{
+    \label{fig-fastlayout2}
+    \includegraphics[width=0.4\textwidth]{figures/fastlayout2.eps}}
+  \caption{These screen-shots demonstrate the effects of the simulated
+  annealing algorithm with potential caching.  Note that the colour of
+  the nodes indicates the force potential at that location.}
+  \label{fig-fastlayout}
+\end{figure}
+
+
+\subsection{Multiscale Force Directed}
+
+Although the fast simulated annealing approach described above did not prove
+perfect as a universal replacement for iterated, force-directed layout, there
+are other algorithms in the literature which might be brought to bear.
+
+We have implemented one of these - the ``Multilevel Force-Directed'' approach
+of Walshaw~\cite{walshaw00multilevel}.  This multi-scaled approach
+incorporates two main innovations over the common force-directed
+algorithm -- hierarchical layout, and short-range-only repulsion forces.
+
+Instead of laying out the entire graph from singular or random initial
+conditions, the algorithm creates a series of simplified approximations of
+the graph, and embeds each of these with increasingly fine detail.
+
+The simplified approximations are generated by applying matching algorithms,
+which select at each iteration as many edges as possible such that
+no node is connected to two of these edges.  Each edge is then ``collapsed''
+so that the two nodes at either end are combined, and the process is repeated.
+
+In order to perform these simplifications rapidly the stochastic matching
+approach of Hendrickson \& Leland~\cite{hendrickson95multilevel} is employed.
+This takes $O(|E|) = O(|V| \centerdot {|E| \over |V|})$ time and is linear for
+sparse graphs (where ${|E| \over |V|}$ is bounded).
+
+After each level of force-directed layout has stabilised the aggregated
+nodes are replaced by their pairs of matched children and the thermal energy
+of the system is re-initialised.  This process repeats until the entire graph
+has been embedded.
+
+The multilevel process provides a number of benefits over single-pass
+force-directed layout.  Notably, these include avoidance of local energy minima
+which may result from the arbitrary initial position of a large set of nodes;
+and the ability to tune layout parameters to correct for pathologies which
+become apparent to the user as the level of detail increases.
+
+Walshaw's algorithm also addresses the $O(n^2)$ cost of calculating the
+repulsion force (see Equation~\ref{repulsion}).  As with the fast simulated
+annealing strategy this involves storing information about the repulsion in
+a spatial data structure although the details are different.
+
+Instead of trying to approximate the potential field of the force the
+spatial structure simply allows nodes to be addressed by their locality (or
+``cell'').  A na\"{i}ve method for doing this is to keep lists of nodes in a
+complete spatial array.  The size of an array may become large relative to
+the number of nodes (especially for spacious 3D embeddings) but, if this is
+problematic, space usage can be made linear in the number of nodes in
+exchange for a constant slowdown through the use of a hash table.
+
+If the repulsion force is constructed so that it cuts off beyond a certain
+distance $d_\infty$, that is:
+
+\begin{equation}
+\exists \, d_\infty : \, 
+||\avec{p_i} - \avec{p_j}|| > d_\infty
+\Rightarrow 
+repulsionforce (\avec{p_i},\avec{p_j}) = \avec{0}
+\end{equation}
+%\forall d > d_\infty, f_g(d) = 0
+
+It is then possible to calculate the repulsion force on a particular node $i$
+with reference solely to the positions of nearby nodes.  If the cells for
+the spatial data structure are of a size greater than or equal to $d_\infty$
+then all such nodes may be addressed through the cell containing $i$ and
+those adjacent to it.  In this algorithm the cost of calculating the
+repulsion force is $O(|V| \centerdot \rho)$, where $\rho$ is the average 
+of the embedding density around each node.
+
+The multilevel force-directed layout engine provides WilmaScope with
+an efficient mechanism for handling large graphs.  Figure
+\ref{fig-multiscale} gives six screen shots showing the progressive
+addition of detail as a large graph is embedded using the Wilma multiscale
+layout engine.  Figure \ref{fig-multiscalecontrols} shows the full
+control panel for the multiscale layout engine.  Each of these
+parameters may be adjusted as the layout progresses and the effect
+instantly seen on screen.
+
+\begin{figure}[h]
+  \centering
+  \subfigure{
+    \includegraphics[width=0.3\textwidth]{figures/multiscale1.eps}}
+  \subfigure{
+    \includegraphics[width=0.3\textwidth]{figures/multiscale2.eps}}
+  \subfigure{
+    \includegraphics[width=0.3\textwidth]{figures/multiscale3.eps}}
+  \subfigure{
+    \includegraphics[width=0.3\textwidth]{figures/multiscale4.eps}}
+  \subfigure{
+    \includegraphics[width=0.3\textwidth]{figures/multiscale5.eps}}
+  \subfigure{
+    \includegraphics[width=0.3\textwidth]{figures/multiscale6.eps}}
+  \caption{Six screen shots showing the progress of the Wilma
+  multiscale layout engine as it finds an embedding for a regular mesh
+  containing 900 nodes.}
+  \label{fig-multiscale}
+\end{figure}
+
+\subsection{DOT: Hierarchical Layout} \label{sec:dot}
+DOT is a program included in the Graphviz
+(\url{http://www.graphviz.org}) open source graph visualisation
+toolkit from AT\&T.  It produces effective two dimensional layered graph
+layouts using a Sugiyama\cite{Sugiyama81methods}-style algorithm.
+The Wilma DOT layout engine runs dot in a sub-process, pipes in the graph
+data converted into DOT file format and parses the DOT output to
+obtain the new layout.
+DOT also features aesthetically pleasing spline edges which Wilma
+is able to render as curved tubes.
+
+Since the DOT layouts are strictly two-dimensional we are free to use the
+third dimension to capture additional information.  For example
+Section \ref{sec:fmflow} describes an application where the third
+dimension (the {\em z}-axis) is used to capture changes in the graph over time.
+That is, the nodes are rendered as tubes and the edges may appear at different
+levels in the {\em z} dimension.
+
+\section{Implementation}\label{sec:implementation}
 \subsection{High Level Architecture}
 Conceived as a research project with open-ended goals Wilma was
 designed to be as flexible and extensible as possible.  The intention
@@ -476,277 +769,6 @@ individual nodes have been elided.
 \end{description}
 
 
-\subsection{Platform}
-
-WilmaScope has been implemented in Java, using the Java3D graphics library.
-Java provides a good tradeoff between high level language constructs,
-portability and performance.  Java3D provides access to 3D graphics accelerator hardware through
-a high-level Java API and useful features such as a scene graph
-structure and methods for coupling animation into the render cycle.
-
-\subsection{Layout Algorithms}
-\subsubsection{Force Directed} \label{sec:forcedirectedlayout}
-The first layout algorithm implemented in Wilma was force-directed
-layout the basic principles of which are described in Chapter
-1.  There were several factors that motivated us to
-implement this algorithm first, notably:
-\begin{itemize}
-\item it is relatively easy to obtain good results for most types of
-graphs by application of the basic attractive spring force and
-repulsive inter-node force.
-\item it is easy to animate the layout process in a dynamic
-graph visualisation to preserve a user's ``mental map''\cite{Misue:VLC95}
-between changes in the graph structure.  We can animate simply by
-redrawing the graph between each iteration of the algorithm.
-\item since the algorithm is iterative and does not require any
-special pre- or post-processing it is easy to use in a dynamic graph
-editor where the graph structure may be changed by the user even
-before the layout has stabilised.
-\item different layout
-aesthetics can be enhanced by adding extra forces such as the Sugiyama and Misue\cite{Sugiyama:VLC95}
-directed field force for aligning directed edges to emphasise flow.
-\item the force-directed approach can be easily extended to support
-clustered graphs\cite{Huang:GD98}.
-\item the approach works just as well in three dimensions as in two.
-\end{itemize}
-The Wilma implementation of the force-directed algorithm attempts to make the most
-of these assorted advantages.  Firstly it offers a user interface which
-allows the user to control all the parameters of the layout algorithm
-even while the layout is still in progress.  The user can control the
-number of iterations of the algorithm that are executed between frames
-of animation, choosing to run the algorithm to
-convergence as fast as possible or to watch the layout unfold, and if
-necessary tweak the controls to adjust the embedding or to help it
-converge.
-
-Different forces, such as the directed field force or a gravitational force
-which keeps the graph centred, may be added or removed at any time to achieve
-different aesthetic effects.  Since each of the different forces implements a
-common interface (as the UML Class Diagram in Figure~\ref{fig-wilmaclasses}
-illustrates), new forces can be added or removed at any time.
-
-The force-directed layout engine fits well into Wilma's object
-oriented clustered graph model.  As mentioned previously each cluster
-has its own layout engine but, when the force directed engine is used,
-edges connecting nodes in different clusters exert a force on
-the nodes inside these clusters.  The nodes inside a cluster are
-attracted to the centroid of the cluster by a ``gravitational force''.
-The gravitational force then balances the inter-cluster forces.  This
-achieves a net result similar to the ``dummy node'' approach of Huang
-and Eades\cite{Huang:GD98}, however, repulsive forces do not need to be
-calculated between nodes inside different clusters.
-
-As noted previously a cluster's mass is the sum of the masses of all
-its children.
-The repulsive force used varies with the mass of nodes so
-that nodes with large mass, such as clusters with many descendents,
-will exert a strong repulsive force on their neighbours, ie.
-
-\[
-\mathit{repulsiveforce}(p_u,p_v) \equiv \frac{m_u m_v}{\|\avec{p_u}-\avec{p_v}\|}
-\centerdot \avec{p_u p_v}
-\]
-
-This ensures
-that clusters have plenty of space and avoids overlaps.  It also helps
-to give the user a feeling for the size of collapsed clusters.  That is, even
-though their contents are elided, the space around them gives an
-indication as to their complexity.
-
-A novel extension that has been added to our force-directed layout
-engine is the ability for the contents of clusters to be constrained
-to a plane.  The orientation of this plane can then be rotated in
-order to help minimise the spring force of inter-cluster edges.  This
-is illustrated in Figure \ref{fig-spincluster}.  Restricting the
-contents of clusters to planes, but then allowing the clusters
-themselves to be arranged in three dimensions, allows certain types of
-clustered
-graphs to be more clearly displayed.  For example, a graph which is not
-{\em c-planar}\cite{Eades:GD96} but which has planar clusters may be best
-displayed in this way, showing planarity where possible but avoiding
-intersecting edges.
-\begin{figure}[h]
-  \centering
-    \includegraphics[width=0.8\textwidth]{figures/enterprise.eps}
-  \caption{A screen-shot showing a clustered graph with planar
-  clusters.  The clusters are rotated to minimise the lengths of the
-  edges between clusters.}
-  \label{fig-spincluster}
-\end{figure}
-
-\subsubsection{Fast Simulated Annealing}
-
-As stated in Section~\ref{motivation}, a major design goal for Wilma
-was to provide a platform upon which algorithmic experimentation could be
-conducted elegantly and efficiently.
-
-As we have argued, force-directed layout algorithms are the method of
-choice for a wide range of graph visualisation problems.  One
-variation on these algorithms, advocated by Fruchtermann \&
-Rheingold~\cite{fruchtermann90force-directed} and Davidson {\em et
-al.}~\cite{davidson01noise}, attempts to avoid calculation of
-repulsion force vectors, which is $O(n)$ in the number of vertices for
-each node $i$, and $O(n^2)$ for the whole graph:
-
-\begin{equation}
-\label{repulsion}
-\avec{R_i} \equiv \sum_{j \in V \setminus \{i\}} \avec{p_{ij}}
-\end{equation}
-
-\noindent Where $\avec{p_{ij}} = \avec{p_i} - \avec{p_j}$ is the displacement
-of node $i$ relative to $j$.
-
-To avoid this expense it is possible to approximate scalar energy potential
-values, caching this information at grid points throughout space.  Iterated
-updates to the potential well then cost only $O(|V|)$ time per iteration.  On
-the downside, the cache array itself takes $O(v \centerdot \rho)$ memory,
-where $v$ is the $n$-dimensional volume (or area) of the embedded graph and
-$\rho$ is the density of stored potential data points.
-
-Cowling~\cite{cowling02fast} has implemented a fast layout engine for
-WilmaScope which employs simulated annealing with potential energy caching to
-achieve linear-time graph embeddings.  Cowling was able to demonstrate that
-the algorithms of \cite{davidson01noise} do appear to achieve linear time
-results.  However, when the grid size $v \centerdot \rho$ must be adjusted to
-prevent folding in large graphs, space and time complexity are no longer
-linear.  Figure \ref{fig-fastlayout} shows before and after screen-shots of
-the algorithm's effects.
-
-Cowling's work serves to demonstrate the utility of Wilma as an empirical
-platform; with the WilmaScope rendering and navigation system, and the
-availability of convenient data structures for input and dataset management,
-algorithmic experiments can be performed at optimal speeds.
-
-\begin{figure}[h]
-  \centering
-  \subfigure[After only a few iterations.]{
-    \label{fig-fastlayout1}
-    \includegraphics[width=0.4\textwidth]{figures/fastlayout1.eps}}
-  \subfigure[After a complete run of the algorithm.]{
-    \label{fig-fastlayout2}
-    \includegraphics[width=0.4\textwidth]{figures/fastlayout2.eps}}
-  \caption{These screen-shots demonstrate the effects of the simulated
-  annealing algorithm with potential caching.  Note that the colour of
-  the nodes indicates the force potential at that location.}
-  \label{fig-fastlayout}
-\end{figure}
-
-
-\subsubsection{Multiscale Force Directed}
-
-Although the fast simulated annealing approach described above did not prove
-perfect as a universal replacement for iterated, force-directed layout, there
-are other algorithms in the literature which might be brought to bear.
-
-We have implemented one of these - the ``Multilevel Force-Directed'' approach
-of Walshaw~\cite{walshaw00multilevel}.  This multi-scaled approach
-incorporates two main innovations over the common force-directed
-algorithm -- hierarchical layout, and short-range-only repulsion forces.
-
-Instead of laying out the entire graph from singular or random initial
-conditions, the algorithm creates a series of simplified approximations of
-the graph, and embeds each of these with increasingly fine detail.
-
-The simplified approximations are generated by applying matching algorithms,
-which select at each iteration as many edges as possible such that
-no node is connected to two of these edges.  Each edge is then ``collapsed''
-so that the two nodes at either end are combined, and the process is repeated.
-
-In order to perform these simplifications rapidly the stochastic matching
-approach of Hendrickson \& Leland~\cite{hendrickson95multilevel} is employed.
-This takes $O(|E|) = O(|V| \centerdot {|E| \over |V|})$ time and is linear for
-sparse graphs (where ${|E| \over |V|}$ is bounded).
-
-After each level of force-directed layout has stabilised the aggregated
-nodes are replaced by their pairs of matched children and the thermal energy
-of the system is re-initialised.  This process repeats until the entire graph
-has been embedded.
-
-The multilevel process provides a number of benefits over single-pass
-force-directed layout.  Notably, these include avoidance of local energy minima
-which may result from the arbitrary initial position of a large set of nodes;
-and the ability to tune layout parameters to correct for pathologies which
-become apparent to the user as the level of detail increases.
-
-Walshaw's algorithm also addresses the $O(n^2)$ cost of calculating the
-repulsion force (see Equation~\ref{repulsion}).  As with the fast simulated
-annealing strategy this involves storing information about the repulsion in
-a spatial data structure although the details are different.
-
-Instead of trying to approximate the potential field of the force the
-spatial structure simply allows nodes to be addressed by their locality (or
-``cell'').  A na\"{i}ve method for doing this is to keep lists of nodes in a
-complete spatial array.  The size of an array may become large relative to
-the number of nodes (especially for spacious 3D embeddings) but, if this is
-problematic, space usage can be made linear in the number of nodes in
-exchange for a constant slowdown through the use of a hash table.
-
-If the repulsion force is constructed so that it cuts off beyond a certain
-distance $d_\infty$, that is:
-
-\begin{equation}
-\exists \, d_\infty : \, 
-||\avec{p_i} - \avec{p_j}|| > d_\infty
-\Rightarrow 
-repulsionforce (\avec{p_i},\avec{p_j}) = \avec{0}
-\end{equation}
-%\forall d > d_\infty, f_g(d) = 0
-
-It is then possible to calculate the repulsion force on a particular node $i$
-with reference solely to the positions of nearby nodes.  If the cells for
-the spatial data structure are of a size greater than or equal to $d_\infty$
-then all such nodes may be addressed through the cell containing $i$ and
-those adjacent to it.  In this algorithm the cost of calculating the
-repulsion force is $O(|V| \centerdot \rho)$, where $\rho$ is the average 
-of the embedding density around each node.
-
-The multilevel force-directed layout engine provides WilmaScope with
-an efficient mechanism for handling large graphs.  Figure
-\ref{fig-multiscale} gives six screen shots showing the progressive
-addition of detail as a large graph is embedded using the Wilma multiscale
-layout engine.  Figure \ref{fig-multiscalecontrols} shows the full
-control panel for the multiscale layout engine.  Each of these
-parameters may be adjusted as the layout progresses and the effect
-instantly seen on screen.
-
-\begin{figure}[h]
-  \centering
-  \subfigure{
-    \includegraphics[width=0.3\textwidth]{figures/multiscale1.eps}}
-  \subfigure{
-    \includegraphics[width=0.3\textwidth]{figures/multiscale2.eps}}
-  \subfigure{
-    \includegraphics[width=0.3\textwidth]{figures/multiscale3.eps}}
-  \subfigure{
-    \includegraphics[width=0.3\textwidth]{figures/multiscale4.eps}}
-  \subfigure{
-    \includegraphics[width=0.3\textwidth]{figures/multiscale5.eps}}
-  \subfigure{
-    \includegraphics[width=0.3\textwidth]{figures/multiscale6.eps}}
-  \caption{Six screen shots showing the progress of the Wilma
-  multiscale layout engine as it finds an embedding for a regular mesh
-  containing 900 nodes.}
-  \label{fig-multiscale}
-\end{figure}
-
-\subsubsection{DOT: Hierarchical Layout}
-DOT is a program included in the Graphviz
-(\url{http://www.graphviz.org}) open source graph visualisation
-toolkit from AT\&T.  It produces effective two dimensional layered graph
-layouts using a Sugiyama\cite{Sugiyama81methods}-style algorithm.
-The Wilma DOT layout engine runs dot in a sub-process, pipes in the graph
-data converted into DOT file format and parses the DOT output to
-obtain the new layout.
-DOT also features aesthetically pleasing spline edges which Wilma
-is able to render as curved tubes.
-
-Since the DOT layouts are strictly two-dimensional we are free to use the
-third dimension to capture additional information.  For example
-Section \ref{sec:fmflow} describes an application where the third
-dimension (the {\em z}-axis) is used to capture changes in the graph over time.
-That is, the nodes are rendered as tubes and the edges may appear at different
-levels in the {\em z} dimension.
-
 \subsection{Programming Interfaces}
 \label{API}
 
@@ -792,8 +814,8 @@ marshaling and type requirements for a sophisticated API, programmers using
 languages which support CORBA can take advantage of these facilities without
 writing additional code.
 
-\section{Applications: The Importance of being Wilma}
-\label{sec:results}
+\section{Examples: The Importance of being Wilma}
+\label{sec:examples}
 Wilma was designed to be as open and extensible as possible and
 evidence for the success of this design is shown in the array of
 domains to which Wilma has been applied.
@@ -804,7 +826,7 @@ extension of the Unified Modelling Language\cite{dwyer013D-UML}.
 UML diagram elements were translated into 3D glyphs and a simple
 class-diagram editor was constructed on top of the Wilma framework.  A user study
 was then conducted to test the feasibility of such a paradigm for
-software design.  Interesting annecdotal evidence was collected
+software design.  Interesting anecdotal evidence was collected
 indicating that such 3D UML models, when coupled with a force directed
 layout engine, could assist a software architect to understand structure
 within a reasonably complex system.  An example of such a diagram is
@@ -835,7 +857,7 @@ Various styles of layout were tried in arranging these stratified
 graphs in space.  Force-directed layout was useful for showing clustering and centrality of
 highly active stocks while Sugiyama-style layout is useful for showing
 flow from source stocks to sinks.  Figure \ref{fig-fm} shows an
-example using the DOT layout engine in Wilma to produce 3D Sugiyama-style layout.  A current research project is to tailor the hueristics
+example using the DOT layout engine in Wilma to produce 3D Sugiyama-style layout.  A current research project is to tailor the heuristics
 used in these layout algorithms to suit such stratified graphs.
 
 \begin{figure}[h]
@@ -890,8 +912,20 @@ embeddings.  One example of this is shown in Figure~\ref{fig-concept}
 \end{center}
 \end{figure}
 
-\section{Conclusions}
-\label{sec:conclusions}
+\section{Software} \label{sec:software}
+
+WilmaScope has been implemented in Java, using the Java3D graphics library.
+Java provides a good tradeoff between high level language constructs,
+portability and performance.  Java3D provides access to 3D graphics accelerator hardware through
+a high-level Java API and useful features such as a scene graph
+structure and methods for coupling animation into the render cycle.
+
+As mentioned in Section \ref{sec:dot} the GraphViz toolkit is also
+used by one of the layout engines.  It should be noted that this
+functionality is optional and the GraphViz toolkit is not distributed
+with WilmaScope.
+
+\section{Conclusions} \label{sec:conclusions}
 
 We hope that the reader will by now be convinced that WilmaScope presents an
 invaluable addition to the graph connoisseur's toolbox.  
