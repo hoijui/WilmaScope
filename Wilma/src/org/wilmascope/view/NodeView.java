@@ -20,9 +20,11 @@
 
 package org.wilmascope.view;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.lang.ref.WeakReference;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.Vector;
 
 import javax.media.j3d.Appearance;
 import javax.media.j3d.BranchGroup;
@@ -36,87 +38,131 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
-import org.wilmascope.graph.Edge;
-import org.wilmascope.graph.EdgeList;
 import org.wilmascope.graph.Node;
-import org.wilmascope.viewplugin.LineEdgeView;
 
 import com.sun.j3d.utils.geometry.Cone;
+
 /**
- * Title:        WilmaToo
- * Description:  Sequel to the ever popular WilmaScope software
- * Copyright:    Copyright (c) 2001
- * Company:      WilmaScope.org
+ * Title: WilmaToo Description: Sequel to the ever popular WilmaScope software
+ * Copyright: Copyright (c) 2001 Company: WilmaScope.org
+ * 
  * @author Tim Dwyer
  * @version 1.0
  */
 
-public abstract class NodeView extends GraphElementView implements org.wilmascope.graph.NodeView, View2D {
+public abstract class NodeView extends GraphElementView implements
+    org.wilmascope.graph.NodeView, View2D {
 
-  public NodeView() {
-  }
+  private Vector<WeakReference<NodeGeometryObserver>> geometryObservers;
+
   /*
-  public void draw() {
-    setTranslation(new Vector3f(node.getPosition()));
+   * Let any edges observing our geometry know that it has changed
+   */
+  private void notifyGeometryObservers() {
+    if (geometryObservers != null) {
+      for (Iterator<WeakReference<NodeGeometryObserver>> i = geometryObservers
+          .iterator(); i.hasNext();) {
+        WeakReference<NodeGeometryObserver> wr = i.next();
+        NodeGeometryObserver o = wr.get();
+        if (o != null) {
+          o.nodeGeometryChanged(this);
+        } else {
+          i.remove();
+        }
+      }
+    }
   }
-  */
+
+  /**
+   * By implementing the NodeGeometryObserver interface an EdgeView can register
+   * with this NodeView to be notified of any changes to its geometry so that it
+   * can update itself accordingly
+   * 
+   * @param o
+   */
+  public void addGeometryObserver(NodeGeometryObserver o) {
+    WeakReference<NodeGeometryObserver> wr = new WeakReference<NodeGeometryObserver>(
+        o);
+    if (geometryObservers == null) { // lazy instantiation avoids needing init
+                                     // method
+      geometryObservers = new Vector<WeakReference<NodeGeometryObserver>>();
+    }
+    geometryObservers.add(wr);
+  }
+
+  /*
+   * public void draw() { setTranslation(new Vector3f(node.getPosition())); }
+   */
   public void draw() {
     Node n = getNode();
-    double radius = (double)n.getRadius();
-    setResizeTranslateTransform(
-      new Vector3d(radius,radius,radius),
-      new Vector3f(n.getPosition()));
+    double radius = (double) n.getRadius();
+    setResizeTranslateTransform(new Vector3d(radius, radius, radius),
+        new Vector3f(n.getPosition()));
   }
+
   public Node getNode() {
     return node;
   }
+
   public void setNode(Node node) {
     this.node = node;
   }
+
   public ImageIcon getIcon() {
-    return new ImageIcon(org.wilmascope.images.Images.class.getResource("node.png"));
+    return new ImageIcon(org.wilmascope.images.Images.class
+        .getResource("node.png"));
   }
+
   protected void showLabel(String text) {
-    double r = (double)node.getRadius();
+    double r = (double) node.getRadius();
     // the log term on the scale is a feable attempt to stop labels getting too
-    // big with large clusters... however it doesn't really work because clusters
+    // big with large clusters... however it doesn't really work because
+    // clusters
     // typically grow or shrink after a label is set... when the label will be
-    // scaled linearly along with the cluster.  A more correct solution would be
+    // scaled linearly along with the cluster. A more correct solution would be
     // to have the label branch scaled separately in the draw method.
-    addLabel(text, 10d / Math.log(r * 10 * Math.E), new Point3f(0.0f,0.05f,-0.07f), new Vector3f(-0.1f * (float)text.length(),1.3f,0.0f), getAppearance());
+    addLabel(text, 10d / Math.log(r * 10 * Math.E), new Point3f(0.0f, 0.05f,
+        -0.07f), new Vector3f(-0.1f * (float) text.length(), 1.3f, 0.0f),
+        getAppearance());
   }
+
   BranchGroup anchorBranch;
+
   public void showAnchor() {
     Appearance a = new Appearance();
     a.setMaterial(Colours.blueMaterial);
-    Cone pin = new Cone(0.05f,0.1f,a);
+    Cone pin = new Cone(0.05f, 0.1f, a);
     makePickable(pin.getShape(Cone.BODY));
     makePickable(pin.getShape(Cone.CAP));
     anchorBranch = new BranchGroup();
     anchorBranch.setCapability(BranchGroup.ALLOW_DETACH);
     Transform3D t = new Transform3D();
-    t.set(new Vector3f(0,-node.getRadius(),0));
+    t.set(new Vector3f(0, -node.getRadius(), 0));
     TransformGroup tg = new TransformGroup(t);
     Transform3D r = new Transform3D();
-    r.setRotation(new AxisAngle4f(-1f,0f,1f,3f*(float)Math.PI/4f));
+    r.setRotation(new AxisAngle4f(-1f, 0f, 1f, 3f * (float) Math.PI / 4f));
     TransformGroup rg = new TransformGroup(r);
     tg.addChild(pin);
     rg.addChild(tg);
     anchorBranch.addChild(rg);
     addLiveBranch(anchorBranch);
   }
+
   public void hideAnchor() {
     anchorBranch.detach();
   }
 
   /**
    * Move the node in a plane parallel to the view plate, such that it appears
-   * at the point on the canvas specified in x and y.
-   * The x and y parameters are in AWT coordinates with 0,0 at the top left
-   * of the canvas.
-   * @param c the canvas
-   * @param x the x awt coordinate
-   * @param y the y awt coordinate
+   * at the point on the canvas specified in x and y. The x and y parameters are
+   * in AWT coordinates with 0,0 at the top left of the canvas.
+   * 
+   * @param c
+   *          the canvas
+   * @param x
+   *          the x awt coordinate
+   * @param y
+   *          the y awt coordinate
    */
   public void moveToCanvasPos(GraphCanvas c, int x, int y) {
     // All transformations are done in VWorld coordinates so set up the
@@ -137,20 +183,20 @@ public abstract class NodeView extends GraphElementView implements org.wilmascop
     Point3f eyePos = new Point3f(d);
 
     // get mouse position
-    c.getPixelLocationInImagePlate(x,y,d);
+    c.getPixelLocationInImagePlate(x, y, d);
     imagePlateToVworld.transform(d);
     Point3f mousePos = new Point3f(d);
 
     // calculate vector from eye to canvas
     Vector3f eyeToCanvas = new Vector3f();
-    eyeToCanvas.sub(mousePos,eyePos);
+    eyeToCanvas.sub(mousePos, eyePos);
 
     // the target position will be at a point in the same plane parallel to
-    // the view plate.  Calculate the scale factor for eye to canvas in order
+    // the view plate. Calculate the scale factor for eye to canvas in order
     // to place the node from the known z values.
     float t = (pos.z - mousePos.z) / eyeToCanvas.z;
 
-    pos.scale(t,eyeToCanvas);
+    pos.scale(t, eyeToCanvas);
     pos.add(mousePos);
 
     // If this method turns out to be too slow we could easily speed it up
@@ -161,48 +207,48 @@ public abstract class NodeView extends GraphElementView implements org.wilmascop
     localToVworld.transform(pos);
     node.setPosition(pos);
   }
-  /*
-   * LineEdges need to be updated when one of their end nodes change colour
+
+  /**
+   * When a new colour is set any GeometryObservers that have been added to this
+   * object will be notified
+   * 
+   * @see addGeometryObserver(NodeGeometryObserver)
+   * @param c
+   *          new colour for this NodeView
    */
   public void setColour(Color3f c) {
     super.setColour(c);
-    Node n = getNode();
-    EdgeList edges = n.getEdges();
-    for(edges.resetIterator();edges.hasNext();) {
-      Edge e = edges.nextEdge();
-      if(!(e.getView() instanceof LineEdgeView)) {
-        return;
-      }
-      LineEdgeView v = (LineEdgeView)e.getView();
-      if(e.getStart() == n) {
-        v.setStartColour(c);
-      } else {
-        v.setEndColour(c);
-      }
-    }
+    notifyGeometryObservers();
   }
+
   public void setProperties(Properties p) {
     super.setProperties(p);
     String radius = p.getProperty("Radius");
-    if(radius!=null) {
+    if (radius != null) {
       getNode().setRadius(Float.parseFloat(radius));
     }
   }
+
   public Properties getProperties() {
     Properties p = super.getProperties();
-    p.setProperty("Radius",""+getNode().getRadius());
+    p.setProperty("Radius", "" + getNode().getRadius());
     return p;
   }
+
   private Node node;
-	/* (non-Javadoc)
-	 * @see org.wilmascope.view.View2D#draw2D(org.wilmascope.view.Renderer2D, java.awt.Graphics2D, float)
-	 */
-	public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.wilmascope.view.View2D#draw2D(org.wilmascope.view.Renderer2D,
+   *      java.awt.Graphics2D, float)
+   */
+  public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
     Color3f c = new Color3f();
     getAppearance().getMaterial().getDiffuseColor(c);
-//    g.setColor(new Color(c.x,c.y,c.z,transparency));
+    //    g.setColor(new Color(c.x,c.y,c.z,transparency));
 
     g.setColor(c.get());
-    r.fillCircle(g,getNode().getPosition(),getNode().getRadius());
-	}
+    r.fillCircle(g, getNode().getPosition(), getNode().getRadius());
+  }
 }

@@ -15,8 +15,10 @@ import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
 import org.wilmascope.control.GraphControl;
+import org.wilmascope.control.WilmaMain;
 import org.wilmascope.graphgen.GeneratorManager;
 import org.wilmascope.graphgen.GraphGenerator;
+import org.wilmascope.graphgen.GeneratorManager.UnknownTypeException;
 
 /**
  * @author dwyer
@@ -97,8 +99,12 @@ public class GenerateTestGraphFrame extends JFrame implements ActionListener {
   }
 
   public void generatorsComboBox_actionPerformed(ActionEvent e) {
-    generator = GeneratorManager.getInstance().getGenerator(
-        (String) generatorsComboBox.getSelectedItem());
+    try {
+      generator = GeneratorManager.getInstance().getGenerator(
+          (String) generatorsComboBox.getSelectedItem());
+    } catch (UnknownTypeException e1) {
+      WilmaMain.showErrorDialog("Unknown generator error!",e1);
+    }
     if (controlPanel != null) {
       boxLayout.remove(controlPanel);
     }

@@ -40,7 +40,7 @@ import org.wilmascope.graph.Edge;
  * @version 1.0
  */
 public abstract class EdgeView extends GraphElementView
-implements org.wilmascope.graph.EdgeView, View2D  {
+implements org.wilmascope.graph.EdgeView, View2D {
   /**
    * draw the edge correctly between the start and end nodes
    */

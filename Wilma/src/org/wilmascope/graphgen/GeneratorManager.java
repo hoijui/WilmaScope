@@ -37,19 +37,39 @@ import org.wilmascope.global.GlobalConstants;
  *  
  */
 public class GeneratorManager {
+  public class UnknownTypeException extends Exception {
+    public UnknownTypeException(String viewType) {
+      super("No known GraphGenerator type: " + viewType);
+    }
+  }
+
   private static GeneratorManager instance = new GeneratorManager();
 
   /**
-   * Builds up the table of available generators. If you create a new generator
-   * then add a call to addGenerator for it here to make it available.
+   * Builds up the table of available generators and sets the default based on
+   * the "DefaultGenerator" field in the WILMA_CONSTANTS.properties file.
+   * 
+   * @throws UnknownTypeException
+   *           if the default generator
    */
   private GeneratorManager() {
     graphGenerators = new Hashtable<String, GraphGenerator>();
     load();
-    defaultGenerator = graphGenerators.get(GlobalConstants.getInstance().getProperty("DefaultGenerator"));
-    // insert a call to addGenerator for your GraphGenerator here...
+    try {
+      defaultGenerator = getGenerator(GlobalConstants.getInstance()
+          .getProperty("DefaultGenerator"));
+    } catch (UnknownTypeException e) {
+      WilmaMain
+          .showErrorDialog(
+              "DefaultGenerator specified in WILMA_CONSTANTS.properties file is unknown!",
+              e);
+    }
   }
 
+  /**
+   * If you create a new generator then add the fully qualified class path to
+   * the GeneratorPlugins field in WILMA_CONSTANTS.properties
+   */
   public void load() {
     try {
       String plugins = GlobalConstants.getInstance().getProperty(
@@ -70,7 +90,10 @@ public class GeneratorManager {
         addGenerator(gen);
       }
     } catch (Exception e) {
-      WilmaMain.showErrorDialog("WARNING: Couldn't load plugins... check that you've listed the plugin classnames in the properties file",e);
+      WilmaMain
+          .showErrorDialog(
+              "WARNING: Couldn't load plugins... check that you've listed the plugin classnames in the properties file",
+              e);
     }
   }
 
@@ -91,8 +114,12 @@ public class GeneratorManager {
     return graphGenerators.keySet().toArray(new String[graphGenerators.size()]);
   }
 
-  public GraphGenerator getGenerator(String type) {
-    return graphGenerators.get(type);
+  public GraphGenerator getGenerator(String type) throws UnknownTypeException {
+    GraphGenerator g = graphGenerators.get(type);
+    if (g == null) {
+      throw new UnknownTypeException(type);
+    }
+    return g;
   }
 
   public GraphGenerator getDefault() {

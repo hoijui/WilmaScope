@@ -1,6 +1,7 @@
 package org.wilmascope.viewplugin;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import javax.media.j3d.GeometryArray;
@@ -12,7 +13,7 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
 import org.wilmascope.view.EdgeView;
-import org.wilmascope.view.GraphElementView;
+import org.wilmascope.view.NodeGeometryObserver;
 import org.wilmascope.view.NodeView;
 import org.wilmascope.view.Renderer2D;
 /**
@@ -20,7 +21,7 @@ import org.wilmascope.view.Renderer2D;
  * @author dwyer
  *
  */
-public class LineEdgeView extends EdgeView {
+public class LineEdgeView extends EdgeView implements NodeGeometryObserver {
   public LineEdgeView() {
     setTypeName("LineEdge");
   }
@@ -42,8 +43,12 @@ public class LineEdgeView extends EdgeView {
     myLine.setCapability(LineArray.ALLOW_COORDINATE_WRITE);
     myLine.setCapability(LineArray.ALLOW_COLOR_WRITE);
     myLine.setCoordinates(0, myCoords);
-    myLine.setColor(0,((GraphElementView)getEdge().getStart().getView()).getColor3f());
-    myLine.setColor(1,((GraphElementView)getEdge().getEnd().getView()).getColor3f());
+    NodeView startView = (NodeView)getEdge().getStart().getView();
+    NodeView endView = (NodeView)getEdge().getEnd().getView();
+    setStartColour(startView.getColor3f());
+    setEndColour(endView.getColor3f());
+    startView.addGeometryObserver(this);
+    endView.addGeometryObserver(this);
     Shape3D s = new Shape3D(myLine);
     makePickable(s);
     addTransformGroupChild(s);
@@ -81,5 +86,13 @@ public class LineEdgeView extends EdgeView {
   }
   public ImageIcon getIcon() {
     return new ImageIcon(org.wilmascope.images.Images.class.getResource("lineEdge.png"));
+  }
+  public void nodeGeometryChanged(NodeView nv) {
+    Color3f c = nv.getColor3f();
+    if (getEdge().getStart().getView() == nv) {
+      setStartColour(c);
+    } else {
+      setEndColour(c);
+    }
   }
 }
