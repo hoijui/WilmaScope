@@ -12,7 +12,7 @@
  * WilmaScope as an influence and inform us (tgdwyer@yahoo.com)
  * if you do anything really cool with it.
  *
- * The WilmaScope software source repository is hosted by Source Forge:
+* The WilmaScope software source repository is hosted by Source Forge:
  * www.sourceforge.net/projects/wilma
  *
  * -- Tim Dwyer, 2001

@@ -176,6 +176,10 @@ public class SplineEdgeView extends EdgeView implements org.wilmascope.dotlayout
     */
     addLiveBranch(b);
   }
+  public void setScale(float scale) {
+    this.scale = scale;
+  }
+
   /*
   public void setProperties(Properties p) {
     super.setProperties(p);

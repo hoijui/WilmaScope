@@ -98,6 +98,25 @@ public class NodeList extends List{
     barycenter.scale(1f/(float)elements.size());
     return barycenter;
   }
+  public float getWidth() {
+    float xMin=Float.MAX_VALUE, xMax=Float.MIN_VALUE;
+    for(resetIterator();hasNext();) {
+      Point3f p = nextNode().getPosition();
+      if(p.x<xMin) { xMin = p.x; }
+      if(p.x>xMax) { xMax = p.x; }
+    }
+    return xMax - xMin;
+  }
+  public float getHeight() {
+    float yMin=Float.MAX_VALUE, yMax=Float.MIN_VALUE;
+    for(resetIterator();hasNext();) {
+      Point3f p = nextNode().getPosition();
+      if(p.y<yMin) { yMin = p.y; }
+      if(p.y>yMax) { yMax = p.y; }
+    }
+    return yMax - yMin;
+  }
+
   public final Node nextNode() {
     return (Node)next();
   }
