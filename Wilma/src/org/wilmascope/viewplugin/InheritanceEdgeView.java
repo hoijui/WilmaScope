@@ -36,12 +36,12 @@ import com.sun.j3d.utils.picking.PickTool;
  * @version 1.0
  */
 
-public class ArrowEdgeView extends EdgeView {
+public class InheritanceEdgeView extends EdgeView {
   /** radius of the edgeCylinder
    */
   float radius = 0.02f;
-  public ArrowEdgeView() {
-    setTypeName("Arrow");
+  public InheritanceEdgeView() {
+    setTypeName("Inheritance");
   }
   protected void setupDefaultMaterial() {
     Material material = new Material();
@@ -54,12 +54,12 @@ public class ArrowEdgeView extends EdgeView {
     setupHighlightAppearance(Colours.yellowMaterial);
   }
   public void init() {
-    LODCylinder cylinder = new LODCylinder(radius,0.8f,getAppearance());
+    LODCylinder cylinder = new LODCylinder(radius,0.7f,getAppearance());
     //addShape(new Shape3D(edgeCylinder.getShape(Cylinder.BODY).getGeometry()));
 
     cylinder.makePickable(this);
     Transform3D transform = new Transform3D();
-    transform.setTranslation(new Vector3f(0f,-0.1f,0f));
+    transform.setTranslation(new Vector3f(0f,-0.15f,0f));
     TransformGroup tg = new TransformGroup(transform);
     cylinder.addToTransformGroup(tg);
     addTransformGroupChild(tg);
@@ -67,18 +67,18 @@ public class ArrowEdgeView extends EdgeView {
   }
   public void showDirectionIndicator() {
     Appearance appearance = new Appearance();
-    appearance.setMaterial(org.wilmascope.view.Colours.blueMaterial);
-    Cone cone=new Cone(0.05f, 0.2f, Cone.GENERATE_NORMALS, appearance);
+    appearance.setMaterial(org.wilmascope.view.Colours.greenMaterial);
+    Cone cone=new Cone(0.07f, 0.3f, Cone.GENERATE_NORMALS, appearance);
     makePickable(cone.getShape(Cone.BODY));
     makePickable(cone.getShape(Cone.CAP));
     Transform3D transform = new Transform3D();
     transform.setTranslation(new Vector3f(0f,
-      0.4f, 0f));
+      0.3f, 0f));
     TransformGroup coneTransform = new TransformGroup(transform);
     coneTransform.addChild(cone);
     addTransformGroupChild(coneTransform);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/arrow.png"));
+    return new ImageIcon(getClass().getResource("/images/inheritance.png"));
   }
 }

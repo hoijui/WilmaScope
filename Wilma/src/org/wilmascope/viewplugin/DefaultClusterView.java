@@ -34,9 +34,9 @@ import com.sun.j3d.utils.geometry.Sphere;
  * @version 1.0
  */
 
-public class DefaultClusterView extends NodeView {
+public class DefaultClusterView extends ClusterView {
   public DefaultClusterView() {
-    setTypeName("DefaultClusterView");
+    setTypeName("Spherical Cluster");
   }
   protected void setupDefaultMaterial() {
     setupDefaultAppearance(Colours.pinkMaterial);
@@ -45,12 +45,8 @@ public class DefaultClusterView extends NodeView {
     setupHighlightAppearance(Colours.yellowMaterial);
   }
   public void init() {
-    getAppearance().setTransparencyAttributes(new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.6f));
-    /*
-    Sphere sphere = new Sphere(1.0f,Sphere.GEOMETRY_NOT_SHARED|Sphere.GENERATE_NORMALS,null);
-    addShape(new Shape3D(sphere.getShape().getGeometry()));
-    */
-    LODSphere sphere = new LODSphere(getAppearance());
+    setExpandedView();
+    LODSphere sphere = new LODSphere(1.0f, getAppearance());
     sphere.makePickable(this);
     sphere.addToTransformGroup(getTransformGroup());
   }

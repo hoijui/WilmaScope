@@ -43,7 +43,7 @@ import com.sun.j3d.utils.geometry.Sphere;
  * -- Tim Dwyer, 2001
  */
 
-public class CollapsedClusterView extends NodeView {
+public class CollapsedClusterView extends ClusterView {
 
   public CollapsedClusterView() {
     setTypeName("CollapsedClusterView");
@@ -57,7 +57,7 @@ public class CollapsedClusterView extends NodeView {
   public void init() {
     //Sphere sphere = new Sphere(1.0f,Sphere.GEOMETRY_NOT_SHARED|Sphere.GENERATE_NORMALS,null);
     //addShape(new Shape3D(sphere.getShape().getGeometry()));
-    LODSphere sphere = new LODSphere(getAppearance());
+    LODSphere sphere = new LODSphere(1.0f,getAppearance());
     sphere.makePickable(this);
     sphere.addToTransformGroup(getTransformGroup());
 

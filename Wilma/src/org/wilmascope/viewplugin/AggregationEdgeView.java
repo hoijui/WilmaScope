@@ -25,7 +25,7 @@ import org.wilmascope.view.*;
 import javax.media.j3d.*;
 import javax.vecmath.*;
 import javax.swing.*;
-import com.sun.j3d.utils.geometry.Cone;
+import com.sun.j3d.utils.geometry.Box;
 
 import com.sun.j3d.utils.picking.PickTool;
 
@@ -36,12 +36,12 @@ import com.sun.j3d.utils.picking.PickTool;
  * @version 1.0
  */
 
-public class ArrowEdgeView extends EdgeView {
+public class AggregationEdgeView extends EdgeView {
   /** radius of the edgeCylinder
    */
   float radius = 0.02f;
-  public ArrowEdgeView() {
-    setTypeName("Arrow");
+  public AggregationEdgeView() {
+    setTypeName("Aggregation");
   }
   protected void setupDefaultMaterial() {
     Material material = new Material();
@@ -66,19 +66,29 @@ public class ArrowEdgeView extends EdgeView {
     showDirectionIndicator();
   }
   public void showDirectionIndicator() {
+    float width = 0.03f;
     Appearance appearance = new Appearance();
-    appearance.setMaterial(org.wilmascope.view.Colours.blueMaterial);
-    Cone cone=new Cone(0.05f, 0.2f, Cone.GENERATE_NORMALS, appearance);
-    makePickable(cone.getShape(Cone.BODY));
-    makePickable(cone.getShape(Cone.CAP));
+    appearance.setMaterial(org.wilmascope.view.Colours.redMaterial);
+    Box diamond=new Box(width, width, width, appearance);
+    makePickable(diamond.getShape(Box.TOP));
+    makePickable(diamond.getShape(Box.BOTTOM));
+    makePickable(diamond.getShape(Box.BACK));
+    makePickable(diamond.getShape(Box.FRONT));
+    makePickable(diamond.getShape(Box.LEFT));
+    makePickable(diamond.getShape(Box.RIGHT));
+    Transform3D rotation = new Transform3D();
+    rotation.setRotation(new AxisAngle4f(1f,0f,1f,(float)Math.atan(Math.sqrt(2))));
+    TransformGroup rotationTG = new TransformGroup(rotation);
+    rotationTG.addChild(diamond);
     Transform3D transform = new Transform3D();
     transform.setTranslation(new Vector3f(0f,
-      0.4f, 0f));
-    TransformGroup coneTransform = new TransformGroup(transform);
-    coneTransform.addChild(cone);
-    addTransformGroupChild(coneTransform);
+      0.35f, 0f));
+    transform.setScale(new Vector3d(1d,3d,1d));
+    TransformGroup tg = new TransformGroup(transform);
+    tg.addChild(rotationTG);
+    addTransformGroupChild(tg);
   }
   public ImageIcon getIcon() {
-    return new ImageIcon(getClass().getResource("/images/arrow.png"));
+    return new ImageIcon(getClass().getResource("/images/aggregation.png"));
   }
 }
