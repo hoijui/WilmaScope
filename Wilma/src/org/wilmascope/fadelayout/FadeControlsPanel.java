@@ -129,23 +129,32 @@ public class FadeControlsPanel extends JPanel {
       }
       degreeLayerButton.setActionCommand(new String("degreeLayer"));
       
-      JRadioButton sphereLayerButton = new JRadioButton("Sphere");
+      JRadioButton sphereYearLayerButton = new JRadioButton("Sphere Year");
       if (VariableForces.layering == VariableForces.sphereYear)
       {
-      	degreeLayerButton.setSelected(true);
+      	sphereYearLayerButton.setSelected(true);
       }
-      sphereLayerButton.setActionCommand(new String("sphereLayer"));
+      sphereYearLayerButton.setActionCommand(new String("sphereYearLayer"));
+      
+      JRadioButton sphereDegreeLayerButton = new JRadioButton("Sphere Degree");
+      if (VariableForces.layering == VariableForces.sphereDegree)
+      {
+      	sphereDegreeLayerButton.setSelected(true);
+      }
+      sphereDegreeLayerButton.setActionCommand(new String("sphereDegreeLayer"));
       
       ButtonGroup layerGroup = new ButtonGroup();
       layerGroup.add(noneLayerButton);
       layerGroup.add(yearLayerButton);
       layerGroup.add(degreeLayerButton);
-      layerGroup.add(sphereLayerButton);
+      layerGroup.add(sphereYearLayerButton);
+      layerGroup.add(sphereDegreeLayerButton);
       
       layerBox.add(noneLayerButton);
       layerBox.add(yearLayerButton);
       layerBox.add(degreeLayerButton);
-      layerBox.add(sphereLayerButton);
+      layerBox.add(sphereYearLayerButton);
+      layerBox.add(sphereDegreeLayerButton);
       
       fadeControlsBox.add(layerBox);
       
@@ -167,7 +176,13 @@ public class FadeControlsPanel extends JPanel {
         }
     });
       
-      sphereLayerButton.addActionListener(new java.awt.event.ActionListener() {
+      sphereYearLayerButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          changedLayerButton_actionPerformed(e);
+        }
+    });
+      
+      sphereDegreeLayerButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(ActionEvent e) {
           changedLayerButton_actionPerformed(e);
         }
@@ -235,9 +250,13 @@ public class FadeControlsPanel extends JPanel {
   	{
   		VariableForces.layering = VariableForces.degree;
   	}
-  	if (e.getActionCommand().equals(new String("sphereLayer")))
+  	if (e.getActionCommand().equals(new String("sphereYearLayer")))
   	{
   		VariableForces.layering = VariableForces.sphereYear;
+  	}
+  	if (e.getActionCommand().equals(new String("sphereDegreeLayer")))
+  	{
+  		VariableForces.layering = VariableForces.sphereDegree;
   	}
   	if (e.getActionCommand().equals(new String("yearColour")))
   	{

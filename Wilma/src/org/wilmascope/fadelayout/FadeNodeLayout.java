@@ -52,7 +52,7 @@ public class FadeNodeLayout extends NodeLayout {
 		// Move the node
 		node.reposition(force);
 		
-		if (VariableForces.layering == VariableForces.year && (node.getView() instanceof LineNodeView))
+		if (VariableForces.layering == VariableForces.year)
 		{
 			if (levelConstraint >= 0) {
 				Point3f p = node.getPosition();
@@ -60,7 +60,7 @@ public class FadeNodeLayout extends NodeLayout {
 			}
 		}
 		
-		if (VariableForces.layering == VariableForces.degree && (node.getView() instanceof LineNodeView))
+		if (VariableForces.layering == VariableForces.degree)
 		{			
 			int degree = node.getEdges().size();
 	    	
@@ -84,6 +84,12 @@ public class FadeNodeLayout extends NodeLayout {
     				Point3f p = node.getPosition();
     				p.z = layerScale * 6f;
 	    		}
+	    	}
+	    	
+	    	if (!(node.getView() instanceof LineNodeView))
+	    	{
+	    		Point3f p = node.getPosition();
+				p.z = layerScale * 9f;
 	    	}
 		}
 		
@@ -128,7 +134,7 @@ public class FadeNodeLayout extends NodeLayout {
 	    	
 	    	if (!(node.getView() instanceof LineNodeView))
 	    	{
-	    		radius = 7f;
+	    		radius = 25f;
 	    	}
 	    	
 	    	Vector3f delta = new Vector3f(node.getPosition());
