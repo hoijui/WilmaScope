@@ -35,6 +35,7 @@ import org.wilmascope.graph.GraphElement;
 import org.wilmascope.graph.LayoutEngine;
 import org.wilmascope.graph.NodeLayout;
 import org.wilmascope.graph.NodeList;
+import org.wilmascope.gui.Actions;
 import org.wilmascope.layoutregistry.LayoutManager;
 import org.wilmascope.layoutregistry.LayoutManager.UnknownLayoutTypeException;
 import org.wilmascope.view.BehaviorClient;
@@ -1040,6 +1041,7 @@ public class GraphControl extends ObservableLayout {
         rootCluster.delete();
         
       }
+      Actions.getInstance().closeOpenFrames();
       setRootCluster(new Cluster(this));
     } catch (ViewManager.UnknownViewTypeException ex) {
       WilmaMain.showErrorDialog("Unknown ViewType!", ex);

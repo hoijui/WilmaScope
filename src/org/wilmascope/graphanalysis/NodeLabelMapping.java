@@ -17,32 +17,37 @@
  *
  * -- Tim Dwyer, 2001
  */
-package org.wilmascope.graphanalysis.plugin;
+package org.wilmascope.graphanalysis;
 
-import org.wilmascope.graphanalysis.GraphAnalysis;
-import org.wilmascope.graphanalysis.VisualMapping;
+import java.awt.Color;
+
+import javax.swing.JPanel;
+
+import org.wilmascope.control.GraphControl.Cluster;
+import org.wilmascope.control.GraphControl.Node;
+import org.wilmascope.gui.HueSettingsPanel;
 
 /**
+ * A mapping for node properties to colour
  * @author dwyer
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class LevelAnalysis extends GraphAnalysis {
-
-  /* (non-Javadoc)
-   * @see org.wilmascope.util.Plugin#getName()
-   */
-  public String getName() {
-    return "Level Constraints";
+public class NodeLabelMapping extends VisualMapping {
+  public NodeLabelMapping() {
+    super("Node Labels");
   }
 
-  /* (non-Javadoc)
-   * @see org.wilmascope.graphanalysis.GraphAnalysis#analyse(org.wilmascope.graphanalysis.GraphAnalysis.VisualMapping)
-   */
-  public void analyse() {
-    // TODO Auto-generated method stub
-    
+  JPanel controls = new JPanel();
+
+  public void apply(Cluster c, String analysisType) {
+    for (Node n : c.getNodes()) {
+      float attr = Float
+          .parseFloat(n.getProperties().getProperty(analysisType));
+      n.setLabel(""+attr);
+    }
+    c.draw();
   }
 
+  public JPanel getControls() {
+    return controls;
+  }
 }

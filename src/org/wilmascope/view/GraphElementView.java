@@ -340,6 +340,9 @@ public abstract class GraphElementView
 			labelBranch.addChild(labelSubBranch);
 		}
 	}
+  public void removeLabel() {
+    labelSubBranch.detach();
+  }
 	protected void setLabel(TransformGroup label) {
 		labelSubBranch = new BranchGroup();
 		labelSubBranch.setCapability(BranchGroup.ALLOW_DETACH);

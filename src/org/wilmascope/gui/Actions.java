@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -35,6 +36,7 @@ import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
@@ -45,10 +47,6 @@ import org.wilmascope.control.GraphControl;
 import org.wilmascope.control.GraphControl.Cluster;
 import org.wilmascope.file.FileHandler;
 import org.wilmascope.forcelayout.ForceLayout;
-import org.wilmascope.graphgen.GeneratorManager;
-import org.wilmascope.graphgen.GraphGenerator;
-import org.wilmascope.graphmodifiers.GraphModifier;
-import org.wilmascope.graphmodifiers.ModifierManager;
 import org.wilmascope.light.LightFrame;
 import org.wilmascope.view.GraphCanvas;
 import org.wilmascope.view.ViewManager;
@@ -57,6 +55,7 @@ public class Actions {
   ActionMap actionMap = new ActionMap();
 
   FileHandler fileHandler;
+  Vector<JFrame> openFrames = new Vector<JFrame>();
 
   Action fileNewAction;
 
@@ -151,6 +150,7 @@ public class Actions {
         LayoutEngineFrame controls = new LayoutEngineFrame(graphControl,
             "Global Layout Engine Controls");
         controls.show();
+        openFrames.add(controls);
       }
     };
     rotateAction = new AbstractAction("Auto-Rotate", new ImageIcon(
@@ -193,7 +193,9 @@ public class Actions {
     };
     graphAnalysisAction = new AbstractAction("Analyse Graph") {
       public void actionPerformed(ActionEvent e) {
-        new AnalysisFrame("Analyse Graph",graphControl.getRootCluster()).show();
+        JFrame af = new AnalysisFrame("Analyse Graph",graphControl.getRootCluster());
+        af.show();
+        openFrames.add(af);
       }
     };
     graphModifiersAction = new AbstractAction("Modify Graph") {
@@ -201,6 +203,7 @@ public class Actions {
         ModifyGraphFrame graphOps = new ModifyGraphFrame("Modify Graph",
             graphControl);
         graphOps.show();
+        openFrames.add(graphOps);
       }
     };
     graphGeneratorsAction = new AbstractAction("Generate Graph") {
@@ -208,6 +211,7 @@ public class Actions {
         GenerateGraphFrame graphGen = new GenerateGraphFrame("Generate Graph",
             graphControl);
         graphGen.show();
+        openFrames.add(graphGen);
       }
     };
     fileOpenAction = new AbstractAction("Open", new ImageIcon(
@@ -367,5 +371,10 @@ public class Actions {
 
   public static Actions getInstance() {
     return instance;
+  }
+  public void closeOpenFrames() {
+    for(JFrame frame : openFrames) {
+      frame.dispose();
+    }
   }
 }
