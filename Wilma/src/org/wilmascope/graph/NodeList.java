@@ -68,10 +68,6 @@ public class NodeList extends List{
       nextNode().setPosition(position);
     }
   }
-
-  public void setBalanced(boolean balanced) {
-    clusters.setBalanced(balanced);
-  }
   public float calcMass() {
     for(clusters.resetIterator(); clusters.hasNext();) {
       clusters.nextCluster().calcMass();

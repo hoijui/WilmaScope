@@ -57,6 +57,7 @@ public class Cluster extends Node {
   public void addNode(Node node) {
     nodes.add(node);
     node.setOwner(this);
+    node.setLayout(layoutEngine.createNodeLayout());
     // get this node's edges.  Edges between the node to be added and nodes
     // that are members of this cluster will be added to this cluster's
     // internal edge list -- addEdge is a bit brute force: it
@@ -116,6 +117,8 @@ public class Cluster extends Node {
         // promoted then our reference to the edge will be null... nothing
         // needs to occur as the edge will be deleted from the owner
     }
+    // recalculate the mass which should now be minus one node!
+    calcMass();
   }
 
   /**
@@ -171,6 +174,9 @@ public class Cluster extends Node {
       //   ie one end of the edge was already in this cluster and the other
       // has just been added
       super.removeEdge(e);
+      // create the appropriate layout details for the edge depending on the
+      // layout engine used for this cluster
+      e.setLayout(getLayoutEngine().createEdgeLayout());
     }
     // for the each node of the edge, if the parent of that node is not
     // this cluster (ie the cluster that now owns the edge) then this edge
@@ -333,28 +339,30 @@ public class Cluster extends Node {
   }
 
   /**
-   * Lay out the nodes according to the current graph and layout engine
+   * Find a new layout for the nodes according to the current graph
+   * and layout engine
    */
   public void calculateLayout() {
     if(expanded) {
-      nodes.getClusters().calculateLayout();
       layoutEngine.calculateLayout();
+      nodes.getClusters().calculateLayout();
 
       // Let's postpone calculating the radius until just before we draw since
       // at the moment there's nothing in Layout that needs it...
       // calcRadius();
     }
   }
-  public float applyLayout() {
-    if(expanded) {
-      float maxVelocity = nodes.getClusters().applyLayout();
-      float velocity = layoutEngine.applyLayout();
-      if(velocity > maxVelocity) {
-        maxVelocity = velocity;
-      }
-      return maxVelocity;
-    }
-    return 0;
+  /**
+   * applies the layout changes calculated in
+   * {@link org.wilmascope.graph.Cluster#calculateLayout} to the contents of
+   * this cluster and all subclusters
+   * @return true if all are balanced
+   */
+  public boolean applyLayout() {
+    boolean balanced = true;
+    balanced = layoutEngine.applyLayout() && balanced;
+    balanced = nodes.getClusters().applyLayout() && balanced;
+    return balanced;
   }
 
   // The radius at any given time should be the distance from the centre of the
@@ -375,19 +383,20 @@ public class Cluster extends Node {
   }
 
 
+
   // A layout engine for use by the cluster
   private LayoutEngine layoutEngine;
 
   /**
    * Moves this cluster (and its' internal nodes) by the specified amount
    * @param delta the change vector
-   */
   public void reposition(Vector3f delta) {
     super.reposition(delta);
     if(expanded) {
       nodes.reposition(delta);
     }
   }
+   */
   /**
    * delete a cluster and its contents
    */
@@ -425,15 +434,6 @@ public class Cluster extends Node {
     orientationDelta.set(angle);
     orientation.mul(orientationDelta);
     this.rotationAngle = angle;
-  }
-
-  public void freeze(boolean balanced) {
-    layoutEngine.setBalanced(balanced);
-    nodes.setBalanced(balanced);
-  }
-
-  public void setBalanced(boolean balanced) {
-    layoutEngine.setBalanced(balanced);
   }
 
   /**

@@ -31,5 +31,15 @@ package org.wilmascope.graph;
  * that can be placed by a LayoutEngine
  */
 
-public interface EdgeLayout extends Layable, EdgeAbility {
+public abstract class EdgeLayout implements Layable, EdgeAbility {
+    public void delete() {
+        edge = null;
+    }
+    public void setEdge(Edge edge) {
+        this.edge = edge;
+    }
+    public Edge getEdge() {
+        return edge;
+    }
+    private Edge edge;
 }

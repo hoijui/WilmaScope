@@ -22,10 +22,17 @@ package org.wilmascope.graph;
 
 public interface LayoutEngine {
   /**
-   * move graph elements in cluster around to achieve a pretty layout
+   * calculate the changes required to move the graph to a nicer layout
    * @return cost function of the new layout
    */
   public void calculateLayout();
-  public float applyLayout();
-  public void setBalanced(boolean balanced);
+  /**
+   * apply the changes calculated by
+   * {@link org.wilmascope.graph.LayoutEngine#calculateLayout}
+   * @return true when a stable state is reached
+   */
+  public boolean applyLayout();
+  public void reset();
+  public NodeLayout createNodeLayout();
+  public EdgeLayout createEdgeLayout();
 }

@@ -32,5 +32,19 @@ package org.wilmascope.graph;
  * that can be placed by a LayoutEngine
  */
 
-public interface NodeLayout extends Layable, NodeAbility {
+public abstract class NodeLayout implements Layable, NodeAbility {
+  /** dereference links */
+  public void delete() {
+    node = null;
+  }
+  /** Set the node for the NodeForceLayout */
+  public void setNode(Node node) {
+    this.node = node;
+  }
+
+  /** Return the node for the NodeForceLayout */
+  public Node getNode() {
+    return node;
+  }
+  Node node;
 }

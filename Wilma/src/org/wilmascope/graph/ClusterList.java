@@ -40,16 +40,17 @@ public class ClusterList extends List {
       ((Cluster)elements.get(i)).calculateLayout();
     }
   }
-  public float applyLayout() {
-    float maxVelocity=0;
-    float velocity;
+  /**
+   * applies the layout changes for all clusters that were calculated by a
+   * previous call to {@link org.wilmascope.graph.ClusterList#calculateLayout}
+   * @return true if all clusters are balanced
+   */
+  public boolean applyLayout() {
+    boolean balanced = true;
     for(int i = 0; i<elements.size(); i++) {
-      velocity = ((Cluster)elements.get(i)).applyLayout();
-      if(velocity>maxVelocity) {
-        maxVelocity=velocity;
-      }
+      balanced = ((Cluster)elements.get(i)).applyLayout() && balanced;
     }
-    return maxVelocity;
+    return balanced;
   }
   public boolean isAncestor(Cluster c) {
     for(int i=0; i<elements.size(); i++) {
@@ -70,11 +71,6 @@ public class ClusterList extends List {
   }
   public Cluster get(int index) {
     return (Cluster)elements.get(index);
-  }
-  public void setBalanced(boolean balanced) {
-    for(int i = 0; i<elements.size(); i++) {
-      ((Cluster)elements.get(i)).setBalanced(balanced);
-    }
   }
   public Cluster nextCluster() {
     return (Cluster)next();
