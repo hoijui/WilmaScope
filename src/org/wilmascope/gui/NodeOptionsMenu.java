@@ -230,6 +230,11 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
   JMenuItem dragMenuItem = new JMenuItem();
   void fixedCheckBoxMenuItem_actionPerformed(ActionEvent e) {
     node.setFixedPosition(fixedCheckBoxMenuItem.isSelected());
+    if(fixedCheckBoxMenuItem.isSelected()) {
+      node.setColour(java.awt.Color.cyan);
+    } else {
+      node.defaultColour();
+    }
   }
 
   void dragMenuItem_actionPerformed(ActionEvent e) {
@@ -247,6 +252,7 @@ public class NodeOptionsMenu extends JPopupMenu implements OptionsClient {
       private void reposition(MouseEvent e) {
         if(!e.isAltDown() && e.isMetaDown()) {
           node.moveToCanvasPos(e.getX(),e.getY());
+          rootCluster.unfreeze();
         }
       }
     };
