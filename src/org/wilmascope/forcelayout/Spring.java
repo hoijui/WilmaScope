@@ -73,8 +73,8 @@ public class Spring extends Force {
          * 
          * <start modification>
          */
-        if (edge.getWeight() > 0.5)
-        		springForce *= edge.getWeight() * 100.0;
+//        if (edge.getWeight() > 0.5)
+//        		springForce *= edge.getWeight() * 100.0;
         /**
          * <end Modification>
          */
