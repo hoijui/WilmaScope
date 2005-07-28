@@ -41,102 +41,113 @@ import org.wilmascope.view.View2D;
 import com.sun.j3d.utils.geometry.Box;
 
 /**
- * A box shaped node.  Labels are texture mapped onto the face.
+ * A box shaped node. Labels are texture mapped onto the face.
+ * 
  * @author Tim Dwyer
  * @version 1.0
  */
 
-public class BoxNodeView
-    extends NodeView
-    implements SizeAdjustableNodeView, View2D {
-  public BoxNodeView() {
-    setTypeName("Box Node");
-  }
+public class BoxNodeView extends NodeView implements SizeAdjustableNodeView,
+		View2D {
+	public BoxNodeView() {
+		setTypeName("Box Node");
+	}
 
-  protected void setupDefaultMaterial() {
-    setupDefaultAppearance(Colours.defaultMaterial);
-    getAppearance().setCapability(Appearance.ALLOW_TEXTURE_WRITE);
-    getAppearance().setCapability(Appearance.ALLOW_TEXTURE_ATTRIBUTES_WRITE);
-  }
+	protected void setupDefaultMaterial() {
+		setupDefaultAppearance(Colours.defaultMaterial);
+		getAppearance().setCapability(Appearance.ALLOW_TEXTURE_WRITE);
+		getAppearance()
+				.setCapability(Appearance.ALLOW_TEXTURE_ATTRIBUTES_WRITE);
+	}
 
-  protected void setupHighlightMaterial() {
-    setupHighlightAppearance(Colours.yellowMaterial);
-  }
+	protected void setupHighlightMaterial() {
+		setupHighlightAppearance(Colours.yellowMaterial);
+	}
 
-  protected void init() {
-    // make the main box that will carry the texture mapped label
-    box = new Box(1.0f, 1.0f, 1.0f, getAppearance());
-    makePickable(box.getShape(Box.TOP));
-    makePickable(box.getShape(Box.BOTTOM));
-    makePickable(box.getShape(Box.BACK));
-    makePickable(box.getShape(Box.FRONT));
-    makePickable(box.getShape(Box.LEFT));
-    makePickable(box.getShape(Box.RIGHT));
-    addTransformGroupChild(box);
-  }
+	protected void init() {
+		// make the main box that will carry the texture mapped label
+		box = new Box(1.0f, 1.0f, 1.0f, getAppearance());
+		makePickable(box.getShape(Box.TOP));
+		makePickable(box.getShape(Box.BOTTOM));
+		makePickable(box.getShape(Box.BACK));
+		makePickable(box.getShape(Box.FRONT));
+		makePickable(box.getShape(Box.LEFT));
+		makePickable(box.getShape(Box.RIGHT));
+		addTransformGroupChild(box);
+	}
 
-  public ImageIcon getIcon() {
-    return new ImageIcon(org.wilmascope.images.Images.class.getResource("cube.png"));
-  }
+	public ImageIcon getIcon() {
+		return new ImageIcon(org.wilmascope.images.Images.class
+				.getResource("cube.png"));
+	}
 
-  public void draw() {
-    try {
-      Node n = getNode();
-      float height = ( (NodeColumnLayout) n.getLayout()).getHeight();
-      Vector3f v = new Vector3f(n.getPosition());
-      float nr = getRadius() / 4.0f;
-      float cr = ( (ColumnClusterView) n.getOwner().getView()).getMaxRadius() / 4.0f;
-      v.x -= (cr - nr);
-      float depth = getDepth();
-      if (nr == 0) {
-        depth = 0;
-      }
-      setResizeTranslateTransform(new Vector3d(nr, depth, height / 2.0), v);
-    }
-    catch (NullPointerException e) {
-      System.out.println("WARNING: Null pointer in ColumnClusterView.draw()");
-    }
-  }
+	public void draw() {
+		try {
+			Node n = getNode();
+			Vector3f v = new Vector3f(n.getPosition());
+			if (n.getOwner().getView() instanceof ColumnClusterView) {
+				float nr = getRadius() / 4.0f;
+				float cr = ((ColumnClusterView) n.getOwner().getView())
+						.getMaxRadius() / 4.0f;
+				v.x -= (cr - nr);
+				float height = ((NodeColumnLayout) n.getLayout()).getHeight();
+				float depth = getDepth();
+				if (nr == 0) {
+					depth = 0;
+				}
+				setResizeTranslateTransform(new Vector3d(nr, depth, height / 2.0),
+						v);
+			} else {
+				float radius = getRadius();
+			    setResizeTranslateTransform(new Vector3d(radius, radius, radius),
+			        new Vector3f(n.getPosition()));
+			}
+		} catch (NullPointerException e) {
+			System.out
+					.println("WARNING: Null pointer in ColumnClusterView.draw()");
+		}
+	}
 
-  public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
-    Node n = getNode();
-    float nr = getRadius() / 4.0f;
-    float cr = ( (ColumnClusterView) n.getOwner().getView()).getMaxRadius() / 4.0f;
-    Point3f p = new Point3f(n.getPosition());
-    g.setStroke(new BasicStroke(1f));
-    g.setColor(new Color(0, 0, 0, transparency));
-    r.drawRect(g, p, cr, getDepth());
-    p.x -= (cr - nr);
-    r.fillRect(g, p, nr, getDepth());
-  }
+	public void draw2D(Renderer2D r, Graphics2D g, float transparency) {
+		Node n = getNode();
+		float nr = getRadius() / 4.0f;
+		float cr = ((ColumnClusterView) n.getOwner().getView()).getMaxRadius() / 4.0f;
+		Point3f p = new Point3f(n.getPosition());
+		g.setStroke(new BasicStroke(1f));
+		g.setColor(new Color(0, 0, 0, transparency));
+		r.drawRect(g, p, cr, getDepth());
+		p.x -= (cr - nr);
+		r.fillRect(g, p, nr, getDepth());
+	}
 
-  Box box;
-  /**
-   * @see org.wilmascope.view.SizeAdjustableNodeView#getBottomRadius()
-   */
-  public float getBottomRadius() {
-    return getRadius();
-  }
+	Box box;
 
-  /**
-   * @see org.wilmascope.view.SizeAdjustableNodeView#getTopRadius()
-   */
-  public float getTopRadius() {
-    return getRadius();
-  }
+	/**
+	 * @see org.wilmascope.view.SizeAdjustableNodeView#getBottomRadius()
+	 */
+	public float getBottomRadius() {
+		return getRadius();
+	}
 
-  /**
-   * @see org.wilmascope.view.SizeAdjustableNodeView#setEndRadii(float, float)
-   */
-  public void setEndRadii(float bottomRadius, float topRadius) {
-    setRadius(topRadius / 100f);
-  }
+	/**
+	 * @see org.wilmascope.view.SizeAdjustableNodeView#getTopRadius()
+	 */
+	public float getTopRadius() {
+		return getRadius();
+	}
 
-  public int getShape() {
-    return BOX;
-  }
+	/**
+	 * @see org.wilmascope.view.SizeAdjustableNodeView#setEndRadii(float, float)
+	 */
+	public void setEndRadii(float bottomRadius, float topRadius) {
+		setRadius(topRadius / 100f);
+	}
 
-  public float getDepth() {
-    return 1f / 4f;
-  }
+	public int getShape() {
+		return BOX;
+	}
+
+	public float getDepth() {
+		return 1f / 4f;
+	}
 }
