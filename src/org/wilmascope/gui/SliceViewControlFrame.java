@@ -14,6 +14,7 @@ import java.util.Vector;
 
 import javax.media.j3d.Appearance;
 import javax.media.j3d.BranchGroup;
+import javax.media.j3d.LineStripArray;
 import javax.media.j3d.Material;
 import javax.media.j3d.RenderingAttributes;
 import javax.media.j3d.Shape3D;
@@ -128,7 +129,8 @@ public class SliceViewControlFrame extends JFrame {
     } else {
       WilmaMain.showErrorDialog("Not a stratified graph!",new Exception());
     }
-    bottomLeft = new Point3f();
+
+	bottomLeft = new Point3f();
     topRight = new Point3f();
     centroid = new Point3f();
     l.getBoundingBoxCorners(bottomLeft, topRight, centroid);
@@ -178,8 +180,8 @@ public class SliceViewControlFrame extends JFrame {
     downButton = new JButton();
     showButton = new JButton();
     hideButton = new JButton();
-    printButton = new JButton();
-    unionFrameButton = new JButton();
+//    printButton = new JButton();
+//    unionFrameButton = new JButton();
     setSelectedStratum(0);
     hBox = Box.createHorizontalBox();
     Box buttonBox = Box.createHorizontalBox();
@@ -192,8 +194,8 @@ public class SliceViewControlFrame extends JFrame {
     showHideBox.add(hideButton);
     buttonBox.add(upDownBox);
     buttonBox.add(showHideBox);
-    buttonBox.add(printButton);
-    buttonBox.add(unionFrameButton);
+//    buttonBox.add(printButton);
+//    buttonBox.add(unionFrameButton);
     vBox.add(buttonBox);
     upButton.setText("Up");
     upButton.addActionListener(new ActionListener() {
@@ -221,18 +223,18 @@ public class SliceViewControlFrame extends JFrame {
         hideButton_actionPerformed(e);
       }
     });
-    printButton.setText("Print");
-    printButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        printButton_actionPerformed(e);
-      }
-    });
-    unionFrameButton.setText("Show Union Graph");
-    unionFrameButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        unionFrameButton_actionPerformed(e);
-      }
-    });
+//    printButton.setText("Print");
+//    printButton.addActionListener(new ActionListener() {
+//      public void actionPerformed(ActionEvent e) {
+//        printButton_actionPerformed(e);
+//      }
+//    });
+//	unionFrameButton.setText("Show Union Graph");
+//    unionFrameButton.addActionListener(new ActionListener() {
+//      public void actionPerformed(ActionEvent e) {
+//        unionFrameButton_actionPerformed(e);
+//      }
+//    });
     this.getContentPane().add(hBox, null);
     vBox.add(radioButtons());
     hBox.add(vBox);
@@ -303,30 +305,30 @@ public class SliceViewControlFrame extends JFrame {
     showAxisPlane();
   }
 
-  void printButton_actionPerformed(ActionEvent e) {
-    PrinterJob printJob = PrinterJob.getPrinterJob();
-    printJob.setPrintable(drawingPanel);
-    PageFormat pf = printJob.pageDialog(printJob.defaultPage());
-    if (printJob.printDialog()) {
-      try {
-        printJob.print();
-      } catch (Exception ex) {
-      }
-    }
-  }
+//  void printButton_actionPerformed(ActionEvent e) {
+//    PrinterJob printJob = PrinterJob.getPrinterJob();
+//    printJob.setPrintable(drawingPanel);
+//    PageFormat pf = printJob.pageDialog(printJob.defaultPage());
+//    if (printJob.printDialog()) {
+//      try {
+//        printJob.print();
+//      } catch (Exception ex) {
+//      }
+//    }
+//  }
 
-  void unionFrameButton_actionPerformed(ActionEvent e) {
-    JFrame unionFrame = new JFrame("Union View");
-    JPanel treePanel = new TreePanel();
-    hBox = Box.createHorizontalBox();
-    hBox.add(treePanel);
-    DrawingPanel unionDrawingPanel = new DrawingPanel(r, bottomLeft, topRight,
-        DrawingPanel.RENDER_UNION);
-    hBox.add(unionDrawingPanel);
-    unionFrame.getContentPane().add(hBox);
-    unionFrame.pack();
-    unionFrame.setVisible(true);
-  }
+//  void unionFrameButton_actionPerformed(ActionEvent e) {
+//    JFrame unionFrame = new JFrame("Union View");
+//    JPanel treePanel = new TreePanel();
+//    hBox = Box.createHorizontalBox();
+//    hBox.add(treePanel);
+//    DrawingPanel unionDrawingPanel = new DrawingPanel(r, bottomLeft, topRight,
+//        DrawingPanel.RENDER_UNION);
+//    hBox.add(unionDrawingPanel);
+//    unionFrame.getContentPane().add(hBox);
+//    unionFrame.pack();
+//    unionFrame.setVisible(true);
+//  }
 
   void showAxisPlane() {
     canvas.getTransformGroup().addChild(axisPlaneBG);
@@ -370,9 +372,9 @@ public class SliceViewControlFrame extends JFrame {
 
   JButton hideButton;
 
-  JButton printButton;
+//  JButton printButton;
 
-  JButton unionFrameButton;
+//  JButton unionFrameButton;
 
   DrawingPanel drawingPanel;
 }
