@@ -206,16 +206,31 @@ public class ForceLayout extends
     return levelSeparation;
   }
 
+  public void setLevels (int i) {
+      this.levels=i;
+  }
+	  
+  public void setLevelSeparation (float f) {
+      this.levelSeparation=f;
+  }
   private int levels = -1;
 
   private float levelSeparation = 1f;
   public int getOrbits() {
     return orbits;
   }
+  public void setOrbits (int i) {
+      this.orbits=i;
+  }
   private int orbits = -1;
+  
   public float getOrbitSeparation() {
     return orbitSeparation;
   }
+  public void setOrbitSeparation (float f) {
+      this.orbitSeparation=f;
+  }
+  
   private float orbitSeparation = 1f;
 
   /*
