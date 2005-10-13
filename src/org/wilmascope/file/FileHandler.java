@@ -144,10 +144,7 @@ public class FileHandler {
     }
     Properties p = xe.getProperties();
     if (p != null) {
-      String weight = p.getProperty("Weight");
-      if (weight != null) {
-        ge.setWeight(Float.parseFloat(weight));
-      }
+      ge.setProperties(p);
     }
   }
 

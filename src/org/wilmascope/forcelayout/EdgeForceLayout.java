@@ -29,24 +29,41 @@ import org.wilmascope.graph.EdgeLayout;
  */
 
 public class EdgeForceLayout extends EdgeLayout {
-  public float getRelaxedLength() {
-    return relaxedLength;
-  }
-  public void setRelaxedLength(float relaxedLength) {
-    this.relaxedLength = relaxedLength;
-  }
-  public void setStiffness(float stiffness) {
-    this.stiffness = stiffness;
-  }
-  public float getStiffness() {
-    return stiffness;
-  }
-  private float relaxedLength = Constants.defaultEdgeLength;
-  private float stiffness = 1f;
-  /* (non-Javadoc)
-   * @see org.wilmascope.graph.EdgeLayout#resetProperties()
-   */
-  public void resetProperties() {
-    Properties p = getEdge().getProperties();
-  }
+	public float getRelaxedLength() {
+		return relaxedLength;
+	}
+
+	public void setRelaxedLength(float relaxedLength) {
+		this.relaxedLength = relaxedLength;
+	}
+
+	public void setStiffness(float stiffness) {
+		this.stiffness = stiffness;
+	}
+
+	public float getStiffness() {
+		return stiffness;
+	}
+
+	private float relaxedLength = Constants.defaultEdgeLength;
+
+	private float stiffness = 1f;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.wilmascope.graph.EdgeLayout#resetProperties()
+	 */
+	public void resetProperties() {
+		super.resetProperties();
+		Properties p = getEdge().getProperties();
+		String str = p.getProperty("Stiffness");
+		if (str != null) {
+			stiffness = Float.parseFloat(str);
+		}
+		str = p.getProperty("RelaxedLength");
+		if (str != null) {
+			relaxedLength = Float.parseFloat(str);
+		}
+	}
 }
