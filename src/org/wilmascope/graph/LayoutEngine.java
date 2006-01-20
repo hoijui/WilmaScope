@@ -20,6 +20,7 @@
 
 package org.wilmascope.graph;
 
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.swing.JPanel;
@@ -28,9 +29,8 @@ import javax.swing.JPanel;
  * Classes which determine layout for a particular cluster must implement this
  * interface.
  *
- * @author Tim Dwyer
- * @version $Id$
- *
+ * @author Tim Dwyer, modified by Tristan Manwaring
+ * @version $Id$ 
  */
 public abstract class LayoutEngine<N extends NodeLayout,E extends EdgeLayout> {
   /**
@@ -120,5 +120,17 @@ public abstract class LayoutEngine<N extends NodeLayout,E extends EdgeLayout> {
    */
   public boolean isIterative() {
     return false;
+  }
+ 
+  /**
+   * For an interactive layout that responds to the user
+   * left and middle mouse clicks and drags, this method must be
+   * overridden in the LayoutEngine and return a valid LayoutInteraction
+   * specific for that layout
+   * 
+   * If not overridden, there is no interactivity
+   */
+  public LayoutInteraction getLayoutInteraction() {
+	  return null;
   }
 }
