@@ -37,12 +37,39 @@ class GenericPickingClient implements PickingClient {
     if(e.isMetaDown()) {
       // right mouse button click
       if(pickListener.isOptionPickingEnabled()) {
-        optionsClient.callback(e, element);
+    	  boolean show = true;
+    	  
+    	  //don't show if the element picked is a sector marker
+    	  if (element instanceof GraphControl.Edge) {
+    	      show = (((GraphControl.Edge)element).getEdge().getUserData("divider") != "y");
+    	  } else if (element instanceof GraphControl.Cluster) {
+    		  show = (((GraphControl.Cluster)element).getCluster().getUserData("divider") != "y");
+    	  } else if (element instanceof GraphControl.Node) {
+    		  show = (((GraphControl.Node)element).getNode().getUserData("divider") != "y");
+    	  }
+    	  
+    	  if(show){
+    		  optionsClient.callback(e, element);
+    	  }
       }
     } else if (e.isAltDown()) {
-      // middle mouse button click
-    } else {
+    	// middle mouse button click
+    	System.out.println("Middle Mouse Button Picked...(PickListener.java): " + element.getClass());
+      if (element instanceof GraphControl.Node) {
+    	 ((GraphControl.Node)element).getNode().storeUserData("middle mouse picked", "y");
+      } else if (element instanceof GraphControl.Cluster) {
+		 ((GraphControl.Cluster)element).getCluster().storeUserData("middle mouse picked", "y");
+	  } else if (element instanceof GraphControl.Edge) {
+		 ((GraphControl.Edge)element).getEdge().storeUserData("middle mouse picked", "y");
+	  }
+      
       pickListener.picked(element);
+      
+    } else {
+      // left mouse button click
+      System.out.println("Left Mouse Button Picked...(PickListener.java): " + element.getClass());
+
+      pickListener.picked(element);  
     }
   }
   OptionsClient optionsClient;
@@ -63,18 +90,31 @@ public class PickListener {
     }
   }
   void picked(GraphControl.GraphElementFacade element) {
-    if(!isPickableType(element)) {
-      return;
+
+	//interactive elements for interactive layouts
+	//this is called whether the layout is interactive or not,
+	//but the method will do nothing if there is no interactivity
+    if(element instanceof GraphControl.Node){
+      ((GraphControl.Node)element).callback(element);
+    } else if(element instanceof GraphControl.Edge){
+      ((GraphControl.Edge)element).callback(element);
+    } else if(element instanceof GraphControl.Cluster){
+      ((GraphControl.Cluster)element).callback(element);
+    }  
+	  
+	if(!isPickableType(element)) {
+      System.out.println("Not pickable type!...:");
+      return; 
     }
     if(multiPickingEnabled && !pickedList.contains(element)) {
-      element.highlightColour();
+      element.highlightColour();  
       pickedList.push(element);
       // if we have too many elements then pop one off the front of the list
       // ie FIFO queue
       if(pickedList.size()>pickedListLimit) {
         GraphControl.GraphElementFacade head = (GraphControl.GraphElementFacade)pickedList.get(0);
         pickedList.removeElementAt(0);
-        head.defaultColour();
+        head.defaultColour(); 
       }
     } else if(singlePickClient != null) {
       singlePickClient.callback(element);
