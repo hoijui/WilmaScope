@@ -133,4 +133,11 @@ public abstract class LayoutEngine<N extends NodeLayout,E extends EdgeLayout> {
   public LayoutInteraction getLayoutInteraction() {
 	  return null;
   }
+  
+  /**
+   * For interactive data
+   * override this in the LayoutEngine to make use of it
+   */
+  public void setInteractiveData(int type, int index, float value, boolean compute){
+  }
 }
