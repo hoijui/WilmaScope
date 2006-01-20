@@ -35,6 +35,7 @@ import org.wilmascope.graph.EdgeLayout;
 import org.wilmascope.graph.EdgeList;
 import org.wilmascope.graph.GraphElement;
 import org.wilmascope.graph.LayoutEngine;
+import org.wilmascope.graph.LayoutInteraction;
 import org.wilmascope.graph.NodeLayout;
 import org.wilmascope.graph.NodeList;
 import org.wilmascope.gui.Actions;
@@ -54,11 +55,13 @@ import org.wilmascope.view.ViewManager;
  * Title: WilmaToo Description: Sequel to the ever popular Wilma graph drawing
  * engine Copyright: Copyright (c) 2001 Company: WilmaOrg @author Tim Dwyer
  * 
+ * modified by Tristan Manwaring, 2005.
+ * 
  * @version 1.0
  */
 class ObservableLayout extends Observable {
 	public void addObserver(LayoutObserver o) {
-		super.addObserver(o);
+		super.addObserver(o); 
 	}
 
 	protected void notifyLayoutObservers() {
@@ -283,8 +286,9 @@ public class GraphControl extends ObservableLayout {
 
 	/**
 	 * The interface for edges
+	 * Needs to implement the PickClient interface for interactivity
 	 */
-	public class Edge extends GraphElementFacade {
+	public class Edge extends GraphElementFacade implements org.wilmascope.control.PickClient {
 		Edge() {
 		}
 
@@ -388,12 +392,26 @@ public class GraphControl extends ObservableLayout {
 		private org.wilmascope.graph.Edge edge;
 
 		private Node start, end;
+		
+		/**
+		 * called when the edge is picked with the left or middle mouse button
+		 */
+		public void callback(GraphElementFacade e) {
+			System.out.println("Inside GraphControl.Edge");
+			
+			//get the layout interaction, and carry out the interaction
+			LayoutInteraction li = getRootCluster().getLayoutEngine().getLayoutInteraction();
+			if(li != null) { //this is null if no interaction is specified for this layout
+				li.interact(LayoutInteraction.EDGE, e, getGraphCanvas(), getRootCluster());
+			}
+		}
 	}
 
 	/**
 	 * the interface for nodes
+	 * needs to implement the PickClient interface for interactivity
 	 */
-	public class Node extends GraphElementFacade {
+	public class Node extends GraphElementFacade implements org.wilmascope.control.PickClient {
 		/**
 		 * create a new facade for a predefined node
 		 * 
@@ -497,14 +515,29 @@ public class GraphControl extends ObservableLayout {
 		}
 
 		private org.wilmascope.graph.Node node;
+		
+		/**
+		 * called when the node is picked with the left or middle mouse button
+		 */
+		public void callback(GraphElementFacade e) {
+			System.out.println("Inside GraphControl.Node");
+			
+			//get the layout interaction, and carry out the interaction
+			LayoutInteraction li = getRootCluster().getLayoutEngine().getLayoutInteraction();
+			if(li != null) { //this is null if no interaction is specified for this layout
+				li.interact(LayoutInteraction.NODE, e, getGraphCanvas(), getRootCluster());
+			}
+		}
 	}
 
 	/**
 	 * the interface for clusters which are collections of nodes, note that a
 	 * cluster is also a node so you can add a cluster as a member to a cluster
 	 * using the {@link #addNode(GraphControl.Node)}method
+	 * 
+	 * this implements the PickClient interface for interactivity
 	 */
-	public class Cluster extends Node {
+	public class Cluster extends Node implements org.wilmascope.control.PickClient {
 		GraphControl gc;
 
 		/**
@@ -921,6 +954,19 @@ public class GraphControl extends ObservableLayout {
 			getCluster().draw();
 		}
 
+		/**
+		 * called when the cluster is picked with the left or middle mouse button
+		 */
+		public void callback(GraphElementFacade e) {
+			System.out.println("Inside GraphControl.Cluster");
+			
+			//get the layout interaction and carry out the interaction
+			LayoutInteraction li = getRootCluster().getLayoutEngine().getLayoutInteraction();
+			if(li != null) { //this is null if no interaction is specified for this layout
+				li.interact(LayoutInteraction.CLUSTER, e, getGraphCanvas(), getRootCluster());
+			}
+		}
+		
 		private org.wilmascope.graph.Cluster cluster;
 	}
 
