@@ -22,8 +22,12 @@ package org.wilmascope.view;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.lang.ref.WeakReference;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.Vector;
 
+import javax.media.j3d.Appearance;
 import javax.swing.ImageIcon;
 import javax.vecmath.AxisAngle4f;
 import javax.vecmath.Color3f;
@@ -69,7 +73,7 @@ implements org.wilmascope.graph.EdgeView, View2D {
   public Vector3f getPositionVector() {
     Vector3f v = new Vector3f(edge.getVector());
     v.scaleAdd(0.5f,edge.getStart().getPosition());
-    if(edge.getEnd().getView().getRadius()!=edge.getStart().getView().getRadius()) {
+    if(edge.getEnd().getView().getRadius()!=edge.getStart().getView(  ).getRadius()) {
       Vector3f offset = new Vector3f(edge.getVector());
       offset.normalize();
       offset.scale((edge.getEnd().getView().getRadius()-edge.getStart().getView().getRadius())/2f);
@@ -114,7 +118,23 @@ implements org.wilmascope.graph.EdgeView, View2D {
     return new ImageIcon(org.wilmascope.images.Images.class.getResource("edge.png"));
   }
   protected void showLabel(String text) {
-    addLabel(text, 1.0d, new Point3f(0.0f,4.0f,1.0f), ViewConstants.vZero, getAppearance());
+    //addLabel(text, 10.0, new Point3f(0.0f,4.0f,1.0f), ViewConstants.vZero, getAppearance());
+	/**
+	 * Modified by Xiaoyan
+	 * to fix the bug of edge labels
+	 * 
+	 * add a new method in GraphElementView.java
+	 * 	protected void addLabel(String text, Vector3d scale, Point3f originPosition, Vector3f vTranslation, Appearance apText)
+	 * to set the scale in x,y,z axis seperately.
+	 * 
+	 * 20 is half size of the font(40); Node Label size=40;
+	 */  
+	System.out.println("radius = "+radius);
+    addLabel(text, 
+    		new Vector3d(20,radius*text.length(),20), 
+    		new Point3f(0.0f,0.0f,0.0f),
+    		ViewConstants.vZero,
+            getAppearance());
   }
   public void setRadius(float radius) {
     this.radius = radius;
@@ -151,6 +171,25 @@ implements org.wilmascope.graph.EdgeView, View2D {
     lineEnd.add(v);
     r.linePath(g,start,lineEnd);
   }
+  
+  private Vector<WeakReference<NodeGeometryObserver>> geometryObservers;
+
+//  private void notifyGeometryObservers() {
+//	    if (geometryObservers != null) {
+//	      for (Iterator<WeakReference<NodeGeometryObserver>> i = geometryObservers
+//	          .iterator(); i.hasNext();) {
+//	        WeakReference<NodeGeometryObserver> wr = i.next();
+//	        NodeGeometryObserver o = wr.get();
+//	        if (o != null) {
+//	          o.nodeGeometryChanged(this);
+//	        } else {
+//	          i.remove();
+//	        }
+//	      }
+//	    }
+//	  }
+
+  
   private Edge edge;
   // A vector giving the default orientation of the edgeCylinder
   private static Vector3f initVector = ViewConstants.vY;
