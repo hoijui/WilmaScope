@@ -317,7 +317,56 @@ public abstract class GraphElementView
 			} else {
 				c = constants.getColor3f("LabelColour");
 			}
-			Text2D text2D = new Text2D(text, c, "Dummy", 20, Font.PLAIN);
+			Text2D text2D = new Text2D(text, c, "Dummy", 40, Font.PLAIN);
+			TransformGroup textTG = new TransformGroup();
+			textTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+			textTG.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+			makePickable(text2D);
+			textTG.addChild(text2D);
+			BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0),
+					100.0);
+			Billboard billboard = new Billboard(textTG, Billboard.ROTATE_ABOUT_POINT,
+					originPosition);
+			billboard.setSchedulingBounds(bounds);
+			TransformGroup l = new TransformGroup();
+			Transform3D scaleTransform = new Transform3D();
+			scaleTransform.setScale(scale);
+			l.setTransform(scaleTransform);
+			l.addChild(billboard);
+			l.addChild(textTG);
+			if (labelSubBranch != null) {
+				labelSubBranch.detach();
+			}
+			labelSubBranch = new BranchGroup();
+			labelSubBranch.setCapability(BranchGroup.ALLOW_DETACH);
+			Transform3D translation = new Transform3D();
+			translation.setTranslation(vTranslation);
+			TransformGroup translateTG = new TransformGroup(translation);
+			translateTG.addChild(l);
+			labelSubBranch.addChild(translateTG);
+			labelBranch.addChild(labelSubBranch);
+		}
+	}
+	protected void addLabel(String text, Vector3d scale, Point3f originPosition,
+			Vector3f vTranslation, Appearance apText) {
+		if (text != null && !text.equals("null") && text.length() > 0) {
+			/*
+			 * // using Text3D Point3f centredOriginPosition = new
+			 * Point3f(originPosition); centredOriginPosition.x += -text.length()/2;
+			 * Text3D txt = new Text3D(f3d, text, centredOriginPosition);
+			 * OrientedShape3D textShape = new OrientedShape3D();
+			 * textShape.setAlignmentMode(OrientedShape3D.ROTATE_ABOUT_POINT);
+			 * textShape.setRotationPoint(new Point3f(0,0,0));
+			 * textShape.setGeometry(txt); textShape.setAppearance(apText);
+			 */
+			// Using text2D and a billboard
+			Color3f c = null;
+			if (constants.getProperty("LabelUseViewColour").equals("true")) {
+				c = this.getColor3f();
+			} else {
+				c = constants.getColor3f("LabelColour");
+			}
+			Text2D text2D = new Text2D(text, c, "Dummy", 40, Font.PLAIN);
 			TransformGroup textTG = new TransformGroup();
 			textTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 			textTG.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
