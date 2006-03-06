@@ -129,7 +129,7 @@ implements org.wilmascope.graph.EdgeView, View2D {
 	 * 
 	 * 20 is half size of the font(40); Node Label size=40;
 	 */  
-	System.out.println("radius = "+radius);
+	//System.out.println("radius = "+radius);
     addLabel(text, 
     		new Vector3d(20,radius*text.length(),20), 
     		new Point3f(0.0f,0.0f,0.0f),
