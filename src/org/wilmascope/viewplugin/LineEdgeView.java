@@ -53,10 +53,14 @@ public class LineEdgeView extends EdgeView implements NodeGeometryObserver {
     makePickable(s);
     addTransformGroupChild(s);
   }
-  public void draw() {
-    myLine.setCoordinate(0,getEdge().getStart().getPosition());
-    myLine.setCoordinate(1,getEdge().getEnd().getPosition());
-  }
+  
+  /**
+   * The draw() method is not necessary since TransformGroup will handle the position change
+   */
+//  public void draw() {
+//    myLine.setCoordinate(0,getEdge().getStart().getPosition());
+//    myLine.setCoordinate(1,getEdge().getEnd().getPosition());
+//  }
   /**
    * 2D version of line edge is just a two colour solid line.
    *   First half line is coloured same as start node
