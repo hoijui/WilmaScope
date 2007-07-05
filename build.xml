@@ -6,7 +6,6 @@
 	<property name="lib" value="lib" />
 	<property name="dest" value="classes" />
 	<property name="optimization" value="on" />
-	<property name="cvsroot" value="tgdwyer@cvs.wilma.sourceforge.net:/cvsroot/wilma" />
 	<target name="init">
 		<!-- Create the time stamp -->
 		<tstamp />
@@ -111,9 +110,6 @@
 		<delete dir="${dist}" />
 		<delete dir="${src}/org/wilmascope/chat" />
 		<delete file="${lib}/wilma.jar" />
-	</target>
-	<target name="update" depends="clean" description="check source out of cvs">
-		<cvs command="update" cvsroot="${cvsroot}" />
 	</target>
 </project>
 
