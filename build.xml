@@ -6,6 +6,7 @@
 	<property name="lib" value="lib" />
 	<property name="dest" value="classes" />
 	<property name="optimization" value="on" />
+	<property name="debug" value="off" />
 	<target name="init">
 		<!-- Create the time stamp -->
 		<tstamp />
@@ -16,7 +17,7 @@
 
 	<target name="compile" depends="init" description="Compile just the core wilma code">
 		<!-- Compile the java code from ${src} into ${classes} -->
-		<javac source="1.5" target="1.5" srcdir="${src}" destdir="${dest}" optimize="${optimization}" excludes="org/wilmascope/chat/**,org/wilmascope/TestChatClient.java,org/wilmascope/control/TalkingGraph.java,org/wilmascope/control/WilmaChatServCORBA.java">
+		<javac debug="${debug}" deprecation="on" source="1.5" target="1.5" srcdir="${src}" destdir="${dest}" optimize="${optimization}" excludes="org/wilmascope/chat/**,org/wilmascope/TestChatClient.java,org/wilmascope/control/TalkingGraph.java,org/wilmascope/control/WilmaChatServCORBA.java">
 			<classpath>
 				<pathelement location="${lib}/Jama-1.0.1.jar" />
 				<pathelement location="${lib}/j3d-vrml97.jar" />

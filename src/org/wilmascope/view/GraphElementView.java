@@ -178,8 +178,9 @@ public abstract class GraphElementView
 		return true;
 	}
 	protected void setupDefaultAppearance(Material defaultMaterial) {
+		System.err.println("setup default appearance...");
 
-    if(!defaultMaterial.isLive()) defaultMaterial.setCapability(Material.ALLOW_COMPONENT_READ);
+	    //if(!defaultMaterial.isLive()) defaultMaterial.setCapability(Material.ALLOW_COMPONENT_READ);
 		appearance = new Appearance();
 		appearance.setCapability(Appearance.ALLOW_MATERIAL_WRITE);
 		appearance.setCapability(Appearance.ALLOW_MATERIAL_READ);
@@ -199,6 +200,7 @@ public abstract class GraphElementView
 		 * PointAttributes(); pa.setPointAntialiasingEnable(true);
 		 * appearance.setLineAttributes(la); appearance.setPointAttributes(pa);
 		 */
+		System.err.println("setup default appearance... done");
 	}
 	protected void setupHighlightAppearance(Material highlightMaterial) {
 		this.highlightMaterial = highlightMaterial;
