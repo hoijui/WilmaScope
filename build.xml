@@ -4,7 +4,6 @@
 	<property name="src" value="src" />
 	<property name="doc" value="doc" />
 	<property name="lib" value="lib" />
-	<property name="AreaChart3D" value="../AreaChart3D/bin" />
 	<property name="dest" value="classes" />
 	<property name="optimization" value="on" />
 	<property name="cvsroot" value="tgdwyer@cvs.wilma.sourceforge.net:/cvsroot/wilma" />
@@ -22,7 +21,9 @@
 			<classpath>
 				<pathelement location="${lib}/Jama-1.0.1.jar" />
 				<pathelement location="${lib}/j3d-vrml97.jar" />
-				<pathelement location="${AreaChart3D}" />
+				<pathelement location="${JAVA_HOME}/lib/ext/j3dcore.jar" />
+				<pathelement location="${JAVA_HOME}/lib/ext/j3dutils.jar" />
+				<pathelement location="${JAVA_HOME}/lib/ext/vecmath.jar" />
 			</classpath>
 		</javac>
 	</target>
