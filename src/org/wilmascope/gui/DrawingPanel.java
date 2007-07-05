@@ -16,6 +16,7 @@
  * www.sourceforge.net/projects/wilma
  *
  * -- Tim Dwyer, 2001
+ *
  */
 package org.wilmascope.gui;
 import java.awt.Color;
