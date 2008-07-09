@@ -44,6 +44,12 @@ import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3f;
 
+import org.wilmascope.areaChart3D.ChartAreaShape;
+import org.wilmascope.areaChart3D.MarkLine;
+import org.wilmascope.areaChart3D.ValueLabel;
+import org.wilmascope.areaChart3D.ValueLine;
+import org.wilmascope.areaChart3D.ZLabel;
+
 import com.sun.j3d.utils.behaviors.mouse.MouseTranslate;
 import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
 import com.sun.j3d.utils.geometry.Text2D;

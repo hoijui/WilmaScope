@@ -24,6 +24,8 @@ import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Color3f;
 import javax.vecmath.Vector3f;
+
+import org.wilmascope.areaChart3D.ChartAreaShape;
 /**Clasee XCategories creates a 3D shape to represents different business sectors.
  * Together store the sector's name and position in z axis.
  */

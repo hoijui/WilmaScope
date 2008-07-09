@@ -26,6 +26,10 @@ package org.wilmascope.areaChart3D;
 import com.sun.j3d.utils.behaviors.mouse.*;
 import javax.media.j3d.*;
 import javax.vecmath.*;
+
+import org.wilmascope.areaChart3D.ValueLabel;
+import org.wilmascope.areaChart3D.ValueLine;
+
 import java.util.*;
 import java.awt.event.*;
 import java.awt.*;

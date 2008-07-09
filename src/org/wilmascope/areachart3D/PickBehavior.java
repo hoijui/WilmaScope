@@ -37,6 +37,8 @@ import javax.media.j3d.WakeupOr;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
+import org.wilmascope.areaChart3D.ChartAreaShape;
+
 /**
  * Class PickBehavior enables using mouse to select differect sectors in the scene graph
  *

@@ -22,6 +22,9 @@ package org.wilmascope.areaChart3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Vector3f;
+
+import org.wilmascope.areaChart3D.PlaneLine;
+import org.wilmascope.areaChart3D.TransparentPlain;
 /**Class Plane creates a transparent plane
  */
 public class Plane extends TransformGroup{
