@@ -13,7 +13,7 @@
  *
  * -- Christine, 2003
  */
-package org.wilmascope.areaChart3D;
+package org.wilmascope.areachart3D;
 
 /**
  * @author star

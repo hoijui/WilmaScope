@@ -13,7 +13,7 @@
  *
  * -- Christine, 2003
  */
-package org.wilmascope.areaChart3D;
+package org.wilmascope.areachart3D;
 
 import java.awt.AWTEvent;
 import java.awt.event.MouseEvent;

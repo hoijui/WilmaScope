@@ -1,4 +1,4 @@
-package org.wilmascope.areaChart3D;
+package org.wilmascope.areachart3D;
 
 /*
  * The following source code is distributed under the terms of the GNU Lesser General Public License
